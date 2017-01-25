@@ -3,6 +3,22 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# My additions
+*.png
+*.dll
+Library/
+Resources/
+Temp/
+builds/
+*.anim
+*.controller
+*.asset
+*.jpg
+*.prefab
+*.unity
+*.s3db
+*.ttf
+
 # User-specific files
 *.suo
 *.user
