@@ -21,5 +21,11 @@ namespace UnityUtilities {
             DbCommands.GetDbTableListToPrint(tblName, out strArray);
             PrintListOfStrArrays(strArray);
         }
+
+        public static void PrintDictionary(Dictionary<string, ISelectableUI> dict) {
+            foreach (KeyValuePair<string, ISelectableUI> pair in dict) {
+                print(pair.Key + ", " + pair.Value);
+            }
+        }
     }
 }

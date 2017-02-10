@@ -10,8 +10,8 @@ public class GameInitialiser : MonoBehaviour {
 
     void Awake() {
         DbCommands.SetConnectionString("URI=file:" + Application.dataPath + DB_PATH);
-        print(DbCommands.GetConn());
         dbSetup = new DbSetup();
+        dbSetup.CreateTables();
         playerSavesController = FindObjectOfType<PlayerSavesController>();
         playerSavesController.ManuallyInitialise();
     }

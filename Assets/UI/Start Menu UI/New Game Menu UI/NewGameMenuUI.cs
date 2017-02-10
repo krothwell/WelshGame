@@ -25,7 +25,7 @@ namespace StartMenuUI {
 
         private void SetFirstPortraitSelected() {
             GameObject firstPortrait = portraitGrid.transform.GetChild(0).gameObject;
-            firstPortrait.GetComponent<SelectPlayerPortraitBtn>().SelectMe();
+            firstPortrait.GetComponent<SelectPlayerPortraitBtn>().SelectSelf();
         }
 
         public void DisplayPanel() {

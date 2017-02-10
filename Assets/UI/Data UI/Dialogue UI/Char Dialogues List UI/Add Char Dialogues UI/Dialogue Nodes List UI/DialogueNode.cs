@@ -7,10 +7,8 @@ using UnityUtilities;
 
 namespace DataUI {
     namespace ListItems {
-        public class DialogueNode : MonoBehaviour {
+        public class DialogueNode : UIInputListItem, ISelectableUI {
             DialogueUI dialogueUI;
-            InputField input;
-            Image inputBG;
             GameObject options;
 
             private string myText;
@@ -27,41 +25,25 @@ namespace DataUI {
             // Use this for initialization
             void Start() {
                 dialogueUI = FindObjectOfType<DialogueUI>();
-                inputBG = transform.GetComponentInChildren<Image>();
-                input = transform.GetComponentInChildren<InputField>();
                 options = transform.FindChild("NodeOptions").gameObject;
             }
 
-            void Update() {
-                DeselectIfClickingAnotherNode();
-            }
-
-            void DeselectIfClickingAnotherNode() {
-                /* if another dialogue is selected that is not this dialogue, then this dialogue should be deselected */
-                if (Input.GetMouseButtonUp(0)) {
-                    MouseSelection.ClickSelect();
-                    if (MouseSelection.IsClickedGameObjectName("DialogNode") && MouseSelection.ClickedDifferentGameObjectTo(gameObject)) {
-                        DeselectNode();
-                    }
-                }
-            }
-
             void OnMouseUp() {
-                SelectNode();
+                dialogueUI.ToggleSelectionTo(GetComponent<DialogueNode>(), dialogueUI.selectedNode);
             }
 
-            public void SelectNode() {
+            public void SelectSelf() {
                 DisplayOptions();
-                SetMyColour(Colours.colorDataUIInputSelected);
-                dialogueUI.SetSelectedNode(gameObject);
+                SetInputColour(Colours.colorDataUIInputSelected);
                 dialogueUI.DisplayChoicesRelatedToNode();
                 dialogueUI.HidePlayerChoiceResults();
             }
 
-            private void DeselectNode() {
+            public void DeselectSelf() {
                 HideOptions();
-                SetMyColour(Color.white);
-                input.readOnly = true;
+                SetInputColour(Color.white);
+                GetInputField().readOnly = true;
+                GetInputField().text = myText;
             }
 
             private void DisplayOptions() {
@@ -84,12 +66,8 @@ namespace DataUI {
                 dialogueUI.SetActiveNodeEdit();
             }
 
-            void SetMyColour(Color newColor) {
-                inputBG.color = newColor;
-            }
-
             public void UpdateNodeDisplay(string newText) {
-                input.GetComponent<InputField>().text = newText;
+                GetInputField().text = newText;
             }
         }
     }

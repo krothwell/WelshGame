@@ -3,6 +3,6 @@ using System.Collections;
 
 namespace GameUI {
     public class PlayerInventoryItem : MonoBehaviour {
-        public WorldItems.itemTypes itemType;
+        public WorldItems.WorldItemTypes itemType;
     }
 }

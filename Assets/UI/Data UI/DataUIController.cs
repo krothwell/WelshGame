@@ -8,12 +8,10 @@ public class DataUIController : UIController {
     DialogueUI dialogueUI;
     TranslationUI translationUI;
     void Start() {
-        dialogueUI = FindObjectOfType<DialogueUI>();
-        translationUI = FindObjectOfType<TranslationUI>();
+        dialogueUI = GetPanel().GetComponentInChildren<DialogueUI>();
+        translationUI = GetPanel().GetComponentInChildren<TranslationUI>();
         dataUImenusToggleGroupName = "DataUImenusToggleGroup";
         CreateNewMenuToggleGroup(dataUImenusToggleGroupName);
-        AddNewMenuToToggleGroup(dataUImenusToggleGroupName, dialogueUI);
-        AddNewMenuToToggleGroup(dataUImenusToggleGroupName, translationUI);
     }
 
     public void ActivateDialogueUI() {

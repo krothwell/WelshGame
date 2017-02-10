@@ -42,8 +42,7 @@ public class ExistingSaveGameBtn : MonoBehaviour {
 
     public void SetSelectionOfSaveOnClick() {
         if (Input.GetMouseButtonUp(0)) {
-            MouseSelection.ClickSelect();
-            if (MouseSelection.ClickedDifferentGameObjectTo(this.gameObject)
+            if (MouseSelection.IsClickedDifferentGameObjectTo(this.gameObject)
                 && !MouseSelection.IsClickedGameObjectTag("SaveOption")) {
                 SetDeselected();
                 //            DisableEdits();

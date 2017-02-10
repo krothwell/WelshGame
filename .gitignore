@@ -6,6 +6,7 @@
 # My additions
 *.png
 *.dll
+*.cd
 Library/
 Resources/
 Temp/

@@ -3,8 +3,11 @@ using System;
 using System.Collections;
 using GameUI;
 using UnityUtilities;
-
-public class PlayerController : MonoBehaviour {
+/// <summary>
+/// This class is responsible for controlling the player’s character by reacting
+/// to input from the player and game environment.  
+/// </summary>
+public class PlayerController : Character {
     public Sprite backUpCharPortrait; //if the character portrait is null then this is used.
     public enum PlayerStatus {
         passive,
@@ -14,18 +17,15 @@ public class PlayerController : MonoBehaviour {
         interactingWithObject
     }
     public PlayerStatus playerStatus;
-    private Vector2 myPosition;
-    public Vector2 MyPosition {
-        get { return myPosition; }
-        set { myPosition = value; }
+    private Vector2 myCurrentPosition;
+    public Vector2 MyCurrentPosition {
+        get { return myCurrentPosition; }
+        set { myCurrentPosition = value; }
     }
     public GameObject selectedEnemy;
-    LowerUI lowerUI;
     CombatUI combatui;
     Vector2 camPosition;
     Vector2 destination;
-    public GameObject[] characterParts;
-    Character character;
     float camDelay;
     float camDefault;
     float walkSpeed;
@@ -39,37 +39,37 @@ public class PlayerController : MonoBehaviour {
     public float interactionDistance;
     HumanCharAnimToggles animToggles;
     public GameObject currentInteractiveObject;
+    private GameObject clickSelected;
+    DialogueUI dialogueUI;
 
     void Awake() {
-        character = GetComponent<Character>();
+        playerStatus = PlayerStatus.passive;
     }
 
     void Start() {
-        playerStatus = PlayerStatus.passive;
         camDefault = 0.3f;
         camDelay = camDefault;
         SetCamPosition();
-        myPosition = character.GetMyPosition();
+        myCurrentPosition = GetMyPosition();
         walkSpeed = 1.5f;
         runSpeed = 3.5f;
         timeSinceClickOne = 0;
         doubleClickWait = 0.2f;
         animToggles = gameObject.GetComponent<HumanCharAnimToggles>();
-        character.SetMyOrder(character.bodyParts);
+        SetMyOrder(bodyParts);
         combatui = FindObjectOfType<CombatUI>();
         strikeRangeX = 1.7f;
         strikeRangeY = 1f;
-        lowerUI = FindObjectOfType<LowerUI>();
         interactionDistance = 1f;
-
+        dialogueUI = FindObjectOfType<DialogueUI>();
+        SetCharDefaults();
     }
 
     // Update is called once per frame
     void Update() {
-        GoToDestinationClicked();
+        PrepareToGoToDestinationClicked();
         if (Input.GetMouseButtonUp(0)) {
-            MouseSelection.ClickSelect();
-            print("mouse clicked");
+            MouseSelection.ClickSelect(out clickSelected);
             DestroySelectionCircleOfInteractiveObject();
             if (playerStatus != PlayerStatus.interactingWithObject) {
                 if (MouseSelection.IsClickedGameObjectTag("World")) {
@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour {
                     SetDestination();
                 }
                 else if (MouseSelection.IsClickedGameObjectTag("WorldObject")) {
-                    if (MouseSelection.selected.GetComponent<EnemyController>() != null && playerStatus == PlayerStatus.inCombat) {
+                    if (clickSelected.GetComponent<EnemyController>() != null && playerStatus == PlayerStatus.inCombat) {
                         if (combatui.currentAbility == CombatUI.CombatAbilities.strike) {
                             AttemptStrikeToSelectedEnemy();
                         }
@@ -95,12 +95,11 @@ public class PlayerController : MonoBehaviour {
             
         }
         else if (animToggles.IsWalking || animToggles.IsRunning) {
-
-            character.SetFightMode(false);
-            if (myPosition != destination) {
+            SetFightMode(false);
+            if (myCurrentPosition != destination) {
                 StartMoving();
                 if (playerStatus == PlayerStatus.movingToObject) {
-                    if (character.GetDistanceFromMyPosition(MouseSelection.selected.GetComponent<Transform>().position) < interactionDistance) {
+                    if (GetDistanceFromMyPosition(clickSelected.GetComponent<Transform>().position) < interactionDistance) {
                         StopMoving();
                         InteractWithObject();
                     }
@@ -114,7 +113,7 @@ public class PlayerController : MonoBehaviour {
 
         if (!animToggles.IsWalking && !animToggles.IsRunning) {
             if (playerStatus == PlayerStatus.inCombat) {
-                character.SetFightMode(true);
+                SetFightMode(true);
             }
         }
 
@@ -125,52 +124,51 @@ public class PlayerController : MonoBehaviour {
 
 
     public void SetMyName(string name) {
-        GetComponent<Character>().nameID = name;
+        nameID = name;
     }
 
     public string GetMyName() {
-        return character.nameID;
+        return nameID;
     }
 
-    public void SetMyPortrait(string portraitPath) {
-        GetComponent<Character>().SetMyPortrait(portraitPath);
-    }
-    public Sprite GetMyPortrait() {
-        if (GetComponent<Character>().GetMyPortrait() == null) {
+    public Sprite GetPlayerPortrait() {
+        if (GetMyPortrait() == null) {
             return backUpCharPortrait;
         }
         else {
-            return GetComponent<Character>().GetMyPortrait();
+            return GetMyPortrait();
         }
     }
 
     private void StartMoving() {
-        character.SetTargetPosition(destination, myPosition);
-        character.MoveToCoordinates(playerSpeed);
-        myPosition = character.GetMyPosition();
-        character.SetMyOrder(character.bodyParts);
-        character.SetFightMode(false);
+        SetTargetPosition(destination, myCurrentPosition);
+        MoveToCoordinates(playerSpeed);
+        myCurrentPosition = GetMyPosition();
+        SetMyOrder(bodyParts);
+        SetFightMode(false);
     }
 
     private void StopMoving() {
         camDelay = 0;
         animToggles.IsWalking = false;
         animToggles.IsRunning = false;
-        myPosition = character.GetMyPosition();
+        myCurrentPosition = GetMyPosition();
         if (playerStatus == PlayerStatus.inCombat) {
-            character.SetFightMode(true);
+            SetFightMode(true);
         }
-        character.RerouteCount = 0;
+        RerouteCount = 0;
     }
 
     private void InteractWithObject() {
-        playerStatus = PlayerStatus.interactingWithObject;
-        GameObject objOfInterest = MouseSelection.selected;
-        if (objOfInterest.GetComponent<Character>() != null) {
-            lowerUI.SetInUse();
-            lowerUI.ProcessCharacterDialogue(objOfInterest.GetComponent<Character>());
+        playerStatus = PlayerStatus.interactingWithObject;;
+        if (clickSelected.GetComponent<Character>() != null) {
+            dialogueUI.SetInUse();
+            dialogueUI.StartNewDialogue(clickSelected.GetComponent<Character>());
+        } else if (clickSelected.GetComponent<WorldItem>()) {
+            clickSelected.GetComponent<WorldItem>().GetPickedUp();
+            playerStatus = PlayerStatus.passive;
         }
-        currentInteractiveObject = objOfInterest;
+        currentInteractiveObject = clickSelected;
 
     }
 
@@ -181,11 +179,10 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private void GoToDestinationClicked() {
+    private void PrepareToGoToDestinationClicked() {
         if (destinationClicks > 0) {
-
             WalkOrRun();
-            character.SetMyDirection(destination, myPosition);
+            SetMyDirection(destination, myCurrentPosition);
         }
     }
 
@@ -212,10 +209,10 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void SetDestination() {
-        if (character.RerouteCount < character.RerouteLimit) {
+        if (RerouteCount < RerouteLimit) {
             if (playerStatus == PlayerStatus.movingToObject) {
 
-                GameObject objectOfInterest = MouseSelection.selected;
+                GameObject objectOfInterest = clickSelected;
                 Vector2 objPosition = objectOfInterest.GetComponent<Transform>().position;
                 destination = new Vector2((float)Math.Round(objPosition.x,1), (float)Math.Round(objPosition.y,1));
 
@@ -223,7 +220,7 @@ public class PlayerController : MonoBehaviour {
                 destination = GetMouseCoords();
             }
         } else {
-            destination = character.GetMyPosition();
+            destination = GetMyPosition();
         }
     }
 
@@ -265,23 +262,27 @@ public class PlayerController : MonoBehaviour {
     }
 
     void AttemptStrikeToSelectedEnemy() {
-        if (character.distanceX > strikeRangeX || character.distanceY > strikeRangeY) {
+        if (distanceX > strikeRangeX || distanceY > strikeRangeY) {
             print("Enemy too far away");
         }
         else {
             print("attempting strike");
             Vector2 enemyPosition = selectedEnemy.GetComponent<Transform>().position;
-            character.SetMyDirection(enemyPosition, myPosition);
-            character.SetDistanceFromNewPosition(enemyPosition, myPosition);
+            SetMyDirection(enemyPosition, myCurrentPosition);
+            SetDistanceFromNewPosition(enemyPosition, myCurrentPosition);
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-            lowerUI.SetInUse();
-            lowerUI.SetRandomVocab();
+            dialogueUI.SetInUse();
+            //dialogueUI.SetRandomVocab();
         }
 
     }
 
-    public void SetUnderAttack() {
+    public void SetStatusToUnderAttack() {
         playerStatus = PlayerStatus.inCombat;
+    }
+
+    public void SetStatusToInteractingWithObject() {
+        playerStatus = PlayerStatus.interactingWithObject;
     }
 
     public void StrikeSelectedEnemy() {

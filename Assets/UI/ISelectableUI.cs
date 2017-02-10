@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIListItem : MonoBehaviour {
+public interface ISelectableUI {
 
+    void SelectSelf();
+
+    void DeselectSelf();
 }

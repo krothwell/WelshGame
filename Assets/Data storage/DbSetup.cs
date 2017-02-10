@@ -26,7 +26,8 @@ public class DbSetup {
                         Characters,
                         CharacterDialogues,
                         DialogueNodes,
-                        PlayerChoices
+                        PlayerChoices,
+                        Quests
 						};
 
 	private enum tblSqlStrs {header,body, pk};
@@ -221,6 +222,11 @@ public class DbSetup {
                                                                                 + "FOREIGN KEY (NextNodes) REFERENCES DialogueNodes(NodeIDs) ON DELETE CASCADE, ";
         tblSqlArray[(int)tbls.PlayerChoices, (int)tblSqlStrs.pk]                = "ChoiceIDs";
 
+        tblSqlArray[(int)tbls.Quests, (int)tblSqlStrs.header]                   = "Quests";
+        tblSqlArray[(int)tbls.Quests, (int)tblSqlStrs.body]                     = "QuestNames VARCHAR(100) NOT NULL, "
+                                                                                + "QuestDescriptions VARCHAR(500) NULL, ";
+        tblSqlArray[(int)tbls.Quests, (int)tblSqlStrs.pk]                       = "QuestNames";
+
     }
 
     void ReplaceTable(string tblName) {
@@ -316,7 +322,7 @@ public class DbSetup {
     }
 
 
-    void CreateTables() {
+    public void CreateTables() {
 		for (int i = 0; i < numberOfTbls; i++) {
 			CreateTable(i);
 		}

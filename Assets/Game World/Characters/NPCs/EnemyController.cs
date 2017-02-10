@@ -3,20 +3,22 @@ using System;
 using System.Collections;
 using GameUI;
 
-public class EnemyController : MonoBehaviour {
+/// <summary>
+/// This class is responsible for controlling the actions and reactions of an 
+/// enemy character when they attack the player. 
+/// </summary>
+public class EnemyController : Character {
     CombatUI combatui;
     GameObject positionSet;
-    Vector2 newPosition;
+    Vector2 newTargetPosition;
     EnemyToPlayerCloseCombatPlacements closeRangeEnemyPlacements;
-    Vector2 myPosition;
-    public GameObject[] characterParts;
-    Character character;
+    Vector2 myCurrentPosition;
     float walkSpeed;
     float runSpeed;
     float mySpeed;
     HumanCharAnimToggles animToggles;
     public bool beViolent;
-    PlayerController mainCharacter;
+    PlayerController player;
     private bool nextToPlayer = false;
     public bool NextToPlayer {
         get { return nextToPlayer; }
@@ -25,20 +27,20 @@ public class EnemyController : MonoBehaviour {
 
     void Start() {
         combatui = FindObjectOfType<CombatUI>();
-        character = gameObject.GetComponent<Character>();
-        myPosition = character.GetMyPosition();
+        myCurrentPosition = GetMyPosition();
         walkSpeed = 1.5f;
         runSpeed = 3.5f;
         animToggles = gameObject.GetComponent<HumanCharAnimToggles>();
-        mainCharacter = FindObjectOfType<PlayerController>();
+        player = FindObjectOfType<PlayerController>();
         closeRangeEnemyPlacements = FindObjectOfType<EnemyToPlayerCloseCombatPlacements>();
+        SetCharDefaults();
     }
 
     void Update() {
         if (beViolent) {
             if (positionSet == null) {
                 SetNewPosition();
-                mainCharacter.SetUnderAttack();
+                player.SetStatusToUnderAttack();
             }
             else {
                 SetPositionToPlayer();
@@ -48,24 +50,24 @@ public class EnemyController : MonoBehaviour {
 
     /*nextToPlayer bool is set by object holding collider */
     private void SetPositionToPlayer() {
-        if (myPosition == newPosition) {
-            if(character.redirecting) {
-                character.SetInterimPosition(Vector2.zero, false);
+        if (myCurrentPosition == newTargetPosition) {
+            if(redirecting) {
+                SetInterimPosition(Vector2.zero, false);
             } else {
                 animToggles.IsRunning = false;
                 animToggles.IsWalking = false;
                 mySpeed = 0;
-                myPosition = character.GetMyPosition();
+                myCurrentPosition = GetMyPosition();
                 SetPositionCoords();
-                character.SetMyDirection(mainCharacter.MyPosition, myPosition);
-                character.SetFightMode(true);
+                SetMyDirection(player.MyCurrentPosition, myCurrentPosition);
+                SetFightMode(true);
             }
 
 
         } else {
-            character.SetFightMode(false);
+            SetFightMode(false);
             print("moving to new position");
-            if (character.distanceX < 2f && character.distanceY < 1f) {
+            if (distanceX < 2f && distanceY < 1f) {
                 animToggles.IsRunning = false;
                 animToggles.IsWalking = true;
                 mySpeed = walkSpeed;
@@ -74,21 +76,21 @@ public class EnemyController : MonoBehaviour {
                 animToggles.IsWalking = false;
                 mySpeed = runSpeed;
             }
-            character.SetTargetPosition(newPosition,myPosition);
-            character.MoveToCoordinates(mySpeed);
-            character.SetMyOrder(character.bodyParts);
-            myPosition = character.GetMyPosition();
-            if (character.distanceX > 2 && character.distanceY > 2) {
-                character.SetMyDirection(newPosition, myPosition);
+            SetTargetPosition(newTargetPosition,myCurrentPosition);
+            MoveToCoordinates(mySpeed);
+            SetMyOrder(bodyParts);
+            myCurrentPosition = GetMyPosition();
+            if (distanceX > 2 && distanceY > 2) {
+                SetMyDirection(newTargetPosition, myCurrentPosition);
             } else {
-                character.SetMyDirection(mainCharacter.MyPosition, myPosition);
+                SetMyDirection(player.MyCurrentPosition, myCurrentPosition);
             }
         }
     }
 
     private void SetNewPosition() {
         GameObject side;
-        int sideRaw = mainCharacter.MyPosition.x >= myPosition.x ? -1 : 1;
+        int sideRaw = player.MyCurrentPosition.x >= myCurrentPosition.x ? -1 : 1;
         int positionIndex;
         if (sideRaw == -1) {
             positionIndex = closeRangeEnemyPlacements.GetFreePositionLeft();
@@ -120,25 +122,25 @@ public class EnemyController : MonoBehaviour {
 
         float x = (float)Math.Round(positionSet.GetComponent<Transform>().position.x, 1);
         float y = (float)Math.Round(positionSet.GetComponent<Transform>().position.y, 1);
-        newPosition = new Vector2(x, y);
+        newTargetPosition = new Vector2(x, y);
     }
 
     void OnMouseEnter() {
         if (combatui.currentAbility == CombatUI.CombatAbilities.strike) {
-            character.SetHovered();
+            SetHovered();
         }
     }
 
     void OnMouseExit() {
-        if(mainCharacter.selectedEnemy != gameObject) {
-            character.SetUnhovered();
+        if(player.selectedEnemy != gameObject) {
+            SetUnhovered();
         }
         
     }
 
     void OnMouseUp() {
         if (combatui.currentAbility == CombatUI.CombatAbilities.strike) {
-            mainCharacter.setSelectedEnemy(gameObject);
+            player.setSelectedEnemy(gameObject);
         }
     }
 

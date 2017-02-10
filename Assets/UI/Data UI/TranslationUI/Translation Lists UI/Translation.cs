@@ -7,7 +7,7 @@ using UnityUtilities;
 namespace DataUI {
     namespace ListItems {
 
-        public class Translation : UIListItem {
+        public class Translation : UIInputListItem {
 
             private string currentEnglish;
             public string CurrentEnglish {
@@ -42,7 +42,7 @@ namespace DataUI {
 
             public void SetSelectionOfTranslationOnClick() {
                 if (Input.GetMouseButtonUp(0)) {
-                    if (MouseSelection.ClickedDifferentGameObjectTo(this.gameObject)
+                    if (MouseSelection.IsClickedDifferentGameObjectTo(this.gameObject)
                         && !MouseSelection.IsClickedGameObjectName("AddRemoveRule")) {
                         if (translationOptions.activeSelf || panel.activeSelf) {
                             DeactivateTranslationOptions();

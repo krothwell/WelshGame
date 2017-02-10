@@ -7,7 +7,8 @@ using UnityEngine; //Application.dataPath
 namespace DbUtilities {
 
     /// <summary>
-    /// A number of commands that build common SQL strings to run on the database.
+    /// A number of commands that build common SQL strings based on args 
+    /// provided, and run them on the database.
     /// </summary>
     public class DbCommands {
         private static string conn;
@@ -131,7 +132,7 @@ namespace DbUtilities {
             _dbcUpd = null;
         }
 
-        public static void UpdateTableTuple(string tblName, string condition, string[,] fields) {
+        public static void UpdateTableTuple(string tblName, string condition, string[,] fields, params string[] qryParameters) {
             IDbConnection _dbc = new SqliteConnection(conn);
             _dbc.Open(); //Open connection to the database.
             IDbCommand _dbcm = _dbc.CreateCommand();
@@ -148,6 +149,9 @@ namespace DbUtilities {
                 }
                 else {
                     _dbcm.Parameters.Add(new SqliteParameter(fieldValueParamName, fieldValue));
+                }
+                foreach (string value in qryParameters) {
+                    _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(value), value));
                 }
                 string fieldName = fields[i, 0];
                 if ((i + 1) >= fields.GetLength(0)) {
@@ -350,6 +354,7 @@ namespace DbUtilities {
                 sql += " ORDER BY " + orderBy;
             }
             sql += " LIMIT 1;";
+            Debug.Log(sql);
             _dbcm.CommandText = sql;
             IDataReader _dbr = _dbcm.ExecuteReader();
             _dbr.Read();

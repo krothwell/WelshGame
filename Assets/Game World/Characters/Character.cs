@@ -3,7 +3,10 @@ using UnityEditor;
 using System;
 using System.Collections;
 using GameUtilities.Display;
-
+/// <summary>
+/// Abstract class which provides default controls of all derived character
+/// types such as the player and NPCs. 
+/// </summary>
 public class Character : MonoBehaviour {
     public Sprite charPortrait;
     public string nameID;
@@ -39,19 +42,17 @@ public class Character : MonoBehaviour {
     }
     GameObject charSprite;
     public GameObject[] bodyParts;
-    CollisionAvoider collisionAvoider;
+    public CollisionAvoider collisionAvoider;
     // Use this for initialization
-    void Start () {
-        rerouteLimit = 50;
-        charSprite = gameObject.transform.FindChild("CentreOfGravity").gameObject;
-        collisionAvoider = transform.GetComponentInChildren<CollisionAvoider>();
-        SetMyOrder(bodyParts);
+    public GameObject GetCharacterSprite() {
+        return gameObject.transform.FindChild("CentreOfGravity").gameObject; ;
     }
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public void SetCharDefaults() {
+        SetMyOrder(bodyParts);
+        collisionAvoider = transform.GetComponentInChildren<CollisionAvoider>();
+        RerouteLimit = 50;
+    }
 
     public void SetTargetPosition(Vector2 targetPos, Vector2 myPos) {
         myPosition = myPos;
@@ -99,7 +100,7 @@ public class Character : MonoBehaviour {
     }
 
     public void SetMyOrder(GameObject[] characterParts) {
-        ImageLayerOrder.SetOrderOnArray(characterParts, ImageLayerOrder.GetOrderInt(gameObject) - 1);
+        ImageLayerOrder.SetOrderOnGameObjectArray(characterParts, ImageLayerOrder.GetOrderInt(gameObject) - 1);
         ImageLayerOrder.SetZ(gameObject);
     }
 
@@ -107,10 +108,10 @@ public class Character : MonoBehaviour {
         //depending on which direction the player is going, changes the modifier to decrease or increase on that axis
         int xModifier = myPosition.x >= targettedPosition.x ? -1 : 1;
         Vector3 spriteDirection = new Vector3(xModifier,
-                                      charSprite.GetComponent<Transform>().localScale.y,
-                                      charSprite.GetComponent<Transform>().localScale.z);
-        if (charSprite.GetComponent<Transform>().localScale.x != spriteDirection.x) {
-            charSprite.GetComponent<Transform>().localScale = spriteDirection;
+                                      GetCharacterSprite().GetComponent<Transform>().localScale.y,
+                                      GetCharacterSprite().GetComponent<Transform>().localScale.z);
+        if (GetCharacterSprite().GetComponent<Transform>().localScale.x != spriteDirection.x) {
+            GetCharacterSprite().GetComponent<Transform>().localScale = spriteDirection;
         }
     }
 

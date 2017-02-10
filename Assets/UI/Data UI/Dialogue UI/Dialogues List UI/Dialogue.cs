@@ -6,12 +6,14 @@ using DbUtilities;
 using UnityUtilities;
 namespace DataUI {
     namespace ListItems {
-        public class Dialogue : UIListItem {
+        public class Dialogue : UIInputListItem, ISelectableUI, IEditableUI {
             DialogueUI dialogueUI;
-            InputField input;
+            
             Toggle activeToggle;
             Image inputBG;
             GameObject options, saveDialogue;
+
+            
             bool editable;
             private string myDescription;
             public string MyDescription {
@@ -31,47 +33,32 @@ namespace DataUI {
             // Use this for initialization
             void Start() {
                 dialogueUI = FindObjectOfType<DialogueUI>();
-                inputBG = transform.GetComponentInChildren<Image>();
-                input = transform.GetComponentInChildren<InputField>();
                 options = transform.FindChild("DialogueOptions").gameObject;
                 saveDialogue = transform.FindChild("Save").gameObject;
                 activeToggle = transform.GetComponentInChildren<Toggle>();
             }
 
-            void Update() {
-                DeselectIfClickingAnotherDialogue();
-            }
-
-            void DeselectIfClickingAnotherDialogue() {
-                /* if another dialogue is selected that is not this dialogue, then this dialogue should be deselected */
-                if (Input.GetMouseButtonUp(0)) {
-                    MouseSelection.ClickSelect();
-                    if (MouseSelection.IsClickedGameObjectName("Dialogue") && MouseSelection.ClickedDifferentGameObjectTo(gameObject)) {
-                        DeselectDialogue();
-                    }
+            void OnMouseUp() {
+                if (!editable) {
+                    dialogueUI.ToggleSelectionTo(gameObject.GetComponent<Dialogue>(), dialogueUI.selectedDialogue);
                 }
             }
 
-            void OnMouseUp() {
-                SelectDialogue();
-            }
-
-            public void SelectDialogue() {
+            public void SelectSelf() {
                 DisplayOptions();
-                SetMyColour(Colours.colorDataUIInputSelected);
-                dialogueUI.SetSelectedDialogue(gameObject);
+                SetInputColour(Colours.colorDataUIInputSelected);
                 dialogueUI.DisplayCharsRelatedToDialogue();
                 dialogueUI.DisplayNodesRelatedToDialogue();
                 dialogueUI.HidePlayerChoices();
                 dialogueUI.HidePlayerChoiceResults();
             }
 
-            private void DeselectDialogue() {
+            public void DeselectSelf() {
                 HideOptions();
-                SetMyColour(Color.white);
-                input.text = myDescription;
+                SetInputColour(Color.white);
+                GetInputField().text = myDescription;
                 activeToggle.isOn = active;
-                input.readOnly = true;
+                GetInputField().readOnly = true;
                 activeToggle.interactable = false;
                 saveDialogue.SetActive(false);
                 editable = false;
@@ -98,36 +85,34 @@ namespace DataUI {
 
             public void SetEditable() {
                 editable = true;
-                input.readOnly = false;
+                GetInputField().readOnly = false;
                 activeToggle.interactable = true;
                 HideOptions();
                 saveDialogue.SetActive(true);
-                input.Select();
+                GetInputField().Select();
             }
 
 
-            public void SaveDialogueChanges() {
+            public void SaveEdits() {
                 string isActive = activeToggle.isOn ? "1" : "0";
                 print(isActive);
                 string[,] fields = new string[,]{
-                                            { "DialogueDescriptions", input.text },
+                                            { "DialogueDescriptions", GetInputField().text },
                                             { "Active", isActive }
                                          };
                 DbCommands.UpdateTableTuple("Dialogues",
                                          "DialogueIDs = " + myID,
                                          fields);
-                MyDescription = input.text;
+                MyDescription = GetInputField().text;
                 active = activeToggle.isOn;
                 editable = false;
-                input.readOnly = true;
+                GetInputField().readOnly = true;
                 activeToggle.interactable = false;
                 saveDialogue.SetActive(false);
-                SelectDialogue();
+                dialogueUI.ToggleSelectionTo(GetComponent<Dialogue>(), dialogueUI.selectedDialogue);
             }
 
-            void SetMyColour(Color newColor) {
-                input.colors.normalColor.Equals(newColor);
-            }
+
         }
     }
 }

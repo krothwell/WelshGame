@@ -45,8 +45,7 @@ namespace DataUI {
 
             public void SetSelectionOfTranslationOnClick() {
                 if (Input.GetMouseButtonUp(0)) {
-                    MouseSelection.ClickSelect();
-                    if (MouseSelection.ClickedDifferentGameObjectTo(this.gameObject)) {
+                    if (MouseSelection.IsClickedDifferentGameObjectTo(this.gameObject)) {
                         //if a rule is not being edited then the rule list is refreshed.
                         if (!translationUI.editingRule) {
                             if (ruleOptions.activeSelf) {

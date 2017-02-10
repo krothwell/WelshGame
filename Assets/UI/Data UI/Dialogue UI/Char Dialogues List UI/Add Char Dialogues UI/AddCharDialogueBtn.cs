@@ -5,7 +5,7 @@ using DbUtilities;
 namespace DataUI {
     namespace ListItems {
         public class AddCharDialogueBtn : MonoBehaviour {
-            DialogueUI dui;
+            DialogueUI dialogueUI;
             private string characterName;
             public string CharacterName {
                 get { return characterName; }
@@ -18,14 +18,14 @@ namespace DataUI {
             }
 
             void Start() {
-                dui = FindObjectOfType<DialogueUI>();
+                dialogueUI = FindObjectOfType<DialogueUI>();
             }
 
             public void SelectCharLink() {
-                dui.SetSelectedCharLink(gameObject);
-                dui.InsertNewCharLink();
-                dui.DisplayCharsRelatedToDialogue();
-                dui.DeactivateCharacterLink();
+                dialogueUI.SetSelectedCharLink(gameObject);
+                dialogueUI.InsertNewCharLink();
+                dialogueUI.DisplayCharsRelatedToDialogue();
+                dialogueUI.DeactivateCharacterLink();
             }
 
             public void DisplayDeletionOption() {

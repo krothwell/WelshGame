@@ -6,6 +6,14 @@ using DbUtilities;
 
 namespace GameUI {
     namespace ListItems {
+        /// <summary>
+        /// Displays a player choice clickable text in the game’s dialogue UI.
+        /// The button is instantiated with data from the database when a
+        /// related node is activated either at the start of a Dialogue or 
+        /// because of another player choice being selected. Selecting the 
+        /// choice can result in various outcomes steered by querying related
+        /// tables in the database from the DialogueUI class. 
+        /// </summary>
         public class PlayerChoice : MonoBehaviour {
             private string myText;
             public string MyText {
@@ -23,15 +31,7 @@ namespace GameUI {
                 get { return myNextNode; }
                 set { myNextNode = value; }
             }
-
-            PlayerController mainChar;
-            LowerUI lowerUI;
             public DialogueUI dialogueUI;
-            // Use this for initialization
-            void Start() {
-                mainChar = FindObjectOfType<PlayerController>();
-                lowerUI = FindObjectOfType<LowerUI>();
-            }
 
             void DisableMe() {
                 GetComponent<Button>().interactable = false;
@@ -46,15 +46,17 @@ namespace GameUI {
             public void DisplayChoiceResults() {
                 DisableMe();
                 dialogueUI.DestroyInteractiveChoices();
-                print("displaying results");
                 dialogueUI.InsertSpacer();
-                dialogueUI.DisplayDialogueNode(GetDialogueNodeData(myNextNode));
-                print("displaycurrentnodecharportrait");
+                if (myNextNode != "") {
+                    dialogueUI.DisplayDialogueNode(GetDialogueNodeData(myNextNode));
+                } else {
+                    dialogueUI.InsertEndDialogue();
+                    dialogueUI.ScrollToDialogueElement(dialogueUI.GetCurrentSpeaker());
+                }
                 DisplayCurrentNodeCharacterPortrait();
             }
 
             public void DisplayPlayerPortrait() {
-                lowerUI.SetObjectPortrait(mainChar.GetMyPortrait());
             }
 
             public void DisplayCurrentNodeCharacterPortrait() {

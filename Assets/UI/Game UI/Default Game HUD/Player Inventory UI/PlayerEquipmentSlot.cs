@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace GameUI {
     public class PlayerEquipmentSlot : MonoBehaviour {
-        public WorldItems.itemTypes itemType;
+        public WorldItems.WorldItemTypes itemType;
         PlayerInventoryUI inventory;
         // Use this for initialization
         void Start() {
@@ -15,7 +15,12 @@ namespace GameUI {
 
         }
         void OnMouseUp() {
-            inventory.ActionSlotItem(gameObject);
+            if (inventory.IsItemSelected()) {
+                inventory.AttemptToPutItemInSlot(gameObject);
+            }
+            else {
+                inventory.AttemptToPickUpItemInSlot(gameObject);
+            }
         }
     }
 }

@@ -7,10 +7,9 @@ using UnityUtilities;
 
 namespace DataUI {
     namespace ListItems {
-        public class PlayerChoice : MonoBehaviour {
+        public class PlayerChoice : UIInputListItem, ISelectableUI {
             DialogueUI dialogueUI;
             InputField input;
-            Image inputBG;
             GameObject options;
 
             private string myText;
@@ -32,39 +31,25 @@ namespace DataUI {
             // Use this for initialization
             void Start() {
                 dialogueUI = FindObjectOfType<DialogueUI>();
-                inputBG = transform.GetComponentInChildren<Image>();
                 input = transform.GetComponentInChildren<InputField>();
                 options = transform.FindChild("PlayerChoiceOptions").gameObject;
-            }
-
-            void Update() {
-                DeselectIfClickingAnotherChoice();
-            }
-
-            void DeselectIfClickingAnotherChoice() {
-                /* if another dialogue is selected that is not this dialogue, then this dialogue should be deselected */
-                if (Input.GetMouseButtonUp(0)) {
-                    MouseSelection.ClickSelect();
-                    if (MouseSelection.IsClickedGameObjectName("PlayerChoice") && MouseSelection.ClickedDifferentGameObjectTo(gameObject)) {
-                        DeselectChoice();
-                    }
-                }
+                print(options);
             }
 
             void OnMouseUp() {
-                SelectChoice();
+                dialogueUI.ToggleSelectionTo(GetComponent<PlayerChoice>(), dialogueUI.selectedChoice);
             }
 
-            public void SelectChoice() {
+            public void SelectSelf() {
                 DisplayOptions();
-                SetMyColour(Colours.colorDataUIInputSelected);
-                dialogueUI.SetSelectedPlayerChoice(gameObject);
+                SetInputColour(Colours.colorDataUIInputSelected);
+                //dialogueUI.SetSelectedPlayerChoice(gameObject);
                 dialogueUI.DisplayResultsRelatedToChoices();
             }
 
-            private void DeselectChoice() {
+            public void DeselectSelf() {
                 HideOptions();
-                SetMyColour(Color.white);
+                SetInputColour(Color.white);
                 input.readOnly = true;
             }
 
@@ -85,10 +70,6 @@ namespace DataUI {
 
             public void EditChoice() {
                 dialogueUI.SetActivePlayerChoiceEdit();
-            }
-
-            void SetMyColour(Color newColor) {
-                inputBG.color = newColor;
             }
 
             public void UpdateChoiceDisplay(string newText) {

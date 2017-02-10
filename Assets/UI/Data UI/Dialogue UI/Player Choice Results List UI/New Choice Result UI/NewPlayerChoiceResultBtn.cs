@@ -6,7 +6,7 @@ namespace DataUI {
 
         public class NewPlayerChoiceResultBtn : MonoBehaviour {
 
-            DialogueUI dui;
+            DialogueUI dialogueUI;
             private string myID;
             public string MyID {
                 get { return myID; }
@@ -20,12 +20,12 @@ namespace DataUI {
             }
 
             void Start() {
-                dui = FindObjectOfType<DialogueUI>();
+                dialogueUI = FindObjectOfType<DialogueUI>();
             }
 
             void OnMouseUp() {
-                dui.SetSelectedChoiceResultOption(gameObject);
-                dui.InsertNewChoiceResult();
+                dialogueUI.SetSelectedChoiceResultOption(gameObject);
+                dialogueUI.InsertNewChoiceResult();
             }
         }
     }

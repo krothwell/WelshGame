@@ -4,15 +4,15 @@ using System.Collections;
 namespace GameUI {
     namespace ListItems {
         public class EndDialogueBtn : MonoBehaviour {
-            LowerUI lowerUI;
             PlayerController mainCharacter;
+            DialogueUI dialogueUI;
             void Start() {
-                lowerUI = FindObjectOfType<LowerUI>();
+                dialogueUI = FindObjectOfType<DialogueUI>();
                 mainCharacter = FindObjectOfType<PlayerController>();
             }
 
             public void CloseDialogue() {
-                lowerUI.SetNotInUse();
+                dialogueUI.SetNotInUse();
                 mainCharacter.playerStatus = PlayerController.PlayerStatus.passive;
             }
         }

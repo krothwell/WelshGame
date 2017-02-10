@@ -1,19 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DbUtilities;
 
 namespace GameUI {
+    /// <summary>
+    /// Responsible for knowing when the player is in a combat situation, 
+    /// deciding when the player can enter combat mode, displaying/using combat
+    /// abilities which call methods in GameUI.DialogueUI to test the player 
+    /// (and provide an outcome dealt with by the DialogueUI). 
+    /// </summary>
     public class CombatUI : MonoBehaviour {
         public enum CombatAbilities { passive, strike }
         public CombatAbilities currentAbility;
-        LowerUI lowerUI;
         GameObject abilitiesPanel;
         DefaultGameHUD explorerUI;
         public Texture2D[] cursors;
         public bool CombatUIactive;
         PlayerController mainChar;
+        //DialogueUI dialogueUI;
         // Use this for initialization
         void Start() {
-            lowerUI = FindObjectOfType<LowerUI>();
+            //dialogueUI = FindObjectOfType<DialogueUI>();
             abilitiesPanel = transform.FindChild("AbilitiesPanel").gameObject;
             explorerUI = FindObjectOfType<DefaultGameHUD>();
             currentAbility = CombatAbilities.passive;
@@ -22,7 +29,7 @@ namespace GameUI {
 
         // Update is called once per frame
         void Update() {
-            if (!lowerUI.components.activeSelf && mainChar.playerStatus == PlayerController.PlayerStatus.inCombat) {
+            if (mainChar.playerStatus == PlayerController.PlayerStatus.inCombat) {
                 if (Input.GetKeyUp(KeyCode.Space)) {
                     ToggleCombatMode();
                 }
@@ -52,6 +59,13 @@ namespace GameUI {
         public void SetStrikeAbility() {
             currentAbility = CombatAbilities.strike;
         }
+        
+        public void SetRandomVocab() {
+    		//string[] testStrings = DbCommands.GetRandomTupleFromTable("VocabTranslations");
+    		//testEnglish = testStrings[0];
+    		//testWelsh = testStrings[1];
+    		//lowerUItxt.text = "Translate the following into Welsh: " + testEnglish;
+	    }
 
         public void SetAttackCursor() {
             Texture2D cursorTexture = cursors[0];

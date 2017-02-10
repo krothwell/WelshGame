@@ -41,5 +41,9 @@ namespace DbUtilities {
             string sceneParam = DbCommands.GetParameterNameFromValue(sceneName);
             return "SELECT CharacterNames FROM Characters WHERE scenes = " + sceneParam + ";";
         }
+
+        public static string GetQuestsDisplayQry() {
+            return "SELECT * FROM Quests;";
+        }
     }
 }

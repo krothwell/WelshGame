@@ -25,11 +25,11 @@ namespace DataUI {
             }
 
             GameObject removeLinkBtn;
-            Image inputBG;
+            InputField input;
             // Use this for initialization
             void Start() {
                 removeLinkBtn = transform.FindChild("RemoveLink").gameObject;
-                inputBG = transform.GetComponentInChildren<Image>();
+                input = transform.GetComponentInChildren<InputField>();
             }
             void Update() {
                 DeselectIfClickingAnotherChar();
@@ -38,8 +38,7 @@ namespace DataUI {
             void DeselectIfClickingAnotherChar() {
                 /* if another dialogue is selected that is not this dialogue, then this dialogue should be deselected */
                 if (Input.GetMouseButtonUp(0)) {
-                    MouseSelection.ClickSelect();
-                    if (MouseSelection.IsClickedGameObjectName("CharacterDialog") && MouseSelection.ClickedDifferentGameObjectTo(gameObject)) {
+                    if (MouseSelection.IsClickedGameObjectName("CharacterDialog") && MouseSelection.IsClickedDifferentGameObjectTo(gameObject)) {
                         DeselectCharDialogue();
                     }
                 }
@@ -75,7 +74,7 @@ namespace DataUI {
             }
 
             void SetMyColour(Color newColor) {
-                inputBG.color = newColor;
+                input.colors.normalColor.Equals(newColor);
             }
         }
     }

@@ -11,9 +11,8 @@ using DataUI.Utilities;
 namespace DataUI {
     /* Deals with the higher level functions of the Translation Manager such as displaying lists relating to translations from the database
        and a means to enter new translation related data */
-    public class TranslationUI : DataUIController {
+    public class TranslationUI : UIController {
         //high level cross cutting objects and holders
-        GameObject panel;
 
         //Grammar rules
         GameObject grammarListUI, grammarListUIpanel, grammarList,
@@ -49,10 +48,9 @@ namespace DataUI {
         string auxiliaryDataMenusGroup;
 
         void Start() {
-            panel = transform.FindChild("Panel").gameObject;
 
             //GRAMMAR UI
-            grammarListUI = panel.transform.FindChild("GrammarListUI").gameObject;
+            grammarListUI = GetPanel().transform.FindChild("GrammarListUI").gameObject;
             grammarRulesBtn = grammarListUI.transform.FindChild("GrammarRulesBtn").gameObject.GetComponent<Button>();
             grammarListUIpanel = grammarListUI.transform.FindChild("Panel").gameObject;
             grammarList = grammarListUIpanel.GetComponentInChildren<GridLayoutGroup>().gameObject;
@@ -65,7 +63,7 @@ namespace DataUI {
             viewGrammarDetailsBtnText = activateGrammarDetailsBtn.GetComponent<Text>();
 
             //PROFICIENCIES UI
-            proficienciesListUI = panel.transform.FindChild("ProficienciesListUI").gameObject;
+            proficienciesListUI = GetPanel().transform.FindChild("ProficienciesListUI").gameObject;
             proficienciesBtn = proficienciesListUI.transform.FindChild("ProficienciesBtn").gameObject.GetComponent<Button>();
             proficienciesListUIpanel = proficienciesListUI.transform.FindChild("Panel").gameObject;
             proficienciesList = proficienciesListUIpanel.GetComponentInChildren<GridLayoutGroup>().gameObject;
@@ -77,7 +75,7 @@ namespace DataUI {
             inputThresholdTxt = newProficiencyPanel.transform.Find("ThresholdInput").GetComponent<InputField>();
 
             //TRANSLATIONS UI
-            translationListsUI = panel.transform.FindChild("TranslationListsUI").gameObject;
+            translationListsUI = GetPanel().transform.FindChild("TranslationListsUI").gameObject;
             translationListsUIpanel = translationListsUI.transform.FindChild("Panel").gameObject;
             vocabTranslationList = translationListsUIpanel.GetComponentInChildren<GridLayoutGroup>().gameObject;
             //adding
@@ -91,8 +89,6 @@ namespace DataUI {
 
             auxiliaryDataMenusGroup = "AuxiliaryDataMenus";
             CreateNewMenuToggleGroup(auxiliaryDataMenusGroup);
-            AddNewMenuToToggleGroup(auxiliaryDataMenusGroup, grammarListUI.GetComponent<UIController>());
-            AddNewMenuToToggleGroup(auxiliaryDataMenusGroup, proficienciesListUI.GetComponent<UIController>());
 
             FillDisplayFromDb(DbCommands.GetTranslationsDisplayQry(), vocabTranslationList.transform, BuildVocabTranslation);
         }

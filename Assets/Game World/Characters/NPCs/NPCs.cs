@@ -4,9 +4,10 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// Builds a dictionary in start to hold all the characters so another class can easily get the character
-/// object from the name of the character. Useful functions related to character retrieval are also provided
-/// for updating related database tables as required.
+/// Responsible for providing an easy way for other classes to retrieve NPC
+/// character objects in the scene. Most of the time this is by the name of the
+/// character, so a dictionary is built at the start of the scene to reference
+/// the character objects by string.
 /// </summary>
 public class NPCs : MonoBehaviour {
     private Dictionary<string, Character> npcCharDict;

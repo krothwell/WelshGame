@@ -6,8 +6,7 @@ using DbUtilities;
 
 namespace DataUI {
     namespace ListItems {
-        public class PlayerChoiceResult : MonoBehaviour {
-            UIController ui;
+        public class PlayerChoiceResult : UIInputListItem, ISelectableUI {
             DialogueUI dialogueUI;
             private string myID;
             public string MyID {
@@ -28,32 +27,20 @@ namespace DataUI {
             void Start() {
                 options = transform.FindChild("Options").gameObject;
                 inputBG = transform.GetComponentInChildren<Image>();
-                ui = FindObjectOfType<UIController>();
                 dialogueUI = FindObjectOfType<DialogueUI>();
                 input = transform.GetComponentInChildren<InputField>();
             }
 
-            void Update() {
-                ui.DeselectIfClickingAnotherListItem("ChoiceResult", gameObject, DeselectMe);
-            }
-
-            //void DeselectIfClickingAnotherNode() {
-            //    /* if another dialogue is selected that is not this dialogue, then this dialogue should be deselected */
-            //    if (Input.GetMouseButtonUp(0)) {
-            //        SelectController.ClickSelect();
-            //        if (SelectController.IsClickedGameObjectName("DialogNode") && SelectController.ClickedDifferentGameObjectTo(gameObject)) {
-            //            DeselectNode();
-            //        }
-            //    }
+            //void Update() {
+            //    ui.DeselectIfClickingAnotherListItem("ChoiceResult", gameObject, DeselectMe);
             //}
 
-            void SelectMe() {
+            public void SelectSelf() {
                 DisplayOptions();
                 SetMyColour(Colours.colorDataUIInputSelected);
-                dialogueUI.SetSelectedPchoiceResult(gameObject);
             }
 
-            void DeselectMe() {
+            public void DeselectSelf() {
                 HideOptions();
                 SetMyColour(Color.white);
                 input.readOnly = true;
@@ -72,12 +59,12 @@ namespace DataUI {
             }
 
             public void DeleteMe() {
-                DbCommands.UpdateTableField("PlayerChoices", "NextNodes", "null", "ChoiceIDs = " + dialogueUI.GetSelectedPlayerChoice().GetComponent<PlayerChoice>().MyID);
+                //DbCommands.UpdateTableField("PlayerChoices", "NextNodes", "null", "ChoiceIDs = " + dialogueUI.GetSelectedPlayerChoice().GetComponent<PlayerChoice>().MyID);
                 Destroy(gameObject);
             }
 
             void OnMouseUp() {
-                SelectMe();
+                dialogueUI.ToggleSelectionTo(GetComponent<PlayerChoiceResult>(),dialogueUI.selectedChoiceResult);
             }
         }
     }

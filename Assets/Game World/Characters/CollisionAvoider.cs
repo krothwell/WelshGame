@@ -3,12 +3,26 @@ using System.Collections;
 using System;
 using UnityUtilities;
 
+/// <summary>
+/// NOTE: This may need to be merged with Character class, while doling out 
+/// some generic functions to a utilities namespace.
+///
+/// A line collider is used which spans the distance between the attached 
+/// character and the target location which the character is going towards.
+/// This class is responsible for controlling the line collider by 
+/// specifying the end and starting points of the line. When it detects an 
+/// obstacle (Perimeter object), the class is responsible for redirecting 
+/// the character by choosing the corner of the obstacle nearest the 
+/// destination to direct the character to. Once the redirection has 
+/// occurred, the character will try once again to go to the chosen location
+/// unless interrupted somewhere along the way.  
+/// </summary>
 public class CollisionAvoider : MonoBehaviour {
     float xDirection, yDirection, distanceX, distanceY;
     Character character;
-    //Vector2 charPos;
+    Vector2 charPos;
     Vector2 closestCorner;
-    GameObject myPerimeter;
+    GameObject myPerimeter, selected;
     EdgeCollider2D collisionDetector;
     Transform perimeterTransform;
     PlayerController mainChar;
@@ -23,12 +37,10 @@ public class CollisionAvoider : MonoBehaviour {
     void Update () {
         //Time.timeScale = 0.5f;
         if (Input.GetMouseButtonUp(0)) {
-            MouseSelection.ClickSelect();
+            MouseSelection.ClickSelect(out selected);
 
         }
     }
-
-
 
     void OnTriggerEnter2D(Collider2D trigger) {
         RedirectWhenObstacleDetected(trigger.gameObject);
@@ -40,8 +52,8 @@ public class CollisionAvoider : MonoBehaviour {
             if (obstacle != myPerimeter) {
                 if (mainChar.playerStatus == PlayerController.PlayerStatus.movingToObject 
                 || mainChar.playerStatus == PlayerController.PlayerStatus.interactingWithObject) {
-                    if (obstacle.transform.parent.gameObject != MouseSelection.selected) {
-                        print(MouseSelection.selected);
+                    if (obstacle.transform.parent.gameObject != selected) {
+                        print(selected);
                         print(obstacle.transform.parent.gameObject);
                         RedirectCharacter(obstacle);
                     }
@@ -126,6 +138,7 @@ public class CollisionAvoider : MonoBehaviour {
     } 
 
     public float GetDistanceFromCharPosition(Vector2 newPosition) {
+        charPos = character.GetMyPosition();
         return (float)Math.Sqrt((Math.Pow((double)(newPosition.x - charPos.x), 2)
                               + (Math.Pow((double)(newPosition.y - charPos.y), 2))));
     }

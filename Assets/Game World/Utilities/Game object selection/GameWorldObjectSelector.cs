@@ -2,9 +2,14 @@
 using System.Collections;
 
 public class GameWorldObjectSelector : MonoBehaviour {
-
+    /// <summary>
+    /// Attaches to interactive game world objects – e.g. NPCs, collectable
+    /// items) as a separate script and indicates when the player is hovering
+    /// over an object / has selected an object by instantiating a selection 
+    /// circle prefab in the object hierarchy.
+    /// </summary>
     public GameObject selectionCirclePrefab;
-    public GameObject selectionCircle;
+    private GameObject selectionCircle;
     Color selectedColour; 
     private bool clicked;
 
@@ -43,7 +48,9 @@ public class GameWorldObjectSelector : MonoBehaviour {
 
 
     void ChangeColourToSelected () {
-        selectionCircle.GetComponent<SpriteRenderer>().color = selectedColour;
+        if (selectionCircle != null) {
+            selectionCircle.GetComponent<SpriteRenderer>().color = selectedColour;
+        }
     }
 
 }

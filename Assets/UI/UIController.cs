@@ -9,15 +9,24 @@ using System.Collections.Generic;
 using UnityUtilities;
 
 /// <summary>
-/// UI controllers provide default methods for the display of UI lists by retrieving data from the database.
-/// They also provide default methods for the display of menus.
+/// An abstract class which provides default methods for the display of UI lists
+/// by retrieving data from the database and default methods to display menus
+/// and other UI related components.
 /// </summary>
 public class UIController : MonoBehaviour {
+    protected GameObject panel;
     /// <summary>
-    /// The menu toggle groups dictionary provides a consistent approach when displaying a UI menu that hides others is required. 
+    /// The menu toggle groups dictionary provides a consistent approach when displaying a UI menu where only one
+    /// UI controller should be displayed at a time from the group. 
     /// A list of UIControllers can be added to the dictionary with a string key for referencing.
     /// </summary>
-    Dictionary<String, List<UIController>> menuToggleGroups;
+    private Dictionary<string, UIController> menuToggleGroups;
+    /// <summary>
+    /// The selection toggle groups dictionary provides a consistent approach when selecting a selectable UI list element
+    /// where only one list element should be selected at a time. 
+    /// A list of classes which implement the selectable interface can be added to the dictionary with a string key for referencing.
+    /// </summary>
+    private Dictionary<string, ISelectableUI> selectionToggleGroups;
     /// <summary>
     /// Clear current list and then get a list of data queried from the database and uses an anonymous function to create a new list 
     /// of items from the data retrieved.
@@ -75,8 +84,7 @@ public class UIController : MonoBehaviour {
     public void DeselectIfClickingAnotherListItem(string itemName, GameObject go, Action deselectFunction) {
         /* if another dialogue is selected that is not this dialogue, then this dialogue should be deselected */
         if (Input.GetMouseButtonUp(0)) {
-            MouseSelection.ClickSelect();
-            if (MouseSelection.IsClickedGameObjectName(itemName) && MouseSelection.ClickedDifferentGameObjectTo(go)) {
+            if (MouseSelection.IsClickedGameObjectName(itemName) && MouseSelection.IsClickedDifferentGameObjectTo(go)) {
                 deselectFunction();
             }
         }
@@ -92,7 +100,7 @@ public class UIController : MonoBehaviour {
     /// </summary>
     public void DeactivateSelf() {
         gameObject.SetActive(false);
-        MouseSelection.DelayNextSelection();
+        MouseSelection.DelayNextClickSelect();
     }
 
     /// <summary>
@@ -100,7 +108,7 @@ public class UIController : MonoBehaviour {
     /// "Panel" should be used as the GameObject name so that it can always be found when this function is called.
     /// </summary>
     public void DisplayComponents() {
-        GameObject panel = transform.FindChild("Panel").gameObject;
+        panel = transform.FindChild("Panel").gameObject;
         panel.SetActive(true);
     }
 
@@ -113,29 +121,72 @@ public class UIController : MonoBehaviour {
         panel.SetActive(false);
     }
 
+    public GameObject GetPanel() {
+        return transform.FindChild("Panel").gameObject;
+    }
+
     public void CreateNewMenuToggleGroup(string groupName) {
         if (menuToggleGroups == null) {
-            menuToggleGroups = new Dictionary<String, List<UIController>>();
+            menuToggleGroups = new Dictionary<string, UIController>();
         }
-        menuToggleGroups.Add(groupName, new List<UIController>());
+        if (!menuToggleGroups.ContainsKey(groupName)) {
+            menuToggleGroups.Add(groupName, null);
+        }
+        else {
+            Debug.Log("You tried to create a new menu toggle group which already exists");
+        }
     }
 
-    public void AddNewMenuToToggleGroup(string groupName, UIController menu) {
-        print("adding menu: " + menu);
-        List<UIController> toggleMenuGroup = GetToggleMenuGroup(groupName);
-        toggleMenuGroup.Add(menu);
-    }
-
-    private List<UIController> GetToggleMenuGroup(string groupName) {
+    public UIController GetToggledMenuFromGroup(string groupName) {
         return menuToggleGroups[groupName];
     }
 
     public void ToggleMenuTo(UIController menuToDisplay, string inGroup) {
-        print("Toggling to: " + menuToDisplay);
-        List<UIController> toggleMenuGroup = GetToggleMenuGroup(inGroup);
-        foreach (UIController menu in toggleMenuGroup) {
-            menu.HideComponents();
+        if ((GetToggledMenuFromGroup(inGroup) != null)
+        && (GetToggledMenuFromGroup(inGroup) != menuToDisplay)) {
+            GetToggledMenuFromGroup(inGroup).HideComponents();
+            menuToggleGroups[inGroup] = menuToDisplay;
+            menuToDisplay.DisplayComponents();
         }
-        menuToDisplay.DisplayComponents();
+        else {
+            menuToggleGroups[inGroup] = menuToDisplay;
+            menuToDisplay.DisplayComponents();
+        }
+    }
+
+    public void CreateSelectionToggleGroup(string groupName) {
+        if (selectionToggleGroups == null) {
+            selectionToggleGroups = new Dictionary<string, ISelectableUI>();
+        }
+        if (!selectionToggleGroups.ContainsKey(groupName)) {
+            selectionToggleGroups.Add(groupName, null);
+        } else {
+            Debug.Log(groupName + ": You tried to create a selection toggle group which already exists");
+        }
+    }
+
+    public ISelectableUI GetSelectedItemFromGroup(string groupName) {
+        return selectionToggleGroups[groupName];
+    }
+
+    public void ToggleSelectionTo(ISelectableUI selection, string inGroup) {
+        Debugging.PrintDictionary(selectionToggleGroups);
+        print(GetSelectedItemFromGroup(inGroup));
+        if (GetSelectedItemFromGroup(inGroup) != null) {
+            if (!GetSelectedItemFromGroup(inGroup).Equals(null)) {
+                if (GetSelectedItemFromGroup(inGroup) != selection) {
+                    print(GetSelectedItemFromGroup(inGroup));
+                    GetSelectedItemFromGroup(inGroup).DeselectSelf();
+                    selectionToggleGroups[inGroup] = selection;
+                    selection.SelectSelf();
+                }
+            } else {
+                selectionToggleGroups[inGroup] = selection;
+                selection.SelectSelf();
+            }
+        } else {
+            selectionToggleGroups[inGroup] = selection;
+            selection.SelectSelf();
+        }
     }
 }

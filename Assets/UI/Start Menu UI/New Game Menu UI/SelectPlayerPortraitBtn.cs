@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityUtilities;
 
 namespace StartMenuUI {
-    public class SelectPlayerPortraitBtn : MonoBehaviour {
+    public class SelectPlayerPortraitBtn : MonoBehaviour, ISelectableUI {
 
         NewGameMenuUI newGame;
 
@@ -21,23 +21,24 @@ namespace StartMenuUI {
 
         private void DeselectIfTypeIsSame() {
             if (Input.GetMouseButtonUp(0)) {
-                MouseSelection.ClickSelect();
-                if (MouseSelection.ClickedDifferentGameObjectTo(this.gameObject)) {
+                if (MouseSelection.IsClickedDifferentGameObjectTo(this.gameObject)) {
                     //if a rule is not being edited then the rule list is refreshed.
-                    SelectPlayerPortraitBtn charPortraitSelector = MouseSelection.selected.GetComponent<SelectPlayerPortraitBtn>();
+                    GameObject clickSelect;
+                    MouseSelection.ClickSelect(out clickSelect);
+                    SelectPlayerPortraitBtn charPortraitSelector = clickSelect.GetComponent<SelectPlayerPortraitBtn>();
                     if (charPortraitSelector != null) {
-                        DeselectMe();
+                        DeselectSelf();
                     }
                 }
             }
         }
 
-        public void SelectMe() {
+        public void SelectSelf() {
             GetComponent<Image>().color = newGame.portraitSelectedColor;
             newGame.SetSelectedPortrait(GetComponent<SelectPlayerPortraitBtn>());
         }
 
-        private void DeselectMe() {
+        public void DeselectSelf() {
             GetComponent<Image>().color = newGame.portraitDeselectedColor;
         }
 
@@ -53,12 +54,12 @@ namespace StartMenuUI {
 
         void OnMouseExit() {
             if (newGame.GetSelectedPortrait().gameObject != gameObject) {
-                DeselectMe();
+                DeselectSelf();
             }
         }
 
         void OnMouseUp() {
-            SelectMe();
+            SelectSelf();
         }
     }
 }
