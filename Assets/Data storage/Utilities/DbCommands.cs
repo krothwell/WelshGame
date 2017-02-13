@@ -160,12 +160,11 @@ namespace DbUtilities {
                 else {
                     setSql += fieldName + " = " + fieldValueParamName + ", ";
                 }
-
             }
 
             string whereSql = " WHERE " + condition;
             string sql = updateSql + setSql + whereSql + ";";
-
+            Debug.Log(sql);
             _dbcm.CommandText = sql;
 
             _dbcm.ExecuteNonQuery();
@@ -211,7 +210,7 @@ namespace DbUtilities {
         /// </summary>
         public static void GetDbTableListToPrint(string tblName, out List<string[]> tblList) {
             tblList = new List<string[]>();
-            string[] listName = new string[0];
+            string[] listName = new string[1];
             listName[0] = "TABLE NAME: " + tblName;
             tblList.Add(listName);
             IDbConnection _dbc = new SqliteConnection(conn);
@@ -225,12 +224,15 @@ namespace DbUtilities {
             string[] fieldHeadings = new string[_dbr.FieldCount];
             for (int i = 0; i < _dbr.FieldCount; i++) {
                 fieldHeadings[i] = (_dbr.GetName(i)).ToUpper();
+                
             }
+            tblList.Add(fieldHeadings);
             while (_dbr.Read()) {
                 string[] tupleArray = new string[_dbr.FieldCount];
                 for (int i = 0; i < _dbr.FieldCount; i++) {
                     tupleArray[i] = (_dbr[_dbr.GetName(i)].ToString());
                 }
+                tblList.Add(tupleArray);
             }
             _dbr.Dispose();
             _dbr = null;
@@ -341,7 +343,7 @@ namespace DbUtilities {
             return tupleArray;
         }
 
-        public static string[] GetTupleFromTable(string tblName, string condition = "", string orderBy = "") {
+        public static string[] GetTupleFromTable(string tblName, string condition = "", string orderBy = "", params string[] qryParameters) {
             IDbConnection _dbc = new SqliteConnection(conn);
             _dbc.Open(); //Open connection to the database.
             IDbCommand _dbcm = _dbc.CreateCommand();
@@ -354,8 +356,11 @@ namespace DbUtilities {
                 sql += " ORDER BY " + orderBy;
             }
             sql += " LIMIT 1;";
-            Debug.Log(sql);
+            //Debug.Log(sql);
             _dbcm.CommandText = sql;
+            foreach (string qryParameter in qryParameters) {
+                _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(qryParameter), qryParameter));
+            }
             IDataReader _dbr = _dbcm.ExecuteReader();
             _dbr.Read();
             string[] tupleArray = new string[_dbr.FieldCount];

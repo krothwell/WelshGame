@@ -9,6 +9,7 @@ namespace DataUI {
             public static Color32 colorDataUItxt = new Color32(0, 0, 0, 255);
             public static Color32 colorDataUIinactive = new Color32(33, 33, 33, 255);
             public static Color32 colorDataUIInputSelected = new Color32(204, 217, 255, 255);
+            public static Color32 colorDataUIPanelInactive = new Color32(184, 184, 184, 100);
         }
     }
 }

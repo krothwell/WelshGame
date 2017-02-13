@@ -12,9 +12,13 @@ public class UIInputListItem : MonoBehaviour {
     }
 
     public void SetInputColour(Color newColor) {
-        ColorBlock cb = inputField.colors;
+        ColorBlock cb = GetInputField().colors;
         cb.normalColor = newColor;
         inputField.colors = cb;
+    }
+
+    public void SetInputText(string newText) {
+        inputField.text = newText;
     }
 
 

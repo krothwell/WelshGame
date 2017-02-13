@@ -57,11 +57,8 @@ namespace DataUI {
                 HideOptions();
                 SetInputColour(Color.white);
                 GetInputField().text = myDescription;
+                StopEditing();
                 activeToggle.isOn = active;
-                GetInputField().readOnly = true;
-                activeToggle.interactable = false;
-                saveDialogue.SetActive(false);
-                editable = false;
             }
 
             private void DisplayOptions() {
@@ -83,7 +80,7 @@ namespace DataUI {
                 dialogueUI.HideNodesRelatedToDialogue();
             }
 
-            public void SetEditable() {
+            public void EditSelf() {
                 editable = true;
                 GetInputField().readOnly = false;
                 activeToggle.interactable = true;
@@ -92,23 +89,30 @@ namespace DataUI {
                 GetInputField().Select();
             }
 
-
-            public void SaveEdits() {
-                string isActive = activeToggle.isOn ? "1" : "0";
-                print(isActive);
-                string[,] fields = new string[,]{
-                                            { "DialogueDescriptions", GetInputField().text },
-                                            { "Active", isActive }
-                                         };
-                DbCommands.UpdateTableTuple("Dialogues",
-                                         "DialogueIDs = " + myID,
-                                         fields);
-                MyDescription = GetInputField().text;
-                active = activeToggle.isOn;
+            public void StopEditing() {
                 editable = false;
                 GetInputField().readOnly = true;
                 activeToggle.interactable = false;
                 saveDialogue.SetActive(false);
+                active = activeToggle.isOn;
+            }
+
+            public void SaveEdits() {
+                string[,] fields = new string[,]{
+                                            { "DialogueDescriptions", GetInputField().text },
+                                         };
+                DbCommands.UpdateTableTuple("Dialogues",
+                                         "DialogueIDs = " + myID,
+                                         fields);
+                print("updated Dialogues tuple");
+                if (activeToggle.isOn) {
+                    DbCommands.InsertTupleToTable("ActivatedDialogues", myID, "0", "0"); //Puts the dialgoue in activated dialogues under the "New game" save ref.
+                } else {
+                    string[,] activeDialoguefields = { { "DialogueIDs", myID }, { "SaveIDs", "0" } };
+                    DbCommands.DeleteTupleInTable("ActivatedDialogues", activeDialoguefields); //Removes the dialgoue in activated dialogues if it is marked as inactive.
+                }
+                MyDescription = GetInputField().text;
+                StopEditing();
                 dialogueUI.ToggleSelectionTo(GetComponent<Dialogue>(), dialogueUI.selectedDialogue);
             }
 

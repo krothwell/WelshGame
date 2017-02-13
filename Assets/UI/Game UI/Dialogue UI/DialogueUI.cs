@@ -74,7 +74,6 @@ namespace GameUI {
             btnTxt = submitBtn.transform.FindChild("Text").gameObject.GetComponent<Text>();
             player = FindObjectOfType<PlayerController>();
             objPortrait = panel.transform.FindChild("CharacterPortrait").GetComponent<Image>();
-            print(objPortrait);
         }
 
         // Update is called once per frame
@@ -125,7 +124,6 @@ namespace GameUI {
             string charName = GetSpeakersName(nodeArray[0]);
             InsertCharName(charName);
             GameObject speakerScrollObj = currentCharSpeaking.gameObject;
-            print(charName);
             SetCurrentPortraitFromName(charName);
             DialogueNode dialogueNode = (Instantiate(
                 inGameDialogueNode,
@@ -140,14 +138,12 @@ namespace GameUI {
         }
 
         public void SetCurrentPortraitFromName(string charName) {
-            print(player.GetMyName());
             if (charName != player.GetMyName()) {
                 Character charOfName = npcs.GetCharacterFromName(charName);
                 currentPortrait = charOfName.GetMyPortrait();
                 SetObjectPortrait(currentPortrait);
             }
             else {
-                print(player.GetPlayerPortrait());
                 SetObjectPortrait(player.GetPlayerPortrait());
                 currentPortrait = player.GetPlayerPortrait();
             }
@@ -177,7 +173,6 @@ namespace GameUI {
             string idStr = strArray[0];
             string choiceText = strArray[1];
             string nextNode = strArray[3];
-            print(nextNode);
             GameObject choice = Instantiate(inGamePlayerChoice, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
             choice.transform.GetComponentInChildren<Text>().text = "\t" + choiceText;
             choice.GetComponent<PlayerChoice>().MyID = idStr;
@@ -222,7 +217,7 @@ namespace GameUI {
                         + "LEFT JOIN Dialogues ON CharacterDialogues.DialogueIDs = Dialogues.DialogueIDs "
                         + "WHERE CharacterDialogues.CharacterNames = '" + currentCharID + "' AND Dialogues.Active = 1";
             currentDialogueID = DbCommands.GetFieldValueFromQry(qry, "DialogueIDs");
-            print(currentDialogueID);
+            //print(currentDialogueID);
         }
 
         public void ScrollToDialogueElement(GameObject element) {
@@ -289,8 +284,6 @@ namespace GameUI {
         }
     
         public void SetObjectPortrait(Sprite portrait) {
-            print(portrait);
-            print(objPortrait);
             objPortrait.sprite = portrait;
         }
 

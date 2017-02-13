@@ -7,6 +7,10 @@ using UnityUtilities;
 
 namespace DataUI {
     namespace ListItems {
+        /// <summary>
+        /// Responsible for allowing the user to select, edit and delete 
+        /// dialogue nodes using the dialogue nodes list in the UI.
+        /// </summary>
         public class DialogueNode : UIInputListItem, ISelectableUI {
             DialogueUI dialogueUI;
             GameObject options;

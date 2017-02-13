@@ -45,5 +45,38 @@ namespace DbUtilities {
         public static string GetQuestsDisplayQry() {
             return "SELECT * FROM Quests;";
         }
+
+        public static string GetTasksDisplayQry(string questName) {
+            return "SELECT * FROM QuestTasks WHERE QuestNames = " + DbCommands.GetParameterNameFromValue(questName) +";";
+        }
+
+        public static string GetEquipItemPartsRelatedToTask(string taskID) {
+            return "SELECT QuestTaskParts.PartIDs, QuestTaskPartsEquipItem.ItemNames "
+                + "FROM QuestTaskParts "
+                + "LEFT JOIN QuestTaskPartsEquipItem ON QuestTaskPartsEquipItem.PartIDs = QuestTaskParts.PartIDs "
+                + "WHERE TaskIDs = " + DbCommands.GetParameterNameFromValue(taskID) + ";";
+        }
+
+        public static string GetTaskPartOptionsEquipItemDisplayQry() {
+            return "SELECT DISTINCT ItemNames FROM WorldItems;";
+        }
+
+        public static string GetDialogueDisplayQry() {
+            return "SELECT Dialogues.DialogueIDs, Dialogues.DialogueDescriptions, ActivatedDialogues.SaveIDs " 
+                + "FROM Dialogues LEFT JOIN ActivatedDialogues ON Dialogues.DialogueIDs = ActivatedDialogues.DialogueIDs "
+                + "ORDER BY Dialogues.DialogueIDs ASC;";
+        }
+
+        public static string GetNewNodeChoiceResultQry(string dialogueID) {
+            return "SELECT * FROM DialogueNodes WHERE DialogueIDs = " + dialogueID + ";";
+        }
+
+        public static string GetNewQuestChoiceResultQry() {
+            return "SELECT * FROM Quests;";
+        }
+
+        public static string GetActivateQuestsPlayerChoiceResultQry(string choiceID) {
+            return "SELECT * FROM QuestsActivatedByDialogueChoices WHERE ChoiceIDs = " + choiceID;
+        }
     }
 }

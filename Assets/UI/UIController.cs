@@ -42,7 +42,7 @@ public class UIController : MonoBehaviour {
                                   //string search = null,
                                   params string[] qryParameterValues) {
         EmptyDisplay(display);
-        print(query);
+        //print(query);
         AppendDisplayFromDb(query,display,buildItem, qryParameterValues);
     }
 
@@ -58,7 +58,7 @@ public class UIController : MonoBehaviour {
 
         List<string[]> stringArrayList = new List<string[]>();
         DbCommands.GetDataStringsFromQry(query, out stringArrayList, qryParameterValues);
-        Debugging.PrintListOfStrArrays(stringArrayList);
+        //Debugging.PrintListOfStrArrays(stringArrayList);
         foreach (string[] stringArray in stringArrayList) {
             Transform item = buildItem(stringArray);
             item.SetParent(display, false);
@@ -169,9 +169,16 @@ public class UIController : MonoBehaviour {
         return selectionToggleGroups[groupName];
     }
 
+    public bool IsItemSelectedInGroup(string groupName) {
+        if (GetSelectedItemFromGroup(groupName) == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public void ToggleSelectionTo(ISelectableUI selection, string inGroup) {
         Debugging.PrintDictionary(selectionToggleGroups);
-        print(GetSelectedItemFromGroup(inGroup));
         if (GetSelectedItemFromGroup(inGroup) != null) {
             if (!GetSelectedItemFromGroup(inGroup).Equals(null)) {
                 if (GetSelectedItemFromGroup(inGroup) != selection) {

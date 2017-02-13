@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 
 interface IEditableUI {
-    void SetEditable();
+    void EditSelf();
 
-    void SaveEdits();
+    void StopEditing();
 }
 

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using DbUtilities;
 
@@ -24,7 +23,6 @@ namespace UnityUtilities {
 
         public static void PrintDictionary(Dictionary<string, ISelectableUI> dict) {
             foreach (KeyValuePair<string, ISelectableUI> pair in dict) {
-                print(pair.Key + ", " + pair.Value);
             }
         }
     }

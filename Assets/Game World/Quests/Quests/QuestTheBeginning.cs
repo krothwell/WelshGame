@@ -15,7 +15,6 @@ namespace Quests {
             player.SetStatusToInteractingWithObject();
             dialogueUI = FindObjectOfType<DialogueUI>();
             dialogueUI.SetInUse();
-            print(faerie.GetComponent<EnemyController>().nameID);
             dialogueUI.StartNewDialogue(faerie.GetComponent<EnemyController>());
         }
 

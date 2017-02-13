@@ -9,8 +9,16 @@ using DbUtilities;
 using DataUI.Utilities;
 
 namespace DataUI {
-    /* Deals with the higher level functions of the Translation Manager such as displaying lists relating to translations from the database
-       and a means to enter new translation related data */
+    /// <summary>
+    /// Responsible for menus to add new translations and related data (grammar 
+    /// and proficiencies) to the database and displaying related data in lists
+    /// so that they can be edited or deleted. Translations created here can be 
+    /// tagged with grammar. Proficiencies which relate to translations and 
+    /// grammar can also be added / edited. Methods (probably only in the games
+    /// dialogue UI) will use the database data managed here to help the player
+    /// learn Welsh and track their progress, but they do not communicate to
+    /// this class or children of this class.
+    /// </summary>
     public class TranslationUI : UIController {
         //high level cross cutting objects and holders
 

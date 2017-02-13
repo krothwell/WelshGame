@@ -3,7 +3,7 @@ using System.Collections;
 using System.Data;
 using Mono.Data.Sqlite;
 using DbUtilities;
-
+using UnityEngine;
 public class DbSetup {
 	private enum tbls 	{
 						PlayerGames,	
@@ -23,11 +23,17 @@ public class DbSetup {
 						SentenceRulesList,
 						DiscoveredSentences,
                         Dialogues,
+                        ActivatedDialogues,
                         Characters,
                         CharacterDialogues,
                         DialogueNodes,
                         PlayerChoices,
-                        Quests
+                        QuestsActivatedByDialogueChoices,
+                        Quests,
+                        QuestTasks,
+                        QuestTaskParts,
+                        QuestTaskPartsEquipItem,
+                        WorldItems
 						};
 
 	private enum tblSqlStrs {header,body, pk};
@@ -185,9 +191,16 @@ public class DbSetup {
         //DIALOGUES
         tblSqlArray[(int)tbls.Dialogues, (int)tblSqlStrs.header]                = "Dialogues";
         tblSqlArray[(int)tbls.Dialogues, (int)tblSqlStrs.body]                  = "DialogueIDs INT NOT NULL, "
-                                                                                + "DialogueDescriptions VARCHAR(200) NOT NULL, "
-                                                                                + "Active INT NOT NULL, ";
+                                                                                + "DialogueDescriptions VARCHAR(200) NOT NULL, ";
         tblSqlArray[(int)tbls.Dialogues, (int)tblSqlStrs.pk]                    = "DialogueIDs";
+
+        tblSqlArray[(int)tbls.ActivatedDialogues, (int)tblSqlStrs.header]       = "ActivatedDialogues";
+        tblSqlArray[(int)tbls.ActivatedDialogues, (int)tblSqlStrs.body]         = "DialogueIDs INT NOT NULL, "
+                                                                                + "SaveIDs INT NOT NULL, "
+                                                                                + "Completed INT NOT NULL, "
+                                                                                + "FOREIGN KEY (SaveIDs) REFERENCES PlayerGames(SaveIDs) ON DELETE CASCADE, "
+                                                                                + "FOREIGN KEY (DialogueIDs) REFERENCES Dialogues(DialogueIDs) ON DELETE CASCADE, ";
+        tblSqlArray[(int)tbls.ActivatedDialogues, (int)tblSqlStrs.pk]           = "DialogueIDs, SaveIDs";
 
         tblSqlArray[(int)tbls.Characters, (int)tblSqlStrs.header]               = "Characters";
         tblSqlArray[(int)tbls.Characters, (int)tblSqlStrs.body]                 = "CharacterNames VARCHAR(100) NOT NULL, "
@@ -222,14 +235,51 @@ public class DbSetup {
                                                                                 + "FOREIGN KEY (NextNodes) REFERENCES DialogueNodes(NodeIDs) ON DELETE CASCADE, ";
         tblSqlArray[(int)tbls.PlayerChoices, (int)tblSqlStrs.pk]                = "ChoiceIDs";
 
+        tblSqlArray[(int)tbls.QuestsActivatedByDialogueChoices, (int)tblSqlStrs.header] = "QuestsActivatedByDialogueChoices";
+        tblSqlArray[(int)tbls.QuestsActivatedByDialogueChoices, (int)tblSqlStrs.body]   = "ChoiceIDs INT NOT NULL, "
+                                                                                        + "QuestNames VARCHAR(100) NOT NULL, "
+                                                                                        + "FOREIGN KEY (ChoiceIDs) REFERENCES PlayerChoices(ChoiceIDs) ON DELETE CASCADE ON UPDATE CASCADE, "
+                                                                                        + "FOREIGN KEY (QuestNames) REFERENCES Quests(QuestNames) ON DELETE CASCADE ON UPDATE CASCADE, ";
+        tblSqlArray[(int)tbls.QuestsActivatedByDialogueChoices, (int)tblSqlStrs.pk]     = "ChoiceIDs, QuestNames";
+
+
         tblSqlArray[(int)tbls.Quests, (int)tblSqlStrs.header]                   = "Quests";
         tblSqlArray[(int)tbls.Quests, (int)tblSqlStrs.body]                     = "QuestNames VARCHAR(100) NOT NULL, "
                                                                                 + "QuestDescriptions VARCHAR(500) NULL, ";
         tblSqlArray[(int)tbls.Quests, (int)tblSqlStrs.pk]                       = "QuestNames";
 
+        tblSqlArray[(int)tbls.QuestTasks, (int)tblSqlStrs.header]               = "QuestTasks";
+        tblSqlArray[(int)tbls.QuestTasks, (int)tblSqlStrs.body]                     = "TaskIDs INT, "
+                                                                                + "TaskDescriptions VARCHAR(500) NULL, "
+                                                                                + "QuestNames VARCHAR(100) NOT NULL, "
+                                                                                + "FOREIGN KEY (QuestNames) REFERENCES Quests(QuestNames) ON DELETE CASCADE ON UPDATE CASCADE, ";
+
+        tblSqlArray[(int)tbls.QuestTasks, (int)tblSqlStrs.pk]                   = "TaskIDS";
+
+        tblSqlArray[(int)tbls.QuestTaskParts, (int)tblSqlStrs.header]           = "QuestTaskParts";
+        tblSqlArray[(int)tbls.QuestTaskParts, (int)tblSqlStrs.body]             = "PartIDs INT, "
+                                                                                + "TaskIDs INT, "
+                                                                                + "FOREIGN KEY (TaskIDs) REFERENCES QuestTasks(TaskIDs) ON DELETE CASCADE, ";
+        tblSqlArray[(int)tbls.QuestTaskParts, (int)tblSqlStrs.pk]               = "PartIDs";
+
+        tblSqlArray[(int)tbls.QuestTaskPartsEquipItem, (int)tblSqlStrs.header]  = "QuestTaskPartsEquipItem";
+        tblSqlArray[(int)tbls.QuestTaskPartsEquipItem, (int)tblSqlStrs.body]    = "ItemNames VARCHAR(100) NOT NULL, "
+                                                                                + "PartIDs INT, "
+                                                                                + "FOREIGN KEY (PartIDs) REFERENCES QuestTaskParts(PartIDs) ON DELETE CASCADE, ";
+        tblSqlArray[(int)tbls.QuestTaskPartsEquipItem, (int)tblSqlStrs.pk]      = "ItemNames, PartIDs";
+
+        //NB: world items should never be in the same location at same time to avoid duplicate errors
+        tblSqlArray[(int)tbls.WorldItems, (int)tblSqlStrs.header]               = "WorldItems";
+        tblSqlArray[(int)tbls.WorldItems, (int)tblSqlStrs.body]                 = "StartingLocationX INT, "
+                                                                                + "StartingLocationY INT, "
+                                                                                + "StartingLocationZ INT, "
+                                                                                + "StartingParentPath VARCHAR(250), "
+                                                                                + "SceneNames VARCHAR(50), "
+                                                                                + "ItemNames VARCHAR(50), ";
+        tblSqlArray[(int)tbls.WorldItems, (int)tblSqlStrs.pk]                   = "StartingLocationX, StartingLocationY, StartingLocationZ, StartingParentPath, SceneNames, ItemNames";
     }
 
-    void ReplaceTable(string tblName) {
+    public void ReplaceTable(string tblName) {
         DropTable("copied", false);
         IDbConnection _dbc = new SqliteConnection(conn);
         _dbc.Open(); //Open connection to the database.
@@ -298,6 +348,7 @@ public class DbSetup {
 							+ tblSqlArray[sqlArrayRow, (int)tblSqlStrs.body] 
 							+ "PRIMARY KEY (" + tblSqlArray[sqlArrayRow, (int)tblSqlStrs.pk] + ")"	
 							+ ");";
+        Debug.Log(_dbcm.CommandText);
 		_dbcm.ExecuteNonQuery();
 		_dbcm.Dispose();
 		_dbcm = null;
@@ -328,6 +379,41 @@ public class DbSetup {
 		}
 	}
 
-	
+    //// One off methods to manage the data - kept just in case I need to do it again/something similar
+
+    //void CopyDialogueActiveStateFromDialoguesToActivatedDialogues() {
+    //    IDbConnection _dbc = new SqliteConnection(conn);
+    //    _dbc.Open(); //Open connection to the database.
+    //    IDbCommand _dbcm = _dbc.CreateCommand();
+    //    _dbcm.CommandText = "PRAGMA foreign_keys=ON;";
+    //    _dbcm.ExecuteNonQuery();
+
+    //    sql = "INSERT INTO " + tblNameTo + "(" + tblFieldTo + ")  " + " SELECT " + tblFieldFrom + " FROM " + tblNameFrom;
+    //    _dbcm.CommandText = sql;
+    //    IDataReader _dbr = _dbcm.ExecuteReader();
+    //    for (int i = 0; i < _dbr.FieldCount; i++) {
+    //        if (i == _dbr.FieldCount - 1) {
+    //            copiedFieldNames += (_dbr.GetName(i));
+    //        }
+    //        else { copiedFieldNames += (_dbr.GetName(i)) + ","; }
+    //    }
+
+    //    _dbr.Dispose();
+    //    _dbr = null;
+
+    //    sql = "INSERT INTO " + tblNameTo + "(" + tblFieldTo + ")  " + " SELECT " + tblFieldFrom + " FROM " + tblNameFrom;
+
+    //    _dbcm.CommandText = sql;
+    //    _dbcm.ExecuteNonQuery();
+
+    //    //PrintTable(tblNameTo);
+
+    //    _dbcm.Dispose();
+    //    _dbcm = null;
+    //    _dbc.Close();
+    //    _dbc = null;
+    //}
+
+
 
 }

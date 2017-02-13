@@ -33,7 +33,6 @@ namespace DataUI {
                 dialogueUI = FindObjectOfType<DialogueUI>();
                 input = transform.GetComponentInChildren<InputField>();
                 options = transform.FindChild("PlayerChoiceOptions").gameObject;
-                print(options);
             }
 
             void OnMouseUp() {

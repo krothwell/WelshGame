@@ -19,7 +19,6 @@ namespace DataUI {
     /// dialogue. 
     /// </summary>
     public class DialogueUI : UIController {
-        UIController ui;
         private enum ChoiceResultOptions {
             DialogueNodes
         };
@@ -66,17 +65,15 @@ namespace DataUI {
         ChoiceResultOptions choiceResultOptions;
         ScrollRect choiceResultOptionsScrollView;
         public GameObject pChoiceResultTitlePrefab,
-                          pChoiceResultPrefab,
-                          optionChoiceResultPrefab;
+                          existingChoiceResultPrefab,
+                          nodeChoiceResultPrefab,
+                          activateQuestChoiceResultPrefab;
         
 
         void Start() {
             
             UpdateCharactersTableFromGame();
             choiceResultOptions = new ChoiceResultOptions();
-
-            ui = FindObjectOfType<UIController>();
-            //panel = transform.FindChild("Panel").gameObject;
 
             //DIALOGUE COMPONENTS
             dialoguesListUI = GetPanel().transform.FindChild("DialoguesListUI").gameObject;
@@ -137,8 +134,7 @@ namespace DataUI {
             selectedResultTypeList = choiceResultOptionsScrollView.transform.FindChild("SelectedResultTypeList").gameObject;
 
             //display dialogue list
-            print("print dialogueList: " +dialogueList);
-            ui.FillDisplayFromDb(GetDialogueDisplayQry(), dialogueList.transform, BuildDialogue);
+            FillDisplayFromDb(DBqueries.GetDialogueDisplayQry(), dialogueList.transform, BuildDialogue);
 
             selectedDialogue = "selectedDialogue";
             selectedNode = "selectedNode";
@@ -158,7 +154,7 @@ namespace DataUI {
         public void ActivateCharacterLink() {
             addCharDialoguesPanel.SetActive(true);
             activateAddCharBtn.GetComponent<Button>().interactable = false;
-            ui.FillDisplayFromDb(GetCharLinkDisplayQry(), addCharDialogueList.transform, BuildAddCharDialogueBtn);
+            FillDisplayFromDb(GetCharLinkDisplayQry(), addCharDialogueList.transform, BuildAddCharDialogueBtn);
         }
 
         public void ActivateEditNewNode() {
@@ -199,7 +195,7 @@ namespace DataUI {
                     + "WHERE DialogueIDs = " + dialogueID + ")) "
                 + "OR (Characters.CharacterNames = '!Player') "
                 + "ORDER BY CharacterNames ASC;";
-            ui.FillDisplayFromDb(qry, charOverrideList.transform, BuildDialogueNodeSpeaker);
+            FillDisplayFromDb(qry, charOverrideList.transform, BuildDialogueNodeSpeaker);
         }
 
         public void ActivateEditNewChoice() {
@@ -259,10 +255,13 @@ namespace DataUI {
 
         public void InsertNewDialogue() {
             if ((inputShortDescriptionText.text != null) && (inputShortDescriptionText.text != "")) {
-                string dialogueActiveStr = dialogueActive.isOn ? "1" : "0";
+                string dialogueActiveInNewGameStr = dialogueActive.isOn ? "1" : "0";
                 string dialogueID = DbCommands.GenerateUniqueID("Dialogues", "DialogueIDs", "DialogueID");
-                DbCommands.InsertTupleToTable("Dialogues", dialogueID, inputShortDescriptionText.text, dialogueActiveStr);
-                ui.FillDisplayFromDb(GetDialogueDisplayQry(), dialogueList.transform, BuildDialogue);
+                DbCommands.InsertTupleToTable("Dialogues", dialogueID, inputShortDescriptionText.text);
+                if (dialogueActive.isOn) {
+                    DbCommands.InsertTupleToTable("ActivatedDialogues", dialogueID, "0", "0"); //Puts the dialgoue in activated dialogues under the "New game" save ref as uncompleted.
+                }
+                FillDisplayFromDb(DBqueries.GetDialogueDisplayQry(), dialogueList.transform, BuildDialogue);
                 HideCharsRelatedToDialogue();
                 HideNodesRelatedToDialogue();
             }
@@ -306,7 +305,7 @@ namespace DataUI {
                                             overrideName,
                                             overrideScene,
                                             endDialogueStr);
-                    ui.FillDisplayFromDb(GetDialogueNodeDisplayQry(), dialogueNodesList.transform, BuildDialogueNode);
+                    FillDisplayFromDb(GetDialogueNodeDisplayQry(), dialogueNodesList.transform, BuildDialogueNode);
                     HidePlayerChoices();
                 }
             }
@@ -335,22 +334,24 @@ namespace DataUI {
                                             inputChoiceText.text,
                                             (GetSelectedItemFromGroup(selectedNode) as DialogueNode).MyID,
                                             null);
-                    ui.FillDisplayFromDb(GetPlayerChoiceDisplayQry(), playerChoicesList.transform, BuildPlayerChoice);
+                    FillDisplayFromDb(GetPlayerChoiceDisplayQry(), playerChoicesList.transform, BuildPlayerChoice);
                 }
             }
 
         }
 
-        public void InsertNewChoiceResult() {
-            switch (choiceResultOptions) {
-                case ChoiceResultOptions.DialogueNodes:
-                    print("InsertNewChoiceResult");
-                    NewPlayerChoiceResultBtn newPlayerChoiceResultBtn = selectedChoiceResultOption.GetComponent<NewPlayerChoiceResultBtn>();
-                    (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyNextNode = newPlayerChoiceResultBtn.MyID;
-                    string[,] fieldVals = new string[,] { { "NextNodes", newPlayerChoiceResultBtn.MyID } };
-                    DbCommands.UpdateTableTuple("PlayerChoices", "ChoiceIDs = " + (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID, fieldVals);
-                    break;
-            }
+        public void InsertDialogueNodeChoiceResult(GameObject selectedBtn) {
+            DialogueNodeChoiceResultBtn dialogueNodeChoiceResultBtn = selectedBtn.GetComponent<DialogueNodeChoiceResultBtn>();
+            (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyNextNode = dialogueNodeChoiceResultBtn.MyID;
+            string[,] fieldVals = new string[,] { { "NextNodes", dialogueNodeChoiceResultBtn.MyID } };
+            DbCommands.UpdateTableTuple("PlayerChoices", "ChoiceIDs = " + (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID, fieldVals);
+            DisplayResultsRelatedToChoices();
+            DeactivateNewChoiceResult();
+        }
+
+        public void InsertActivateQuestChoiceResult(GameObject selectedBtn) {
+            ActivateQuestChoiceResultBtn newPlayerChoiceResultBtn = selectedBtn.GetComponent<ActivateQuestChoiceResultBtn>();
+            DbCommands.InsertTupleToTable("PlayerChoices", (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID, newPlayerChoiceResultBtn.MyName);
             DisplayResultsRelatedToChoices();
             DeactivateNewChoiceResult();
         }
@@ -358,21 +359,25 @@ namespace DataUI {
         private Transform BuildDialogue(string[] strArray) {
             string idStr = (strArray[0]);
             string descStr = (strArray[1]);
-            bool activeBool = (int.Parse(strArray[2]) == 1) ? true : false;
-            GameObject dialogue = Instantiate(dialoguePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+            print(strArray[2]);
+            bool activeAtStartOfGameBool = false;
+            if (strArray[2] != "") {
+                activeAtStartOfGameBool = (int.Parse(strArray[2]) == 0) ? true : false;
+            }
+            GameObject dialogue = Instantiate(dialoguePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
             dialogue.transform.FindChild("DescriptionInput").GetComponent<InputField>().text = descStr;
             dialogue.transform.Find("DialogueID").GetComponent<Text>().text = idStr;
-            dialogue.transform.GetComponentInChildren<Toggle>().isOn = activeBool;
+            dialogue.transform.GetComponentInChildren<Toggle>().isOn = activeAtStartOfGameBool;
             dialogue.GetComponent<Dialogue>().MyID = idStr;
             dialogue.GetComponent<Dialogue>().MyDescription = descStr;
-            dialogue.GetComponent<Dialogue>().Active = activeBool;
+            dialogue.GetComponent<Dialogue>().Active = activeAtStartOfGameBool;
             return dialogue.transform;
         }
 
         private Transform BuildAddCharDialogueBtn(string[] strArray) {
             string charName = (strArray[0]);
             string sceneName = (strArray[1]);
-            GameObject charLink = Instantiate(characterLinkPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+            GameObject charLink = Instantiate(characterLinkPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
             string sceneStr = " <i>in " + sceneName + "</i>";
             if (sceneName == "") {
                 sceneStr = " <i>scene not found</i>";
@@ -393,7 +398,7 @@ namespace DataUI {
             if (sceneName != "") {
                 sceneStr = " <i>in " + sceneName + "</i>";
             }
-            GameObject charDialogue = Instantiate(charDialoguePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+            GameObject charDialogue = Instantiate(charDialoguePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
             charDialogue.transform.FindChild("CharacterInput").GetComponent<InputField>().text = charName + sceneStr;
             charDialogue.GetComponent<CharacterDialogue>().CharacterName = charName;
             charDialogue.GetComponent<CharacterDialogue>().DialogueID = dialogueID;
@@ -404,7 +409,7 @@ namespace DataUI {
         private Transform BuildDialogueNode(string[] strArray) {
             string idStr = (strArray[0]);
             string nodeText = (strArray[1]);
-            GameObject dialogNode = Instantiate(dialogNodePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+            GameObject dialogNode = Instantiate(dialogNodePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
             dialogNode.transform.GetComponentInChildren<InputField>().text = nodeText;
             dialogNode.transform.Find("NodeID").GetComponent<Text>().text = idStr;
             dialogNode.GetComponent<DialogueNode>().MyID = idStr;
@@ -415,7 +420,7 @@ namespace DataUI {
         private Transform BuildDialogueNodeSpeaker(string[] strArray) {
             string charName = strArray[0];
             string sceneName = strArray[1];
-            GameObject charOverride = Instantiate(charOverridePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+            GameObject charOverride = Instantiate(charOverridePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
             string sceneStr = " <i>in " + sceneName + "</i>";
             if (sceneName == "") {
                 sceneStr = " <i>scene not found</i>";
@@ -431,7 +436,7 @@ namespace DataUI {
             string idStr = strArray[0];
             string choiceText = strArray[1];
             string nextNode = strArray[3];
-            GameObject playerChoice = Instantiate(playerChoicePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+            GameObject playerChoice = Instantiate(playerChoicePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
             playerChoice.transform.GetComponentInChildren<InputField>().text = choiceText;
             playerChoice.transform.Find("ChoiceID").GetComponent<Text>().text = idStr;
             playerChoice.GetComponent<PlayerChoice>().MyID = idStr;
@@ -440,108 +445,96 @@ namespace DataUI {
             return playerChoice.transform;
         }
 
-        private Transform BuildNewChoiceResultNode(string[] strArray) {
+        //for adding a new choice result, not to be confused with existing results
+        private Transform BuildNewChoiceResultNodeBtn(string[] strArray) {
             string idStr = strArray[0];
             string nodeText = strArray[1];
-            GameObject optionChoiceResult = Instantiate(optionChoiceResultPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+            GameObject optionChoiceResult = Instantiate(nodeChoiceResultPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
             optionChoiceResult.transform.GetComponentInChildren<InputField>().text = nodeText;
             optionChoiceResult.transform.Find("NodeID").GetComponent<Text>().text = idStr;
-            optionChoiceResult.GetComponent<NewPlayerChoiceResultBtn>().MyID = idStr;
-            optionChoiceResult.GetComponent<NewPlayerChoiceResultBtn>().MyText = nodeText;
+            optionChoiceResult.GetComponent<DialogueNodeChoiceResultBtn>().MyID = idStr;
+            optionChoiceResult.GetComponent<DialogueNodeChoiceResultBtn>().MyText = nodeText;
             return optionChoiceResult.transform;
         }
 
+        //for adding a new  result, not to be confused with existing results
+        private Transform BuildChoiceResultActivateQuestBtn(string[] strArray) {
+            string questName = strArray[0];
+            string questDescription = strArray[1];
+            GameObject activateQuestChoiceResult = Instantiate(activateQuestChoiceResultPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
+            activateQuestChoiceResult.transform.Find("QuestDescription").GetComponent < Text>().text = questDescription;
+            activateQuestChoiceResult.transform.Find("QuestName").GetComponent<Text>().text = questName;
+            activateQuestChoiceResult.GetComponent<ActivateQuestChoiceResultBtn>().MyName = questName;
+            activateQuestChoiceResult.GetComponent<ActivateQuestChoiceResultBtn>().MyDescription = questDescription;
+            return activateQuestChoiceResult.transform;
+        }
+
+        //for adding an existing choice result, not to be confused with a new result
         private Transform BuildChoiceResultNode(string[] strArray) {
             string idStr = strArray[0];
             string nodeText = strArray[1];
-            GameObject choiceResult = Instantiate(pChoiceResultPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+            GameObject choiceResult = Instantiate(existingChoiceResultPrefab, new Vector3(0f, 0f), Quaternion.identity) as GameObject;
+            choiceResult.AddComponent<PlayerChoiceNodeResult>();
             choiceResult.transform.GetComponentInChildren<InputField>().text = string.Format("Node ID <b>{0}</b>: \"{1}\"", idStr, nodeText);
             choiceResult.GetComponent<PlayerChoiceResult>().MyID = idStr;
             choiceResult.GetComponent<PlayerChoiceResult>().MyText = nodeText;
             return choiceResult.transform;
         }
 
-        //public void SetSelectedListItem(GameObject go) {
-        //    if (selectedDialogue != null) {
-        //        if (selectedDialogue != go) {
-        //            selectedDialogue.GetComponent<ISelectableUI>().DeselectSelf();
-        //        }
-        //    }
-        //    if (selectedDialogue != go) {
-        //        selectedDialogue = go;
-        //        selectedDialogue.GetComponent<ISelectableUI>().SelectSelf();
-        //    }
-        //}
-
-        //public void SetSelectedDialogueNode(GameObject nodeInput) {
-        //    if (selectedNode != null) {
-        //        if (selectedNode != nodeInput) {
-        //            selectedNode.GetComponent<DialogueNode>().DeselectSelf();
-        //        }
-        //    }
-        //    if (selectedNode != nodeInput) {
-        //        selectedNode = nodeInput;
-        //        selectedNode.GetComponent<DialogueNode>().SelectSelf();
-        //    }
-        //}
+        private Transform BuildChoiceResultActivateQuest(string[] strArray) {
+            string idStr = strArray[0];
+            string nodeText = strArray[1];
+            GameObject choiceResult = Instantiate(existingChoiceResultPrefab, new Vector3(0f, 0f), Quaternion.identity) as GameObject;
+            choiceResult.AddComponent<PlayerChoiceActivateQuestResult>();
+            choiceResult.transform.GetComponentInChildren<InputField>().text = string.Format("<b>{0}</b>: {1}", idStr, nodeText);
+            choiceResult.GetComponent<PlayerChoiceResult>().MyID = idStr;
+            choiceResult.GetComponent<PlayerChoiceResult>().MyText = nodeText;
+            return choiceResult.transform;
+        }
 
         public void SetSelectedCharLink(GameObject charlink) {
             selectedCharLink = charlink;
         }
 
-        //public void SetSelectedPlayerChoice(GameObject choice) {
-        //    if (selectedChoice != null) {
-        //        if (selectedChoice != choice) {
-        //            selectedChoice.GetComponent<PlayerChoice>().DeselectSelf();
-        //        }
-        //    }
-        //    if (selectedChoice != choice) {
-        //        selectedChoice = choice;
-        //        selectedChoice.GetComponent<PlayerChoice>().SelectSelf();
-        //    }
-        //}
-
-        public void SetSelectedChoiceResultOption(GameObject option) {
-            selectedChoiceResultOption = option;
-        }
-
-        //public void SetSelectedPchoiceResult(GameObject result) {
-        //    selectedChoiceResult = result;
-        //}
-
-        //public GameObject GetSelectedPlayerChoice() {
-        //    return selectedChoice;
-        //}
-
         public void DisplayCharsRelatedToDialogue() {
             charDialoguesListUI.SetActive(true);
-            ui.FillDisplayFromDb(GetCharDialogueDisplayQry(), characterList.transform, BuildCharacterDialogue);
+            FillDisplayFromDb(GetCharDialogueDisplayQry(), characterList.transform, BuildCharacterDialogue);
         }
 
         public void DisplayNodesRelatedToDialogue() {
             dialogueNodesListUI.SetActive(true);
-            ui.FillDisplayFromDb(GetDialogueNodeDisplayQry(), dialogueNodesList.transform, BuildDialogueNode);
+            FillDisplayFromDb(GetDialogueNodeDisplayQry(), dialogueNodesList.transform, BuildDialogueNode);
         }
 
         public void DisplayChoicesRelatedToNode() {
             playerChoicesListUI.SetActive(true);
-            ui.FillDisplayFromDb(GetPlayerChoiceDisplayQry(), playerChoicesList.transform, BuildPlayerChoice);
+            FillDisplayFromDb(GetPlayerChoiceDisplayQry(), playerChoicesList.transform, BuildPlayerChoice);
         }
 
         public void DisplayNewChoiceResultsNodes() {
-            ui.FillDisplayFromDb(GetNewNodeChoiceResultQry(), selectedResultTypeList.transform, BuildNewChoiceResultNode);
-            choiceResultOptions = ChoiceResultOptions.DialogueNodes;
+            FillDisplayFromDb(DBqueries.GetNewNodeChoiceResultQry((GetSelectedItemFromGroup(selectedDialogue) as Dialogue).MyID), selectedResultTypeList.transform, BuildNewChoiceResultNodeBtn);
         }
+
+        public void DisplayNewChoiceResultsQuests() {
+            FillDisplayFromDb(DBqueries.GetNewQuestChoiceResultQry(), selectedResultTypeList.transform, BuildChoiceResultActivateQuestBtn);
+        }
+
 
         public void DisplayResultsRelatedToChoices() {
 
             playerChoiceResultsListUI.SetActive(true);
-            ui.EmptyDisplay(playerChoicesResultsList.transform);
-            if (DbCommands.GetFieldValueFromTable("PlayerChoices", "NextNodes", " ChoiceIDs = " + (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID) != "") {
-                print("DisplayChoiceResults");
-                GameObject pChoiceResultsTitle = Instantiate(pChoiceResultTitlePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+            EmptyDisplay(playerChoicesResultsList.transform);
+            string selectedChoiceID = (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID;
+            if (DbCommands.GetFieldValueFromTable("PlayerChoices", "NextNodes", " ChoiceIDs = " + selectedChoiceID) != "") {
+                GameObject pChoiceResultsTitle = Instantiate(pChoiceResultTitlePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
                 AppendDisplayWithTitle(playerChoicesResultsList.transform, pChoiceResultsTitle.transform, "Goes to dialogue node... ");
-                ui.AppendDisplayFromDb(GetNextNodeResultQry(), playerChoicesResultsList.transform, BuildChoiceResultNode);
+                AppendDisplayFromDb(GetNextNodeResultQry(), playerChoicesResultsList.transform, BuildChoiceResultNode);
+            }
+
+            if (DbCommands.GetFieldValueFromTable("QuestsActivatedByDialogueChoices", "QuestNames", " ChoiceIDs = " + selectedChoiceID) != "") {
+                GameObject pChoiceResultsTitle = Instantiate(pChoiceResultTitlePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
+                AppendDisplayWithTitle(playerChoicesResultsList.transform, pChoiceResultsTitle.transform, "Activates quest... ");
+                AppendDisplayFromDb(DBqueries.GetActivateQuestsPlayerChoiceResultQry(selectedChoiceID), playerChoicesResultsList.transform, BuildChoiceResultActivateQuestBtn);
             }
         }
 
@@ -573,10 +566,6 @@ namespace DataUI {
             ActivateEditNewChoice();
         }
 
-        private string GetDialogueDisplayQry() {
-            return "SELECT * FROM Dialogues ORDER BY DialogueIDs ASC;";
-        }
-
         private string GetCharLinkDisplayQry() {
             return "SELECT * FROM Characters WHERE CharacterNames != '!Player' ORDER BY CharacterNames ASC;";
         }
@@ -596,12 +585,24 @@ namespace DataUI {
                + (GetSelectedItemFromGroup(selectedNode) as DialogueNode).MyID + ";";
         }
 
-        private string GetNewNodeChoiceResultQry() {
-            return "SELECT * FROM DialogueNodes WHERE DialogueIDs = " + (GetSelectedItemFromGroup(selectedDialogue) as Dialogue).MyID + ";";
-        }
-
         private string GetNextNodeResultQry() {
             return "SELECT * FROM DialogueNodes WHERE NodeIDs = " + (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyNextNode + ";";
+        }
+
+        public void DeleteNodePlayerChoice() {
+            DbCommands.UpdateTableField(
+                    "PlayerChoices",
+                    "NextNodes",
+                    "null",
+                    "ChoiceIDs = " + (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID);
+        }
+
+        public void DeleteActivateQuestPlayerChoice(string questName) { 
+            string[,] fields = { { "ChoiceIDs", (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID},
+                                 { "QuestNames", questName} };
+            DbCommands.DeleteTupleInTable(
+                    "QuestsActivatedByDialogueChoices",
+                    fields);
         }
 
         /// <summary>

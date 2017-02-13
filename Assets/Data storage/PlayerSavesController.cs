@@ -1,9 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using System;
-using System.Data;
-using UnityEditor.SceneManagement;
 using StartMenuUI;
 using DbUtilities;
 
@@ -134,7 +131,7 @@ public class PlayerSavesController : MonoBehaviour {
         string saveRefStr = strArray[1].ToString();
         string playerNameStr = strArray[2].ToString();
         string dateStr = strArray[4].ToString();
-        saveGame = Instantiate(saveGamePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+        saveGame = Instantiate(saveGamePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
         saveGame.transform.FindChild("Panel").FindChild("SaveRef").gameObject.GetComponent<Text>().text = saveRefStr;
         saveGame.transform.FindChild("Panel").FindChild("CharName").GetComponent<Text>().text = playerNameStr;
         saveGame.transform.FindChild("Panel").FindChild("Date").GetComponent<Text>().text = dateStr;
@@ -159,7 +156,6 @@ public class PlayerSavesController : MonoBehaviour {
     /*loads all the details of the saved game except for the scene, since loading a scene destroys saveGameManager obj*/
     public void LoadSave() {
         int id = PlayerPrefsManager.GetSaveGame();
-        print(id);
         print(DbCommands.GetConn());
         string[] playerSave = DbCommands.GetTupleFromTable("PlayerGames", " SaveIDs = " + id);
         print("Loading save reference: " 
