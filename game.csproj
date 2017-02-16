@@ -119,6 +119,7 @@
     <Compile Include="Assets\Game World\WorldItems\WorldItemWithMultiSprites.cs" />
     <Compile Include="Assets\Game World\WorldItems\WorldItems.cs" />
     <Compile Include="Assets\GameInitialiser.cs" />
+    <Compile Include="Assets\QuestsUI.cs" />
     <Compile Include="Assets\UI\Data UI\DataUIController.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Char Dialogues List UI\Add Char Dialogues UI\AddCharDialogueBtn.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Char Dialogues List UI\Add Char Dialogues UI\Dialogue Nodes List UI\DialogueNode.cs" />
@@ -126,11 +127,11 @@
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Char Dialogues List UI\CharacterDialogue.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\DialogueUI.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Dialogues List UI\Dialogue.cs" />
-    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\ActivateQuestChoiceResultBtn.cs" />
-    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\DialogueNodeChoiceResultBtn.cs" />
-    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\PlayerChoiceActivateQuestResult.cs" />
-    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\PlayerChoiceNodeResult.cs" />
-    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\PlayerChoiceResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingActivateQuestResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingNodeResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewActivateQuestResultBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewNodeResultBtn.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choices List UI\PlayerChoice.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\Quests list UI\Quest.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\QuestsUI.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventoryItem.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventorySlot.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventoryUI.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\Quest.cs" />
     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\DialogueHolder.cs" />
     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\DialogueNode.cs" />
     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\EndDialogueBtn.cs" />

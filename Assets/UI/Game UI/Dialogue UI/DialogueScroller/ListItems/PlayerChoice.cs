@@ -43,20 +43,24 @@ namespace GameUI {
                 dialogueUI = dm;
             }
 
-            public void DisplayChoiceResults() {
+            public void ProcessChoiceResults() {
                 DisableMe();
                 dialogueUI.DestroyInteractiveChoices();
                 dialogueUI.InsertSpacer();
                 if (myNextNode != "") {
                     dialogueUI.DisplayDialogueNode(GetDialogueNodeData(myNextNode));
+                    DisplayCurrentNodeCharacterPortrait();
                 } else {
-                    dialogueUI.InsertEndDialogue();
-                    dialogueUI.ScrollToDialogueElement(dialogueUI.GetCurrentSpeaker());
+                    dialogueUI.SetNotInUse();
                 }
-                DisplayCurrentNodeCharacterPortrait();
+                
+                if (dialogueUI.GetChoiceResultsCount(myID) > 0) {
+                    dialogueUI.ActivateQuests(myID);
+                }
             }
 
             public void DisplayPlayerPortrait() {
+
             }
 
             public void DisplayCurrentNodeCharacterPortrait() {

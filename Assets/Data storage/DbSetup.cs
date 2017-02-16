@@ -28,6 +28,7 @@ public class DbSetup {
                         CharacterDialogues,
                         DialogueNodes,
                         PlayerChoices,
+                        PlayerChoiceResults,
                         QuestsActivatedByDialogueChoices,
                         Quests,
                         QuestTasks,
@@ -235,12 +236,20 @@ public class DbSetup {
                                                                                 + "FOREIGN KEY (NextNodes) REFERENCES DialogueNodes(NodeIDs) ON DELETE CASCADE, ";
         tblSqlArray[(int)tbls.PlayerChoices, (int)tblSqlStrs.pk]                = "ChoiceIDs";
 
-        tblSqlArray[(int)tbls.QuestsActivatedByDialogueChoices, (int)tblSqlStrs.header] = "QuestsActivatedByDialogueChoices";
-        tblSqlArray[(int)tbls.QuestsActivatedByDialogueChoices, (int)tblSqlStrs.body]   = "ChoiceIDs INT NOT NULL, "
+        tblSqlArray[(int)tbls.PlayerChoiceResults, (int)tblSqlStrs.header]      = "PlayerChoiceResults";
+        tblSqlArray[(int)tbls.PlayerChoiceResults, (int)tblSqlStrs.body]        = "ResultIDs INT NOT NULL, "
+                                                                                + "ChoiceIDs INT NOT NULL, "
+                                                                                + "FOREIGN KEY (ChoiceIDs) REFERENCES PlayerChoices(ChoiceIDs) ON DELETE CASCADE ON UPDATE CASCADE, ";
+        tblSqlArray[(int)tbls.PlayerChoiceResults, (int)tblSqlStrs.pk]          = "ResultIDs, ChoiceIDs";
+
+        tblSqlArray[(int)tbls.QuestsActivatedByDialogueChoices, (int)tblSqlStrs.header] = "QuestActivateResults";
+        tblSqlArray[(int)tbls.QuestsActivatedByDialogueChoices, (int)tblSqlStrs.body]   = "ResultIDs INT NOT NULL, "
+                                                                                        + "ChoiceIDs INT NOT NULL, "
                                                                                         + "QuestNames VARCHAR(100) NOT NULL, "
-                                                                                        + "FOREIGN KEY (ChoiceIDs) REFERENCES PlayerChoices(ChoiceIDs) ON DELETE CASCADE ON UPDATE CASCADE, "
+                                                                                        + "FOREIGN KEY (ResultIDs, ChoiceIDs) "
+                                                                                            + "REFERENCES PlayerChoiceResults(ResultIDs, ChoiceIDs) ON DELETE CASCADE ON UPDATE CASCADE, "//fk referencing composite pk must use all values of pk
                                                                                         + "FOREIGN KEY (QuestNames) REFERENCES Quests(QuestNames) ON DELETE CASCADE ON UPDATE CASCADE, ";
-        tblSqlArray[(int)tbls.QuestsActivatedByDialogueChoices, (int)tblSqlStrs.pk]     = "ChoiceIDs, QuestNames";
+        tblSqlArray[(int)tbls.QuestsActivatedByDialogueChoices, (int)tblSqlStrs.pk]     = "ResultIDs, ChoiceIDs, QuestNames";
 
 
         tblSqlArray[(int)tbls.Quests, (int)tblSqlStrs.header]                   = "Quests";
@@ -356,7 +365,7 @@ public class DbSetup {
 		_dbc = null;
 	}
 
-    void DropTable(string tblName, bool cascade = true) {
+    public void DropTable(string tblName, bool cascade = true) {
         IDbConnection _dbc = new SqliteConnection(conn);
         _dbc.Open(); //Open connection to the database.
         IDbCommand _dbcm = _dbc.CreateCommand();

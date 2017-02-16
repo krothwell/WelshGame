@@ -6,7 +6,7 @@ using DbUtilities;
 
 namespace DataUI {
     namespace ListItems {
-        public class PlayerChoiceResult : UIInputListItem, ISelectableUI {
+        public class ExistingResult : UITextPanelListItem, ISelectableUI {
             protected DialogueUI dialogueUI;
             private string myID;
             public string MyID {
@@ -14,25 +14,18 @@ namespace DataUI {
                 set { myID = value; }
             }
 
-            private string myText;
-            public string MyText {
-                get { return myText; }
-                set { myText = value; }
-            }
             Image inputBG;
             InputField input;
             GameObject options;
 
             public void SelectSelf() {
                 DisplayOptions();
-                SetMyColour(Colours.colorDataUIInputSelected);
+                SetPanelColour(Colours.colorDataUIInputSelected);
             }
 
             public void DeselectSelf() {
-                input = transform.GetComponentInChildren<InputField>();
                 HideOptions();
-                SetMyColour(Color.white);
-                input.readOnly = true;
+                SetPanelColour(Color.white);
             }
 
             void DisplayOptions() {
@@ -45,14 +38,9 @@ namespace DataUI {
                 options.SetActive(false);
             }
 
-            void SetMyColour(Color newColor) {
-                inputBG = transform.GetComponentInChildren<Image>();
-                inputBG.color = newColor;
-            }
-
             void OnMouseUp() {
                 dialogueUI = FindObjectOfType<DialogueUI>();
-                dialogueUI.ToggleSelectionTo(GetComponent<PlayerChoiceResult>(),dialogueUI.selectedChoiceResult);
+                dialogueUI.ToggleSelectionTo(GetComponent<ExistingResult>(),dialogueUI.selectedChoiceResult);
             }
         }
     }

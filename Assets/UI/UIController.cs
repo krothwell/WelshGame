@@ -55,7 +55,7 @@ public class UIController : MonoBehaviour {
     /// <param name="qryParameters">The values of the parameters to be added (a function is used when building the query and on the values in this
     /// function to give the same name.</param>
     public void AppendDisplayFromDb(string query, Transform display, Func<string[], Transform> buildItem, params string[] qryParameterValues) {
-
+        print (query);
         List<string[]> stringArrayList = new List<string[]>();
         DbCommands.GetDataStringsFromQry(query, out stringArrayList, qryParameterValues);
         //Debugging.PrintListOfStrArrays(stringArrayList);

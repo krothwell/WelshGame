@@ -13,7 +13,6 @@ namespace GameUI {
 
             public void CloseDialogue() {
                 dialogueUI.SetNotInUse();
-                mainCharacter.playerStatus = PlayerController.PlayerStatus.passive;
             }
         }
     }

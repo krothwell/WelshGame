@@ -4,7 +4,7 @@ using System.Collections;
 namespace DataUI {
     namespace ListItems {
 
-        public class DialogueNodeChoiceResultBtn : MonoBehaviour {
+        public class NewNodeChoiceResultBtn : MonoBehaviour {
 
             DialogueUI dialogueUI;
             private string myID;
@@ -24,7 +24,7 @@ namespace DataUI {
             }
 
             void OnMouseUp() {
-                dialogueUI.InsertDialogueNodeChoiceResult(gameObject);
+                dialogueUI.InsertDialogueNodeResult(gameObject);
             }
         }
     }

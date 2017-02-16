@@ -18,8 +18,11 @@ public class GameInitialiser : MonoBehaviour {
     void Awake() {
         DbCommands.SetConnectionString("URI=file:" + Application.dataPath + DB_PATH);
         dbSetup = new DbSetup();
-        //dbSetup.CreateTables();
-        Debugging.PrintDbTable("PlayerGames");
+        //dbSetup.DropTable("PlayerChoiceResults");
+        //dbSetup.DropTable("QuestActivateResults");
+        dbSetup.CreateTables();
+        Debugging.PrintDbTable("PlayerChoiceResults");
+        Debugging.PrintDbTable("QuestActivateResults");
         DbCommands.InsertTupleToTable("PlayerGames", "0", "New game", "New player", "No path", DateTime.Now.ToString(), "Start", "0", "0");
         playerSavesController = FindObjectOfType<PlayerSavesController>();
         // when playerSavesController is first initialised it tries to load the

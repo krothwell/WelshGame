@@ -50,9 +50,11 @@ namespace DbUtilities {
                 }
 
             }
-            _dbcm.CommandText = sqlInsert + sqlValues;
-
+            string sql = sqlInsert + sqlValues;
+            Debug.Log(sql);
+            _dbcm.CommandText = sql;
             _dbcm.ExecuteNonQuery();
+            Debug.Log("inserted");
             _dbcm.Dispose();
             _dbcm = null;
             _dbc.Close();
@@ -289,6 +291,26 @@ namespace DbUtilities {
             return count;
         }
 
+        public static int GetCountFromQry(string qry, params string[] qryParameters) {
+            IDbConnection _dbc = new SqliteConnection(conn);
+            _dbc.Open(); //Open connection to the database.
+            IDbCommand _dbcm = _dbc.CreateCommand();
+            _dbcm.CommandText = "PRAGMA foreign_keys=ON;";
+            _dbcm.ExecuteNonQuery();
+            string sql;
+            sql = qry;
+            foreach (string qryParameter in qryParameters) {
+                _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(qryParameter), qryParameter));
+            }
+            _dbcm.CommandText = sql;
+            string countStr = _dbcm.ExecuteScalar().ToString();
+            int count = int.Parse(countStr);
+            _dbcm.Dispose();
+            _dbcm = null;
+            _dbc.Close();
+            _dbc = null;
+            return count;
+        }
         public static string GetParameterNameFromValue(string value) {
             if (value == null) {
                 value = "";

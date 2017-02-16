@@ -23,7 +23,7 @@ using GameUI;
 /// input results (% of answer that the player input that is correct).
 /// </summary>
 namespace GameUI {
-    public class DialogueUI : MonoBehaviour {
+    public class DialogueUI : UIController {
         bool submissionScored = false;
     	private string testEnglish;
     	private string testWelsh;
@@ -36,7 +36,6 @@ namespace GameUI {
     		set {testWelsh = value;}
     	}
     	Text answerTxt, percentageTxt;
-        private GameObject panel;
         GameObject answerField;
         InputField answerInput;
         GameObject submitBtn;
@@ -50,7 +49,6 @@ namespace GameUI {
         private ScrollRect dialogueScroller;
         private GameObject currentDialogueHolder, currentDialogueNode, currentCharSpeaking;
         private string currentCharID, currentDialogueID;
-        private UIController ui;
         private PlayerController player;
         public Character currentChar;
         private Sprite currentPortrait;
@@ -62,7 +60,6 @@ namespace GameUI {
         // Use this for initialization
         void Start() {
             npcs = FindObjectOfType<NPCs>();
-            ui = FindObjectOfType<UIController>();
             player = FindObjectOfType<PlayerController>();
             panel = transform.FindChild("Panel").gameObject;
             answerField = panel.transform.FindChild("InputField").gameObject;
@@ -161,7 +158,7 @@ namespace GameUI {
                 InsertCharName(player.GetMyName());
             }
             string nodeChoiceQry = "SELECT * FROM PlayerChoices WHERE NodeIDs = " + nodeID + ";";
-            ui.AppendDisplayFromDb(nodeChoiceQry, currentDialogueHolder.transform, BuildNodeChoice);
+            AppendDisplayFromDb(nodeChoiceQry, currentDialogueHolder.transform, BuildNodeChoice);
             string displayEndDialogueIndicator = (DbCommands.GetFieldValueFromTable("DialogueNodes", "EndDialogueOption", "DialogueIDs = " + nodeID));
             int choicesInt = DbCommands.GetCountFromTable("PlayerChoices", "NodeIDs = " + nodeID);
             if (displayEndDialogueIndicator == "1" || choicesInt == 0) {
@@ -261,6 +258,7 @@ namespace GameUI {
         public void SetNotInUse() {
             animator.SetBool("InUse", false);
             player.DestroySelectionCircleOfInteractiveObject();
+            player.playerStatus = PlayerController.PlayerStatus.passive;
         }
         
         public void SetBtnText(string newText) {
@@ -286,6 +284,21 @@ namespace GameUI {
         public void SetObjectPortrait(Sprite portrait) {
             objPortrait.sprite = portrait;
         }
+
+        public void ActivateQuests(string choiceID) {
+            int countQuestActivateResults = DbCommands.GetCountFromQry(DbQueries.GetQuestActivateCountFromChoiceIDqry(choiceID));
+            print("countQuestActivateResults: " + countQuestActivateResults);
+            if (countQuestActivateResults > 0) {
+                print("QUESTS ACTIVATING!!!!");
+                
+            }
+        }
+
+        public int GetChoiceResultsCount(string choiceID) {
+            int countChoiceResults = DbCommands.GetCountFromTable("PlayerChoiceResults", "ChoiceIDs = " + choiceID);
+            return countChoiceResults;
+        }
+
 
 
     }

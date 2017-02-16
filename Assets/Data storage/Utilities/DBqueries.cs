@@ -8,7 +8,7 @@ namespace DbUtilities {
     /// before the query is ran. This ensures that the parameter names match up since they are both derived from the function using
     /// the same value. The function is part of the DbCommands class in the DbUtilities namespace.
     /// </summary>
-    public class DBqueries {
+    public class DbQueries {
 
         /// <summary>
         /// A left join is used to check if the grammar rule is related to a particular translation in the
@@ -75,8 +75,43 @@ namespace DbUtilities {
             return "SELECT * FROM Quests;";
         }
 
-        public static string GetActivateQuestsPlayerChoiceResultQry(string choiceID) {
-            return "SELECT * FROM QuestsActivatedByDialogueChoices WHERE ChoiceIDs = " + choiceID;
+        public static string GetActivateQuestsPlayerChoiceResultQry(string choiceIDs) {
+            return "SELECT QuestActivateResults.ResultIDs, Quests.QuestNames, Quests.QuestDescriptions FROM Quests "
+                + "LEFT JOIN QuestActivateResults ON Quests.QuestNames = QuestActivateResults.QuestNames "
+                + "WHERE ChoiceIDs = " + choiceIDs;
+        }
+
+        public static string GetQuestActivateCountFromChoiceIDqry(string choiceID) {
+            return "SELECT COUNT(*) FROM QuestActivateResults "
+                + "INNER JOIN PlayerChoiceResults ON QuestActivateResults.ResultIDs = PlayerChoiceResults.ResultIDs "
+                + "WHERE PlayerChoiceResults.ChoiceIDs = " + choiceID + ";";
+        }
+
+        public static string GetCharLinkDisplayQry() {
+            return "SELECT * FROM Characters WHERE CharacterNames != '!Player' ORDER BY CharacterNames ASC;";
+        }
+
+        public static string GetCharDialogueDisplayQry(string dialogueID) {
+            return "SELECT * FROM CharacterDialogues WHERE DialogueIDs = "
+                + dialogueID + ";";
+        }
+
+        public static string GetDialogueNodeDisplayQry(string dialogueID) {
+            return "SELECT * FROM DialogueNodes WHERE DialogueIDs = "
+               + dialogueID + ";";
+        }
+
+        public static string GetPlayerChoiceDisplayQry(string nodeID) {
+            return "SELECT * FROM PlayerChoices WHERE NodeIDs = "
+               + nodeID + ";";
+        }
+
+        public static string GetNextNodeResultQry(string choiceNextNodeID) {
+            return "SELECT * FROM DialogueNodes WHERE NodeIDs = " + choiceNextNodeID + ";";
+        }
+
+        public static string GetDialogueResultsRelatingToChoice(string choiceID) {
+            return "SELECT * FROM DialogueNodes WHERE NodeIDs = " + choiceID + ";";
         }
     }
 }

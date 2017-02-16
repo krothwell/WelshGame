@@ -4,7 +4,7 @@ using System.Collections;
 namespace DataUI {
     namespace ListItems {
 
-        public class ActivateQuestChoiceResultBtn : UITextPanelListItem {
+        public class NewActivateQuestResultBtn : UITextPanelListItem {
 
             DialogueUI dialogueUI;
             private string myName;
@@ -24,7 +24,7 @@ namespace DataUI {
             }
 
             void OnMouseUp() {
-                dialogueUI.InsertActivateQuestChoiceResult(gameObject);
+                dialogueUI.InsertActivateQuestResult(gameObject);
             }
 
 

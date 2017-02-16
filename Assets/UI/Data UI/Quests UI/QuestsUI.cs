@@ -70,7 +70,7 @@ namespace DataUI {
             partOptionSelectedList = addPartPanel.transform.FindChild("OptionSelectedList").gameObject;
 
 
-            FillDisplayFromDb(DBqueries.GetQuestsDisplayQry(), questsList.transform, BuildQuest);
+            FillDisplayFromDb(DbQueries.GetQuestsDisplayQry(), questsList.transform, BuildQuest);
 
             selectedQuest = "selectedQuest";
             selectedTask = "selectedTask";
@@ -135,7 +135,7 @@ namespace DataUI {
 
         public void DisplayTasksRelatedToDialogue(string questName) {
             tasksListUIPanel.SetActive(true);
-            FillDisplayFromDb(DBqueries.GetTasksDisplayQry(questName), tasksList.transform, BuildTask, questName);
+            FillDisplayFromDb(DbQueries.GetTasksDisplayQry(questName), tasksList.transform, BuildTask, questName);
         }
 
         public void DisplayPartsRelatedToTask(string taskID) {
@@ -146,11 +146,11 @@ namespace DataUI {
         public void DisplayEquipItemPartsRelatedToTask(string taskID) {
             Debugging.PrintDbTable("QuestTaskParts");
             Debugging.PrintDbTable("QuestTaskPartsEquipItem");
-            FillDisplayFromDb(DBqueries.GetEquipItemPartsRelatedToTask(taskID), partsList.transform, BuildEquipItemPart, taskID);
+            FillDisplayFromDb(DbQueries.GetEquipItemPartsRelatedToTask(taskID), partsList.transform, BuildEquipItemPart, taskID);
         }
 
         public void DisplayPartOptionssRelatedToEquipItem() {
-            FillDisplayFromDb(DBqueries.GetTaskPartOptionsEquipItemDisplayQry(), partOptionSelectedList.transform, BuildEquipItemPartOptionBtn);
+            FillDisplayFromDb(DbQueries.GetTaskPartOptionsEquipItemDisplayQry(), partOptionSelectedList.transform, BuildEquipItemPartOptionBtn);
         }
 
         public void HideTasksListUI() {
@@ -201,7 +201,7 @@ namespace DataUI {
             DbCommands.InsertTupleToTable("Quests",
                                             inputQuestDetailsName.text,
                                             inputQuestDetailsDesc.text);
-            FillDisplayFromDb(DBqueries.GetQuestsDisplayQry(), questsList.transform, BuildQuest);
+            FillDisplayFromDb(DbQueries.GetQuestsDisplayQry(), questsList.transform, BuildQuest);
         }
 
         public void InsertTask() {

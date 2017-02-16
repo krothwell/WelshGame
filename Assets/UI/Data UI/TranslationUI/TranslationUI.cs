@@ -116,7 +116,7 @@ namespace DataUI {
                 ToggleMenuTo(grammarListUI.GetComponent<UIController>(), auxiliaryDataMenusGroup);
                 proficienciesBtn.colors.normalColor.Equals(Colours.colorDataUItxt);
                 grammarRulesBtn.colors.normalColor.Equals(Colours.colorDataUIbtn);
-                FillDisplayFromDb(DBqueries.GetGrammarRuleDisplayQry(englishTxt,welshTxt),
+                FillDisplayFromDb(DbQueries.GetGrammarRuleDisplayQry(englishTxt,welshTxt),
                             grammarList.transform,
                             BuildRule,
                             englishTxt,
@@ -124,7 +124,7 @@ namespace DataUI {
             }
             else {
                 print("Activate grammar rules");
-                FillDisplayFromDb(DBqueries.GetGrammarRuleDisplayQry(englishTxt, welshTxt),
+                FillDisplayFromDb(DbQueries.GetGrammarRuleDisplayQry(englishTxt, welshTxt),
                             grammarList.transform,
                             BuildRule,
                             englishTxt,
@@ -223,7 +223,7 @@ namespace DataUI {
                 else {
                     string ruleID = DbCommands.GenerateUniqueID("VocabGrammar", "RuleIDs", "RuleID");
                     DbCommands.InsertTupleToTable("VocabGrammar", ruleID, inputRuleSdescTxt.text, inputRuleLdescTxt.text);
-                    FillDisplayFromDb(DBqueries.GetGrammarRuleDisplayQry(), grammarList.transform, BuildRule);
+                    FillDisplayFromDb(DbQueries.GetGrammarRuleDisplayQry(), grammarList.transform, BuildRule);
                 }
             }
 
@@ -239,7 +239,7 @@ namespace DataUI {
         }
 
         public void FillRulesNotSelected() {
-            FillDisplayFromDb(DBqueries.GetGrammarRuleDisplayQry(), grammarList.transform, BuildRule);
+            FillDisplayFromDb(DbQueries.GetGrammarRuleDisplayQry(), grammarList.transform, BuildRule);
         }
 
         private Transform BuildVocabTranslation(string[] strArray) {
@@ -311,7 +311,7 @@ namespace DataUI {
                 FillDisplayFromDb(DbCommands.GetTranslationsDisplayQry(), vocabTranslationList.transform, BuildVocabTranslation);
             } else { 
                 string searchText = "%" + searchTranslations.text + "%";
-                string sqlqry = DBqueries.GetTranslationSearchQry(searchText);
+                string sqlqry = DbQueries.GetTranslationSearchQry(searchText);
                 FillDisplayFromDb(sqlqry, vocabTranslationList.transform, BuildVocabTranslation, searchText);
             }
         }
