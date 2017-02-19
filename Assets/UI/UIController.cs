@@ -119,6 +119,7 @@ public class UIController : MonoBehaviour {
     public void HideComponents() {
         GameObject panel = transform.FindChild("Panel").gameObject;
         panel.SetActive(false);
+        MouseSelection.DelayNextClickSelect();
     }
 
     public GameObject GetPanel() {

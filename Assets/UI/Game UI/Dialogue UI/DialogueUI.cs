@@ -290,6 +290,8 @@ namespace GameUI {
             print("countQuestActivateResults: " + countQuestActivateResults);
             if (countQuestActivateResults > 0) {
                 print("QUESTS ACTIVATING!!!!");
+                string questName = 
+                DbCommands.InsertTupleToTable("QuestsActivated", )
                 
             }
         }

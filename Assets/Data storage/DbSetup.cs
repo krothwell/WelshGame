@@ -31,6 +31,7 @@ public class DbSetup {
                         PlayerChoiceResults,
                         QuestsActivatedByDialogueChoices,
                         Quests,
+                        QuestsActivated,
                         QuestTasks,
                         QuestTaskParts,
                         QuestTaskPartsEquipItem,
@@ -256,6 +257,13 @@ public class DbSetup {
         tblSqlArray[(int)tbls.Quests, (int)tblSqlStrs.body]                     = "QuestNames VARCHAR(100) NOT NULL, "
                                                                                 + "QuestDescriptions VARCHAR(500) NULL, ";
         tblSqlArray[(int)tbls.Quests, (int)tblSqlStrs.pk]                       = "QuestNames";
+
+        tblSqlArray[(int)tbls.QuestsActivated, (int)tblSqlStrs.header]          = "QuestsActivated";
+        tblSqlArray[(int)tbls.QuestsActivated, (int)tblSqlStrs.body]            = "QuestNames VARCHAR(100) NOT NULL, "
+                                                                                + "SaveIDs INT NOT NULL, "
+                                                                                + "FOREIGN KEY (QuestNames) REFERENCES Quests(QuestNames) ON DELETE CASCADE ON UPDATE CASCADE, "
+                                                                                + "FOREIGN KEY (SaveIDs) REFERENCES PlayerGames(SaveIDs) ON DELETE CASCADE ON UPDATE CASCADE, ";
+        tblSqlArray[(int)tbls.QuestsActivated, (int)tblSqlStrs.pk]              = "QuestNames, SaveIDs";
 
         tblSqlArray[(int)tbls.QuestTasks, (int)tblSqlStrs.header]               = "QuestTasks";
         tblSqlArray[(int)tbls.QuestTasks, (int)tblSqlStrs.body]                     = "TaskIDs INT, "
