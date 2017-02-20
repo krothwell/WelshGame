@@ -113,5 +113,9 @@ namespace DbUtilities {
         public static string GetDialogueResultsRelatingToChoice(string choiceID) {
             return "SELECT * FROM DialogueNodes WHERE NodeIDs = " + choiceID + ";";
         }
+
+        public static string GetActivatedQuestsInCurrentGame() {
+            return "SELECT * FROM QuestsActivated WHERE SaveIDs = 0;";
+        }
     }
 }

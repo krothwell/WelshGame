@@ -9,7 +9,15 @@ namespace GameUI {
             QuestsUI questsUI;
             LayoutElement layoutElement;
             Text myText;
+            BoxCollider2D myBoxCollider;
+
             // Use this for initialization
+
+            private string myName;
+            public string MyName {
+                get { return myName; }
+                set { myName = value; }
+            }
             void Awake() {
                 SetHeightToMatchText();
             }
@@ -17,8 +25,11 @@ namespace GameUI {
             void SetHeightToMatchText() {
                 layoutElement = GetComponent<LayoutElement>();
                 myText = GetComponentInChildren<Text>();
+                myBoxCollider = GetComponent<BoxCollider2D>();
                 Canvas.ForceUpdateCanvases();
                 layoutElement.minHeight = myText.preferredHeight;
+                myBoxCollider.size = new Vector2(layoutElement.minWidth, layoutElement.minHeight);
+
             }
 
             public void SelectSelf() {

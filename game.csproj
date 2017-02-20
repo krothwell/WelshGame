@@ -52,9 +52,6 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -69,9 +66,6 @@
     </Reference>
     <Reference Include="UnityEngine.HoloLens">
       <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Purchasing">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Purchasing.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VR">
       <HintPath>Library\UnityAssemblies\UnityEngine.VR.dll</HintPath>
@@ -125,7 +119,6 @@
     <Compile Include="Assets\Game World\WorldItems\WorldItemWithMultiSprites.cs" />
     <Compile Include="Assets\Game World\WorldItems\WorldItems.cs" />
     <Compile Include="Assets\GameInitialiser.cs" />
-    <Compile Include="Assets\QuestsUI.cs" />
     <Compile Include="Assets\UI\Data UI\DataUIController.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Char Dialogues List UI\Add Char Dialogues UI\AddCharDialogueBtn.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Char Dialogues List UI\Add Char Dialogues UI\Dialogue Nodes List UI\DialogueNode.cs" />
@@ -159,6 +152,8 @@
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventorySlot.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventoryUI.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\Quest.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\QuestNotifier.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\QuestsUI.cs" />
     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\DialogueHolder.cs" />
     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\DialogueNode.cs" />
     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\EndDialogueBtn.cs" />

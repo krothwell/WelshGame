@@ -266,7 +266,7 @@ public class DbSetup {
         tblSqlArray[(int)tbls.QuestsActivated, (int)tblSqlStrs.pk]              = "QuestNames, SaveIDs";
 
         tblSqlArray[(int)tbls.QuestTasks, (int)tblSqlStrs.header]               = "QuestTasks";
-        tblSqlArray[(int)tbls.QuestTasks, (int)tblSqlStrs.body]                     = "TaskIDs INT, "
+        tblSqlArray[(int)tbls.QuestTasks, (int)tblSqlStrs.body]                 = "TaskIDs INT, "
                                                                                 + "TaskDescriptions VARCHAR(500) NULL, "
                                                                                 + "QuestNames VARCHAR(100) NOT NULL, "
                                                                                 + "FOREIGN KEY (QuestNames) REFERENCES Quests(QuestNames) ON DELETE CASCADE ON UPDATE CASCADE, ";

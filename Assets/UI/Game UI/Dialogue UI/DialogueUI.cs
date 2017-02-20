@@ -1,15 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using System.Data;
-using Mono.Data.Sqlite;
-using System;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
 using GameUI.ListItems;
 using UIUtilities;
 using DbUtilities;
-using UnityEditor;
-using GameUI;
 
 /// <summary>
 /// When certain in-game interactions take place, this class is responsible for 
@@ -43,6 +37,7 @@ namespace GameUI {
         Text btnTxt;
         Animator animator;
         DialogueUI dialogueUI;
+        QuestsUI questsUI;
         Image objPortrait;
         protected RectTransform contentPanel;
         public GameObject dialogueHolderPrefab, characterSpeakingPrefab, inGameDialogueNode, inGamePlayerChoice, endDialogueBtn, spacer, emptyBlockPrefab;
@@ -59,6 +54,7 @@ namespace GameUI {
         }
         // Use this for initialization
         void Start() {
+            questsUI = FindObjectOfType<QuestsUI>();
             npcs = FindObjectOfType<NPCs>();
             player = FindObjectOfType<PlayerController>();
             panel = transform.FindChild("Panel").gameObject;
@@ -290,9 +286,11 @@ namespace GameUI {
             print("countQuestActivateResults: " + countQuestActivateResults);
             if (countQuestActivateResults > 0) {
                 print("QUESTS ACTIVATING!!!!");
-                string questName = 
-                DbCommands.InsertTupleToTable("QuestsActivated", )
-                
+                List<string[]> questsActivatedList;
+                DbCommands.GetDataStringsFromQry(DbQueries.GetActivateQuestsPlayerChoiceResultQry(choiceID), out questsActivatedList);
+                foreach (string[] activatedQuest in questsActivatedList) {
+                    questsUI.InsertActivatedQuest(activatedQuest[1]);
+                }
             }
         }
 
@@ -301,7 +299,7 @@ namespace GameUI {
             return countChoiceResults;
         }
 
-
+        
 
     }
 }
