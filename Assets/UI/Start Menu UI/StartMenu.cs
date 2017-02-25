@@ -3,39 +3,37 @@ using System.Collections;
 using DbUtilities;
 
 namespace StartMenuUI {
-    public class StartMenu : MonoBehaviour {
+    public class StartMenu : UIController {
         public GameObject[] options;
+        public string mainMenus;
         UIController ui;
         PlayerSavesController saveGameManager;
+        LoadGameMenuUI loadGameMenuUI;
+        NewGameMenuUI newGameMenuUI;
         GameObject saveGamesList;
 
         // Use this for initialization
         void Start() {
-            ui = GameObject.FindObjectOfType<UIController>();
-            saveGameManager = GameObject.FindObjectOfType<PlayerSavesController>();
-            saveGamesList = transform.FindChild("LoadGame").FindChild("Panel").FindChild("SaveGamesList").gameObject;
+            ui = FindObjectOfType<UIController>();
+            saveGameManager = FindObjectOfType<PlayerSavesController>();
+            loadGameMenuUI = FindObjectOfType<LoadGameMenuUI>();
+            newGameMenuUI = FindObjectOfType<NewGameMenuUI>();
+            saveGamesList = loadGameMenuUI.transform.FindChild("Panel").FindChild("SaveGamesList").gameObject;
             print(saveGamesList);
-        }
-
-        // Update is called once per frame
-        void Update() {
-
-        }
-
-        public void SetOptionsDisplay(GameObject optionSelected) {
-            foreach (GameObject option in options) {
-                HideOptionMenu(option);
-            }
-            optionSelected.transform.FindChild("Panel").gameObject.SetActive(true);
-        }
-
-        public void HideOptionMenu(GameObject option) {
-            GameObject optionPanel = option.transform.FindChild("Panel").gameObject;
-            optionPanel.SetActive(false);
+            mainMenus = "mainMenus";
+            CreateNewMenuToggleGroup(mainMenus);
         }
 
         public void FillSaveGames() {
-            ui.FillDisplayFromDb(DbCommands.GetSaveGamesDisplayQry(true), saveGamesList.transform, saveGameManager.BuildSaveGameRow);
+            ui.FillDisplayFromDb(DbQueries.GetSaveGamesDisplayQry(true), saveGamesList.transform, saveGameManager.BuildSaveGameRow);
+        }
+
+        public void ActivateLoadGameMenu() {
+            ToggleMenuTo(loadGameMenuUI,mainMenus);
+        }
+
+        public void ActivateNewGameMenu() {
+            ToggleMenuTo(newGameMenuUI, mainMenus);
         }
     }
 }

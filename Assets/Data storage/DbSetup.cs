@@ -233,6 +233,7 @@ public class DbSetup {
                                                                                 + "ChoiceText VARCHAR(500) NOT NULL, "
                                                                                 + "NodeIDs INT NULL, "
                                                                                 + "NextNodes INT, "
+                                                                                + "MarkDialogueCompleted INT NOT NULL, "
                                                                                 + "FOREIGN KEY (NodeIDs) REFERENCES DialogueNodes(NodeIDs) ON DELETE CASCADE, "
                                                                                 + "FOREIGN KEY (NextNodes) REFERENCES DialogueNodes(NodeIDs) ON DELETE CASCADE, ";
         tblSqlArray[(int)tbls.PlayerChoices, (int)tblSqlStrs.pk]                = "ChoiceIDs";
@@ -319,7 +320,7 @@ public class DbSetup {
         _dbc = null;
     }
 
-    void CopyTable(string tblNameTo, string tblNameFrom) {
+    public void CopyTable(string tblNameTo, string tblNameFrom) {
         IDbConnection _dbc = new SqliteConnection(conn);
         _dbc.Open(); //Open connection to the database.
         IDbCommand _dbcm = _dbc.CreateCommand();
@@ -365,7 +366,7 @@ public class DbSetup {
 							+ tblSqlArray[sqlArrayRow, (int)tblSqlStrs.body] 
 							+ "PRIMARY KEY (" + tblSqlArray[sqlArrayRow, (int)tblSqlStrs.pk] + ")"	
 							+ ");";
-        Debug.Log(_dbcm.CommandText);
+       // Debug.Log(_dbcm.CommandText);
 		_dbcm.ExecuteNonQuery();
 		_dbcm.Dispose();
 		_dbcm = null;

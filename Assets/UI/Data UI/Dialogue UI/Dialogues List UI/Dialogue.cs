@@ -106,9 +106,9 @@ namespace DataUI {
                                          fields);
                 print("updated Dialogues tuple");
                 if (activeToggle.isOn) {
-                    DbCommands.InsertTupleToTable("ActivatedDialogues", myID, "0", "0"); //Puts the dialgoue in activated dialogues under the "New game" save ref.
+                    DbCommands.InsertTupleToTable("ActivatedDialogues", myID, "-1", "0"); //Puts the dialgoue in activated dialogues under the "New game" save ref.
                 } else {
-                    string[,] activeDialoguefields = { { "DialogueIDs", myID }, { "SaveIDs", "0" } };
+                    string[,] activeDialoguefields = { { "DialogueIDs", myID }, { "SaveIDs", "-1" } };
                     DbCommands.DeleteTupleInTable("ActivatedDialogues", activeDialoguefields); //Removes the dialgoue in activated dialogues if it is marked as inactive.
                 }
                 MyDescription = GetInputField().text;

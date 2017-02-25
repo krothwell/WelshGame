@@ -14,8 +14,9 @@ namespace Quests {
             player = FindObjectOfType<PlayerController>();
             player.SetStatusToInteractingWithObject();
             dialogueUI = FindObjectOfType<DialogueUI>();
-            dialogueUI.SetInUse();
+            //dialogueUI.SetInUse();
             dialogueUI.StartNewDialogue(faerie.GetComponent<EnemyController>());
+            Destroy(gameObject);
         }
 
         // Update is called once per frame

@@ -21,6 +21,12 @@ namespace UnityUtilities {
             PrintListOfStrArrays(strArray);
         }
 
+        public static void PrintDbQryResults(string qry) {
+            List<string[]> strArray = new List<string[]>();
+            DbCommands.GetDataStringsFromQry(qry, out strArray);
+            PrintListOfStrArrays(strArray);
+        }
+
         public static void PrintDictionary(Dictionary<string, ISelectableUI> dict) {
             foreach (KeyValuePair<string, ISelectableUI> pair in dict) {
             }

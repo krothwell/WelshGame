@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using GameUI.ListItems;
 using UIUtilities;
 using DbUtilities;
+using System;
 
 /// <summary>
 /// When certain in-game interactions take place, this class is responsible for 
@@ -75,17 +76,23 @@ namespace GameUI {
         }
 
         public void StartNewDialogue(Character character) {
-            ResetLowerUIText();
+            ResetLowerDialogueContainer();
             currentChar = character;
             currentCharID = character.nameID;
-            currentDialogueHolder = Instantiate(dialogueHolderPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
-            currentDialogueHolder.transform.SetParent(dialogueScroller.gameObject.transform, false);
-            dialogueScroller.GetComponent<ScrollRect>().content = currentDialogueHolder.GetComponent<RectTransform>();
             SetDialogueID();
-            DisplayFirstDialogueNode();
+            print(currentDialogueID);
+            if (currentDialogueID != "") {
+                SetInUse();
+                currentDialogueHolder = Instantiate(dialogueHolderPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+                currentDialogueHolder.transform.SetParent(dialogueScroller.gameObject.transform, false);
+                dialogueScroller.GetComponent<ScrollRect>().content = currentDialogueHolder.GetComponent<RectTransform>();
+                DisplayFirstDialogueNode();
+            } else {
+                SetNotInUse();
+            }
         }
 
-        public void ResetLowerUIText() {
+        public void ResetLowerDialogueContainer() {
             foreach (Transform dialogue in dialogueScroller.gameObject.transform) {
                 Destroy(dialogue.gameObject);
             }
@@ -93,10 +100,10 @@ namespace GameUI {
         }
 
         private void DisplayFirstDialogueNode() {
-            if (currentDialogueID != "") {
-                string[] nodeArray = DbCommands.GetTupleFromTable("DialogueNodes", "DialogueIDs = " + currentDialogueID, "NodeIDs ASC");
-                DisplayDialogueNode(nodeArray);
-            }
+            print("getting first dialogue node data");
+            string[] nodeArray = DbCommands.GetTupleFromTable("DialogueNodes", "DialogueIDs = " + currentDialogueID, "NodeIDs ASC");
+            print("got first dialogue node data");
+            DisplayDialogueNode(nodeArray);
         }
 
         private string GetSpeakersName(string nodeID) {
@@ -206,11 +213,15 @@ namespace GameUI {
 
 
         private void SetDialogueID() {
-            string qry = "SELECT * FROM CharacterDialogues "
-                        + "LEFT JOIN Dialogues ON CharacterDialogues.DialogueIDs = Dialogues.DialogueIDs "
-                        + "WHERE CharacterDialogues.CharacterNames = '" + currentCharID + "' AND Dialogues.Active = 1";
-            currentDialogueID = DbCommands.GetFieldValueFromQry(qry, "DialogueIDs");
-            //print(currentDialogueID);
+            string qry = "SELECT CharacterDialogues.DialogueIDs FROM CharacterDialogues "
+                        + "INNER JOIN ActivatedDialogues ON CharacterDialogues.DialogueIDs = ActivatedDialogues.DialogueIDs "
+                        + "WHERE CharacterDialogues.CharacterNames = " + DbCommands.GetParameterNameFromValue(currentCharID)
+                            + " AND ActivatedDialogues.Completed = 0"
+                            + " AND ActivatedDialogues.SaveIDs = 0";
+            //Debugging.PrintDbQryResults(qry);
+
+            currentDialogueID = DbCommands.GetFieldValueFromQry(qry, "DialogueIDs", currentCharID);
+            
         }
 
         public void ScrollToDialogueElement(GameObject element) {
@@ -252,6 +263,7 @@ namespace GameUI {
 
 
         public void SetNotInUse() {
+            animator = GetComponent<Animator>();
             animator.SetBool("InUse", false);
             player.DestroySelectionCircleOfInteractiveObject();
             player.playerStatus = PlayerController.PlayerStatus.passive;
@@ -259,6 +271,16 @@ namespace GameUI {
         
         public void SetBtnText(string newText) {
             btnTxt.text = newText;
+        }
+
+        public void MarkDialogueComplete(string choiceID) {
+            bool isDialogueComplete = Convert.ToBoolean(DbCommands.GetCountFromTable("PlayerChoices", "ChoiceIDs = " + choiceID + " AND MarkDialogueCompleted = 1"));
+            if (isDialogueComplete) {
+                int activatedDialogueCount = DbCommands.GetCountFromTable("ActivatedDialogues", "SaveIDs = 0 AND Completed = 0 AND DialogueIDs = " + currentDialogueID);
+                if (activatedDialogueCount > 0) {
+                    DbCommands.UpdateTableField("ActivatedDialogues", "Completed", "1", "SaveIDs = 0 AND DialogueIDs = " + currentDialogueID);
+                }
+            }
         }
         
         public void ManageLowerUISubmission() {
@@ -298,8 +320,6 @@ namespace GameUI {
             int countChoiceResults = DbCommands.GetCountFromTable("PlayerChoiceResults", "ChoiceIDs = " + choiceID);
             return countChoiceResults;
         }
-
-        
 
     }
 }

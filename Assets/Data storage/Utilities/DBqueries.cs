@@ -63,7 +63,7 @@ namespace DbUtilities {
 
         public static string GetDialogueDisplayQry() {
             return "SELECT Dialogues.DialogueIDs, Dialogues.DialogueDescriptions, ActivatedDialogues.SaveIDs " 
-                + "FROM Dialogues LEFT JOIN ActivatedDialogues ON Dialogues.DialogueIDs = ActivatedDialogues.DialogueIDs "
+                + "FROM Dialogues LEFT JOIN ActivatedDialogues ON Dialogues.DialogueIDs = ActivatedDialogues.DialogueIDs AND ActivatedDialogues.SaveIDS = -1 "
                 + "ORDER BY Dialogues.DialogueIDs ASC;";
         }
 
@@ -106,6 +106,11 @@ namespace DbUtilities {
                + nodeID + ";";
         }
 
+        public static string GetChoiceCompleteDialogueQry(string choiceID) {
+            return "SELECT ChoiceIDs FROM PlayerChoices WHERE ChoiceIDs = "
+               + choiceID + ";";
+        }
+
         public static string GetNextNodeResultQry(string choiceNextNodeID) {
             return "SELECT * FROM DialogueNodes WHERE NodeIDs = " + choiceNextNodeID + ";";
         }
@@ -116,6 +121,14 @@ namespace DbUtilities {
 
         public static string GetActivatedQuestsInCurrentGame() {
             return "SELECT * FROM QuestsActivated WHERE SaveIDs = 0;";
+        }
+
+        public static string GetSaveGamesDisplayQry(bool autoSaveIncluded) {
+            string whereStr = " WHERE SaveIDs != 0 AND SaveIDs != -1";
+            if (!autoSaveIncluded) {
+                whereStr += " AND SaveIDs > -2 ";
+            }
+            return "SELECT * FROM PlayerGames" + whereStr + ";";
         }
     }
 }

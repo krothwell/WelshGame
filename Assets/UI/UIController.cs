@@ -55,7 +55,7 @@ public class UIController : MonoBehaviour {
     /// <param name="qryParameters">The values of the parameters to be added (a function is used when building the query and on the values in this
     /// function to give the same name.</param>
     public void AppendDisplayFromDb(string query, Transform display, Func<string[], Transform> buildItem, params string[] qryParameterValues) {
-        print (query);
+        //print (query);
         List<string[]> stringArrayList = new List<string[]>();
         DbCommands.GetDataStringsFromQry(query, out stringArrayList, qryParameterValues);
         //Debugging.PrintListOfStrArrays(stringArrayList);
@@ -78,15 +78,6 @@ public class UIController : MonoBehaviour {
     public void EmptyDisplay(Transform display) {
         foreach (Transform item in display) {
             Destroy(item.gameObject);
-        }
-    }
-
-    public void DeselectIfClickingAnotherListItem(string itemName, GameObject go, Action deselectFunction) {
-        /* if another dialogue is selected that is not this dialogue, then this dialogue should be deselected */
-        if (Input.GetMouseButtonUp(0)) {
-            if (MouseSelection.IsClickedGameObjectName(itemName) && MouseSelection.IsClickedDifferentGameObjectTo(go)) {
-                deselectFunction();
-            }
         }
     }
 

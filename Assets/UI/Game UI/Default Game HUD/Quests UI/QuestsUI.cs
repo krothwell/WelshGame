@@ -31,7 +31,7 @@ namespace GameUI {
             string questName = questData[0];
             print(questName);
             GameObject quest = Instantiate(questPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
-            print(quest);
+            //print(quest);
             quest.GetComponent<Quest>().MyName = questName;
             quest.GetComponentInChildren<Text>().text = questName;
             return quest.transform;

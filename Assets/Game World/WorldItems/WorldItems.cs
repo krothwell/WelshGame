@@ -21,7 +21,7 @@ public class WorldItems : MonoBehaviour {
     }
 
     private void SetWorldItemsList() {
-        print(FindObjectsOfType<WorldItem>().Length);
+        //print(FindObjectsOfType<WorldItem>().Length);
 
         foreach (WorldItem worldItem in FindObjectsOfType<WorldItem>()) {
             string[] itemDetails = new string[5];

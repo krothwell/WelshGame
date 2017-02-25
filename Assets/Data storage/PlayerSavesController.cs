@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System;
 using StartMenuUI;
 using DbUtilities;
+using GameUI;
 
 public class PlayerSavesController : MonoBehaviour {
     GameObject player;
@@ -14,8 +15,8 @@ public class PlayerSavesController : MonoBehaviour {
     GameObject saveGamesList;
     SceneLoader sceneLoader;
 
-    private ExistingSaveGameBtn selectedSave;
-    public ExistingSaveGameBtn SelectedSave {
+    private ExistingSaveGame selectedSave;
+    public ExistingSaveGame SelectedSave {
         get { return selectedSave; }
         set { selectedSave = value; }
     }
@@ -38,11 +39,6 @@ public class PlayerSavesController : MonoBehaviour {
         sceneLoader = FindObjectOfType<SceneLoader>();
     }
 
-    // Update is called once per frame
-    void Update() {
-
-    }
-
     private void SetPlayerName(string name) {
         playerName = name;
         //player.GetComponent<MainCharacter>().SetMyName(name);
@@ -57,38 +53,51 @@ public class PlayerSavesController : MonoBehaviour {
         saveID = int.Parse(sid);
     }
 
-    public void StartNewGame() {
-        /*only used in main menu, the new game inputfield is found and used to set the character name
-         * a save ID is generated and a save reference called autosave is overwritten or created if it doesn't exist
-         * with the new character name and save id. This will be used for reference when changing levels. 
-         */
-        NewGameMenuUI newGame = FindObjectOfType<NewGameMenuUI>();
-        SetPlayerName(newGame.GetNameInput());
-        SetPlayerPortraitPath(newGame.GetSelectedPortraitPath());
-        print(playerPortraitPath);
-        int saves = DbCommands.GetCountFromTable("PlayerGames");
-        if (saves > 0) {
-            string[,] ruleFields = new string[,] { { "SaveRefs", "CurrentGame"}};
-            DbCommands.DeleteTupleInTable("PlayerGames", ruleFields);
-        }
-        SetSaveID(DbCommands.GenerateUniqueID("PlayerGames", "SaveIDs", "SaveID"));
-        DbCommands.InsertTupleToTable("PlayerGames",
-                                    saveID.ToString(),
-                                    "CurrentGame",
-                                    playerName,
-                                    playerPortraitPath,
-                                    DateTime.Now.ToString(),
-                                    "Start",
-                                    "0.0", 
-                                    "0.0");
-        PlayerPrefsManager.SetSaveGame(saveID);
+    public void StartNewGame(string name, string portraitPath) {
+        string[,] pgFields = new string[,] {
+                                                { "PlayerNames", name },
+                                                { "PortraitImages", portraitPath },
+                                                { "Dates", DateTime.Now.ToString() },
+                                                { "LocationName", "Start" },
+                                                { "LocationX", "0.0" },
+                                                { "LocationY", "0.0" }
+                                            };
+        DbCommands.UpdateTableTuple("PlayerGames", "SaveIDs = 0", pgFields);
+
+        //Dialogues activated
+        string[,] delFields = new string[,] {
+                                                {"SaveIDs", "0" }
+        };
+        DbCommands.DeleteTupleInTable("ActivatedDialogues", delFields);
+        DbCommands.InsertExistingValuesInSameTableWithNewPK("ActivatedDialogues",
+                                                            new string[] { "SaveIDs" },
+                                                            new string[] { "0" },
+                                                            new string[] { "-1" });
+        //Quests activated
+        DbCommands.DeleteTupleInTable("QuestsActivated", delFields);
+        DbCommands.InsertExistingValuesInSameTableWithNewPK("QuestsActivated",
+                                                    new string[] { "SaveIDs" },
+                                                    new string[] { "0" },
+                                                    new string[] { "-1" });
+        PlayerPrefsManager.SetSaveGame(0);
+
     }
 
     /*used in game to create a new save with player referenced save slot */
+
+    public void Save() {
+        if (selectedSave == null) {
+            print("saving new");
+            SaveNew();
+        }
+        else {
+            print("saving over selected");
+            SaveSelected();
+        }
+    }
     public void SaveNew() {
         SetSaveID(DbCommands.GenerateUniqueID("PlayerGames", "SaveIDs", "SaveID"));
-        string saveRef = FindObjectOfType<UIController>().transform.FindChild("GameUI").transform
-            .FindChild("GameOptions")
+        string saveRef = FindObjectOfType<EscMenuUI>().transform
             .FindChild("Panel")
             .FindChild("SaveOptions")
             .FindChild("SaveInput").GetComponent<InputField>().text;
@@ -100,18 +109,31 @@ public class PlayerSavesController : MonoBehaviour {
                                         playerName,
                                         playerPortraitPath,
                                         DateTime.Now.ToString(),
-                                        "Start",
+                                        sceneLoader.GetCurrentSceneName(),
                                         player.GetComponent<Transform>().position.x.ToString(),
                                         player.GetComponent<Transform>().position.y.ToString());
         }
+
+        CopyCurrentGameToPlayerSave(saveID);
     }
 
-    public void Save() {
-        if (selectedSave == null) {
-            SaveNew();
-        } else {
-            SaveSelected();
-        }
+    public void CopyCurrentGameToPlayerSave(int saveID) {
+        string saveIDstr = saveID.ToString();
+        //Dialogues activated
+        string[,] delFields = new string[,] {
+                                                {"SaveIDs", saveIDstr }
+        };
+        DbCommands.DeleteTupleInTable("ActivatedDialogues", delFields);
+        DbCommands.InsertExistingValuesInSameTableWithNewPK("ActivatedDialogues",
+                                                            new string[] { "SaveIDs" },
+                                                            new string[] { saveIDstr },
+                                                            new string[] { "0" });
+        //Quests activated
+        DbCommands.DeleteTupleInTable("QuestsActivated", delFields);
+        DbCommands.InsertExistingValuesInSameTableWithNewPK("QuestsActivated",
+                                                    new string[] { "SaveIDs" },
+                                                    new string[] { saveIDstr },
+                                                    new string[] { "0" });
     }
 
     public void SaveSelected() {
@@ -124,6 +146,7 @@ public class PlayerSavesController : MonoBehaviour {
                                                 { "LocationY", player.GetComponent<Transform>().position.y.ToString() }
                                             };
         DbCommands.UpdateTableTuple("PlayerGames", "SaveIDs = " + saveID, fieldVals);
+        CopyCurrentGameToPlayerSave(saveID);
     }
 
     public Transform BuildSaveGameRow(string[] strArray) {
@@ -135,10 +158,10 @@ public class PlayerSavesController : MonoBehaviour {
         saveGame.transform.FindChild("Panel").FindChild("SaveRef").gameObject.GetComponent<Text>().text = saveRefStr;
         saveGame.transform.FindChild("Panel").FindChild("CharName").GetComponent<Text>().text = playerNameStr;
         saveGame.transform.FindChild("Panel").FindChild("Date").GetComponent<Text>().text = dateStr;
-        saveGame.GetComponent<ExistingSaveGameBtn>().ID = saveID;
-        saveGame.GetComponent<ExistingSaveGameBtn>().SaveRef = saveRefStr;
-        saveGame.GetComponent<ExistingSaveGameBtn>().CharName = playerNameStr;
-        saveGame.GetComponent<ExistingSaveGameBtn>().SaveDate = dateStr;
+        saveGame.GetComponent<ExistingSaveGame>().ID = saveID;
+        saveGame.GetComponent<ExistingSaveGame>().SaveRef = saveRefStr;
+        saveGame.GetComponent<ExistingSaveGame>().CharName = playerNameStr;
+        saveGame.GetComponent<ExistingSaveGame>().SaveDate = dateStr;
         //saveGame.transform.SetParent(saveGamesList.transform, false);
         return saveGame.transform;
     }
@@ -146,6 +169,7 @@ public class PlayerSavesController : MonoBehaviour {
     /*player prefs is used to store the selected save id and then the database is accessed to load the saved scene from the
      * game, other details are loaded using the loadSave function from the Start method. */
     public void LoadFromGameID() {
+        print(selectedSave);
         int id = selectedSave.ID;
         print("ready to load game from id: " + id);
         PlayerPrefsManager.SetSaveGame(id);
@@ -166,12 +190,43 @@ public class PlayerSavesController : MonoBehaviour {
         SetPlayerPortraitPath(playerSave[3]);
         player.GetComponent<PlayerController>().SetMyName(playerName);
         player.GetComponent<PlayerController>().SetMyPortrait(playerPortraitPath);
-        
         float playerXpos = float.Parse(playerSave[6]);
         float playerYpos = float.Parse(playerSave[7]);
         player.GetComponent<Transform>().position = new Vector2(playerXpos, playerYpos);
         Camera.main.transform.position =  new Vector3(playerXpos, playerYpos, Camera.main.transform.position.z);
         Time.timeScale = 1;
+
+        //Need to update currentgame with data from player save
+        CopyPlayerSaveToCurrentGame(playerSave);
+    }
+
+    public void CopyPlayerSaveToCurrentGame(string[] playerGameData) {
+        string saveID = playerGameData[0];
+        if (saveID != "0") {
+            //PlayerGames tbl
+            string[,] pgFields = new string[,] {
+                                                { "PlayerNames", playerGameData[2] },
+                                                { "PortraitImages", playerGameData[3] },
+                                                { "LocationName", playerGameData[5] }
+                                             };
+            DbCommands.UpdateTableTuple("PlayerGames", "SaveIDs = 0", pgFields);
+
+            string[,] delFields = new string[,] {
+                                                {"SaveIDs", "0" }
+            };
+            //Dialogues activated
+            DbCommands.DeleteTupleInTable("ActivatedDialogues", delFields);
+            DbCommands.InsertExistingValuesInSameTableWithNewPK("ActivatedDialogues",
+                                                                new string[] { "SaveIDs" },
+                                                                new string[] { "0" },
+                                                                new string[] { playerGameData[0] });
+            //Quests activated
+            DbCommands.DeleteTupleInTable("QuestsActivated", delFields);
+            DbCommands.InsertExistingValuesInSameTableWithNewPK("QuestsActivated",
+                                                        new string[] { "SaveIDs" },
+                                                        new string[] { "0" },
+                                                        new string[] { playerGameData[0] });
+        }
     }
 
     public void DeleteSave() {

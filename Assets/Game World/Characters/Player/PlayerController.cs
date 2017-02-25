@@ -162,7 +162,7 @@ public class PlayerController : Character {
     private void InteractWithObject() {
         playerStatus = PlayerStatus.interactingWithObject;;
         if (clickSelected.GetComponent<Character>() != null) {
-            dialogueUI.SetInUse();
+            //dialogueUI.SetInUse();
             dialogueUI.StartNewDialogue(clickSelected.GetComponent<Character>());
         } else if (clickSelected.GetComponent<WorldItem>()) {
             clickSelected.GetComponent<WorldItem>().GetPickedUp();
@@ -271,7 +271,7 @@ public class PlayerController : Character {
             SetMyDirection(enemyPosition, myCurrentPosition);
             SetDistanceFromNewPosition(enemyPosition, myCurrentPosition);
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-            dialogueUI.SetInUse();
+            //dialogueUI.SetInUse();
             //dialogueUI.SetRandomVocab();
         }
 

@@ -64,11 +64,11 @@ namespace GameUI {
         }
 
         public void FillSaveGames() {
-            ui.FillDisplayFromDb(DbCommands.GetSaveGamesDisplayQry(false), saveGameList.transform, playerSavesController.BuildSaveGameRow);
+            ui.FillDisplayFromDb(DbQueries.GetSaveGamesDisplayQry(false), saveGameList.transform, playerSavesController.BuildSaveGameRow);
         }
 
         public void FillLoadGames() {
-            ui.FillDisplayFromDb(DbCommands.GetSaveGamesDisplayQry(true), loadGameList.transform, playerSavesController.BuildSaveGameRow);
+            ui.FillDisplayFromDb(DbQueries.GetSaveGamesDisplayQry(true), loadGameList.transform, playerSavesController.BuildSaveGameRow);
         }
 
 

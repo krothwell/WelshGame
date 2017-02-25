@@ -10,30 +10,14 @@ namespace StartMenuUI {
         NewGameMenuUI newGame;
 
         // Use this for initialization
-        void Start() {
+        void Awake() {
             newGame = FindObjectOfType<NewGameMenuUI>();
         }
 
-        // Update is called once per frame
-        void Update() {
-            DeselectIfTypeIsSame();
-        }
-
-        private void DeselectIfTypeIsSame() {
-            if (Input.GetMouseButtonUp(0)) {
-                if (MouseSelection.IsClickedDifferentGameObjectTo(this.gameObject)) {
-                    //if a rule is not being edited then the rule list is refreshed.
-                    GameObject clickSelect;
-                    MouseSelection.ClickSelect(out clickSelect);
-                    SelectPlayerPortraitBtn charPortraitSelector = clickSelect.GetComponent<SelectPlayerPortraitBtn>();
-                    if (charPortraitSelector != null) {
-                        DeselectSelf();
-                    }
-                }
-            }
-        }
-
         public void SelectSelf() {
+            print(GetComponent<Image>());
+            print(newGame);
+            print(newGame.portraitSelectedColor);
             GetComponent<Image>().color = newGame.portraitSelectedColor;
             newGame.SetSelectedPortrait(GetComponent<SelectPlayerPortraitBtn>());
         }
@@ -59,7 +43,7 @@ namespace StartMenuUI {
         }
 
         void OnMouseUp() {
-            SelectSelf();
+            newGame.ToggleSelectionTo(this, newGame.selectedPortrait);
         }
     }
 }

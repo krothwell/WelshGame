@@ -20,6 +20,7 @@ namespace GameUI {
             }
             void Awake() {
                 SetHeightToMatchText();
+                questsUI = FindObjectOfType<QuestsUI>();
             }
             
             void SetHeightToMatchText() {

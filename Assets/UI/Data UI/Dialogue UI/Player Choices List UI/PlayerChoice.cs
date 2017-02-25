@@ -28,6 +28,12 @@ namespace DataUI {
                 get { return myNextNode; }
                 set { myNextNode = value; }
             }
+
+            private string markDialogueComplete;
+            public string MarkDialogueComplete {
+                get { return myNextNode; }
+                set { myNextNode = value; }
+            }
             // Use this for initialization
             void Start() {
                 dialogueUI = FindObjectOfType<DialogueUI>();

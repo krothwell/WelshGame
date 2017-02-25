@@ -56,6 +56,7 @@ namespace GameUI {
                 
                 if (dialogueUI.GetChoiceResultsCount(myID) > 0) {
                     dialogueUI.ActivateQuests(myID);
+                    dialogueUI.MarkDialogueComplete(myID);
                 }
             }
 
@@ -64,7 +65,6 @@ namespace GameUI {
             }
 
             public void DisplayCurrentNodeCharacterPortrait() {
-                print(dialogueUI);
                 dialogueUI.SetCurrentPortrait();
             }
 

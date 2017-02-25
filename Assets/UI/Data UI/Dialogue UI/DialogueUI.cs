@@ -63,6 +63,7 @@ namespace DataUI {
         public GameObject existingResultTitlePrefab,
                           existingNodeResultPrefab,
                           existingActivateQuestResultPrefab,
+                          existingCompleteDialogueResultPrefab,
                           newNodeResultBtnPrefab,
                           newActivateQuestResultBtnPrefab;
         
@@ -342,8 +343,16 @@ namespace DataUI {
 
         public void InsertDialogueNodeResult(GameObject selectedBtn) {
             NewNodeChoiceResultBtn dialogueNodeChoiceResultBtn = selectedBtn.GetComponent<NewNodeChoiceResultBtn>();
-            (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyNextNode = dialogueNodeChoiceResultBtn.MyID;
+            //(GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyNextNode = dialogueNodeChoiceResultBtn.MyID;
             string[,] fieldVals = new string[,] { { "NextNodes", dialogueNodeChoiceResultBtn.MyID } };
+            DbCommands.UpdateTableTuple("PlayerChoices", "ChoiceIDs = " + (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID, fieldVals);
+            DisplayResultsRelatedToChoices();
+            DeactivateNewChoiceResult();
+        }
+
+        public void InsertCompleteDialogueResult() {
+            //(GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MarkDialogueComplete = "1";
+            string[,] fieldVals = new string[,] { { "MarkDialogueCompleted", "1" } };
             DbCommands.UpdateTableTuple("PlayerChoices", "ChoiceIDs = " + (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID, fieldVals);
             DisplayResultsRelatedToChoices();
             DeactivateNewChoiceResult();
@@ -368,7 +377,7 @@ namespace DataUI {
             print(strArray[2]);
             bool activeAtStartOfGameBool = false;
             if (strArray[2] != "") {
-                activeAtStartOfGameBool = (int.Parse(strArray[2]) == 0) ? true : false;
+                activeAtStartOfGameBool = (int.Parse(strArray[2]) == -1) ? true : false;
             }
             GameObject dialogue = Instantiate(dialoguePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
             dialogue.transform.FindChild("DescriptionInput").GetComponent<InputField>().text = descStr;
@@ -488,6 +497,16 @@ namespace DataUI {
             return choiceResult.transform;
         }
 
+        //for adding an existing choice result, not to be confused with a new result
+        private Transform BuildExistingResultCompleteDialogue(string[] strArray) {
+            string choiceIDstr = strArray[0];
+            print(choiceIDstr);
+            GameObject choiceResult = Instantiate(existingCompleteDialogueResultPrefab, new Vector3(0f, 0f), Quaternion.identity) as GameObject;
+            choiceResult.GetComponent<ExistingResult>().MyID = "-1";//since the next node of a choice is not logged in the results table it is given -1 in case this needs to be checked somewhere.
+            choiceResult.GetComponent<ExistingCompleteDialogueResult>().MyChoiceID = choiceIDstr;
+            return choiceResult.transform;
+        }
+
         private Transform BuildExistingResultActivateQuest(string[] strArray) {
             string resultID = strArray[0];
             string questName = strArray[1];
@@ -535,6 +554,9 @@ namespace DataUI {
             playerChoiceResultsListUI.SetActive(true);
             EmptyDisplay(playerChoicesResultsList.transform);
             string selectedChoiceID = (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID;
+            if (DbCommands.GetFieldValueFromTable("PlayerChoices", "MarkDialogueCompleted", " ChoiceIDs = " + selectedChoiceID) != "0") {
+                AppendDisplayFromDb((DbQueries.GetChoiceCompleteDialogueQry(selectedChoiceID)), playerChoicesResultsList.transform, BuildExistingResultCompleteDialogue);
+            }
             if (DbCommands.GetFieldValueFromTable("PlayerChoices", "NextNodes", " ChoiceIDs = " + selectedChoiceID) != "") {
                 GameObject pChoiceResultsTitle = Instantiate(existingResultTitlePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
                 AppendDisplayWithTitle(playerChoicesResultsList.transform, pChoiceResultsTitle.transform, "Goes to dialogue node... ");
@@ -542,10 +564,7 @@ namespace DataUI {
             }
             int resultsCount = DbCommands.GetCountFromTable("PlayerChoiceResults", "ChoiceIDs = " + selectedChoiceID);
             if (resultsCount > 0) {
-                print("getting quest activate count");
-                print(DbQueries.GetQuestActivateCountFromChoiceIDqry(selectedChoiceID));
                 int questActivateCount = DbCommands.GetCountFromQry(DbQueries.GetQuestActivateCountFromChoiceIDqry(selectedChoiceID));
-                print(questActivateCount);
                 if (questActivateCount > 0) {
                     GameObject existingResultsTitle = Instantiate(existingResultTitlePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
                     AppendDisplayWithTitle(playerChoicesResultsList.transform, existingResultsTitle.transform, "Activates quest... ");
@@ -593,12 +612,20 @@ namespace DataUI {
                     "ChoiceIDs = " + (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID);
         }
 
-        public void DeleteActivateQuestPlayerChoice(string questName) { 
+        public void DeleteActivateQuestPlayerChoice() { 
             string[,] fields = { { "ResultIDs", (GetSelectedItemFromGroup(selectedChoiceResult) as ExistingResult).MyID},
                                  { "ChoiceIDs", (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID} };
             DbCommands.DeleteTupleInTable(
                     "PlayerChoiceResults",
                     fields);
+        }
+
+        public void DeleteCompleteDialogueResult (string choiceID) {
+            DbCommands.UpdateTableField(
+                    "PlayerChoices",
+                    "NextNodes",
+                    "0",
+                    "ChoiceIDs = " + choiceID);
         }
 
         /// <summary>

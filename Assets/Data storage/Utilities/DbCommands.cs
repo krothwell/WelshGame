@@ -3,6 +3,7 @@ using System.Data;
 using Mono.Data.Sqlite;
 using System.Text.RegularExpressions;
 using UnityEngine; //Application.dataPath
+using UnityUtilities;
 
 namespace DbUtilities {
 
@@ -51,10 +52,10 @@ namespace DbUtilities {
 
             }
             string sql = sqlInsert + sqlValues;
-            Debug.Log(sql);
+            //Debug.Log(sql);
             _dbcm.CommandText = sql;
             _dbcm.ExecuteNonQuery();
-            Debug.Log("inserted");
+            //Debug.Log("inserted");
             _dbcm.Dispose();
             _dbcm = null;
             _dbc.Close();
@@ -63,6 +64,76 @@ namespace DbUtilities {
 
             //PrintTable (tableName);
         }
+
+        public static void InsertExistingValuesInSameTableWithNewPK(string tblName, string[] pkColumns, string[] newPK, string[] oldPK) {
+            IDbConnection _dbc = new SqliteConnection(conn);
+            _dbc.Open(); //Open connection to the database.
+            IDbCommand _dbcm = _dbc.CreateCommand();
+            _dbcm.CommandText = "PRAGMA foreign_keys=ON;";
+            _dbcm.ExecuteNonQuery();
+            string pkColumnsStr = string.Join(",", pkColumns);
+            Debug.Log(pkColumnsStr);
+
+            string sql = "SELECT * FROM " + tblName;
+            _dbcm.CommandText = sql;
+            IDataReader _dbr = _dbcm.ExecuteReader();
+            string updFieldNames = "";
+            for (int i = 0; i < _dbr.FieldCount; i++) {
+                string fName = (_dbr.GetName(i));
+                foreach (string pkCol in pkColumns) {
+                    if (pkCol != fName) {
+                        updFieldNames += fName + ", ";
+                    }
+                }
+            }
+            updFieldNames = updFieldNames.Substring(0, updFieldNames.Length - 2);
+            Debug.Log(updFieldNames);
+            _dbr.Dispose();
+            _dbr = null;
+
+            string newPKstr = "";
+            for (int i = 0; i < newPK.Length; i++) {
+                string newPKstrParam = GetParameterNameFromValue(newPK[i]);
+                if (i == newPK.Length - 1) {
+                    newPKstr += newPKstrParam;
+                }
+                else {
+                    newPKstr += newPKstrParam + ", ";
+                }
+                _dbcm.Parameters.Add(new SqliteParameter(newPKstrParam, newPK[i]));
+            }
+
+            string whereSql = "";
+            for (int i = 0; i< pkColumns.Length; i ++) {
+                string condition = pkColumns[i] + " = " + GetParameterNameFromValue(oldPK[i]);
+                _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(oldPK[i]), oldPK[i]));
+                if (i == pkColumns.Length - 1) {
+                    whereSql += condition;
+                }
+                else {
+                    whereSql += condition + " AND ";
+                }
+            }
+
+            string sqlInsert = "INSERT OR IGNORE INTO " + tblName + " "
+                             + "(" + pkColumnsStr + ", " + updFieldNames + ") "
+                             + "SELECT " + newPKstr + ", " + updFieldNames + " "
+                             + "FROM " + tblName + " "
+                             + "WHERE " + whereSql;
+            Debug.Log(sqlInsert);
+            
+            _dbcm.CommandText = sqlInsert;
+            _dbcm.ExecuteNonQuery();
+            _dbcm.Dispose();
+            _dbcm = null;
+            _dbc.Close();
+            _dbc = null;
+
+
+            Debugging.PrintDbTable(tblName);
+        }
+
+
 
         public static void DeleteTupleInTable(string tableName, string[,] fields) {
             IDbConnection _dbc = new SqliteConnection(conn);
@@ -105,7 +176,7 @@ namespace DbUtilities {
             _dbc = null;
         }
 
-        public static void UpdateTableField(string tblName, string field, string value, string condition, params string[] qryParameters) {
+        public static void UpdateTableField(string tblName, string field, string value, string condition = null, params string[] qryParameters) {
             IDbConnection _dbcUpd = new SqliteConnection(conn);
             _dbcUpd.Open(); //Open connection to the database.
             IDbCommand _dbcmUpd = _dbcUpd.CreateCommand();
@@ -117,8 +188,10 @@ namespace DbUtilities {
             }
             string sql = "UPDATE " + tblName + " "
                         + "SET " + field + " = "
-                        + pValue + " "
-                        + "WHERE " + condition;
+                        + pValue + " ";
+            if (condition != null) {
+                sql += "WHERE " + condition;
+            }
             if (pValue != "null") {
                 _dbcmUpd.Parameters.Add(new SqliteParameter("@value", value));
             }
@@ -134,7 +207,7 @@ namespace DbUtilities {
             _dbcUpd = null;
         }
 
-        public static void UpdateTableTuple(string tblName, string condition, string[,] fields, params string[] qryParameters) {
+        public static void UpdateTableTuple(string tblName, string condition, string[,] fields, params string[] conditionParameters) {
             IDbConnection _dbc = new SqliteConnection(conn);
             _dbc.Open(); //Open connection to the database.
             IDbCommand _dbcm = _dbc.CreateCommand();
@@ -152,7 +225,7 @@ namespace DbUtilities {
                 else {
                     _dbcm.Parameters.Add(new SqliteParameter(fieldValueParamName, fieldValue));
                 }
-                foreach (string value in qryParameters) {
+                foreach (string value in conditionParameters) {
                     _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(value), value));
                 }
                 string fieldName = fields[i, 0];
@@ -315,8 +388,11 @@ namespace DbUtilities {
             if (value == null) {
                 value = "";
             }
+            string v2 = value.Replace("-", "m"); 
+            Debug.Log(v2);
             Regex rgx = new Regex("[^a-zA-Z0-9]");
-            string ret = rgx.Replace(value, "");
+            string ret = rgx.Replace(v2, "");
+            
             if (ret == "") {
                 return null;
             }
@@ -331,16 +407,6 @@ namespace DbUtilities {
 
         public static string GetProficienciesDisplayQry() {
             return "SELECT * FROM Proficiencies ORDER BY Thresholds ASC;";
-        }
-
-
-
-        public static string GetSaveGamesDisplayQry(bool autoSaveIncluded) {
-            string whereStr = " WHERE SaveRefs != 'CurrentGame'";
-            if (!autoSaveIncluded) {
-                whereStr += " AND SaveRefs != 'Autosave'";
-            }
-            return "SELECT * FROM PlayerGames" + whereStr + ";";
         }
 
         public static string[] GetRandomTupleFromTable(string tblName) {
@@ -418,11 +484,15 @@ namespace DbUtilities {
             return fieldValue;
         }
 
-        public static string GetFieldValueFromQry(string qry, string field) {
+        public static string GetFieldValueFromQry(string qry, string field, params string[] qryParams) {
             IDbConnection _dbc = new SqliteConnection(conn);
             _dbc.Open(); //Open connection to the database.
             IDbCommand _dbcm = _dbc.CreateCommand();
+            foreach (string qryParameter in qryParams) {
+                _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(qryParameter), qryParameter));
+            }
             string sql = qry + " LIMIT 1;";
+            Debug.Log(sql);
             _dbcm.CommandText = sql;
             IDataReader _dbr = _dbcm.ExecuteReader();
             _dbr.Read();

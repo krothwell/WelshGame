@@ -9,12 +9,7 @@ public class PlayerPrefsManager : MonoBehaviour {
     const string SAVE_KEY = "save_game";
 
     public static void SetSaveGame(int id) {
-        if (id > 0) { 
-            PlayerPrefs.SetInt(SAVE_KEY, id);
-        }
-        else {
-            Debug.LogError("Save key out of range");
-        }
+        PlayerPrefs.SetInt(SAVE_KEY, id);
     }
 
     public static int GetSaveGame() {
