@@ -32,6 +32,7 @@ namespace GameUI {
                 set { myNextNode = value; }
             }
             public DialogueUI dialogueUI;
+            NotificationQueue notificationQueue;
 
             void DisableMe() {
                 GetComponent<Button>().interactable = false;
@@ -57,6 +58,9 @@ namespace GameUI {
                 if (dialogueUI.GetChoiceResultsCount(myID) > 0) {
                     dialogueUI.ActivateQuests(myID);
                     dialogueUI.MarkDialogueComplete(myID);
+
+                    notificationQueue = FindObjectOfType<NotificationQueue>();
+                    notificationQueue.DisplayQueuedNotifications();
                 }
             }
 

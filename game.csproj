@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>5.5.0f3</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -119,6 +121,7 @@
     <Compile Include="Assets\Game World\WorldItems\WorldItemWithMultiSprites.cs" />
     <Compile Include="Assets\Game World\WorldItems\WorldItems.cs" />
     <Compile Include="Assets\GameInitialiser.cs" />
+    <Compile Include="Assets\NotificationQueue.cs" />
     <Compile Include="Assets\UI\Data UI\DataUIController.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Char Dialogues List UI\Add Char Dialogues UI\AddCharDialogueBtn.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Char Dialogues List UI\Add Char Dialogues UI\Dialogue Nodes List UI\DialogueNode.cs" />
@@ -149,12 +152,14 @@
     <Compile Include="Assets\UI\ExistingSaveGame.cs" />
     <Compile Include="Assets\UI\Game UI\Combat UI\CombatUI.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\DefaultGameHUD.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Notifcation Queue UI\GameNotifier.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Notifcation Queue UI\NotificationData.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Notifcation Queue UI\NewQuestNotifier.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerEquipmentSlot.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventoryItem.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventorySlot.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventoryUI.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\Quest.cs" />
-    <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\QuestNotifier.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\QuestsUI.cs" />
     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\DialogueHolder.cs" />
     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\DialogueNode.cs" />

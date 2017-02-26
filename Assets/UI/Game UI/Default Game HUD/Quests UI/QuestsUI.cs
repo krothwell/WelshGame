@@ -11,16 +11,19 @@ namespace GameUI {
         public string selectedQuest;
         Dictionary<string, Quest> questDict;
         GameObject questsList;
-        List<string> questNotifierQueue;
+        NotificationQueue notificationQueue;
+
+        public GameObject questNotifierPrefab;
         // Use this for initialization
         void Start() {
+            notificationQueue = FindObjectOfType<NotificationQueue>();
             selectedQuest = "selectedQuest";
             CreateSelectionToggleGroup(selectedQuest);
             questDict = new Dictionary<string, Quest>();
             questsList = GetPanel().transform.FindChild("QuestsScroller").FindChild("QuestsList").gameObject;
             DisplayQuests();
             FillQuestDictionary();
-            questNotifierQueue = new List<string>();
+
         }
 
         public void DisplayQuests() {
@@ -51,7 +54,7 @@ namespace GameUI {
 
         public void InsertActivatedQuest(string questName) {
             DbCommands.InsertTupleToTable("QuestsActivated", questName, "0");
-            QueueQuestNotifier(questName);
+            notificationQueue.QueueNewQuestNotifier(questName);
             string[] questData = new string[1];
             questData[0] = questName;
             GameObject newQuest = BuildQuest(questData).gameObject;
@@ -59,21 +62,12 @@ namespace GameUI {
             AddQuestToDictionary(newQuest);
         }
 
-        public void QueueQuestNotifier(string questName) {
-            questNotifierQueue.Add(questName);
-        }
-
-        public void DisplayQuestNotifications() {
-            foreach(string qn in questNotifierQueue) {
-                print("Quest notifier: " + qn);
-            }
-        }
-
         public void AddQuestToDictionary(GameObject newQuest) {
             questDict.Add(newQuest.GetComponent<Quest>().MyName, newQuest.GetComponent<Quest>());
         }
 
         public void SelectQuest(string questName) {
+            DisplayComponents();
             Quest quest = questDict[questName];
             quest.SelectSelf();
         }

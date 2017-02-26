@@ -240,7 +240,7 @@ public class PlayerController : Character {
         }
         else {
             camDelay = camDefault;
-            print("camDelay reset");
+            //print("camDelay reset");
         }
     }
 

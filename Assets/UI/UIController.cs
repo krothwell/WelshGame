@@ -39,7 +39,6 @@ public class UIController : MonoBehaviour {
     public void FillDisplayFromDb(string query,
                                   Transform display,
                                   Func<string [], Transform> buildItem,
-                                  //string search = null,
                                   params string[] qryParameterValues) {
         EmptyDisplay(display);
         //print(query);

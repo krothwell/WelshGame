@@ -80,7 +80,6 @@ namespace GameUI {
             currentChar = character;
             currentCharID = character.nameID;
             SetDialogueID();
-            print(currentDialogueID);
             if (currentDialogueID != "") {
                 SetInUse();
                 currentDialogueHolder = Instantiate(dialogueHolderPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
