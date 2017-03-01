@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System;
-using StartMenuUI;
+//using StartMenuUI;
 using DbUtilities;
 using GameUI;
+using UnityUtilities;
 
 public class PlayerSavesController : MonoBehaviour {
     GameObject player;
@@ -79,6 +80,13 @@ public class PlayerSavesController : MonoBehaviour {
                                                     new string[] { "SaveIDs" },
                                                     new string[] { "0" },
                                                     new string[] { "-1" });
+
+        //Quests tasks completed
+        DbCommands.DeleteTupleInTable("CompletedQuestTasks", delFields);
+
+        //Task parts completed
+        DbCommands.DeleteTupleInTable("CompletedQuestTaskParts", delFields);
+
         PlayerPrefsManager.SetSaveGame(0);
 
     }
@@ -131,6 +139,20 @@ public class PlayerSavesController : MonoBehaviour {
         //Quests activated
         DbCommands.DeleteTupleInTable("QuestsActivated", delFields);
         DbCommands.InsertExistingValuesInSameTableWithNewPK("QuestsActivated",
+                                                    new string[] { "SaveIDs" },
+                                                    new string[] { saveIDstr },
+                                                    new string[] { "0" });
+
+        //Quests tasks completed
+        DbCommands.DeleteTupleInTable("CompletedQuestTasks", delFields);
+        DbCommands.InsertExistingValuesInSameTableWithNewPK("CompletedQuestTasks",
+                                                            new string[] { "SaveIDs" },
+                                                            new string[] { saveIDstr },
+                                                            new string[] { "0" });
+
+        //Task parts completed
+        DbCommands.DeleteTupleInTable("CompletedQuestTaskParts", delFields);
+        DbCommands.InsertExistingValuesInSameTableWithNewPK("CompletedQuestTaskParts",
                                                     new string[] { "SaveIDs" },
                                                     new string[] { saveIDstr },
                                                     new string[] { "0" });
@@ -197,6 +219,7 @@ public class PlayerSavesController : MonoBehaviour {
         Time.timeScale = 1;
 
         //Need to update currentgame with data from player save
+        
         CopyPlayerSaveToCurrentGame(playerSave);
     }
 
@@ -226,6 +249,22 @@ public class PlayerSavesController : MonoBehaviour {
                                                         new string[] { "SaveIDs" },
                                                         new string[] { "0" },
                                                         new string[] { playerGameData[0] });
+
+            //Quests tasks completed
+            DbCommands.DeleteTupleInTable("CompletedQuestTasks", delFields);
+            DbCommands.InsertExistingValuesInSameTableWithNewPK("CompletedQuestTasks",
+                                                                new string[] { "SaveIDs" },
+                                                                new string[] { "0" },
+                                                                new string[] { playerGameData[0] });
+            //Task parts completed
+
+
+            DbCommands.DeleteTupleInTable("CompletedQuestTaskParts", delFields);
+            DbCommands.InsertExistingValuesInSameTableWithNewPK("CompletedQuestTaskParts",
+                                                        new string[] { "SaveIDs" },
+                                                        new string[] { "0" },
+                                                        new string[] { playerGameData[0] });
+            Debugging.PrintDbTable("CompletedQuestTaskParts");
         }
     }
 

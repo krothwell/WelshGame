@@ -87,6 +87,34 @@ namespace DbUtilities {
                 + "WHERE PlayerChoiceResults.ChoiceIDs = " + choiceID + ";";
         }
 
+        public static string GetEquipItemTaskPartCountFromActiveQuests(string itemName, string saveID) {
+            return "SELECT COUNT(QuestTaskPartsEquipItem.PartIDs) "
+                + "FROM QuestTaskPartsEquipItem "
+                + "INNER JOIN QuestTaskParts ON QuestTaskPartsEquipItem.PartIDs = QuestTaskParts.PartIDs "
+                + "LEFT JOIN QuestTasks ON QuestTaskParts.TaskIDs = QuestTasks.TaskIDs "
+                + "LEFT JOIN QuestsActivated ON QuestTasks.QuestNames = QuestsActivated.QuestNames "
+                + "WHERE QuestTaskPartsEquipItem.ItemNames = " + DbCommands.GetParameterNameFromValue(itemName)
+                    + " AND QuestsActivated.SaveIDs = " + saveID;
+        }
+
+        public static string GetTaskPartsCompleteFromTaskID(string taskID, string saveID) {
+            return "SELECT COUNT(*) "
+                + "FROM CompletedQuestTaskParts "
+                + "INNER JOIN QuestTaskParts ON CompletedQuestTaskParts.PartIDs = QuestTaskParts.PartIDs "
+                + "WHERE QuestTaskParts.TaskIDs = " + taskID
+                    + " AND CompletedQuestTaskParts.SaveIDs = " + saveID;
+        }
+
+        public static string GetEquipItemTasksData(string itemName, string saveID) {
+            return "SELECT QuestTaskPartsEquipItem.PartIDs, QuestTaskParts.TaskIDs, QuestTasks.QuestNames "
+                + "FROM QuestTaskPartsEquipItem "
+                + "INNER JOIN QuestTaskParts ON QuestTaskPartsEquipItem.PartIDs = QuestTaskParts.PartIDs "
+                + "LEFT JOIN QuestTasks ON QuestTaskParts.TaskIDs = QuestTasks.TaskIDs "
+                + "LEFT JOIN QuestsActivated ON QuestTasks.QuestNames = QuestsActivated.QuestNames "
+                + "WHERE QuestTaskPartsEquipItem.ItemNames = " + DbCommands.GetParameterNameFromValue(itemName)
+                    + " AND QuestsActivated.SaveIDs = " + saveID;
+        }
+
         public static string GetCharLinkDisplayQry() {
             return "SELECT * FROM Characters WHERE CharacterNames != '!Player' ORDER BY CharacterNames ASC;";
         }
@@ -120,7 +148,15 @@ namespace DbUtilities {
         }
 
         public static string GetActivatedQuestsInCurrentGame() {
-            return "SELECT * FROM QuestsActivated WHERE SaveIDs = 0;";
+            return "SELECT * FROM QuestsActivated WHERE SaveIDs = 0 ORDER BY Completed DESC;";
+        }
+
+        public static string GetTasksRelatedToQuest(string questName) {
+            return "SELECT * FROM QuestTasks WHERE QuestNames = " + DbCommands.GetParameterNameFromValue(questName);
+        }
+
+        public static string GetPartsRelatedToTask(string taskID) {
+            return "SELECT * FROM QuestTaskParts WHERE TaskIDs = " + taskID;
         }
 
         public static string GetSaveGamesDisplayQry(bool autoSaveIncluded) {

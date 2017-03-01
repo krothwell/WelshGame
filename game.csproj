@@ -118,7 +118,7 @@
     <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldObjectSelector.cs" />
     <Compile Include="Assets\Game World\Utilities\Layers\ImageLayerOrder.cs" />
     <Compile Include="Assets\Game World\WorldItems\WorldItem.cs" />
-    <Compile Include="Assets\Game World\WorldItems\WorldItemWithMultiSprites.cs" />
+    <Compile Include="Assets\Game World\WorldItems\EquipableWorldItemWithMultiSprites.cs" />
     <Compile Include="Assets\Game World\WorldItems\WorldItems.cs" />
     <Compile Include="Assets\GameInitialiser.cs" />
     <Compile Include="Assets\NotificationQueue.cs" />
@@ -153,13 +153,14 @@
     <Compile Include="Assets\UI\Game UI\Combat UI\CombatUI.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\DefaultGameHUD.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Notifcation Queue UI\GameNotifier.cs" />
-    <Compile Include="Assets\UI\Game UI\Default Game HUD\Notifcation Queue UI\NotificationData.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Notifcation Queue UI\NewQuestNotifier.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Notifcation Queue UI\NotificationData.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerEquipmentSlot.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventoryItem.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventorySlot.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventoryUI.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\Quest.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\QuestTask.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\QuestsUI.cs" />
     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\DialogueHolder.cs" />
     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\DialogueNode.cs" />

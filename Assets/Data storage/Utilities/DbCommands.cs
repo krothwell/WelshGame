@@ -372,6 +372,7 @@ namespace DbUtilities {
             _dbcm.ExecuteNonQuery();
             string sql;
             sql = qry;
+            Debug.Log(sql);
             foreach (string qryParameter in qryParameters) {
                 _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(qryParameter), qryParameter));
             }
@@ -384,12 +385,12 @@ namespace DbUtilities {
             _dbc = null;
             return count;
         }
+
         public static string GetParameterNameFromValue(string value) {
             if (value == null) {
                 value = "";
             }
             string v2 = value.Replace("-", "m"); 
-            Debug.Log(v2);
             Regex rgx = new Regex("[^a-zA-Z0-9]");
             string ret = rgx.Replace(v2, "");
             

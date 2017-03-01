@@ -33,7 +33,9 @@ public class DbSetup {
                         Quests,
                         QuestsActivated,
                         QuestTasks,
+                        CompletedQuestTasks,
                         QuestTaskParts,
+                        CompletedQuestTaskParts,
                         QuestTaskPartsEquipItem,
                         WorldItems
 						};
@@ -262,6 +264,7 @@ public class DbSetup {
         tblSqlArray[(int)tbls.QuestsActivated, (int)tblSqlStrs.header]          = "QuestsActivated";
         tblSqlArray[(int)tbls.QuestsActivated, (int)tblSqlStrs.body]            = "QuestNames VARCHAR(100) NOT NULL, "
                                                                                 + "SaveIDs INT NOT NULL, "
+                                                                                + "Completed INT NOT NULL, "
                                                                                 + "FOREIGN KEY (QuestNames) REFERENCES Quests(QuestNames) ON DELETE CASCADE ON UPDATE CASCADE, "
                                                                                 + "FOREIGN KEY (SaveIDs) REFERENCES PlayerGames(SaveIDs) ON DELETE CASCADE ON UPDATE CASCADE, ";
         tblSqlArray[(int)tbls.QuestsActivated, (int)tblSqlStrs.pk]              = "QuestNames, SaveIDs";
@@ -271,14 +274,27 @@ public class DbSetup {
                                                                                 + "TaskDescriptions VARCHAR(500) NULL, "
                                                                                 + "QuestNames VARCHAR(100) NOT NULL, "
                                                                                 + "FOREIGN KEY (QuestNames) REFERENCES Quests(QuestNames) ON DELETE CASCADE ON UPDATE CASCADE, ";
-
         tblSqlArray[(int)tbls.QuestTasks, (int)tblSqlStrs.pk]                   = "TaskIDS";
+
+        tblSqlArray[(int)tbls.CompletedQuestTasks, (int)tblSqlStrs.header]      = "CompletedQuestTasks";
+        tblSqlArray[(int)tbls.CompletedQuestTasks, (int)tblSqlStrs.body]        = "TaskIDs INT, "
+                                                                                + "SaveIDs INT NOT NULL, "
+                                                                                + "FOREIGN KEY (TaskIDs) REFERENCES QuestTasks(TaskIDs) ON DELETE CASCADE ON UPDATE CASCADE, "
+                                                                                + "FOREIGN KEY (SaveIDs) REFERENCES PlayerGames(SaveIDs) ON DELETE CASCADE ON UPDATE CASCADE, ";
+        tblSqlArray[(int)tbls.CompletedQuestTasks, (int)tblSqlStrs.pk]          = "TaskIDs, SaveIDs";
 
         tblSqlArray[(int)tbls.QuestTaskParts, (int)tblSqlStrs.header]           = "QuestTaskParts";
         tblSqlArray[(int)tbls.QuestTaskParts, (int)tblSqlStrs.body]             = "PartIDs INT, "
                                                                                 + "TaskIDs INT, "
                                                                                 + "FOREIGN KEY (TaskIDs) REFERENCES QuestTasks(TaskIDs) ON DELETE CASCADE, ";
         tblSqlArray[(int)tbls.QuestTaskParts, (int)tblSqlStrs.pk]               = "PartIDs";
+
+        tblSqlArray[(int)tbls.CompletedQuestTaskParts, (int)tblSqlStrs.header]  = "CompletedQuestTaskParts";
+        tblSqlArray[(int)tbls.CompletedQuestTaskParts, (int)tblSqlStrs.body]    = "PartIDs INT, "
+                                                                                + "SaveIDs INT NOT NULL, "
+                                                                                + "FOREIGN KEY (PartIDs) REFERENCES QuestTaskParts(PartIDs) ON DELETE CASCADE ON UPDATE CASCADE, "
+                                                                                + "FOREIGN KEY (SaveIDs) REFERENCES PlayerGames(SaveIDs) ON DELETE CASCADE ON UPDATE CASCADE, ";
+        tblSqlArray[(int)tbls.CompletedQuestTaskParts, (int)tblSqlStrs.pk]      = "PartIDs, SaveIDs";
 
         tblSqlArray[(int)tbls.QuestTaskPartsEquipItem, (int)tblSqlStrs.header]  = "QuestTaskPartsEquipItem";
         tblSqlArray[(int)tbls.QuestTaskPartsEquipItem, (int)tblSqlStrs.body]    = "ItemNames VARCHAR(100) NOT NULL, "

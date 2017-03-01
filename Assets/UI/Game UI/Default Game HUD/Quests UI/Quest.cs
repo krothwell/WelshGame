@@ -37,12 +37,17 @@ namespace GameUI {
                 GetComponent<Image>().color = Colours.colorSelectedQuestPanel;
             }
 
+            public void SetCompleted() {
+                GetComponent<Image>().color = Colours.colorCompletedQuestPanel;
+            }
+
             public void DeselectSelf() {
                 GetComponent<Image>().color = Colours.colorQuestPanel;
             }
 
             void OnMouseUp () {
                 questsUI.ToggleSelectionTo(this, questsUI.selectedQuest);
+                questsUI.SelectQuest(myName);
             }
         }
     }

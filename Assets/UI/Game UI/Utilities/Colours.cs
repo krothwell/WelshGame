@@ -6,6 +6,9 @@ namespace GameUI {
         public class Colours {
             public static Color32 colorSelectedQuestPanel = new Color32(174, 218, 208, 255);
             public static Color32 colorQuestPanel = new Color32(122, 163, 154, 255);
+            public static Color32 colorCompletedQuestPanel = new Color32(150, 150, 150, 125);
+            public static Color32 colorCompletedQuestTaskPart = new Color32(150, 150, 150, 125);
+            public static Color32 colorCompletedQuestTask = new Color32(150, 150, 150, 125);
         }
     }
 }

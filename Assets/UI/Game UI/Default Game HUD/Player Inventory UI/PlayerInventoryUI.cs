@@ -90,11 +90,9 @@ namespace GameUI {
         public void SelectItem(GameObject slot) {
             if (selectedItem == null) {
                 selectedItem = slot.transform.GetChild(0).gameObject;
-                //selectedItemParent = slot.transform; //incase next action fails it can go back here
                 if (slot.HasComponent<PlayerEquipmentSlot>()) {
                     selectedItem.GetComponent<WorldItem>().UnequipFromPlayerModel();
                 }
-                //followCursor = true;
                 selectedItem.GetComponent<BoxCollider2D>().enabled = false;
                 selectedItem.transform.SetParent(ui.transform);
             }
@@ -104,7 +102,6 @@ namespace GameUI {
             if (equip) {
                 selectedItem.GetComponent<WorldItem>().EquipToPlayerModel();
             }
-            //followCursor = false;
             selectedItem.transform.SetParent(selectedSlot.transform, false);
             selectedItem.transform.localPosition = new Vector3(0f, 0f, 0f);
             selectedItem = null;

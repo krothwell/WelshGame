@@ -21,9 +21,9 @@ namespace UnityUtilities {
             PrintListOfStrArrays(strArray);
         }
 
-        public static void PrintDbQryResults(string qry) {
+        public static void PrintDbQryResults(string qry, params string[] parameterVals) {
             List<string[]> strArray = new List<string[]>();
-            DbCommands.GetDataStringsFromQry(qry, out strArray);
+            DbCommands.GetDataStringsFromQry(qry, out strArray, parameterVals);
             PrintListOfStrArrays(strArray);
         }
 

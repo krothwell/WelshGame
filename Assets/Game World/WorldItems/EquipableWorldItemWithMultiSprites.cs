@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using GameUtilities.Display;
-
+using GameUI;
 
 /// <summary>
 /// Implements some methods derived from WorldItem to deal with items that deal
@@ -9,8 +9,8 @@ using GameUtilities.Display;
 /// arms, and lower arms parts). 
 /// </summary>
 
-//TODO rename to EquipableWorldItemWithMultiSprites
-public class WorldItemWithMultiSprites : WorldItem {
+public class EquipableWorldItemWithMultiSprites : WorldItem {
+    private QuestsUI questsUI;
     public GameObject[] equipToPlayerParts;
 
     void Start() {
@@ -22,6 +22,8 @@ public class WorldItemWithMultiSprites : WorldItem {
         } else {
             SetInventoryDisplay();
         }
+
+        questsUI = FindObjectOfType<QuestsUI>();
     }
 
     protected override void SetWorldDisplay() {
@@ -48,6 +50,8 @@ public class WorldItemWithMultiSprites : WorldItem {
                 equipToPlayerParts[i].GetComponent<SpriteRenderer>().sprite = null;
             }
         }
+        questsUI.CompleteEquipItemTaskPart(gameObject.name);
+        
     }
 
     public override void UnequipFromPlayerModel() {

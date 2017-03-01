@@ -19,8 +19,10 @@ public class GameInitialiser : MonoBehaviour {
         DbCommands.SetConnectionString("URI=file:" + Application.dataPath + DB_PATH);
         dbSetup = new DbSetup();
         //Debugging.PrintDbTable("Copied");
-        Debugging.PrintDbTable("PlayerGames");
-        //dbSetup.ReplaceTable("PlayerChoices");
+        
+        //dbSetup.ReplaceTable("QuestsActivated");
+        //DbCommands.UpdateTableField("QuestsActivated", "Completed", "0");
+        Debugging.PrintDbTable("QuestsActivated");
         DbCommands.InsertTupleToTable("PlayerGames", "0", "Current Game", "Current player", "No path", DateTime.Now.ToString(), "Start", "0", "0");
         DbCommands.InsertTupleToTable("PlayerGames", "-1", "New game", "New player", "No path", DateTime.Now.ToString(), "Start", "0", "0");
         playerSavesController = FindObjectOfType<PlayerSavesController>();
