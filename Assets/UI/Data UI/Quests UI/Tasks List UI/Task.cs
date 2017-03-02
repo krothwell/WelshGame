@@ -47,7 +47,7 @@ namespace DataUI {
                 DisplayOptions();
                 SetInputColour(Colours.colorDataUIInputSelected);
                 questsUI.DisplayPartsRelatedToTask(myID);
-                //dialogueUI.DisplayNodesRelatedToDialogue();
+                questsUI.DisplayResultsRelatedToTaskCompletion(myID);
                 //dialogueUI.HidePlayerChoices();
                 //dialogueUI.HidePlayerChoiceResults();
             }

@@ -40,7 +40,7 @@ namespace GameUI {
         }
 
         public void SetCompleted() {
-            GetComponent<Text>().color = Colours.colorCompletedQuestTask;
+            GetComponentInChildren<Text>().color = Colours.colorCompletedQuestTask;
         }
 
         void OnMouseUp() {

@@ -142,12 +142,12 @@ namespace GameUI {
                     "QuestTasks", 
                     "QuestNames = " + DbCommands.GetParameterNameFromValue(questName),
                     questName);
-                int tasksCompletedCount = DbCommands.GetCountFromTable(
-                    "CompletedQuestTasks",
-                    "QuestNames = " + DbCommands.GetParameterNameFromValue(questName),
+                int tasksCompletedCount = DbCommands.GetCountFromQry(
+                    DbQueries.GetTasksCompleteFromQuestName(questName, "0"),
                     questName);
                 if (tasksCount == tasksCompletedCount) {
                     DbCommands.UpdateTableField("QuestsActivated", "Completed", "1");
+                    
                 }
             }
             SetQuestDetails(questName);

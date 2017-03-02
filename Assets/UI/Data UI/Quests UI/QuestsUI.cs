@@ -17,9 +17,15 @@ namespace DataUI {
     /// </summary>
     public class QuestsUI : UIController {
         private bool editMode;
-        public string selectedQuest, selectedTask, selectedTaskPart;
+        public string selectedQuest, selectedTask, selectedTaskPart, selectedTaskResult;
         //Prefabs
-        public GameObject QuestPrefab, TaskPrefab, TaskPartEquipItemPrefab, EquipItemPartOptionBtnPrefab;
+        public GameObject 
+            QuestPrefab,
+            TaskPrefab, 
+            TaskPartEquipItemPrefab, 
+            EquipItemPartOptionBtnPrefab,
+            startDialogueTaskResultOptionBtnPrefab,
+            existingStartDialogueTaskResultPrefab;
 
         //Quests
         GameObject questsListUI, questsListUIPanel, questsList,
@@ -34,6 +40,10 @@ namespace DataUI {
         //Task parts
         GameObject partsListUI, partsListUIPanel, partsList,
            addPart, addPartPanel, addPartPanelJoiner, activateAddPartBtn, partOptionSelectedList;
+
+        //Task results
+        GameObject taskResultsListUI, taskResultsListUIPanel, taskResultsList,
+            addTaskResult, addTaskResultPanel, activateAddTaskResultBtn, taskResultOptionSelectedList;
 
 
         void Start() {
@@ -69,16 +79,28 @@ namespace DataUI {
             activateAddPartBtn = addPart.transform.FindChild("ActivateAddPartBtn").gameObject;
             partOptionSelectedList = addPartPanel.transform.FindChild("OptionSelectedList").gameObject;
 
+            //TASK RESULTS COMPONENTS
+            taskResultsListUI = GetPanel().transform.FindChild("QuestTaskCompleteResultsUI").gameObject;
+            taskResultsListUIPanel = taskResultsListUI.transform.FindChild("Panel").gameObject;
+            taskResultsList = taskResultsListUIPanel.transform.FindChild("ResultsList").gameObject;
+            //add
+            addTaskResult = taskResultsListUIPanel.transform.FindChild("AddTaskResult").gameObject;
+            addTaskResultPanel = addTaskResult.transform.FindChild("AddResultPanel").gameObject;
+            activateAddTaskResultBtn = addTaskResult.transform.FindChild("ActivateAddTaskResultBtn").gameObject;
+            taskResultOptionSelectedList = addTaskResultPanel.transform.FindChild("OptionSelectedList").gameObject;
+
 
             FillDisplayFromDb(DbQueries.GetQuestsDisplayQry(), questsList.transform, BuildQuest);
 
             selectedQuest = "selectedQuest";
             selectedTask = "selectedTask";
             selectedTaskPart = "selectedTaskPart";
+            selectedTaskResult = "selectedTaskResult";
 
             CreateSelectionToggleGroup(selectedQuest);
             CreateSelectionToggleGroup(selectedTask);
             CreateSelectionToggleGroup(selectedTaskPart);
+            CreateSelectionToggleGroup(selectedTaskResult);
 
             SceneLoader sceneLoader = FindObjectOfType<SceneLoader>();
             string currentScene = sceneLoader.GetCurrentSceneName();
@@ -88,6 +110,7 @@ namespace DataUI {
             HideNewPartPanel();
             HidePartsListUI();
             HideTasksListUI();
+            HideTaskResultsListUI();
         }
 
         public void EditSelectedQuest() {
@@ -118,6 +141,10 @@ namespace DataUI {
             DisplayNewPartPanel();
         }
 
+        public void AddNewTaskResult() {
+            DisplayNewTaskResultPanel();
+        }
+
         public void DisplayQuestDetails() {
             activateQuestDetailsBtn.GetComponent<Button>().interactable = false;
             questDetailsPanel.SetActive(true);
@@ -143,14 +170,31 @@ namespace DataUI {
             DisplayEquipItemPartsRelatedToTask(taskID);
         }
 
+        public void DisplayResultsRelatedToTaskCompletion(string taskID) {
+            taskResultsListUIPanel.SetActive(true);
+            DisplayStartDialogueResultRelatedToTask(taskID);
+        }
+
+        public void DisplayNewTaskResultPanel() {
+            activateAddTaskResultBtn.GetComponent<Button>().interactable = false;
+            addTaskResultPanel.SetActive(true);
+        }
+
+
         public void DisplayEquipItemPartsRelatedToTask(string taskID) {
-            Debugging.PrintDbTable("QuestTaskParts");
-            Debugging.PrintDbTable("QuestTaskPartsEquipItem");
             FillDisplayFromDb(DbQueries.GetEquipItemPartsRelatedToTask(taskID), partsList.transform, BuildEquipItemPart, taskID);
         }
 
-        public void DisplayPartOptionssRelatedToEquipItem() {
+        public void DisplayStartDialogueResultRelatedToTask(string taskID) {
+            FillDisplayFromDb(DbQueries.GetStartDialogueResultsRelatedToTaskQry(taskID), taskResultsList.transform, BuildCurrentStartDialogueTaskResult, taskID);
+        }
+
+        public void DisplayPartOptionsRelatedToEquipItem() {
             FillDisplayFromDb(DbQueries.GetTaskPartOptionsEquipItemDisplayQry(), partOptionSelectedList.transform, BuildEquipItemPartOptionBtn);
+        }
+
+        public void DisplayTaskResultOptionsRelatedToStartDialogue() {
+            FillDisplayFromDb(DbQueries.GetTaskResultOptionsToStartDialogueQry(), taskResultOptionSelectedList.transform, BuildStartDialogueTaskResultOptionBtn);
         }
 
         public void HideTasksListUI() {
@@ -159,6 +203,10 @@ namespace DataUI {
 
         public void HidePartsListUI() {
             partsListUIPanel.SetActive(false);
+        }
+
+        public void HideTaskResultsListUI() {
+            taskResultsListUIPanel.SetActive(false);
         }
 
         public void HideQuestDetails() {
@@ -180,6 +228,12 @@ namespace DataUI {
             activateAddPartBtn.GetComponent<Button>().interactable = true;
             EmptyDisplay(partOptionSelectedList.transform);
             addPartPanel.SetActive(false);
+        }
+
+        public void HideNewTaskResultPanel() {
+            activateAddTaskResultBtn.GetComponent<Button>().interactable = true;
+            EmptyDisplay(taskResultOptionSelectedList.transform);
+            addTaskResultPanel.SetActive(false);
         }
 
         public void SaveQuestDetails() {
@@ -232,6 +286,26 @@ namespace DataUI {
                                             partID
                                          );
             DisplayPartsRelatedToTask(currentTaskID);
+        }
+
+        public void InsertTaskResult(string resultID) {
+            string currentTaskID = (GetSelectedItemFromGroup(selectedTask) as Task).MyID;
+            DbCommands.InsertTupleToTable("QuestTaskResults",
+                                            resultID,
+                                            currentTaskID
+                                         );
+        }
+
+        public void InsertTaskResultStartDialogue(string dialogueID) {
+            string resultID = DbCommands.GenerateUniqueID("QuestTaskResults", "ResultIDs", "ResultID");
+            InsertTaskResult(resultID);
+            string currentTaskID = (GetSelectedItemFromGroup(selectedTask) as Task).MyID;
+            DbCommands.InsertTupleToTable("QuestTaskStartDialogueResults",
+                                resultID,
+                                currentTaskID,
+                                dialogueID
+                             );
+            DisplayResultsRelatedToTaskCompletion(currentTaskID);
         }
 
         public void UpdateQuestInDb(string questName, string newName, string questDescription) {
@@ -300,6 +374,28 @@ namespace DataUI {
             
         }
 
+        private Transform BuildStartDialogueTaskResultOptionBtn (string[] strArray) {
+            string dialogueID = strArray[0];
+            string dialogueDesc = strArray[1];
+            string speakerName = strArray[2];
+            NewStartDialogueTaskResultOptionBtn startDialogueTaskResultOptionBtn = (
+                Instantiate(startDialogueTaskResultOptionBtnPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject).GetComponent<NewStartDialogueTaskResultOptionBtn>();
+            startDialogueTaskResultOptionBtn.MyID = dialogueID;
+            startDialogueTaskResultOptionBtn.SetMyText(dialogueID, dialogueDesc, speakerName);
+            return startDialogueTaskResultOptionBtn.transform;
+        }
+
+        private Transform BuildCurrentStartDialogueTaskResult (string [] strArray) {
+            string resultID = strArray[0];
+            string dialogueID = strArray[1];
+            string dialogueDesc = strArray[2];
+            ExistingStartDialogueTaskResult existingStartDialogueTaskResult = (
+                Instantiate(existingStartDialogueTaskResultPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject).GetComponent<ExistingStartDialogueTaskResult>();
+            existingStartDialogueTaskResult.ResultID = resultID;
+            existingStartDialogueTaskResult.SetMyText(dialogueID, dialogueDesc);
+            return existingStartDialogueTaskResult.transform;
+        }
+
         public void DeleteTaskFromDb(string taskID) {
             string[,] fields = { { "TaskIDs", taskID } };
             DbCommands.DeleteTupleInTable("QuestTasks", fields);
@@ -308,6 +404,11 @@ namespace DataUI {
         public void DeleteTaskPartFromDb(string taskPartID) {
             string[,] fields = { { "PartIDs", taskPartID } };
             DbCommands.DeleteTupleInTable("QuestTaskParts", fields);
+        }
+
+        public void DeleteStartDialogueTaskResultFromDB(string resultID) {
+            string[,] fields = { { "ResultIDs", resultID } };
+            DbCommands.DeleteTupleInTable("QuestTaskResults", fields);
         }
 
         /// <summary>
@@ -331,5 +432,7 @@ namespace DataUI {
             }
             //Debugging.PrintDbTable("WorldItems");
         }
+
+
     }
 }

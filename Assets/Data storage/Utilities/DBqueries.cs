@@ -105,6 +105,14 @@ namespace DbUtilities {
                     + " AND CompletedQuestTaskParts.SaveIDs = " + saveID;
         }
 
+        public static string GetTasksCompleteFromQuestName(string questName, string saveID) {
+            return "SELECT COUNT(*) "
+                + "FROM CompletedQuestTasks "
+                + "INNER JOIN QuestTasks ON CompletedQuestTasks.TaskIDs = QuestTasks.TaskIDs "
+                + "WHERE QuestTasks.QuestNames = " + DbCommands.GetParameterNameFromValue(questName)
+                    + " AND CompletedQuestTasks.SaveIDs = " + saveID;
+        }
+
         public static string GetEquipItemTasksData(string itemName, string saveID) {
             return "SELECT QuestTaskPartsEquipItem.PartIDs, QuestTaskParts.TaskIDs, QuestTasks.QuestNames "
                 + "FROM QuestTaskPartsEquipItem "
@@ -165,6 +173,18 @@ namespace DbUtilities {
                 whereStr += " AND SaveIDs > -2 ";
             }
             return "SELECT * FROM PlayerGames" + whereStr + ";";
+        }
+
+        public static string GetTaskResultOptionsToStartDialogueQry() {
+            return "SELECT Dialogues.DialogueIDs, Dialogues.DialogueDescriptions, CharacterDialogues.CharacterNames "
+                + "FROM Dialogues LEFT JOIN CharacterDialogues ON Dialogues.DialogueIDs = CharacterDialogues.DialogueIDs "
+                + "ORDER BY CharacterDialogues.CharacterNames";
+        }
+
+        public static string GetStartDialogueResultsRelatedToTaskQry(string taskID) {
+            return "SELECT QuestTaskStartDialogueResults.ResultIDs, Dialogues.DialogueIDs, Dialogues.DialogueDescriptions "
+                + "FROM QuestTaskStartDialogueResults INNER JOIN Dialogues ON Dialogues.DialogueIDs = QuestTaskStartDialogueResults.DialogueIDs "
+                + "WHERE TaskIDs = " + taskID;
         }
     }
 }

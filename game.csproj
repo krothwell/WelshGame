@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>5.5.0f3</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -117,8 +115,8 @@
     <Compile Include="Assets\Game World\Scenery\level1\Scenery1.cs" />
     <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldObjectSelector.cs" />
     <Compile Include="Assets\Game World\Utilities\Layers\ImageLayerOrder.cs" />
-    <Compile Include="Assets\Game World\WorldItems\WorldItem.cs" />
     <Compile Include="Assets\Game World\WorldItems\EquipableWorldItemWithMultiSprites.cs" />
+    <Compile Include="Assets\Game World\WorldItems\WorldItem.cs" />
     <Compile Include="Assets\Game World\WorldItems\WorldItems.cs" />
     <Compile Include="Assets\GameInitialiser.cs" />
     <Compile Include="Assets\NotificationQueue.cs" />
@@ -141,6 +139,8 @@
     <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\Part Options\EquipItemPartOptionBtn.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\TaskPart.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\TaskPartEquipItem.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\ExistingStartDialogueTaskResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\NewStartDialogueTaskResultOptionBtn.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\Tasks List UI\Task.cs" />
     <Compile Include="Assets\UI\Data UI\TranslationUI\Grammar List UI\GrammarListUI.cs" />
     <Compile Include="Assets\UI\Data UI\TranslationUI\Grammar List UI\GrammarRule.cs" />
