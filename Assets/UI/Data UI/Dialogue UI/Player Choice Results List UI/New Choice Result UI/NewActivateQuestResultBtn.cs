@@ -1,33 +1,27 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using UnityEngine.UI;
 
-namespace DataUI {
-    namespace ListItems {
+namespace DataUI.ListItems {
 
-        public class NewActivateQuestResultBtn : UITextPanelListItem {
+    public class NewActivateQuestResultBtn : NewChoiceResultBtn {
 
-            DialogueUI dialogueUI;
-            private string myName;
-            public string MyName{
-                get { return myName; }
-                set { myName = value; }
-            }
+        private string myName;
+        public string MyName{
+            get { return myName; }
+            set { myName = value; }
+        }
 
-            private string myDescription;
-            public string MyDescription {
-                get { return myDescription; }
-                set { myDescription = value; }
-            }
+        void Start() {
+            dialogueUI = FindObjectOfType<DialogueUI>();
+        }
 
-            void Start() {
-                dialogueUI = FindObjectOfType<DialogueUI>();
-            }
+        public void InitialiseMe(string questName, string questDesc) {
+            transform.FindChild("QuestDescription").GetComponent<Text>().text = questDesc;
+            transform.FindChild("QuestName").GetComponent<Text>().text = questName;
+            GetComponent<NewActivateQuestResultBtn>().MyName = questName;
+        }
 
-            void OnMouseUp() {
-                dialogueUI.InsertActivateQuestResult(gameObject);
-            }
-
-
+        protected override void InsertResult() {
+            dialogueUI.InsertActivateQuestResult(myName);
         }
     }
 }

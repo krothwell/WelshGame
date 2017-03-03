@@ -62,6 +62,7 @@ public class UIController : MonoBehaviour {
             Transform item = buildItem(stringArray);
             item.SetParent(display, false);
         }
+        print(query);
     }
 
     public void FillDisplayFromTransform(Transform goHolder,

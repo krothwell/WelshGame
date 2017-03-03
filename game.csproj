@@ -128,10 +128,13 @@
     <Compile Include="Assets\UI\Data UI\Dialogue UI\DialogueUI.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Dialogues List UI\Dialogue.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingActivateQuestResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingActivateTaskResult.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingCompleteDialogueResult.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingNodeResult.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingResult.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewActivateQuestResultBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewActivateTaskResultBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewChoiceResultBtn.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewNodeResultBtn.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choices List UI\PlayerChoice.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\Quests list UI\Quest.cs" />

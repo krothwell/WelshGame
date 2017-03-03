@@ -2,9 +2,7 @@
 using UnityEngine.UI;
 using DataUI.ListItems;
 using DbUtilities;
-using System.Collections.Generic;
-using UnityUtilities;
-
+using System;
 
 namespace DataUI {
     /// <summary>
@@ -35,8 +33,8 @@ namespace DataUI {
         //Tasks
         GameObject tasksListUI, tasksListUIPanel, tasksList,
            addTask, addTaskPanel, activateAddTaskBtn;//new task components
-        private InputField inputTaskDescription; 
-
+        private InputField inputTaskDescription;
+        private Toggle taskActiveAtStart;
         //Task parts
         GameObject partsListUI, partsListUIPanel, partsList,
            addPart, addPartPanel, addPartPanelJoiner, activateAddPartBtn, partOptionSelectedList;
@@ -68,6 +66,7 @@ namespace DataUI {
             addTaskPanel = addTask.transform.FindChild("AddTaskPanel").gameObject;
             activateAddTaskBtn = addTask.transform.FindChild("ActivateAddTaskBtn").gameObject;
             inputTaskDescription = addTaskPanel.transform.FindChild("InputDescriptionText").GetComponent<InputField>();
+            taskActiveAtStart = addTaskPanel.GetComponentInChildren<Toggle>();
 
             //PART COMPONENTS
             partsListUI = GetPanel().transform.FindChild("QuestTaskPartsListUI").gameObject;
@@ -265,6 +264,9 @@ namespace DataUI {
                                             taskID,
                                             inputTaskDescription.text,
                                             currentQuestName);
+            if (taskActiveAtStart.isOn) {
+                DbCommands.InsertTupleToTable("QuestTasksActivated", taskID, "-1", "0");
+            }
             DisplayTasksRelatedToDialogue(currentQuestName);
         }
 
@@ -306,6 +308,7 @@ namespace DataUI {
                                 dialogueID
                              );
             DisplayResultsRelatedToTaskCompletion(currentTaskID);
+            HideNewTaskResultPanel();
         }
 
         public void UpdateQuestInDb(string questName, string newName, string questDescription) {
@@ -320,14 +323,20 @@ namespace DataUI {
                                      questName);
         }
 
-        public void UpdateTaskInDb (string taskID, string taskDescription) {
+        public void UpdateTaskInDb (string taskID, string taskDescription, bool activeAtStart) {
             Task selectedTaskObj = (GetSelectedItemFromGroup(selectedQuest) as Task);
             string[,] fields = new string[,]{
-                                                { "TaskDescriptions", taskDescription }
-                                             };
+                                            { "TaskDescriptions", taskDescription }
+                                            };
             DbCommands.UpdateTableTuple("QuestTasks",
                                      "TaskIDs = " + taskID,
                                      fields);
+            if (activeAtStart) {
+                DbCommands.InsertTupleToTable("QuestTasksActivated", taskID, "-1", "0");
+            } else {
+                string[,] activeTaskfields = { { "TaskIDs", taskID }, { "SaveIDs", "-1" } };
+                DbCommands.DeleteTupleInTable("QuestTasksActivated", activeTaskfields); //Removes the task in activated tasks if it is marked as inactive.
+            }
         }
 
 
@@ -345,10 +354,13 @@ namespace DataUI {
         private Transform BuildTask(string[] strArray) {
             string idStr = strArray[0];
             string descStr = strArray[1];
+            bool taskActiveAtStart = Convert.ToBoolean(DbCommands.GetCountFromTable("QuestTasksActivated", "TaskIDs = " + idStr + " AND SaveIDs = -1"));
             Task task = (Instantiate(TaskPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject).GetComponent<Task>();
             task.SetInputText(descStr);
-            task.GetComponent<Task>().MyID = idStr;
-            task.GetComponent<Task>().MyDescription = descStr;
+            task.SetActiveAtStartToggle(taskActiveAtStart);
+            task.MyID = idStr;
+            task.MyDescription = descStr;
+
             return task.transform;
         }
 

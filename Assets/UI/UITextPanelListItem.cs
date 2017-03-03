@@ -1,7 +1,7 @@
 ﻿using UnityEngine.UI;
 using UnityEngine;
 
-public class UITextPanelListItem : MonoBehaviour {
+public abstract class UITextPanelListItem : MonoBehaviour {
     // Use this for initialization
     protected GameObject GetPanel() {
         return transform.FindChild("Panel").gameObject;

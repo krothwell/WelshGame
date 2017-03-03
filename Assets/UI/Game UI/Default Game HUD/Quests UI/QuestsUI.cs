@@ -98,7 +98,7 @@ namespace GameUI {
 
         public Transform BuildQuestTask(string[] taskData) {
             string taskID = taskData[0];
-            bool completed = Convert.ToBoolean(DbCommands.GetCountFromTable("CompletedQuestTasks", "TaskIDs = " + taskID + " AND SaveIDs = 0"));
+            bool completed = Convert.ToBoolean(DbCommands.GetFieldValueFromTable("QuestTasksActivated", "Completed", "TaskIDs = " + taskID + " AND SaveIDs = 0"));
             GameObject task = Instantiate(taskPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
             //print(quest);
             if (completed) {
@@ -137,7 +137,7 @@ namespace GameUI {
             print("task parts completed with id " + taskID + " = " + taskPartsCompletedCount);
             Debugging.PrintDbTable("CompletedQuestTaskParts");
             if (taskPartsCount == taskPartsCompletedCount) {
-                DbCommands.InsertTupleToTable("CompletedQuestTasks", taskID, "0");
+                DbCommands.UpdateTableField("QuestTasksActivated", "Completed", "1", "TaskIDs = " + taskID + " AND SaveIDs = 0");
                 int tasksCount = DbCommands.GetCountFromTable(
                     "QuestTasks", 
                     "QuestNames = " + DbCommands.GetParameterNameFromValue(questName),

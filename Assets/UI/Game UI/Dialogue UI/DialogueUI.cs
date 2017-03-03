@@ -308,7 +308,7 @@ namespace GameUI {
             if (countQuestActivateResults > 0) {
                 print("QUESTS ACTIVATING!!!!");
                 List<string[]> questsActivatedList;
-                DbCommands.GetDataStringsFromQry(DbQueries.GetActivateQuestsPlayerChoiceResultQry(choiceID), out questsActivatedList);
+                DbCommands.GetDataStringsFromQry(DbQueries.GetCurrentActivateQuestsPlayerChoiceResultQry(choiceID), out questsActivatedList);
                 foreach (string[] activatedQuest in questsActivatedList) {
                     questsUI.InsertActivatedQuest(activatedQuest[1]);
                 }

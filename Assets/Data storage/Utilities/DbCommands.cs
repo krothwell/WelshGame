@@ -356,6 +356,7 @@ namespace DbUtilities {
                 _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(qryParameter), qryParameter));
             }
             _dbcm.CommandText = sql;
+            Debug.Log(sql);
             int count = int.Parse(_dbcm.ExecuteScalar().ToString());
             _dbcm.Dispose();
             _dbcm = null;

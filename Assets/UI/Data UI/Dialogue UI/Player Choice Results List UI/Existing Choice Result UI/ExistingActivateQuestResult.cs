@@ -16,10 +16,6 @@ namespace DataUI {
                 get { return myDescription; }
                 set { myDescription = value; }
             }
-            public void DeleteSelf() {
-                dialogueUI.DeleteActivateQuestPlayerChoice();
-                Destroy(gameObject);
-            }
         }
     }
 }

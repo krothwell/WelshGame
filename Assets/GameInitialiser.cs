@@ -18,8 +18,10 @@ public class GameInitialiser : MonoBehaviour {
     void Awake() {
         DbCommands.SetConnectionString("URI=file:" + Application.dataPath + DB_PATH);
         dbSetup = new DbSetup();
-        //Debugging.PrintDbTable("Copied");
+        Debugging.PrintDbTable("QuestTasksActivated");
         dbSetup.CreateTables();
+        //dbSetup.CopyTable("QuestTasksActivated", );
+        
         //dbSetup.ReplaceTable("QuestsActivated");
         //DbCommands.UpdateTableField("QuestsActivated", "Completed", "0");
         Debugging.PrintDbTable("QuestsActivated");

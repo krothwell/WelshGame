@@ -65,7 +65,8 @@ namespace DataUI {
                           existingActivateQuestResultPrefab,
                           existingCompleteDialogueResultPrefab,
                           newNodeResultBtnPrefab,
-                          newActivateQuestResultBtnPrefab;
+                          newActivateQuestResultBtnPrefab,
+                          newActivateTaskResultBtnPrefab;
         
 
         void Start() {
@@ -358,15 +359,11 @@ namespace DataUI {
             DeactivateNewChoiceResult();
         }
 
-        public void InsertActivateQuestResult(GameObject selectedBtn) {
-            NewActivateQuestResultBtn newPlayerChoiceResultBtn = selectedBtn.GetComponent<NewActivateQuestResultBtn>();
+        public void InsertActivateQuestResult(string questName) {
             string playerChoiceID = (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID;
             string newResultID = DbCommands.GenerateUniqueID("PlayerChoiceResults", "ResultIDs", "ResultID");
-            print(newResultID);
-            Debugging.PrintDbTable("PlayerChoiceResults");
-            Debugging.PrintDbTable("QuestActivateResults");
             DbCommands.InsertTupleToTable("PlayerChoiceResults", newResultID, playerChoiceID);
-            DbCommands.InsertTupleToTable("QuestActivateResults", newResultID, playerChoiceID, newPlayerChoiceResultBtn.MyName);
+            DbCommands.InsertTupleToTable("QuestActivateResults", newResultID, playerChoiceID, questName);
             DisplayResultsRelatedToChoices();
             DeactivateNewChoiceResult();
         }
@@ -476,24 +473,27 @@ namespace DataUI {
         private Transform BuildNewChoiceResultActivateQuestBtn(string[] strArray) {
             string questName = strArray[0];
             string questDescription = strArray[1];
-            GameObject activateQuestChoiceResult = Instantiate(newActivateQuestResultBtnPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
-            activateQuestChoiceResult.transform.Find("QuestDescription").GetComponent < Text>().text = questDescription;
-            activateQuestChoiceResult.transform.Find("QuestName").GetComponent<Text>().text = questName;
-            activateQuestChoiceResult.GetComponent<NewActivateQuestResultBtn>().MyName = questName;
-            activateQuestChoiceResult.GetComponent<NewActivateQuestResultBtn>().MyDescription = questDescription;
+            NewActivateQuestResultBtn activateQuestChoiceResult = (Instantiate(newActivateQuestResultBtnPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject).GetComponent<NewActivateQuestResultBtn>();
+            activateQuestChoiceResult.InitialiseMe(questName, questDescription);
             return activateQuestChoiceResult.transform;
+        }
+
+        //for adding a new  result, not to be confused with existing results
+        private Transform BuildNewChoiceResultActivateTaskBtn(string[] strArray) {
+            string taskID = strArray[0];
+            string taskDescription = strArray[1];
+            NewActivateTaskResultBtn activateTaskChoiceResult = (Instantiate(newActivateTaskResultBtnPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject).GetComponent<NewActivateTaskResultBtn>();
+            activateTaskChoiceResult.InitialiseMe(taskID, taskDescription, (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID);
+            return activateTaskChoiceResult.transform;
         }
 
         //for adding an existing choice result, not to be confused with a new result
         private Transform BuildExistingResultNode(string[] strArray) {
             string nodeIDStr = strArray[0];
             string nodeText = strArray[1];
-            GameObject choiceResult = Instantiate(existingNodeResultPrefab, new Vector3(0f, 0f), Quaternion.identity) as GameObject;
-            choiceResult.transform.FindChild("NodeIDLbl").GetComponent<Text>().text = nodeIDStr; 
-            choiceResult.transform.FindChild("NodeTextLbl").GetComponent<Text>().text = nodeText;
-            choiceResult.GetComponent<ExistingResult>().MyID = "-1";//since the next node of a choice is not logged in the results table it is given -1 in case this needs to be checked somewhere.
-            choiceResult.GetComponent<ExistingNodeResult>().MyID = nodeIDStr;
-            choiceResult.GetComponent<ExistingNodeResult>().MyText = nodeText;
+            ExistingNodeResult choiceResult = (Instantiate(existingNodeResultPrefab, new Vector3(0f, 0f), Quaternion.identity) as GameObject).GetComponent<ExistingNodeResult>();
+            choiceResult.SetMyID("-1");//since the next node of a choice is not logged in the results table it is given -1 in case this needs to be checked somewhere.
+            choiceResult.InitialiseMe(nodeIDStr,nodeText);
             return choiceResult.transform;
         }
 
@@ -548,6 +548,9 @@ namespace DataUI {
             FillDisplayFromDb(DbQueries.GetNewQuestChoiceResultQry(), selectedResultTypeList.transform, BuildNewChoiceResultActivateQuestBtn);
         }
 
+        public void DisplayNewChoiceResultsActivateTask() {
+            FillDisplayFromDb(DbQueries.GetNewActivateTaskPlayerChoiceResultQry(), selectedResultTypeList.transform, BuildNewChoiceResultActivateTaskBtn);
+        }
 
         public void DisplayResultsRelatedToChoices() {
 
@@ -568,7 +571,16 @@ namespace DataUI {
                 if (questActivateCount > 0) {
                     GameObject existingResultsTitle = Instantiate(existingResultTitlePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
                     AppendDisplayWithTitle(playerChoicesResultsList.transform, existingResultsTitle.transform, "Activates quest... ");
-                    AppendDisplayFromDb(DbQueries.GetActivateQuestsPlayerChoiceResultQry(selectedChoiceID),
+                    AppendDisplayFromDb(DbQueries.GetCurrentActivateQuestsPlayerChoiceResultQry(selectedChoiceID),
+                            playerChoicesResultsList.transform,
+                            BuildExistingResultActivateQuest);
+                }
+
+                int taskActivateCount = DbCommands.GetCountFromQry(DbQueries.GetTaskActivateCountFromChoiceIDqry(selectedChoiceID));
+                if (taskActivateCount > 0) {
+                    GameObject existingResultsTitle = Instantiate(existingResultTitlePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
+                    AppendDisplayWithTitle(playerChoicesResultsList.transform, existingResultsTitle.transform, "Activates tasks... ");
+                    AppendDisplayFromDb(DbQueries.GetCurrentActivateTasksPlayerChoiceResultQry(selectedChoiceID),
                             playerChoicesResultsList.transform,
                             BuildExistingResultActivateQuest);
                 }
@@ -612,8 +624,8 @@ namespace DataUI {
                     "ChoiceIDs = " + (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID);
         }
 
-        public void DeleteActivateQuestPlayerChoice() { 
-            string[,] fields = { { "ResultIDs", (GetSelectedItemFromGroup(selectedChoiceResult) as ExistingResult).MyID},
+        public void DeletePlayerChoiceResultGeneric(string resultID) { 
+            string[,] fields = { { "ResultIDs", resultID},
                                  { "ChoiceIDs", (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID} };
             DbCommands.DeleteTupleInTable(
                     "PlayerChoiceResults",

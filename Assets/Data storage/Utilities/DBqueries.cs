@@ -75,15 +75,34 @@ namespace DbUtilities {
             return "SELECT * FROM Quests;";
         }
 
-        public static string GetActivateQuestsPlayerChoiceResultQry(string choiceIDs) {
+        public static string GetCurrentActivateQuestsPlayerChoiceResultQry(string choiceIDs) {
             return "SELECT QuestActivateResults.ResultIDs, Quests.QuestNames, Quests.QuestDescriptions FROM Quests "
                 + "LEFT JOIN QuestActivateResults ON Quests.QuestNames = QuestActivateResults.QuestNames "
                 + "WHERE ChoiceIDs = " + choiceIDs;
         }
 
+        public static string GetCurrentActivateTasksPlayerChoiceResultQry(string choiceID) {
+            return "SELECT TasksActivatedByDialogueChoices.ResultIDs, QuestTasks.TaskIDs, QuestTasks.TaskDescriptions "
+                + "FROM QuestTasks "
+                + "LEFT JOIN TasksActivatedByDialogueChoices ON QuestTasks.TaskIDs = TasksActivatedByDialogueChoices.TaskIDs "
+                + "WHERE ChoiceIDs = " + choiceID;
+        }
+
+        public static string GetNewActivateTaskPlayerChoiceResultQry() {
+            return "SELECT QuestTasks.TaskIDs, QuestTasks.TaskDescriptions "
+                + "FROM QuestTasks "
+                + "WHERE QuestTasks.TaskIDs  NOT IN (SELECT QuestTasksActivated.TaskIDs FROM QuestTasksActivated WHERE SaveIDs = -1);";
+        }
+
         public static string GetQuestActivateCountFromChoiceIDqry(string choiceID) {
             return "SELECT COUNT(*) FROM QuestActivateResults "
                 + "INNER JOIN PlayerChoiceResults ON QuestActivateResults.ResultIDs = PlayerChoiceResults.ResultIDs "
+                + "WHERE PlayerChoiceResults.ChoiceIDs = " + choiceID + ";";
+        }
+
+        public static string GetTaskActivateCountFromChoiceIDqry(string choiceID) {
+            return "SELECT COUNT(*) FROM TasksActivatedByDialogueChoices "
+                + "INNER JOIN PlayerChoiceResults ON TasksActivatedByDialogueChoices.ResultIDs = PlayerChoiceResults.ResultIDs "
                 + "WHERE PlayerChoiceResults.ChoiceIDs = " + choiceID + ";";
         }
 
@@ -107,10 +126,10 @@ namespace DbUtilities {
 
         public static string GetTasksCompleteFromQuestName(string questName, string saveID) {
             return "SELECT COUNT(*) "
-                + "FROM CompletedQuestTasks "
-                + "INNER JOIN QuestTasks ON CompletedQuestTasks.TaskIDs = QuestTasks.TaskIDs "
+                + "FROM QuestTasksActivated "
+                + "INNER JOIN QuestTasks ON QuestTasksActivated.TaskIDs = QuestTasks.TaskIDs "
                 + "WHERE QuestTasks.QuestNames = " + DbCommands.GetParameterNameFromValue(questName)
-                    + " AND CompletedQuestTasks.SaveIDs = " + saveID;
+                    + " AND QuestTasksActivated.SaveIDs = " + saveID;
         }
 
         public static string GetEquipItemTasksData(string itemName, string saveID) {

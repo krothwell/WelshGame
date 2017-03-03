@@ -47,10 +47,15 @@ namespace DataUI {
             }
             private void DisplayOptions() {
                 options.SetActive(true);
+                print("options activated");
             }
 
             private void HideOptions() {
                 options.SetActive(false);
+            }
+
+            void OnMouseUp() {
+                questsUI.ToggleSelectionTo(this, questsUI.selectedTaskResult);
             }
         }
     }

@@ -30,12 +30,13 @@ public class DbSetup {
                         PlayerChoices,
                         PlayerChoiceResults,
                         QuestsActivatedByDialogueChoices,
+                        TasksActivatedByDialogueChoices,
                         Quests,
                         QuestsActivated,
                         QuestTasks,
+                        QuestTasksActivated,
                         QuestTaskResults,
                         QuestTaskStartDialogueResults,
-                        CompletedQuestTasks,
                         QuestTaskParts,
                         CompletedQuestTaskParts,
                         QuestTaskPartsEquipItem,
@@ -257,6 +258,15 @@ public class DbSetup {
                                                                                         + "FOREIGN KEY (QuestNames) REFERENCES Quests(QuestNames) ON DELETE CASCADE ON UPDATE CASCADE, ";
         tblSqlArray[(int)tbls.QuestsActivatedByDialogueChoices, (int)tblSqlStrs.pk]     = "ResultIDs, ChoiceIDs, QuestNames";
 
+        tblSqlArray[(int)tbls.TasksActivatedByDialogueChoices, (int)tblSqlStrs.header] = "TasksActivatedByDialogueChoices";
+        tblSqlArray[(int)tbls.TasksActivatedByDialogueChoices, (int)tblSqlStrs.body]    = "ResultIDs INT NOT NULL, "
+                                                                                        + "ChoiceIDs INT NOT NULL, "
+                                                                                        + "TaskIDs INT, "
+                                                                                        + "FOREIGN KEY (ResultIDs, ChoiceIDs) "
+                                                                                            + "REFERENCES PlayerChoiceResults(ResultIDs, ChoiceIDs) ON DELETE CASCADE ON UPDATE CASCADE, "//fk referencing composite pk must use all values of pk
+                                                                                        + "FOREIGN KEY (TaskIDs) REFERENCES QuestTasks(TaskIDs) ON DELETE CASCADE ON UPDATE CASCADE, ";
+        tblSqlArray[(int)tbls.TasksActivatedByDialogueChoices, (int)tblSqlStrs.pk]      = "ResultIDs, ChoiceIDs, TaskIDs";
+
 
         tblSqlArray[(int)tbls.Quests, (int)tblSqlStrs.header]                   = "Quests";
         tblSqlArray[(int)tbls.Quests, (int)tblSqlStrs.body]                     = "QuestNames VARCHAR(100) NOT NULL, "
@@ -292,12 +302,13 @@ public class DbSetup {
                                                                                             + "FOREIGN KEY (DialogueIDs) REFERENCES Dialogues(DialogueIDs) ON DELETE CASCADE ON UPDATE CASCADE, ";
         tblSqlArray[(int)tbls.QuestTaskStartDialogueResults, (int)tblSqlStrs.pk]            = "ResultIDs, TaskIDs, DialogueIDs";
 
-        tblSqlArray[(int)tbls.CompletedQuestTasks, (int)tblSqlStrs.header]      = "CompletedQuestTasks";
-        tblSqlArray[(int)tbls.CompletedQuestTasks, (int)tblSqlStrs.body]        = "TaskIDs INT, "
-                                                                                + "SaveIDs INT NOT NULL, "
-                                                                                + "FOREIGN KEY (TaskIDs) REFERENCES QuestTasks(TaskIDs) ON DELETE CASCADE ON UPDATE CASCADE, "
-                                                                                + "FOREIGN KEY (SaveIDs) REFERENCES PlayerGames(SaveIDs) ON DELETE CASCADE ON UPDATE CASCADE, ";
-        tblSqlArray[(int)tbls.CompletedQuestTasks, (int)tblSqlStrs.pk]          = "TaskIDs, SaveIDs";
+        tblSqlArray[(int)tbls.QuestTasksActivated, (int)tblSqlStrs.header]          = "QuestTasksActivated";
+        tblSqlArray[(int)tbls.QuestTasksActivated, (int)tblSqlStrs.body]            = "TaskIDs INT, "
+                                                                                    + "SaveIDs INT NOT NULL, "
+                                                                                    + "Completed INT, "
+                                                                                    + "FOREIGN KEY (TaskIDs) REFERENCES QuestTasks(TaskIDs) ON DELETE CASCADE ON UPDATE CASCADE, "
+                                                                                    + "FOREIGN KEY (SaveIDs) REFERENCES PlayerGames(SaveIDs) ON DELETE CASCADE ON UPDATE CASCADE, ";
+        tblSqlArray[(int)tbls.QuestTasksActivated, (int)tblSqlStrs.pk]              = "TaskIDs, SaveIDs";
 
         tblSqlArray[(int)tbls.QuestTaskParts, (int)tblSqlStrs.header]           = "QuestTaskParts";
         tblSqlArray[(int)tbls.QuestTaskParts, (int)tblSqlStrs.body]             = "PartIDs INT, "

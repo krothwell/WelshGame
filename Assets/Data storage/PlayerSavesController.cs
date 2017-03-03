@@ -82,7 +82,11 @@ public class PlayerSavesController : MonoBehaviour {
                                                     new string[] { "-1" });
 
         //Quests tasks completed
-        DbCommands.DeleteTupleInTable("CompletedQuestTasks", delFields);
+        DbCommands.DeleteTupleInTable("QuestTasksActivated", delFields);
+        DbCommands.InsertExistingValuesInSameTableWithNewPK("QuestTasksActivated",
+                                            new string[] { "SaveIDs" },
+                                            new string[] { "0" },
+                                            new string[] { "-1" });
 
         //Task parts completed
         DbCommands.DeleteTupleInTable("CompletedQuestTaskParts", delFields);
@@ -144,8 +148,8 @@ public class PlayerSavesController : MonoBehaviour {
                                                     new string[] { "0" });
 
         //Quests tasks completed
-        DbCommands.DeleteTupleInTable("CompletedQuestTasks", delFields);
-        DbCommands.InsertExistingValuesInSameTableWithNewPK("CompletedQuestTasks",
+        DbCommands.DeleteTupleInTable("QuestTasksActivated", delFields);
+        DbCommands.InsertExistingValuesInSameTableWithNewPK("QuestTasksActivated",
                                                             new string[] { "SaveIDs" },
                                                             new string[] { saveIDstr },
                                                             new string[] { "0" });
@@ -251,8 +255,8 @@ public class PlayerSavesController : MonoBehaviour {
                                                         new string[] { playerGameData[0] });
 
             //Quests tasks completed
-            DbCommands.DeleteTupleInTable("CompletedQuestTasks", delFields);
-            DbCommands.InsertExistingValuesInSameTableWithNewPK("CompletedQuestTasks",
+            DbCommands.DeleteTupleInTable("QuestTasksActivated", delFields);
+            DbCommands.InsertExistingValuesInSameTableWithNewPK("QuestTasksActivated",
                                                                 new string[] { "SaveIDs" },
                                                                 new string[] { "0" },
                                                                 new string[] { playerGameData[0] });
