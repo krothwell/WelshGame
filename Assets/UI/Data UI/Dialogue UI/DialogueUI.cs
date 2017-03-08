@@ -64,6 +64,7 @@ namespace DataUI {
                           existingNodeResultPrefab,
                           existingActivateQuestResultPrefab,
                           existingCompleteDialogueResultPrefab,
+                          existingActivateTaskResultPrefab,
                           newNodeResultBtnPrefab,
                           newActivateQuestResultBtnPrefab,
                           newActivateTaskResultBtnPrefab;
@@ -334,7 +335,8 @@ namespace DataUI {
                                             choiceID,
                                             inputChoiceText.text,
                                             (GetSelectedItemFromGroup(selectedNode) as DialogueNode).MyID,
-                                            null);
+                                            null,
+                                            "0");
                     FillDisplayFromDb(DbQueries.GetPlayerChoiceDisplayQry((GetSelectedItemFromGroup(selectedNode) as DialogueNode).MyID), 
                         playerChoicesList.transform, BuildPlayerChoice);
                 }
@@ -346,7 +348,9 @@ namespace DataUI {
             NewNodeChoiceResultBtn dialogueNodeChoiceResultBtn = selectedBtn.GetComponent<NewNodeChoiceResultBtn>();
             //(GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyNextNode = dialogueNodeChoiceResultBtn.MyID;
             string[,] fieldVals = new string[,] { { "NextNodes", dialogueNodeChoiceResultBtn.MyID } };
-            DbCommands.UpdateTableTuple("PlayerChoices", "ChoiceIDs = " + (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID, fieldVals);
+            PlayerChoice selectedChoiceObj = GetSelectedItemFromGroup(selectedChoice) as PlayerChoice;
+            selectedChoiceObj.MyNextNode = dialogueNodeChoiceResultBtn.MyID;
+            DbCommands.UpdateTableTuple("PlayerChoices", "ChoiceIDs = " + selectedChoiceObj.MyID, fieldVals);
             DisplayResultsRelatedToChoices();
             DeactivateNewChoiceResult();
         }
@@ -482,8 +486,9 @@ namespace DataUI {
         private Transform BuildNewChoiceResultActivateTaskBtn(string[] strArray) {
             string taskID = strArray[0];
             string taskDescription = strArray[1];
+            string questName = strArray[2];
             NewActivateTaskResultBtn activateTaskChoiceResult = (Instantiate(newActivateTaskResultBtnPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject).GetComponent<NewActivateTaskResultBtn>();
-            activateTaskChoiceResult.InitialiseMe(taskID, taskDescription, (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID);
+            activateTaskChoiceResult.InitialiseMe(taskID, taskDescription, (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID, questName);
             return activateTaskChoiceResult.transform;
         }
 
@@ -520,6 +525,17 @@ namespace DataUI {
             return choiceResult.transform;
         }
 
+        private Transform BuildExistingResultActivateTask(string[] strArray) {
+            string resultID = strArray[0];
+            string taskID = strArray[1];
+            string taskDesc = strArray[2];
+            string questName = strArray[3];
+            ExistingActivateTaskResult choiceResult = (Instantiate(existingActivateTaskResultPrefab, new Vector3(0f, 0f), Quaternion.identity)).GetComponent<ExistingActivateTaskResult>();
+            choiceResult.InitialiseMe(taskID, taskDesc, questName);
+            choiceResult.SetMyID(resultID);
+            return choiceResult.transform;
+        }
+
         public void SetSelectedCharLink(GameObject charlink) {
             selectedCharLink = charlink;
         }
@@ -538,6 +554,8 @@ namespace DataUI {
         public void DisplayChoicesRelatedToNode() {
             playerChoicesListUI.SetActive(true);
             FillDisplayFromDb(DbQueries.GetPlayerChoiceDisplayQry((GetSelectedItemFromGroup(selectedNode) as DialogueNode).MyID), playerChoicesList.transform, BuildPlayerChoice);
+            editingChoice = false;
+            DeactivateNewPlayerChoice();
         }
 
         public void DisplayNewChoiceResultsNodes() {
@@ -557,13 +575,18 @@ namespace DataUI {
             playerChoiceResultsListUI.SetActive(true);
             EmptyDisplay(playerChoicesResultsList.transform);
             string selectedChoiceID = (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID;
+            print("working1");
             if (DbCommands.GetFieldValueFromTable("PlayerChoices", "MarkDialogueCompleted", " ChoiceIDs = " + selectedChoiceID) != "0") {
                 AppendDisplayFromDb((DbQueries.GetChoiceCompleteDialogueQry(selectedChoiceID)), playerChoicesResultsList.transform, BuildExistingResultCompleteDialogue);
             }
+            print("working2");
             if (DbCommands.GetFieldValueFromTable("PlayerChoices", "NextNodes", " ChoiceIDs = " + selectedChoiceID) != "") {
+                print("working3");
                 GameObject pChoiceResultsTitle = Instantiate(existingResultTitlePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
                 AppendDisplayWithTitle(playerChoicesResultsList.transform, pChoiceResultsTitle.transform, "Goes to dialogue node... ");
+                print("working4");
                 AppendDisplayFromDb(DbQueries.GetNextNodeResultQry((GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyNextNode), playerChoicesResultsList.transform, BuildExistingResultNode);
+                print("working5");
             }
             int resultsCount = DbCommands.GetCountFromTable("PlayerChoiceResults", "ChoiceIDs = " + selectedChoiceID);
             if (resultsCount > 0) {
@@ -580,9 +603,12 @@ namespace DataUI {
                 if (taskActivateCount > 0) {
                     GameObject existingResultsTitle = Instantiate(existingResultTitlePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
                     AppendDisplayWithTitle(playerChoicesResultsList.transform, existingResultsTitle.transform, "Activates tasks... ");
+                    print("up to this query works: " + DbQueries.GetCurrentActivateTasksPlayerChoiceResultQry(selectedChoiceID));
                     AppendDisplayFromDb(DbQueries.GetCurrentActivateTasksPlayerChoiceResultQry(selectedChoiceID),
                             playerChoicesResultsList.transform,
-                            BuildExistingResultActivateQuest);
+                            BuildExistingResultActivateTask);
+
+                    print("this message won't show unless error is after");
                 }
             }
         }
@@ -602,6 +628,7 @@ namespace DataUI {
 
         public void HidePlayerChoiceResults() {
             playerChoiceResultsListUI.SetActive(false);
+            
         }
 
         public void SetActiveNodeEdit() {

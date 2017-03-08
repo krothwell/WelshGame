@@ -82,14 +82,15 @@ namespace DbUtilities {
         }
 
         public static string GetCurrentActivateTasksPlayerChoiceResultQry(string choiceID) {
-            return "SELECT TasksActivatedByDialogueChoices.ResultIDs, QuestTasks.TaskIDs, QuestTasks.TaskDescriptions "
+            return "SELECT TasksActivatedByDialogueChoices.ResultIDs, QuestTasks.TaskIDs, QuestTasks.TaskDescriptions, QuestTasks.QuestNames "
                 + "FROM QuestTasks "
                 + "LEFT JOIN TasksActivatedByDialogueChoices ON QuestTasks.TaskIDs = TasksActivatedByDialogueChoices.TaskIDs "
-                + "WHERE ChoiceIDs = " + choiceID;
+                + "WHERE ChoiceIDs = " + choiceID + " "
+                + "ORDER BY QuestTasks.QuestNames;" ;
         }
 
         public static string GetNewActivateTaskPlayerChoiceResultQry() {
-            return "SELECT QuestTasks.TaskIDs, QuestTasks.TaskDescriptions "
+            return "SELECT QuestTasks.TaskIDs, QuestTasks.TaskDescriptions, QuestTasks.QuestNames "
                 + "FROM QuestTasks "
                 + "WHERE QuestTasks.TaskIDs  NOT IN (SELECT QuestTasksActivated.TaskIDs FROM QuestTasksActivated WHERE SaveIDs = -1);";
         }
@@ -179,7 +180,8 @@ namespace DbUtilities {
         }
 
         public static string GetTasksRelatedToQuest(string questName) {
-            return "SELECT * FROM QuestTasks WHERE QuestNames = " + DbCommands.GetParameterNameFromValue(questName);
+            return "SELECT * FROM QuestTasks WHERE QuestNames = " + DbCommands.GetParameterNameFromValue(questName) + " "
+                + "AND TaskIDs In (SELECT TaskIDs FROM QuestTasksActivated WHERE SaveIDs = 0)";
         }
 
         public static string GetPartsRelatedToTask(string taskID) {

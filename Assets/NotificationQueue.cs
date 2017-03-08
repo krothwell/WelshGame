@@ -18,7 +18,13 @@ namespace GameUI {
 
         public void QueueNewQuestNotifier(string questName) {
             NotificationData newQuestNotifier = new NotificationData("New quest", questName, NotificationData.NotificationType.newQuest);
-            notificationDataList.Add(newQuestNotifier);
+            if (!notificationDataList.Contains(newQuestNotifier)) { notificationDataList.Add(newQuestNotifier); }
+            
+        }
+
+        public void QueueUpdatedQuestNotifier(string questName) {
+            NotificationData newQuestNotifier = new NotificationData("Updated quest", questName, NotificationData.NotificationType.newQuest);
+            if (!notificationDataList.Contains(newQuestNotifier)) { notificationDataList.Add(newQuestNotifier); }
         }
 
         public void DisplayQueuedNotifications() {

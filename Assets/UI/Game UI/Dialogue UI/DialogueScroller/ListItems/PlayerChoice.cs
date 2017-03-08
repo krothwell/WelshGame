@@ -57,6 +57,7 @@ namespace GameUI {
                 
                 if (dialogueUI.GetChoiceResultsCount(myID) > 0) {
                     dialogueUI.ActivateQuests(myID);
+                    dialogueUI.ActivateQuestTasks(myID);
                     dialogueUI.MarkDialogueComplete(myID);
 
                     notificationQueue = FindObjectOfType<NotificationQueue>();

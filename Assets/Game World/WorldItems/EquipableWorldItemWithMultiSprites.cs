@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using GameUtilities.Display;
+
 using GameUI;
 
 /// <summary>
@@ -26,21 +25,6 @@ public class EquipableWorldItemWithMultiSprites : WorldItem {
         questsUI = FindObjectOfType<QuestsUI>();
     }
 
-    protected override void SetWorldDisplay() {
-        SetChildrenActive(true);
-        ImageLayerOrder.SetOrderOnTranformChildren(transform);
-        GetComponent<Image>().enabled = false;
-        GetComponent<GameWorldObjectSelector>().enabled = true;
-    }
-
-    protected override void SetInventoryDisplay() {
-        rectTransform.localPosition = new Vector3(0f, 0f, 0f);
-        rectTransform.localScale = inventoryScale;
-        SetChildrenActive(false);
-        GetComponent<Image>().enabled = true;
-        GetComponent<GameWorldObjectSelector>().enabled = false;
-    }
-
     public override void EquipToPlayerModel() {
         SetChildrenActive(true);
         for (int i = 0; i < transform.childCount; i++) {
@@ -60,10 +44,5 @@ public class EquipableWorldItemWithMultiSprites : WorldItem {
         }
     }
 
-    //TODO: put in namespace:
-    private void SetChildrenActive(bool active) {
-        foreach (Transform childTransform in transform) {
-            childTransform.gameObject.SetActive(active);
-        }
-    }
+    
 }

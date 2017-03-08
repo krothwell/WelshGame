@@ -14,9 +14,10 @@ namespace DataUI.ListItems {
             dialogueUI = FindObjectOfType<DialogueUI>();
         }
 
-        public void InitialiseMe(string taskIDStr, string taskDesc, string playerChoiceIDStr) {
+        public void InitialiseMe(string taskIDStr, string taskDesc, string playerChoiceIDStr, string questName) {
             transform.FindChild("TaskID").GetComponent<Text>().text = taskIDStr;
             transform.FindChild("TaskDescription").GetComponent<Text>().text = taskDesc;
+            transform.FindChild("QuestName").GetComponent<Text>().text = questName;
             taskID = taskIDStr;
             PlayerChoiceID = playerChoiceIDStr;
         }

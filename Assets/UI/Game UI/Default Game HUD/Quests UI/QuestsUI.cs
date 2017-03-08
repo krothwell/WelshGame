@@ -14,9 +14,11 @@ namespace GameUI {
         GameObject questsList, questDetailsList, questTasksList;
         NotificationQueue notificationQueue;
         Text selectedQuestTitleLbl, selectedQuestDescriptionLbl;
+        DialogueUI dialogueUI;
 
         // Use this for initialization
         void Start() {
+            dialogueUI = FindObjectOfType<DialogueUI>();
             notificationQueue = FindObjectOfType<NotificationQueue>();
             selectedQuest = "selectedQuest";
             CreateSelectionToggleGroup(selectedQuest);
@@ -74,6 +76,11 @@ namespace GameUI {
             AddQuestToDictionary(newQuest);
         }
 
+        public void InsertActivatedTask (string taskID, string questName, string taskDesc) {
+            DbCommands.InsertTupleToTable("QuestTasksActivated", taskID, "0", "0");
+            notificationQueue.QueueUpdatedQuestNotifier(questName);
+        }
+
         public void AddQuestToDictionary(GameObject newQuest) {
             questDict.Add(newQuest.GetComponent<Quest>().MyName, newQuest.GetComponent<Quest>());
         }
@@ -98,13 +105,16 @@ namespace GameUI {
 
         public Transform BuildQuestTask(string[] taskData) {
             string taskID = taskData[0];
-            bool completed = Convert.ToBoolean(DbCommands.GetFieldValueFromTable("QuestTasksActivated", "Completed", "TaskIDs = " + taskID + " AND SaveIDs = 0"));
+            string taskDesc = taskData[1];
+            print(taskID);
+            print(DbCommands.GetFieldValueFromTable("QuestTasksActivated", "Completed", "TaskIDs = " + taskID + " AND SaveIDs = 0"));
+            bool completed = Convert.ToBoolean(int.Parse(DbCommands.GetFieldValueFromTable("QuestTasksActivated", "Completed", "TaskIDs = " + taskID + " AND SaveIDs = 0")));
             GameObject task = Instantiate(taskPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
             //print(quest);
             if (completed) {
                 task.GetComponent<QuestTask>().SetCompleted();
             }
-            task.GetComponent<QuestTask>().SetDescription(taskData[1]);
+            task.GetComponent<QuestTask>().SetDescription(taskDesc);
             task.GetComponent<QuestTask>().MyID = taskID;
 
             return task.transform;
@@ -142,6 +152,10 @@ namespace GameUI {
                     "QuestTasks", 
                     "QuestNames = " + DbCommands.GetParameterNameFromValue(questName),
                     questName);
+                string startDialogueID = DbCommands.GetFieldValueFromTable("QuestTaskStartDialogueResults", "DialogueIDs", "TaskIDs = " + taskID);
+                if (startDialogueID != "") {
+                    dialogueUI.StartNewDialogue(startDialogueID);
+                }
                 int tasksCompletedCount = DbCommands.GetCountFromQry(
                     DbQueries.GetTasksCompleteFromQuestName(questName, "0"),
                     questName);

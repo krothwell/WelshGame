@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using GameUI;
+using GameUtilities.Display;
+using UnityEngine.UI;
 
 /// <summary>
 /// World item types derived from this class are items that are part of the game 
@@ -35,6 +37,25 @@ public abstract class WorldItem : MonoBehaviour {
 
     public abstract void EquipToPlayerModel();
     public abstract void UnequipFromPlayerModel();
-    protected abstract void SetWorldDisplay();
-    protected abstract void SetInventoryDisplay();
+    protected void SetWorldDisplay() {
+        SetChildrenActive(true);
+        ImageLayerOrder.SetOrderOnTranformChildren(transform);
+        GetComponent<Image>().enabled = false;
+        GetComponent<GameWorldObjectSelector>().enabled = true;
+    }
+
+    protected void SetInventoryDisplay() {
+        rectTransform.localPosition = new Vector3(0f, 0f, 0f);
+        rectTransform.localScale = inventoryScale;
+        SetChildrenActive(false);
+        GetComponent<Image>().enabled = true;
+        GetComponent<GameWorldObjectSelector>().enabled = false;
+    }
+
+    protected void SetChildrenActive(bool active) {
+        foreach (Transform childTransform in transform) {
+            childTransform.gameObject.SetActive(active);
+        }
+    }
+
 }

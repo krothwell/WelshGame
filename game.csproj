@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>5.5.0f3</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -116,6 +118,7 @@
     <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldObjectSelector.cs" />
     <Compile Include="Assets\Game World\Utilities\Layers\ImageLayerOrder.cs" />
     <Compile Include="Assets\Game World\WorldItems\EquipableWorldItemWithMultiSprites.cs" />
+    <Compile Include="Assets\Game World\WorldItems\EquipableWorldItemWithSingleSprite.cs" />
     <Compile Include="Assets\Game World\WorldItems\WorldItem.cs" />
     <Compile Include="Assets\Game World\WorldItems\WorldItems.cs" />
     <Compile Include="Assets\GameInitialiser.cs" />
@@ -135,7 +138,7 @@
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewActivateQuestResultBtn.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewActivateTaskResultBtn.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewChoiceResultBtn.cs" />
-    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewNodeResultBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewNodeChoiceResultBtn.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choices List UI\PlayerChoice.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\Quests list UI\Quest.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\QuestsUI.cs" />

@@ -80,15 +80,15 @@ namespace GameUI {
             currentChar = character;
             currentCharID = character.nameID;
             SetDialogueID();
-            if (currentDialogueID != "") {
-                SetInUse();
-                currentDialogueHolder = Instantiate(dialogueHolderPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
-                currentDialogueHolder.transform.SetParent(dialogueScroller.gameObject.transform, false);
-                dialogueScroller.GetComponent<ScrollRect>().content = currentDialogueHolder.GetComponent<RectTransform>();
-                DisplayFirstDialogueNode();
-            } else {
-                SetNotInUse();
-            }
+            DisplayFirstDialogueNode();
+        }
+
+        public void StartNewDialogue(string dialogueID) {
+            ResetLowerDialogueContainer();
+            currentCharID = DbCommands.GetFieldValueFromTable("CharacterDialogues", "CharacterNames", "DialogueIDs = " + dialogueID);
+            currentChar = npcs.GetCharacterFromName(currentCharID);
+            currentDialogueID = dialogueID;
+            DisplayFirstDialogueNode();
         }
 
         public void ResetLowerDialogueContainer() {
@@ -99,10 +99,17 @@ namespace GameUI {
         }
 
         private void DisplayFirstDialogueNode() {
-            print("getting first dialogue node data");
-            string[] nodeArray = DbCommands.GetTupleFromTable("DialogueNodes", "DialogueIDs = " + currentDialogueID, "NodeIDs ASC");
-            print("got first dialogue node data");
-            DisplayDialogueNode(nodeArray);
+            if (currentDialogueID != "") {
+                SetInUse();
+                currentDialogueHolder = Instantiate(dialogueHolderPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+                currentDialogueHolder.transform.SetParent(dialogueScroller.gameObject.transform, false);
+                dialogueScroller.GetComponent<ScrollRect>().content = currentDialogueHolder.GetComponent<RectTransform>();
+                string[] nodeArray = DbCommands.GetTupleFromTable("DialogueNodes", "DialogueIDs = " + currentDialogueID, "NodeIDs ASC");
+                DisplayDialogueNode(nodeArray);
+            }
+            else {
+                SetNotInUse();
+            }
         }
 
         private string GetSpeakersName(string nodeID) {
@@ -271,16 +278,6 @@ namespace GameUI {
         public void SetBtnText(string newText) {
             btnTxt.text = newText;
         }
-
-        public void MarkDialogueComplete(string choiceID) {
-            bool isDialogueComplete = Convert.ToBoolean(DbCommands.GetCountFromTable("PlayerChoices", "ChoiceIDs = " + choiceID + " AND MarkDialogueCompleted = 1"));
-            if (isDialogueComplete) {
-                int activatedDialogueCount = DbCommands.GetCountFromTable("ActivatedDialogues", "SaveIDs = 0 AND Completed = 0 AND DialogueIDs = " + currentDialogueID);
-                if (activatedDialogueCount > 0) {
-                    DbCommands.UpdateTableField("ActivatedDialogues", "Completed", "1", "SaveIDs = 0 AND DialogueIDs = " + currentDialogueID);
-                }
-            }
-        }
         
         public void ManageLowerUISubmission() {
             if (submissionScored) {
@@ -302,15 +299,35 @@ namespace GameUI {
             objPortrait.sprite = portrait;
         }
 
+        public void MarkDialogueComplete(string choiceID) {
+            bool isDialogueComplete = Convert.ToBoolean(DbCommands.GetCountFromTable("PlayerChoices", "ChoiceIDs = " + choiceID + " AND MarkDialogueCompleted = 1"));
+            if (isDialogueComplete) {
+                int activatedDialogueCount = DbCommands.GetCountFromTable("ActivatedDialogues", "SaveIDs = 0 AND Completed = 0 AND DialogueIDs = " + currentDialogueID);
+                if (activatedDialogueCount > 0) {
+                    DbCommands.UpdateTableField("ActivatedDialogues", "Completed", "1", "SaveIDs = 0 AND DialogueIDs = " + currentDialogueID);
+                }
+            }
+        }
+
         public void ActivateQuests(string choiceID) {
             int countQuestActivateResults = DbCommands.GetCountFromQry(DbQueries.GetQuestActivateCountFromChoiceIDqry(choiceID));
-            print("countQuestActivateResults: " + countQuestActivateResults);
             if (countQuestActivateResults > 0) {
-                print("QUESTS ACTIVATING!!!!");
                 List<string[]> questsActivatedList;
                 DbCommands.GetDataStringsFromQry(DbQueries.GetCurrentActivateQuestsPlayerChoiceResultQry(choiceID), out questsActivatedList);
                 foreach (string[] activatedQuest in questsActivatedList) {
                     questsUI.InsertActivatedQuest(activatedQuest[1]);
+                }
+            }
+        }
+
+        public void ActivateQuestTasks(string choiceID) {
+            int countTaskActivateResults = DbCommands.GetCountFromQry(DbQueries.GetTaskActivateCountFromChoiceIDqry(choiceID));
+            if (countTaskActivateResults > 0) {
+                print("Task ACTIVATING!!!!");
+                List<string[]> tasksActivatedList;
+                DbCommands.GetDataStringsFromQry(DbQueries.GetCurrentActivateTasksPlayerChoiceResultQry(choiceID), out tasksActivatedList);
+                foreach (string[] activatedTask in tasksActivatedList) {
+                    questsUI.InsertActivatedTask(activatedTask[1], activatedTask[3], activatedTask[2]);
                 }
             }
         }

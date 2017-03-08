@@ -34,6 +34,7 @@ namespace DataUI {
 
             void OnMouseUp() {
                 dialogueUI.ToggleSelectionTo(GetComponent<DialogueNode>(), dialogueUI.selectedNode);
+                
             }
 
             public void SelectSelf() {
@@ -72,6 +73,7 @@ namespace DataUI {
 
             public void UpdateNodeDisplay(string newText) {
                 GetInputField().text = newText;
+                myText = newText;
             }
         }
     }
