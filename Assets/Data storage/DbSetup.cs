@@ -31,6 +31,7 @@ public class DbSetup {
                         PlayerChoiceResults,
                         QuestsActivatedByDialogueChoices,
                         TasksActivatedByDialogueChoices,
+                        WelshVocabActivatedByDialogueChoices,
                         Quests,
                         QuestsActivated,
                         QuestTasks,
@@ -267,6 +268,27 @@ public class DbSetup {
                                                                                         + "FOREIGN KEY (TaskIDs) REFERENCES QuestTasks(TaskIDs) ON DELETE CASCADE ON UPDATE CASCADE, ";
         tblSqlArray[(int)tbls.TasksActivatedByDialogueChoices, (int)tblSqlStrs.pk]      = "ResultIDs, ChoiceIDs, TaskIDs";
 
+        tblSqlArray[(int)tbls.WelshVocabActivatedByDialogueChoices, (int)tblSqlStrs.header]  = "WelshVocabActivatedByDialogueChoices";
+        tblSqlArray[(int)tbls.WelshVocabActivatedByDialogueChoices, (int)tblSqlStrs.body]    = "ResultIDs INT NOT NULL, "
+                                                                                             + "ChoiceIDs INT NOT NULL, "
+                                                                                             + "EnglishText VARCHAR(140) NOT NULL, "
+                                                                                             + "WelshText VARCHAR(140) NOT NULL, "
+                                                                                             + "FOREIGN KEY (ResultIDs, ChoiceIDs) "
+                                                                                                + "REFERENCES PlayerChoiceResults(ResultIDs, ChoiceIDs) ON DELETE CASCADE ON UPDATE CASCADE, "//fk referencing composite pk must use all values of pk
+                                                                                             + "FOREIGN KEY (EnglishText, WelshText) "
+                                                                                                + "REFERENCES VocabTranslations(EnglishText, WelshText) ON DELETE CASCADE ON UPDATE CASCADE, ";
+        tblSqlArray[(int)tbls.WelshVocabActivatedByDialogueChoices, (int)tblSqlStrs.pk]      = "ResultIDs, ChoiceIDs, EnglishText, WelshText";
+
+        tblSqlArray[(int)tbls.WelshVocabActivatedByDialogueChoices, (int)tblSqlStrs.header] = "WelshVocabActivatedByDialogueChoices";
+        tblSqlArray[(int)tbls.WelshVocabActivatedByDialogueChoices, (int)tblSqlStrs.body] = "ResultIDs INT NOT NULL, "
+                                                                                             + "ChoiceIDs INT NOT NULL, "
+                                                                                             + "EnglishText VARCHAR(140) NOT NULL, "
+                                                                                             + "WelshText VARCHAR(140) NOT NULL, "
+                                                                                             + "FOREIGN KEY (ResultIDs, ChoiceIDs) "
+                                                                                                + "REFERENCES PlayerChoiceResults(ResultIDs, ChoiceIDs) ON DELETE CASCADE ON UPDATE CASCADE, "//fk referencing composite pk must use all values of pk
+                                                                                             + "FOREIGN KEY (EnglishText, WelshText) "
+                                                                                                + "REFERENCES VocabTranslations(EnglishText, WelshText) ON DELETE CASCADE ON UPDATE CASCADE, ";
+        tblSqlArray[(int)tbls.WelshVocabActivatedByDialogueChoices, (int)tblSqlStrs.pk] = "ResultIDs, ChoiceIDs, EnglishText, WelshText";
 
         tblSqlArray[(int)tbls.Quests, (int)tblSqlStrs.header]                   = "Quests";
         tblSqlArray[(int)tbls.Quests, (int)tblSqlStrs.body]                     = "QuestNames VARCHAR(100) NOT NULL, "
@@ -370,7 +392,7 @@ public class DbSetup {
         _dbcm.CommandText = "PRAGMA foreign_keys=ON;";
         _dbcm.ExecuteNonQuery();
 
-        sql = "SELECT * FROM " + tblNameFrom;
+        sql = "SELECT * FROM " + tblNameTo;
         string copiedFieldNames = "";
         _dbcm.CommandText = sql;
         IDataReader _dbr = _dbcm.ExecuteReader();

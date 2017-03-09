@@ -89,10 +89,21 @@ namespace DbUtilities {
                 + "ORDER BY QuestTasks.QuestNames;" ;
         }
 
+        public static string GetCurrentActivateVocabPlayerChoiceResultQry(string choiceID) {
+            return "SELECT * "
+                + "FROM WelshVocabActivatedByDialogueChoices "
+                + "WHERE ChoiceIDs = " + choiceID + " "
+                + "ORDER BY WelshVocabActivatedByDialogueChoices.EnglishText;";
+        }
+
         public static string GetNewActivateTaskPlayerChoiceResultQry() {
             return "SELECT QuestTasks.TaskIDs, QuestTasks.TaskDescriptions, QuestTasks.QuestNames "
                 + "FROM QuestTasks "
                 + "WHERE QuestTasks.TaskIDs  NOT IN (SELECT QuestTasksActivated.TaskIDs FROM QuestTasksActivated WHERE SaveIDs = -1);";
+        }
+
+        public static string GetNewActivateVocabPlayerChoiceResultQry() {
+            return "SELECT * FROM VocabTranslations;";
         }
 
         public static string GetQuestActivateCountFromChoiceIDqry(string choiceID) {
@@ -104,6 +115,12 @@ namespace DbUtilities {
         public static string GetTaskActivateCountFromChoiceIDqry(string choiceID) {
             return "SELECT COUNT(*) FROM TasksActivatedByDialogueChoices "
                 + "INNER JOIN PlayerChoiceResults ON TasksActivatedByDialogueChoices.ResultIDs = PlayerChoiceResults.ResultIDs "
+                + "WHERE PlayerChoiceResults.ChoiceIDs = " + choiceID + ";";
+        }
+
+        public static string GetVocabActivateCountFromChoiceIDqry(string choiceID) {
+            return "SELECT COUNT(*) FROM WelshVocabActivatedByDialogueChoices "
+                + "INNER JOIN PlayerChoiceResults ON WelshVocabActivatedByDialogueChoices.ResultIDs = PlayerChoiceResults.ResultIDs "
                 + "WHERE PlayerChoiceResults.ChoiceIDs = " + choiceID + ";";
         }
 
@@ -140,7 +157,8 @@ namespace DbUtilities {
                 + "LEFT JOIN QuestTasks ON QuestTaskParts.TaskIDs = QuestTasks.TaskIDs "
                 + "LEFT JOIN QuestsActivated ON QuestTasks.QuestNames = QuestsActivated.QuestNames "
                 + "WHERE QuestTaskPartsEquipItem.ItemNames = " + DbCommands.GetParameterNameFromValue(itemName)
-                    + " AND QuestsActivated.SaveIDs = " + saveID;
+                    + " AND QuestsActivated.SaveIDs = " + saveID
+                    + " AND QuestTaskPartsEquipItem.PartIDs NOT IN (SELECT CompletedQuestTaskParts.PartIDs FROM CompletedQuestTaskParts WHERE CompletedQuestTaskParts.SaveIDs = 0)";
         }
 
         public static string GetCharLinkDisplayQry() {

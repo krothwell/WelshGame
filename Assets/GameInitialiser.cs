@@ -20,9 +20,10 @@ public class GameInitialiser : MonoBehaviour {
         dbSetup = new DbSetup();
         Debugging.PrintDbTable("QuestTasksActivated");
         dbSetup.CreateTables();
-        //dbSetup.CopyTable("QuestTasksActivated", );
-        
-        //dbSetup.ReplaceTable("QuestsActivated");
+        //dbSetup.CopyTable("Dialogues", "Copied");
+
+        //dbSetup.ReplaceTable("Dialogues");
+        Debugging.PrintDbTable("ActivatedDialogues");
         //DbCommands.UpdateTableField("QuestsActivated", "Completed", "0");
         Debugging.PrintDbTable("QuestsActivated");
         DbCommands.InsertTupleToTable("PlayerGames", "0", "Current Game", "Current player", "No path", DateTime.Now.ToString(), "Start", "0", "0");

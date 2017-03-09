@@ -65,9 +65,11 @@ namespace DataUI {
                           existingActivateQuestResultPrefab,
                           existingCompleteDialogueResultPrefab,
                           existingActivateTaskResultPrefab,
+                          existingActivateVocabResultPrefab,
                           newNodeResultBtnPrefab,
                           newActivateQuestResultBtnPrefab,
-                          newActivateTaskResultBtnPrefab;
+                          newActivateTaskResultBtnPrefab,
+                          newActivateWelshVocabResultsBtnPrefab;
         
 
         void Start() {
@@ -492,6 +494,14 @@ namespace DataUI {
             return activateTaskChoiceResult.transform;
         }
 
+        private Transform BuildNewChoiceResultActivateVocabBtn(string[] strArray) {
+            string english = strArray[0];
+            string welsh = strArray[1];
+            NewActivateWelshVocabResultBtn activateVocabChoiceResult = (Instantiate(newActivateWelshVocabResultsBtnPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject).GetComponent<NewActivateWelshVocabResultBtn>();
+            activateVocabChoiceResult.InitialiseMe(english, welsh, (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID);
+            return activateVocabChoiceResult.transform;
+        }
+
         //for adding an existing choice result, not to be confused with a new result
         private Transform BuildExistingResultNode(string[] strArray) {
             string nodeIDStr = strArray[0];
@@ -536,6 +546,15 @@ namespace DataUI {
             return choiceResult.transform;
         }
 
+        private Transform BuildExistingResultActivateVocab(string[] strArray) {
+            string resultID = strArray[0];
+            string englishTxt = strArray[2];
+            string welshTxt = strArray[3];
+            ExistingActivateWelshVocab choiceResult = (Instantiate(existingActivateVocabResultPrefab, new Vector3(0f, 0f), Quaternion.identity)).GetComponent<ExistingActivateWelshVocab>();
+            choiceResult.InitialiseMe(resultID, englishTxt, welshTxt);
+            return choiceResult.transform;
+        }
+
         public void SetSelectedCharLink(GameObject charlink) {
             selectedCharLink = charlink;
         }
@@ -568,6 +587,10 @@ namespace DataUI {
 
         public void DisplayNewChoiceResultsActivateTask() {
             FillDisplayFromDb(DbQueries.GetNewActivateTaskPlayerChoiceResultQry(), selectedResultTypeList.transform, BuildNewChoiceResultActivateTaskBtn);
+        }
+
+        public void DisplayNewChoiceResultsActivateVocab() {
+            FillDisplayFromDb(DbQueries.GetNewActivateVocabPlayerChoiceResultQry(), selectedResultTypeList.transform, BuildNewChoiceResultActivateVocabBtn);
         }
 
         public void DisplayResultsRelatedToChoices() {
@@ -603,12 +626,18 @@ namespace DataUI {
                 if (taskActivateCount > 0) {
                     GameObject existingResultsTitle = Instantiate(existingResultTitlePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
                     AppendDisplayWithTitle(playerChoicesResultsList.transform, existingResultsTitle.transform, "Activates tasks... ");
-                    print("up to this query works: " + DbQueries.GetCurrentActivateTasksPlayerChoiceResultQry(selectedChoiceID));
                     AppendDisplayFromDb(DbQueries.GetCurrentActivateTasksPlayerChoiceResultQry(selectedChoiceID),
                             playerChoicesResultsList.transform,
                             BuildExistingResultActivateTask);
 
-                    print("this message won't show unless error is after");
+                }
+                int vocabActivateCount = DbCommands.GetCountFromQry(DbQueries.GetVocabActivateCountFromChoiceIDqry(selectedChoiceID));
+                if (vocabActivateCount > 0) {
+                    GameObject existingResultsTitle = Instantiate(existingResultTitlePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
+                    AppendDisplayWithTitle(playerChoicesResultsList.transform, existingResultsTitle.transform, "Activates new vocab... ");
+                    AppendDisplayFromDb(DbQueries.GetCurrentActivateVocabPlayerChoiceResultQry(selectedChoiceID),
+                            playerChoicesResultsList.transform,
+                            BuildExistingResultActivateVocab);
                 }
             }
         }

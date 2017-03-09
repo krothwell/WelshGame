@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using GameUI.ListItems;
 using UIUtilities;
 using DbUtilities;
+using UnityUtilities;
 using System;
 
 /// <summary>
@@ -39,9 +40,18 @@ namespace GameUI {
         Animator animator;
         DialogueUI dialogueUI;
         QuestsUI questsUI;
+        NewWelshLearnedUI newWelshLearnedUI;
         Image objPortrait;
         protected RectTransform contentPanel;
-        public GameObject dialogueHolderPrefab, characterSpeakingPrefab, inGameDialogueNode, inGamePlayerChoice, endDialogueBtn, spacer, emptyBlockPrefab;
+
+        public GameObject 
+            dialogueHolderPrefab,
+            characterSpeakingPrefab, 
+            inGameDialogueNode, 
+            inGamePlayerChoice, 
+            endDialogueBtn, 
+            spacer, 
+            emptyBlockPrefab;
         private ScrollRect dialogueScroller;
         private GameObject currentDialogueHolder, currentDialogueNode, currentCharSpeaking;
         private string currentCharID, currentDialogueID;
@@ -56,6 +66,7 @@ namespace GameUI {
         // Use this for initialization
         void Start() {
             questsUI = FindObjectOfType<QuestsUI>();
+            newWelshLearnedUI = FindObjectOfType<NewWelshLearnedUI>();
             npcs = FindObjectOfType<NPCs>();
             player = FindObjectOfType<PlayerController>();
             panel = transform.FindChild("Panel").gameObject;
@@ -99,7 +110,8 @@ namespace GameUI {
         }
 
         private void DisplayFirstDialogueNode() {
-            if (currentDialogueID != "") {
+            bool isDialogueComplete = Convert.ToBoolean(int.Parse(DbCommands.GetFieldValueFromTable("ActivatedDialogues", "Completed", "DialogueIDs = " + currentDialogueID + " AND SaveIDs = 0")));
+            if (isDialogueComplete) {
                 SetInUse();
                 currentDialogueHolder = Instantiate(dialogueHolderPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
                 currentDialogueHolder.transform.SetParent(dialogueScroller.gameObject.transform, false);
@@ -225,8 +237,9 @@ namespace GameUI {
                             + " AND ActivatedDialogues.Completed = 0"
                             + " AND ActivatedDialogues.SaveIDs = 0";
             //Debugging.PrintDbQryResults(qry);
-
+            Debugging.PrintDbTable("ActivatedDialogues");
             currentDialogueID = DbCommands.GetFieldValueFromQry(qry, "DialogueIDs", currentCharID);
+            print("working 1");
             
         }
 
@@ -328,6 +341,18 @@ namespace GameUI {
                 DbCommands.GetDataStringsFromQry(DbQueries.GetCurrentActivateTasksPlayerChoiceResultQry(choiceID), out tasksActivatedList);
                 foreach (string[] activatedTask in tasksActivatedList) {
                     questsUI.InsertActivatedTask(activatedTask[1], activatedTask[3], activatedTask[2]);
+                }
+            }
+        }
+
+        public void ActivateNewVocab(string choiceID) {
+            int countVocabActivateResults = DbCommands.GetCountFromQry(DbQueries.GetVocabActivateCountFromChoiceIDqry(choiceID));
+            if (countVocabActivateResults > 0) {
+                print("Vocab ACTIVATING!!!!");
+                List<string[]> vocabActivatedList;
+                DbCommands.GetDataStringsFromQry(DbQueries.GetCurrentActivateVocabPlayerChoiceResultQry(choiceID), out vocabActivatedList);
+                foreach (string[] activatedVocab in vocabActivatedList) {
+                    newWelshLearnedUI.InsertNewVocab(activatedVocab[2], activatedVocab[3]);
                 }
             }
         }

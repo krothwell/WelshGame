@@ -498,6 +498,7 @@ namespace DbUtilities {
             _dbcm.CommandText = sql;
             IDataReader _dbr = _dbcm.ExecuteReader();
             _dbr.Read();
+            
             string fieldValue = _dbr[field].ToString();
             _dbr.Dispose();
             _dbr = null;
@@ -505,7 +506,9 @@ namespace DbUtilities {
             _dbcm = null;
             _dbc.Close();
             _dbc = null;
+            Debug.Log("working 2");
             return fieldValue;
+            
         }
 
     }
