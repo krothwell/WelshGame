@@ -14,6 +14,13 @@ namespace GameUI {
             notificationDataList = new List<NotificationData>();
             notificationList = GetComponentInChildren<HorizontalLayoutGroup>().transform;
             notificationLbl = transform.FindChild("NotificationsLbl").gameObject;
+            ClearNotifications();
+        }
+
+        private void ClearNotifications() {
+            foreach (Transform notifier in notificationList) {
+                Destroy(notifier.gameObject);
+            }
         }
 
         public void QueueNewQuestNotifier(string questName) {

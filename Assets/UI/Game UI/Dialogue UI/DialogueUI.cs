@@ -38,7 +38,6 @@ namespace GameUI {
         CombatUI combatUI;
         Text btnTxt;
         Animator animator;
-        DialogueUI dialogueUI;
         QuestsUI questsUI;
         NewWelshLearnedUI newWelshLearnedUI;
         Image objPortrait;
@@ -111,7 +110,8 @@ namespace GameUI {
 
         private void DisplayFirstDialogueNode() {
             bool isDialogueComplete = Convert.ToBoolean(int.Parse(DbCommands.GetFieldValueFromTable("ActivatedDialogues", "Completed", "DialogueIDs = " + currentDialogueID + " AND SaveIDs = 0")));
-            if (isDialogueComplete) {
+            print("Dialogue complete = " + isDialogueComplete);
+            if (!isDialogueComplete) {
                 SetInUse();
                 currentDialogueHolder = Instantiate(dialogueHolderPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
                 currentDialogueHolder.transform.SetParent(dialogueScroller.gameObject.transform, false);
@@ -353,6 +353,7 @@ namespace GameUI {
                 DbCommands.GetDataStringsFromQry(DbQueries.GetCurrentActivateVocabPlayerChoiceResultQry(choiceID), out vocabActivatedList);
                 foreach (string[] activatedVocab in vocabActivatedList) {
                     newWelshLearnedUI.InsertNewVocab(activatedVocab[2], activatedVocab[3]);
+                    newWelshLearnedUI.DisplayNewWelsh(choiceID);
                 }
             }
         }
