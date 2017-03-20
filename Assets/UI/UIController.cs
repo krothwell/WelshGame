@@ -1,9 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
-using UnityEngine.UI;
-using System.Data;
-using Mono.Data.Sqlite;
 using DbUtilities;
 using System.Collections.Generic;
 using UnityUtilities;
@@ -77,6 +73,7 @@ public class UIController : MonoBehaviour {
 
     public void EmptyDisplay(Transform display) {
         foreach (Transform item in display) {
+            print("Should destroy " + item);
             Destroy(item.gameObject);
         }
     }

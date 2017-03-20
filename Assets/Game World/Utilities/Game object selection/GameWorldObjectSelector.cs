@@ -12,6 +12,7 @@ public class GameWorldObjectSelector : MonoBehaviour {
     private GameObject selectionCircle;
     Color selectedColour; 
     private bool clicked;
+    public float Scale, xOffset, yOffset;
 
     void Start () {
         selectedColour = new Color(0.27f, 0.53f, 0.94f);
@@ -29,6 +30,8 @@ public class GameWorldObjectSelector : MonoBehaviour {
         if (!clicked) {
             if (selectionCircle == null) {
                 selectionCircle = Instantiate(selectionCirclePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+                selectionCircle.GetComponent<Transform>().localScale = new Vector2(Scale,Scale);
+                selectionCircle.GetComponent<Transform>().localPosition = new Vector2(xOffset, yOffset);
                 selectionCircle.transform.SetParent(transform, false);
             }
         }

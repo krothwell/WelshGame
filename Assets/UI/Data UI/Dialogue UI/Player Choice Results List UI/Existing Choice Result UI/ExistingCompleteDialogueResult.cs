@@ -10,7 +10,7 @@ namespace DataUI {
                 get { return myChoiceID; }
                 set { myChoiceID = value; }
             }
-            public void DeleteSelf() {
+            public override void DeleteSelf() {
                 dialogueUI.DeleteCompleteDialogueResult(MyChoiceID);
                 Destroy(gameObject);
                 Destroy(this);

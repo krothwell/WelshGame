@@ -17,7 +17,7 @@ namespace DataUI.ListItems {
         }
 
         void Start() {
-            dialogueUI = FindObjectOfType<DialogueUI>();
+            dialogueUI = FindObjectOfType<DialogueUI>();   
         }
 
         public void InitialiseMe(string englishTxt, string welshTxt, string playerChoiceIDStr) {
@@ -29,9 +29,8 @@ namespace DataUI.ListItems {
         }
 
         protected override void InsertResult() {
-            string newResultID = DbCommands.GenerateUniqueID("PlayerChoiceResults", "ResultIDs", "ResultID");
-            DbCommands.InsertTupleToTable("PlayerChoiceResults", newResultID, PlayerChoiceID);
-            DbCommands.InsertTupleToTable("WelshVocabActivatedByDialogueChoices", newResultID, PlayerChoiceID, welshText, englishText);
+            InsertNewPlayerChoiceResultID();
+            DbCommands.InsertTupleToTable("WelshVocabActivatedByDialogueChoices", playerChoiceResultID, PlayerChoiceID, welshText, englishText);
             dialogueUI.DisplayResultsRelatedToChoices();
             dialogueUI.DeactivateNewChoiceResult();
         }

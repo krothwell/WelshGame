@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 
 namespace UnityUtilities {
     /// <summary>
@@ -8,12 +8,41 @@ namespace UnityUtilities {
     public class MouseSelection : MonoBehaviour {
         private static bool active;
         private static float delayTime;
+        private bool countingDownFromMouseClicked, mouseClicked;
+        float timeDelayToDetectDblClick;
 
+        void Start () {
+            countingDownFromMouseClicked = false;
+            ResetTimeDelayToDetectDblClick();
+        }
 
         void Update() {
             SetActiveIfInactiveAtEndOfDelay();
+            CountDownFromMouseClick();
         }
-        
+
+        private void CountDownFromMouseClick() {
+            if (countingDownFromMouseClicked) {
+                if (timeDelayToDetectDblClick >= 0f) { timeDelayToDetectDblClick -= Time.deltaTime; }
+                else {
+                    countingDownFromMouseClicked = false;
+                    ResetTimeDelayToDetectDblClick();
+                    }
+            }
+        }
+
+        public bool GetIsDoubleClick() {
+            if (countingDownFromMouseClicked) {
+                return true;
+            }
+            else {
+                countingDownFromMouseClicked = true;
+                return false;
+            }
+            
+        }
+
+
         private void SetActiveIfInactiveAtEndOfDelay() {
             if (!active) {
                 if (delayTime >= 0f) { delayTime -= Time.deltaTime; }
@@ -58,6 +87,17 @@ namespace UnityUtilities {
             GameObject selected;
             ClickSelect(out selected);
             return TypeComparisons.IsGameObjectTag(selected, gameObjectTag);
+        }
+
+        public static Vector2 GetMouseCoords2D() {
+            Vector2 rayPos = new Vector2(
+                        (float)Math.Round(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, 1),
+                        (float)Math.Round(Camera.main.ScreenToWorldPoint(Input.mousePosition).y, 1));
+            return rayPos;
+        }
+
+        public void ResetTimeDelayToDetectDblClick() {
+            timeDelayToDetectDblClick = 0.2f;
         }
     }
 }

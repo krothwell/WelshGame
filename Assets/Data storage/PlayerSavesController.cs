@@ -29,8 +29,8 @@ public class PlayerSavesController : MonoBehaviour {
     /// after the database path has been set.
     /// </summary>
     public void ManuallyInitialise() {
-        if (FindObjectOfType<PlayerController>() != null) {
-            player = FindObjectOfType<PlayerController>().gameObject;
+        if (FindObjectOfType<PlayerCharacter>() != null) {
+            player = FindObjectOfType<PlayerCharacter>().gameObject;
             LoadSave();
         }
     }
@@ -165,7 +165,7 @@ public class PlayerSavesController : MonoBehaviour {
     public void SaveSelected() {
         SetSaveID(selectedSave.ID.ToString());
         string[,] fieldVals = new string[,] {
-                                                { "PlayerNames", player.GetComponent<PlayerController>().GetMyName() },
+                                                { "PlayerNames", player.GetComponent<PlayerCharacter>().GetMyName() },
                                                 { "Dates", DateTime.Now.ToString() },
                                                 { "LocationName", sceneLoader.GetCurrentSceneName() },
                                                 { "LocationX", player.GetComponent<Transform>().position.x.ToString() },
@@ -206,7 +206,7 @@ public class PlayerSavesController : MonoBehaviour {
     /*loads all the details of the saved game except for the scene, since loading a scene destroys saveGameManager obj*/
     public void LoadSave() {
         int id = PlayerPrefsManager.GetSaveGame();
-        print(DbCommands.GetConn());
+        //print(DbCommands.GetConn());
         string[] playerSave = DbCommands.GetTupleFromTable("PlayerGames", " SaveIDs = " + id);
         print("Loading save reference: " 
             + playerSave[1] + " PlayerName: " 
@@ -214,8 +214,8 @@ public class PlayerSavesController : MonoBehaviour {
             + playerSave[3]);
         SetPlayerName(playerSave[2]);
         SetPlayerPortraitPath(playerSave[3]);
-        player.GetComponent<PlayerController>().SetMyName(playerName);
-        player.GetComponent<PlayerController>().SetMyPortrait(playerPortraitPath);
+        player.GetComponent<PlayerCharacter>().SetMyName(playerName);
+        player.GetComponent<PlayerCharacter>().SetMyPortrait(playerPortraitPath);
         float playerXpos = float.Parse(playerSave[6]);
         float playerYpos = float.Parse(playerSave[7]);
         player.GetComponent<Transform>().position = new Vector2(playerXpos, playerYpos);

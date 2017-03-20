@@ -58,7 +58,8 @@ namespace GameUI {
                 if (dialogueUI.GetChoiceResultsCount(myID) > 0) {
                     dialogueUI.ActivateQuests(myID);
                     dialogueUI.ActivateQuestTasks(myID);
-                    dialogueUI.ActivateNewVocab(myID);
+                    dialogueUI.ActivateNewGrammar(myID);
+                    dialogueUI.ActivateNewWelsh(myID);
                     dialogueUI.MarkDialogueComplete(myID);
 
                     notificationQueue = FindObjectOfType<NotificationQueue>();

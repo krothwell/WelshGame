@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using DbUtilities;
 
 namespace DataUI.ListItems {
     public abstract class NewChoiceResultBtn : UITextPanelListItem {
@@ -13,8 +11,15 @@ namespace DataUI.ListItems {
             set { playerChoiceID = value; }
         }
 
+        protected string playerChoiceResultID;
+
         protected void OnMouseUp() {
             InsertResult();
+        }
+
+        protected void InsertNewPlayerChoiceResultID() {
+            playerChoiceResultID = DbCommands.GenerateUniqueID("PlayerChoiceResults", "ResultIDs", "ResultID");
+            DbCommands.InsertTupleToTable("PlayerChoiceResults", playerChoiceResultID, PlayerChoiceID);
         }
 
         protected abstract void InsertResult();

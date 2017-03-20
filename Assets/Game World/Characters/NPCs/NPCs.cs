@@ -18,7 +18,7 @@ public class NPCs : MonoBehaviour {
     private void SetCharacterDictionary() {
         foreach (Transform npc in transform) {
             Character npcChar = npc.GetComponent<Character>();
-            string name = npcChar.nameID;
+            string name = npcChar.CharacterName;
             npcCharDict.Add(name, npcChar);
         }
     }

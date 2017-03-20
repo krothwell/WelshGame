@@ -54,7 +54,7 @@ namespace GameUI {
         private ScrollRect dialogueScroller;
         private GameObject currentDialogueHolder, currentDialogueNode, currentCharSpeaking;
         private string currentCharID, currentDialogueID;
-        private PlayerController player;
+        private PlayerCharacter player;
         public Character currentChar;
         private Sprite currentPortrait;
         private NPCs npcs;
@@ -67,7 +67,7 @@ namespace GameUI {
             questsUI = FindObjectOfType<QuestsUI>();
             newWelshLearnedUI = FindObjectOfType<NewWelshLearnedUI>();
             npcs = FindObjectOfType<NPCs>();
-            player = FindObjectOfType<PlayerController>();
+            player = FindObjectOfType<PlayerCharacter>();
             panel = transform.FindChild("Panel").gameObject;
             answerField = panel.transform.FindChild("InputField").gameObject;
             answerInput = answerField.GetComponent<InputField>();
@@ -76,7 +76,7 @@ namespace GameUI {
             percentageTxt = panel.transform.FindChild("PercentageTxt").GetComponent<Text>();
             combatUI = FindObjectOfType<CombatUI>();
             btnTxt = submitBtn.transform.FindChild("Text").gameObject.GetComponent<Text>();
-            player = FindObjectOfType<PlayerController>();
+            player = FindObjectOfType<PlayerCharacter>();
             objPortrait = panel.transform.FindChild("CharacterPortrait").GetComponent<Image>();
         }
 
@@ -88,7 +88,7 @@ namespace GameUI {
         public void StartNewDialogue(Character character) {
             ResetLowerDialogueContainer();
             currentChar = character;
-            currentCharID = character.nameID;
+            currentCharID = character.CharacterName;
             SetDialogueID();
             DisplayFirstDialogueNode();
         }
@@ -109,9 +109,7 @@ namespace GameUI {
         }
 
         private void DisplayFirstDialogueNode() {
-            bool isDialogueComplete = Convert.ToBoolean(int.Parse(DbCommands.GetFieldValueFromTable("ActivatedDialogues", "Completed", "DialogueIDs = " + currentDialogueID + " AND SaveIDs = 0")));
-            print("Dialogue complete = " + isDialogueComplete);
-            if (!isDialogueComplete) {
+            if (!IsDialogueComplete()) {
                 SetInUse();
                 currentDialogueHolder = Instantiate(dialogueHolderPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
                 currentDialogueHolder.transform.SetParent(dialogueScroller.gameObject.transform, false);
@@ -124,10 +122,20 @@ namespace GameUI {
             }
         }
 
+        private bool IsDialogueComplete() {
+            string dialogueComplete = DbCommands.GetFieldValueFromTable("ActivatedDialogues", "Completed", "DialogueIDs = " + currentDialogueID + " AND SaveIDs = 0");
+            //no character dialogue so return true
+            if(dialogueComplete == "") {
+                return true;
+            } else {
+                return Convert.ToBoolean(int.Parse(dialogueComplete));
+            }
+        }
+
         private string GetSpeakersName(string nodeID) {
             string overrideName = DbCommands.GetFieldValueFromTable("DialogueNodes", "CharacterSpeaking", "NodeIDs = " + nodeID);
             if (overrideName == "") {
-                return currentChar.nameID;
+                return currentChar.CharacterName;
             }
             else if (overrideName == "!Player") {
                 return player.GetMyName();
@@ -239,7 +247,8 @@ namespace GameUI {
             //Debugging.PrintDbQryResults(qry);
             Debugging.PrintDbTable("ActivatedDialogues");
             currentDialogueID = DbCommands.GetFieldValueFromQry(qry, "DialogueIDs", currentCharID);
-            print("working 1");
+            currentDialogueID = (currentDialogueID == "") ? "-1" : currentDialogueID;
+            print(currentDialogueID);
             
         }
 
@@ -285,7 +294,7 @@ namespace GameUI {
             animator = GetComponent<Animator>();
             animator.SetBool("InUse", false);
             player.DestroySelectionCircleOfInteractiveObject();
-            player.playerStatus = PlayerController.PlayerStatus.passive;
+            player.playerStatus = PlayerCharacter.PlayerStatus.passive;
         }
         
         public void SetBtnText(string newText) {
@@ -295,7 +304,7 @@ namespace GameUI {
         public void ManageLowerUISubmission() {
             if (submissionScored) {
                 if (combatUI.currentAbility == (CombatUI.CombatAbilities.strike)) { 
-                    player.StrikeSelectedEnemy();
+                    //player.StrikeSelectedEnemy();
                     combatUI.ToggleCombatMode();
                     submissionScored = false;
                     SetBtnText("Submit answer");
@@ -345,6 +354,25 @@ namespace GameUI {
             }
         }
 
+        public void ActivateNewWelsh(string choiceID) {
+            ActivateNewGrammar(choiceID);
+            ActivateNewVocab(choiceID);
+            newWelshLearnedUI.DisplayNewWelsh(choiceID);
+        }
+
+        public void ActivateNewGrammar(string choiceID) {
+            int countGrammarActivateResults = DbCommands.GetCountFromQry(DbQueries.GetGrammarActivateCountFromChoiceIDqry(choiceID));
+            if (countGrammarActivateResults > 0) {
+                print("Grammar ACTIVATING!!!!");
+                List<string[]> grammarActivatedList;
+                DbCommands.GetDataStringsFromQry(DbQueries.GetCurrentActivateGrammarPlayerChoiceResultQry(choiceID), out grammarActivatedList);
+                foreach (string[] activatedGrammar in grammarActivatedList) {
+                    newWelshLearnedUI.InsertDiscoveredGrammar(activatedGrammar[1]);
+                }
+            }
+
+        }
+
         public void ActivateNewVocab(string choiceID) {
             int countVocabActivateResults = DbCommands.GetCountFromQry(DbQueries.GetVocabActivateCountFromChoiceIDqry(choiceID));
             if (countVocabActivateResults > 0) {
@@ -352,8 +380,7 @@ namespace GameUI {
                 List<string[]> vocabActivatedList;
                 DbCommands.GetDataStringsFromQry(DbQueries.GetCurrentActivateVocabPlayerChoiceResultQry(choiceID), out vocabActivatedList);
                 foreach (string[] activatedVocab in vocabActivatedList) {
-                    newWelshLearnedUI.InsertNewVocab(activatedVocab[2], activatedVocab[3]);
-                    newWelshLearnedUI.DisplayNewWelsh(choiceID);
+                    newWelshLearnedUI.InsertDiscoveredVocab(activatedVocab[2], activatedVocab[3]);
                 }
             }
         }

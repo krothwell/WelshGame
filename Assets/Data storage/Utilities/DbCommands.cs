@@ -143,24 +143,33 @@ namespace DbUtilities {
             _dbcm.ExecuteNonQuery();
             string sqlRead = "SELECT * FROM " + tableName + ";";
             _dbcm.CommandText = sqlRead;
+            Debug.Log(sqlRead);
             IDataReader _dbr = _dbcm.ExecuteReader();
             string sqlDelete = "DELETE FROM " + tableName + " ";
             string sqlValues = "WHERE ";
             for (int i = 0; i < fields.GetLength(0); i++) {
                 string fieldValue = fields[i, 1];
                 string fieldName = fields[i, 0];
-                string value;
-                if (fieldValue.ToLower() != "null") {
-                    value = "@value" + i;
-                    _dbcm.Parameters.Add(new SqliteParameter(value, fieldValue));
-                    value = " = " + value;
+                string valueN = "";
+                switch (fieldValue.ToLower()) { 
+                    case "null":
+
+                        valueN = " IS " + fieldValue;
+                        break;
+                    case "''":
+                        valueN = " = ''";
+                        break;
+                    default:
+                        valueN = "@value" + i;
+                        _dbcm.Parameters.Add(new SqliteParameter(valueN, fieldValue));
+                        valueN = " = " + valueN;
+                        break;
                 }
-                else { value = " IS " + fieldValue; }
                 if (i == 0) {
-                    sqlValues += fieldName + value;
+                    sqlValues += fieldName + valueN;
                 }
                 else {
-                    sqlValues += " AND " + fieldName + value;
+                    sqlValues += " AND " + fieldName + valueN;
                 }
             }
             sqlValues += ";";
@@ -168,6 +177,7 @@ namespace DbUtilities {
             //_dbcm.Cancel();
             _dbr.Dispose();
             _dbr = null;
+            Debug.Log(sqlDelete);
             _dbcm.CommandText = sqlDelete;
             _dbcm.ExecuteNonQuery();
             _dbcm.Dispose();
@@ -356,7 +366,7 @@ namespace DbUtilities {
                 _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(qryParameter), qryParameter));
             }
             _dbcm.CommandText = sql;
-            Debug.Log(sql);
+            Debug.Log("COUNT QRY: " + sql);
             int count = int.Parse(_dbcm.ExecuteScalar().ToString());
             _dbcm.Dispose();
             _dbcm = null;

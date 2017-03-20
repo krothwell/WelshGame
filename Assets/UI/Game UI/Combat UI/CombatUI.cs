@@ -16,7 +16,7 @@ namespace GameUI {
         DefaultGameHUD explorerUI;
         public Texture2D[] cursors;
         public bool CombatUIactive;
-        PlayerController mainChar;
+        PlayerCharacter mainChar;
         //DialogueUI dialogueUI;
         // Use this for initialization
         void Start() {
@@ -24,12 +24,12 @@ namespace GameUI {
             abilitiesPanel = transform.FindChild("AbilitiesPanel").gameObject;
             explorerUI = FindObjectOfType<DefaultGameHUD>();
             currentAbility = CombatAbilities.passive;
-            mainChar = FindObjectOfType<PlayerController>();
+            mainChar = FindObjectOfType<PlayerCharacter>();
         }
 
         // Update is called once per frame
         void Update() {
-            if (mainChar.playerStatus == PlayerController.PlayerStatus.inCombat) {
+            if (mainChar.GetCombatController().IsInCombat()) {
                 if (Input.GetKeyUp(KeyCode.Space)) {
                     ToggleCombatMode();
                 }

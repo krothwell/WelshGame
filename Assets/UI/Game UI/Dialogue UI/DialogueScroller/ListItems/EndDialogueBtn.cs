@@ -4,11 +4,11 @@ using System.Collections;
 namespace GameUI {
     namespace ListItems {
         public class EndDialogueBtn : MonoBehaviour {
-            PlayerController mainCharacter;
+            PlayerCharacter mainCharacter;
             DialogueUI dialogueUI;
             void Start() {
                 dialogueUI = FindObjectOfType<DialogueUI>();
-                mainCharacter = FindObjectOfType<PlayerController>();
+                mainCharacter = FindObjectOfType<PlayerCharacter>();
             }
 
             public void CloseDialogue() {

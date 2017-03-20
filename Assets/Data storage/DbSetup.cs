@@ -32,6 +32,7 @@ public class DbSetup {
                         QuestsActivatedByDialogueChoices,
                         TasksActivatedByDialogueChoices,
                         WelshVocabActivatedByDialogueChoices,
+                        GrammarActivatedByDialogueChoices,
                         Quests,
                         QuestsActivated,
                         QuestTasks,
@@ -279,16 +280,15 @@ public class DbSetup {
                                                                                                 + "REFERENCES VocabTranslations(EnglishText, WelshText) ON DELETE CASCADE ON UPDATE CASCADE, ";
         tblSqlArray[(int)tbls.WelshVocabActivatedByDialogueChoices, (int)tblSqlStrs.pk]      = "ResultIDs, ChoiceIDs, EnglishText, WelshText";
 
-        tblSqlArray[(int)tbls.WelshVocabActivatedByDialogueChoices, (int)tblSqlStrs.header] = "WelshVocabActivatedByDialogueChoices";
-        tblSqlArray[(int)tbls.WelshVocabActivatedByDialogueChoices, (int)tblSqlStrs.body] = "ResultIDs INT NOT NULL, "
-                                                                                             + "ChoiceIDs INT NOT NULL, "
-                                                                                             + "EnglishText VARCHAR(140) NOT NULL, "
-                                                                                             + "WelshText VARCHAR(140) NOT NULL, "
-                                                                                             + "FOREIGN KEY (ResultIDs, ChoiceIDs) "
+        tblSqlArray[(int)tbls.GrammarActivatedByDialogueChoices, (int)tblSqlStrs.header]    = "GrammarActivatedByDialogueChoices";
+        tblSqlArray[(int)tbls.GrammarActivatedByDialogueChoices, (int)tblSqlStrs.body]      = "ResultIDs INT NOT NULL, "
+                                                                                            + "ChoiceIDs INT NOT NULL, "
+                                                                                            + "RuleIDs INT NOT NULL, "
+                                                                                            + "FOREIGN KEY (ResultIDs, ChoiceIDs) "
                                                                                                 + "REFERENCES PlayerChoiceResults(ResultIDs, ChoiceIDs) ON DELETE CASCADE ON UPDATE CASCADE, "//fk referencing composite pk must use all values of pk
-                                                                                             + "FOREIGN KEY (EnglishText, WelshText) "
-                                                                                                + "REFERENCES VocabTranslations(EnglishText, WelshText) ON DELETE CASCADE ON UPDATE CASCADE, ";
-        tblSqlArray[(int)tbls.WelshVocabActivatedByDialogueChoices, (int)tblSqlStrs.pk] = "ResultIDs, ChoiceIDs, EnglishText, WelshText";
+                                                                                            + "FOREIGN KEY (RuleIDs) "
+                                                                                                + "REFERENCES VocabGrammar(RuleIDs) ON DELETE CASCADE, ";
+        tblSqlArray[(int)tbls.GrammarActivatedByDialogueChoices, (int)tblSqlStrs.pk]        = "ResultIDs, ChoiceIDs, RuleIDs";
 
         tblSqlArray[(int)tbls.Quests, (int)tblSqlStrs.header]                   = "Quests";
         tblSqlArray[(int)tbls.Quests, (int)tblSqlStrs.body]                     = "QuestNames VARCHAR(100) NOT NULL, "
@@ -431,7 +431,7 @@ public class DbSetup {
 							+ tblSqlArray[sqlArrayRow, (int)tblSqlStrs.body] 
 							+ "PRIMARY KEY (" + tblSqlArray[sqlArrayRow, (int)tblSqlStrs.pk] + ")"	
 							+ ");";
-        Debug.Log(_dbcm.CommandText);
+        //Debug.Log(_dbcm.CommandText);
 		_dbcm.ExecuteNonQuery();
 		_dbcm.Dispose();
 		_dbcm = null;

@@ -18,14 +18,14 @@ public class GameInitialiser : MonoBehaviour {
     void Awake() {
         DbCommands.SetConnectionString("URI=file:" + Application.dataPath + DB_PATH);
         dbSetup = new DbSetup();
-        Debugging.PrintDbTable("QuestTasksActivated");
+        //Debugging.PrintDbTable("VocabRuleList");
         dbSetup.CreateTables();
         //dbSetup.CopyTable("Dialogues", "Copied");
-
+        //string[,] delFields = { { "EnglishText", "''" }, { "WelshText", "''" } };
+        //DbCommands.DeleteTupleInTable("VocabTranslations", delFields);
         //dbSetup.ReplaceTable("Dialogues");
-        Debugging.PrintDbTable("ActivatedDialogues");
         //DbCommands.UpdateTableField("QuestsActivated", "Completed", "0");
-        Debugging.PrintDbTable("QuestsActivated");
+        //Debugging.PrintDbTable("VocabTranslations");
         DbCommands.InsertTupleToTable("PlayerGames", "0", "Current Game", "Current player", "No path", DateTime.Now.ToString(), "Start", "0", "0");
         DbCommands.InsertTupleToTable("PlayerGames", "-1", "New game", "New player", "No path", DateTime.Now.ToString(), "Start", "0", "0");
         playerSavesController = FindObjectOfType<PlayerSavesController>();
@@ -34,6 +34,7 @@ public class GameInitialiser : MonoBehaviour {
         // ensures it doesn't try to load it before the connection string is set
         // up.
         playerSavesController.ManuallyInitialise();
+
     }
 	
 }

@@ -5,19 +5,19 @@ using GameUI;
 
 namespace Quests {
     public class QuestTheBeginning : MonoBehaviour {
-        PlayerController player;
+        PlayerCharacter player;
         DialogueUI dialogueUI;
         public GameObject faerie;
         // Use this for initialization
         void Start() {
             //quests.ActivateDialogue("1");
             
-            player = FindObjectOfType<PlayerController>();
-            player.SetStatusToInteractingWithObject();
+            player = FindObjectOfType<PlayerCharacter>();
+            player.playerStatus = PlayerCharacter.PlayerStatus.speakingToCharacter;
             dialogueUI = FindObjectOfType<DialogueUI>();
             //dialogueUI.SetInUse();
             
-            dialogueUI.StartNewDialogue(faerie.GetComponent<EnemyController>());
+            dialogueUI.StartNewDialogue(faerie.GetComponent<NPCHumanCharacter>());
             Destroy(gameObject);
         }
 

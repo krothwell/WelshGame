@@ -1,9 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
 using UnityEngine.UI;
-using Mono.Data.Sqlite;
-using System.Data;
 using DataUI.ListItems;
 using DbUtilities;
 using DataUI.Utilities;
@@ -85,7 +81,7 @@ namespace DataUI {
             //TRANSLATIONS UI
             translationListsUI = GetPanel().transform.FindChild("TranslationListsUI").gameObject;
             translationListsUIpanel = translationListsUI.transform.FindChild("Panel").gameObject;
-            vocabTranslationList = translationListsUIpanel.GetComponentInChildren<GridLayoutGroup>().gameObject;
+            vocabTranslationList = translationListsUIpanel.GetComponentInChildren<VerticalLayoutGroup>().gameObject;
             //adding
             submitNewTranslation = translationListsUIpanel.transform.FindChild("SubmitNewTranslation").gameObject;
             activateNewTranslationBtn = submitNewTranslation.transform.Find("ActivateNewTranslationBtn").gameObject;
@@ -96,6 +92,8 @@ namespace DataUI {
             searchTranslations = translationListsUIpanel.transform.FindChild("SearchTranslations").GetComponent<InputField>();
 
             auxiliaryDataMenusGroup = "AuxiliaryDataMenus";
+            CreateNewMenuToggleGroup(auxiliaryDataMenusGroup);
+
             CreateNewMenuToggleGroup(auxiliaryDataMenusGroup);
 
             FillDisplayFromDb(DbCommands.GetTranslationsDisplayQry(), vocabTranslationList.transform, BuildVocabTranslation);
@@ -204,8 +202,11 @@ namespace DataUI {
             DbCommands.InsertTupleToTable("WelshVocab", inputTranslationCyTxt.text);
             DbCommands.InsertTupleToTable("VocabTranslations", inputTranslationEnTxt.text, inputTranslationCyTxt.text);
             FillDisplayFromDb(DbCommands.GetTranslationsDisplayQry(), vocabTranslationList.transform, BuildVocabTranslation);
+            searchTranslations.text = inputTranslationEnTxt.text;
+            SearchTranslationNow();
             inputTranslationEnTxt.text = "";
             inputTranslationCyTxt.text = "";
+            
         }
 
         public void UpdateInsertRule() {

@@ -15,6 +15,8 @@ namespace DataUI {
     /// dialogue. 
     /// </summary>
     public class DialogueUI : UIController {
+        
+
         private enum ChoiceResultOptions {
             DialogueNodes
         };
@@ -59,6 +61,9 @@ namespace DataUI {
                    newChoiceResultUI, displayNewChoiceResultBtn, newChoiceResultPanel, selectedResultTypeList,
                    selectedChoiceResultOption;
         ChoiceResultOptions choiceResultOptions;
+        ListSearcher newChoiceResultListSearcher;
+        ListDisplayInfo newActivateWelshVocabListInfo,
+                        newActivateGrammarListInfo;
         ScrollRect choiceResultOptionsScrollView;
         public GameObject existingResultTitlePrefab,
                           existingNodeResultPrefab,
@@ -66,11 +71,12 @@ namespace DataUI {
                           existingCompleteDialogueResultPrefab,
                           existingActivateTaskResultPrefab,
                           existingActivateVocabResultPrefab,
+                          existingActivateGrammarResultPrefab,
                           newNodeResultBtnPrefab,
                           newActivateQuestResultBtnPrefab,
                           newActivateTaskResultBtnPrefab,
-                          newActivateWelshVocabResultsBtnPrefab;
-        
+                          newActivateWelshVocabResultsBtnPrefab,
+                          newActivateGrammarResultBtnPrefab;
 
         void Start() {
             
@@ -82,7 +88,7 @@ namespace DataUI {
             dialoguesPanel = dialoguesListUI.transform.FindChild("Panel").gameObject;
             dialogueList = dialoguesPanel.transform.FindChild("DialoguesList").gameObject; 
              //add
-             submitNewDialogue = dialoguesPanel.transform.FindChild("SubmitNewDialog").gameObject;
+            submitNewDialogue = dialoguesPanel.transform.FindChild("SubmitNewDialog").gameObject;
             newDialoguePanel = submitNewDialogue.transform.FindChild("NewDialogPanel").gameObject;
             activateNewDialogueBtn = submitNewDialogue.transform.FindChild("ActivateNewDialogBtn").gameObject;
             inputShortDescriptionText = newDialoguePanel.transform.FindChild("InputShortDescriptionText").GetComponent<InputField>();
@@ -127,13 +133,22 @@ namespace DataUI {
             //PLAYER CHOICE RESULTS COMPONENTS
             playerChoiceResultsListUI = GetPanel().transform.FindChild("PlayerChoiceResultsListUI").gameObject;
             playerChoiceResultsPanel = playerChoiceResultsListUI.transform.FindChild("Panel").gameObject;
-            playerChoicesResultsList = playerChoiceResultsPanel.transform.FindChild("PlayerChoiceResultsList").gameObject;
+            playerChoicesResultsList = playerChoiceResultsPanel.GetComponentInChildren<VerticalLayoutGroup>().gameObject;
             //add
             newChoiceResultUI = playerChoiceResultsPanel.transform.FindChild("NewChoiceResultUI").gameObject;
             displayNewChoiceResultBtn = newChoiceResultUI.transform.FindChild("DisplayNewChoiceResultBtn").gameObject;
             newChoiceResultPanel = newChoiceResultUI.transform.FindChild("Panel").gameObject;
             choiceResultOptionsScrollView = newChoiceResultPanel.GetComponentInChildren<ScrollRect>();
             selectedResultTypeList = choiceResultOptionsScrollView.transform.FindChild("SelectedResultTypeList").gameObject;
+            newChoiceResultListSearcher = newChoiceResultPanel.GetComponentInChildren<ListSearcher>();
+
+            newActivateWelshVocabListInfo = new ListDisplayInfo(
+                DbQueries.GetNewActivateVocabPlayerChoiceResultQry,
+                BuildNewChoiceResultActivateVocabBtn);
+            newActivateGrammarListInfo = new ListDisplayInfo(
+                DbQueries.GetNewActivateGrammarPlayerChoiceResultQry,
+                BuildNewChoiceResultActivateGrammarBtn);
+
 
             //display dialogue list
             FillDisplayFromDb(DbQueries.GetDialogueDisplayQry(), dialogueList.transform, BuildDialogue);
@@ -502,6 +517,15 @@ namespace DataUI {
             return activateVocabChoiceResult.transform;
         }
 
+        private Transform BuildNewChoiceResultActivateGrammarBtn(string[] strArray) {
+            string grammarID = strArray[0];
+            string grammarSummary = strArray[1];
+            string grammarDescription = strArray[2];
+            NewActivateGrammarResultBtn activateGrammarResult = (Instantiate(newActivateGrammarResultBtnPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject).GetComponent<NewActivateGrammarResultBtn>();
+            activateGrammarResult.InitialiseMe(grammarID, grammarSummary, grammarDescription, (GetSelectedItemFromGroup(selectedChoice) as PlayerChoice).MyID);
+            return activateGrammarResult.transform;
+        }
+
         //for adding an existing choice result, not to be confused with a new result
         private Transform BuildExistingResultNode(string[] strArray) {
             string nodeIDStr = strArray[0];
@@ -555,6 +579,16 @@ namespace DataUI {
             return choiceResult.transform;
         }
 
+        private Transform BuildExistingResultActivateGrammar(string[] strArray) {
+            string resultID = strArray[0];
+            string grammarID = strArray[1];
+            string grammarSummary = strArray[2];
+            string grammarDesc = strArray[3];
+            ExistingActivateGrammarResult choiceResult = (Instantiate(existingActivateGrammarResultPrefab, new Vector3(0f, 0f), Quaternion.identity)).GetComponent<ExistingActivateGrammarResult>();
+            choiceResult.InitialiseMe(resultID, grammarID, grammarSummary, grammarDesc);
+            return choiceResult.transform;
+        }
+
         public void SetSelectedCharLink(GameObject charlink) {
             selectedCharLink = charlink;
         }
@@ -579,18 +613,28 @@ namespace DataUI {
 
         public void DisplayNewChoiceResultsNodes() {
             FillDisplayFromDb(DbQueries.GetNewNodeChoiceResultQry((GetSelectedItemFromGroup(selectedDialogue) as Dialogue).MyID), selectedResultTypeList.transform, BuildNewChoiceResultNodeBtn);
+            newChoiceResultListSearcher.DeactivateSelf();
         }
 
         public void DisplayNewChoiceResultsQuests() {
             FillDisplayFromDb(DbQueries.GetNewQuestChoiceResultQry(), selectedResultTypeList.transform, BuildNewChoiceResultActivateQuestBtn);
+            newChoiceResultListSearcher.DeactivateSelf();
         }
 
         public void DisplayNewChoiceResultsActivateTask() {
             FillDisplayFromDb(DbQueries.GetNewActivateTaskPlayerChoiceResultQry(), selectedResultTypeList.transform, BuildNewChoiceResultActivateTaskBtn);
+            newChoiceResultListSearcher.DeactivateSelf();
         }
 
         public void DisplayNewChoiceResultsActivateVocab() {
             FillDisplayFromDb(DbQueries.GetNewActivateVocabPlayerChoiceResultQry(), selectedResultTypeList.transform, BuildNewChoiceResultActivateVocabBtn);
+            newChoiceResultListSearcher.SetSearchInfo(newActivateWelshVocabListInfo);
+        }
+
+        public void DisplayNewChoiceResultsActivateGrammar() {
+            FillDisplayFromDb(newActivateGrammarListInfo.GetMyDefaultQuery(), selectedResultTypeList.transform, newActivateGrammarListInfo.GetMyBuildMethod());
+            newChoiceResultListSearcher.SetSearchInfo(newActivateGrammarListInfo);
+
         }
 
         public void DisplayResultsRelatedToChoices() {
@@ -631,6 +675,16 @@ namespace DataUI {
                             BuildExistingResultActivateTask);
 
                 }
+
+                int grammarActivateCount = DbCommands.GetCountFromQry(DbQueries.GetGrammarActivateCountFromChoiceIDqry(selectedChoiceID));
+                if (grammarActivateCount > 0) {
+                    GameObject existingResultsTitle = Instantiate(existingResultTitlePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
+                    AppendDisplayWithTitle(playerChoicesResultsList.transform, existingResultsTitle.transform, "Activates new grammar... ");
+                    AppendDisplayFromDb(DbQueries.GetCurrentActivateGrammarPlayerChoiceResultQry(selectedChoiceID),
+                            playerChoicesResultsList.transform,
+                            BuildExistingResultActivateGrammar);
+                }
+
                 int vocabActivateCount = DbCommands.GetCountFromQry(DbQueries.GetVocabActivateCountFromChoiceIDqry(selectedChoiceID));
                 if (vocabActivateCount > 0) {
                     GameObject existingResultsTitle = Instantiate(existingResultTitlePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;

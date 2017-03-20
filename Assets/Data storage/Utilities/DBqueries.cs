@@ -1,5 +1,5 @@
 ﻿
-
+using UnityEngine;
 namespace DbUtilities {
     /// <summary>
     /// Queries used to pull data from the SQLite database. As a general rule, any variables that are used as values in
@@ -20,16 +20,22 @@ namespace DbUtilities {
             string welshStrQry = "''";
             if (englishStr != null) {
                 englishStrQry = DbCommands.GetParameterNameFromValue(englishStr);
+                englishStrQry = (englishStrQry == null) ? "''" : englishStrQry;
             }
             if (welshStr != null) {
                 welshStrQry = DbCommands.GetParameterNameFromValue(welshStr);
+                welshStrQry = (welshStrQry == null) ? "''" : welshStrQry;
             }
-            return "SELECT VocabGrammar.RuleIDs, VocabGrammar.ShortDescriptions, " +
+
+
+            string sql = "SELECT VocabGrammar.RuleIDs, VocabGrammar.ShortDescriptions, " +
                         "CASE WHEN VocabGrammar.RuleIDs = VocabRuleList.RuleIDs THEN 1 ELSE 0 END TranslationRules " +
                     "FROM VocabGrammar " +
                     "LEFT JOIN VocabRuleList ON VocabGrammar.RuleIDs = VocabRuleList.RuleIDs " +
                     "AND VocabRuleList.EnglishText = " + englishStrQry + " AND VocabRuleList.WelshText = " + welshStrQry + " " +
                         "ORDER BY VocabGrammar.RuleIDs ASC;";
+            Debug.Log(sql);
+            return sql;
         }
 
         public static string GetTranslationSearchQry(string searchStr) {
@@ -47,7 +53,7 @@ namespace DbUtilities {
         }
 
         public static string GetTasksDisplayQry(string questName) {
-            return "SELECT * FROM QuestTasks WHERE QuestNames = " + DbCommands.GetParameterNameFromValue(questName) +";";
+            return "SELECT * FROM QuestTasks WHERE QuestNames = " + DbCommands.GetParameterNameFromValue(questName) + ";";
         }
 
         public static string GetEquipItemPartsRelatedToTask(string taskID) {
@@ -62,7 +68,7 @@ namespace DbUtilities {
         }
 
         public static string GetDialogueDisplayQry() {
-            return "SELECT Dialogues.DialogueIDs, Dialogues.DialogueDescriptions, ActivatedDialogues.SaveIDs " 
+            return "SELECT Dialogues.DialogueIDs, Dialogues.DialogueDescriptions, ActivatedDialogues.SaveIDs "
                 + "FROM Dialogues LEFT JOIN ActivatedDialogues ON Dialogues.DialogueIDs = ActivatedDialogues.DialogueIDs AND ActivatedDialogues.SaveIDS = -1 "
                 + "ORDER BY Dialogues.DialogueIDs ASC;";
         }
@@ -86,7 +92,7 @@ namespace DbUtilities {
                 + "FROM QuestTasks "
                 + "LEFT JOIN TasksActivatedByDialogueChoices ON QuestTasks.TaskIDs = TasksActivatedByDialogueChoices.TaskIDs "
                 + "WHERE ChoiceIDs = " + choiceID + " "
-                + "ORDER BY QuestTasks.QuestNames;" ;
+                + "ORDER BY QuestTasks.QuestNames;";
         }
 
         public static string GetCurrentActivateVocabPlayerChoiceResultQry(string choiceID) {
@@ -96,14 +102,41 @@ namespace DbUtilities {
                 + "ORDER BY WelshVocabActivatedByDialogueChoices.EnglishText;";
         }
 
+        public static string GetCurrentActivateGrammarPlayerChoiceResultQry(string choiceID) {
+            return "SELECT GrammarActivatedByDialogueChoices.ResultIDs, VocabGrammar.RuleIDs, VocabGrammar.ShortDescriptions, VocabGrammar.LongDescriptions "
+                + "FROM VocabGrammar "
+                + "INNER JOIN GrammarActivatedByDialogueChoices ON VocabGrammar.RuleIDs = GrammarActivatedByDialogueChoices.RuleIDs "
+                + "WHERE GrammarActivatedByDialogueChoices.ChoiceIDs = " + choiceID + " "
+                + "ORDER BY VocabGrammar.RuleIDs;";
+        }
+
         public static string GetNewActivateTaskPlayerChoiceResultQry() {
             return "SELECT QuestTasks.TaskIDs, QuestTasks.TaskDescriptions, QuestTasks.QuestNames "
                 + "FROM QuestTasks "
                 + "WHERE QuestTasks.TaskIDs  NOT IN (SELECT QuestTasksActivated.TaskIDs FROM QuestTasksActivated WHERE SaveIDs = -1);";
         }
 
-        public static string GetNewActivateVocabPlayerChoiceResultQry() {
-            return "SELECT * FROM VocabTranslations;";
+        public static string GetNewActivateVocabPlayerChoiceResultQry(string searchStr = "") {
+            string qryStr = "SELECT EnglishText, WelshText FROM VocabTranslations";
+            if (searchStr != "") {
+                string searchParam = DbCommands.GetParameterNameFromValue(searchStr);
+                string whereStr = " WHERE EnglishText LIKE " + searchParam + " OR WelshText LIKE " + searchParam;
+                qryStr += whereStr;
+            }
+            qryStr += ";";
+            return qryStr;
+        }
+
+        public static string GetNewActivateGrammarPlayerChoiceResultQry(string searchStr = "") {
+            string qryStr = "SELECT VocabGrammar.RuleIDs, VocabGrammar.ShortDescriptions, VocabGrammar.LongDescriptions "
+                 + "FROM VocabGrammar";
+            if (searchStr != "") {
+                string searchParam = DbCommands.GetParameterNameFromValue(searchStr);
+                string whereStr = " WHERE VocabGrammar.ShortDescriptions LIKE " + searchParam + " OR VocabGrammar.LongDescriptions LIKE " + searchParam;
+                qryStr += whereStr;
+            }
+            qryStr += ";";
+            return qryStr;
         }
 
         public static string GetQuestActivateCountFromChoiceIDqry(string choiceID) {
@@ -121,6 +154,12 @@ namespace DbUtilities {
         public static string GetVocabActivateCountFromChoiceIDqry(string choiceID) {
             return "SELECT COUNT(*) FROM WelshVocabActivatedByDialogueChoices "
                 + "INNER JOIN PlayerChoiceResults ON WelshVocabActivatedByDialogueChoices.ResultIDs = PlayerChoiceResults.ResultIDs "
+                + "WHERE PlayerChoiceResults.ChoiceIDs = " + choiceID + ";";
+        }
+
+        public static string GetGrammarActivateCountFromChoiceIDqry(string choiceID) {
+            return "SELECT COUNT(*) FROM GrammarActivatedByDialogueChoices "
+                + "INNER JOIN PlayerChoiceResults ON GrammarActivatedByDialogueChoices.ResultIDs = PlayerChoiceResults.ResultIDs "
                 + "WHERE PlayerChoiceResults.ChoiceIDs = " + choiceID + ";";
         }
 
@@ -224,6 +263,31 @@ namespace DbUtilities {
             return "SELECT QuestTaskStartDialogueResults.ResultIDs, Dialogues.DialogueIDs, Dialogues.DialogueDescriptions "
                 + "FROM QuestTaskStartDialogueResults INNER JOIN Dialogues ON Dialogues.DialogueIDs = QuestTaskStartDialogueResults.DialogueIDs "
                 + "WHERE TaskIDs = " + taskID;
+        }
+
+        public static string GetSearchQry(string tableName, params string[] fieldNames) {
+            string selectStr = "SELECT ";
+            for (int i = 0; i < fieldNames.Length; i++) {
+                string fieldName = fieldNames[i];
+                if (i > 0) {
+                    selectStr += ", " + fieldName;
+                }
+                else {
+                    selectStr += fieldName;
+                }
+            }
+            string fromStr = "FROM " + tableName + " ";
+            return selectStr + fromStr;
+        }
+
+        public static string GetGrammarRelatedToVocab(string EnglishTxt, string WelshTxt) {
+            return "SELECT VocabGrammar.ShortDescriptions, VocabGrammar.LongDescriptions "
+                + "FROM VocabGrammar "
+                + "INNER JOIN VocabRuleList ON VocabGrammar.RuleIDs = VocabRuleList.RuleIDs "
+                + "INNER JOIN DiscoveredVocabGrammar ON VocabGrammar.RuleIDs = VocabRuleList.RuleIDs "
+                + "WHERE VocabRuleList.EnglishText = " + DbCommands.GetParameterNameFromValue(EnglishTxt)
+                    + " AND VocabRuleList.WelshText = " + DbCommands.GetParameterNameFromValue(WelshTxt)
+                    + " AND DiscoveredVocabGrammar.SaveIDs = 0";
         }
     }
 }
