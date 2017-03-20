@@ -6,6 +6,14 @@ using System;
 namespace GameUtilities {
     public class World {
 
+        public static void PauseGame(float timeSpeed = 0) {
+            Time.timeScale = timeSpeed;
+        }
+
+        public static void UnpauseGame() {
+            Time.timeScale = 1;
+        }
+
         public static float GetDistanceFromPositions2D(Vector2 pos1, Vector2 pos2) {
             return (float)Math.Sqrt((Math.Pow((pos1.x - pos2.x), 2)
                                   + (Math.Pow((pos1.y - pos2.y), 2))));

@@ -6,7 +6,7 @@ using System;
 using GameUtilities;
 
 public class PlayerCombatController : CharCombatController {
-
+    PlayerInventoryUI inventory;
     public GameObject selectedEnemy;
     CombatUI combatui;
     PlayerCharacter character;
@@ -15,6 +15,7 @@ public class PlayerCombatController : CharCombatController {
     void Awake() {
         combatui = FindObjectOfType<CombatUI>();
         character = FindObjectOfType<PlayerCharacter>();
+        inventory = FindObjectOfType<PlayerInventoryUI>();
     }
 
     public void setSelectedEnemy(GameObject enemy) {
@@ -53,6 +54,7 @@ public class PlayerCombatController : CharCombatController {
             if (characterSelected.GetCombatController() != null) {
                 currentTarget = characterSelected;
                 if (IsCurrentTargetInWeaponRange()) {
+                    combatui.p
                     character.playerStatus = PlayerCharacter.PlayerStatus.movingToWeaponRange;
                     character.GetMovementController().ProcessMovement();
                 }
@@ -63,7 +65,17 @@ public class PlayerCombatController : CharCombatController {
     }
 
     public override Vector2 GetWeaponReachXY() {
-        throw new NotImplementedException();
+        WeaponItem weapon = (inventory.GetItemFromEquippedDict(WorldItems.WorldItemTypes.WeaponWearable) as WeaponItem);
+        float xRange = BaseWeaponReach, yRange = BaseWeaponReach/3;
+        if (weapon != null) {
+            Vector2 weaponRange = (weapon.GetWeaponRange());
+            xRange += weaponRange.x;
+            yRange += weaponRange.y;
+        }
+        Vector2 reach = new Vector2(xRange, yRange);
+        print(reach);
+        return reach;
+        //return weaponRange + BaseWeaponReach;
     }
 
     public bool IsCharacterEnemy(Character characterIn) {

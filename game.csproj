@@ -105,6 +105,7 @@
     <Compile Include="Assets\Data storage\Utilities\DbCommands.cs" />
     <Compile Include="Assets\Game World\Camera\CameraController.cs" />
     <Compile Include="Assets\Game World\Characters\Anim toggles\HumanCharAnimToggles.cs" />
+    <Compile Include="Assets\Game World\Characters\CharAbility.cs" />
     <Compile Include="Assets\Game World\Characters\CharAction.cs" />
     <Compile Include="Assets\Game World\Characters\CharActionContinuous.cs" />
     <Compile Include="Assets\Game World\Characters\CharCombatController.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Assets\Game World\Utilities\World\World.cs" />
     <Compile Include="Assets\Game World\WorldItems\EquipableWorldItemWithMultiSprites.cs" />
     <Compile Include="Assets\Game World\WorldItems\EquipableWorldItemWithSingleSprite.cs" />
+    <Compile Include="Assets\Game World\WorldItems\WeaponItem.cs" />
     <Compile Include="Assets\Game World\WorldItems\WorldItem.cs" />
     <Compile Include="Assets\Game World\WorldItems\WorldItems.cs" />
     <Compile Include="Assets\GameInitialiser.cs" />
@@ -186,6 +188,7 @@
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventoryItem.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventorySlot.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventoryUI.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\WeaponEquipmentSlot.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\Quest.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\QuestTask.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\QuestsUI.cs" />

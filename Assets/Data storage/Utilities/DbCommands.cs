@@ -504,7 +504,7 @@ namespace DbUtilities {
                 _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(qryParameter), qryParameter));
             }
             string sql = qry + " LIMIT 1;";
-            Debug.Log(sql);
+            //Debug.Log(sql);
             _dbcm.CommandText = sql;
             IDataReader _dbr = _dbcm.ExecuteReader();
             _dbr.Read();
@@ -516,7 +516,6 @@ namespace DbUtilities {
             _dbcm = null;
             _dbc.Close();
             _dbc = null;
-            Debug.Log("working 2");
             return fieldValue;
             
         }

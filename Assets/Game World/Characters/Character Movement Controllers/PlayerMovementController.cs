@@ -76,7 +76,7 @@ public class PlayerMovementController : CharMovementController {
             playerCharacter.playerStatus = PlayerCharacter.PlayerStatus.passive;
         }
         isDecisionRun = isDecidingMovement = false;
-        print("stopped: " + playerCharacter.playerStatus);
+
     }
 
     public override void ProcessMovement() {

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using DbUtilities;
+using GameUtilities;
 
 namespace GameUI {
     /// <summary>
@@ -9,19 +10,17 @@ namespace GameUI {
     /// abilities which call methods in GameUI.DialogueUI to test the player 
     /// (and provide an outcome dealt with by the DialogueUI). 
     /// </summary>
-    public class CombatUI : MonoBehaviour {
+    public class CombatUI : UIController {
         public enum CombatAbilities { passive, strike }
         public CombatAbilities currentAbility;
-        GameObject abilitiesPanel;
         DefaultGameHUD explorerUI;
         public Texture2D[] cursors;
-        public bool CombatUIactive;
+        private bool combatUIactive;
         PlayerCharacter mainChar;
         //DialogueUI dialogueUI;
         // Use this for initialization
         void Start() {
             //dialogueUI = FindObjectOfType<DialogueUI>();
-            abilitiesPanel = transform.FindChild("AbilitiesPanel").gameObject;
             explorerUI = FindObjectOfType<DefaultGameHUD>();
             currentAbility = CombatAbilities.passive;
             mainChar = FindObjectOfType<PlayerCharacter>();
@@ -31,28 +30,21 @@ namespace GameUI {
         void Update() {
             if (mainChar.GetCombatController().IsInCombat()) {
                 if (Input.GetKeyUp(KeyCode.Space)) {
-                    ToggleCombatMode();
+                    DisplayComponents();
                 }
             }
         }
 
-        public void ToggleCombatMode() {
-            Time.timeScale = Time.timeScale == 0 ? 1 : 0;
-            ShowAbilities();
-        }
+        public void ToggleCombatUI() {
+            if (combatUIactive) {
+                HideComponents();
+                World.UnpauseGame();
+                combatUIactive = false;
 
-        private void ShowAbilities() {
-            if (abilitiesPanel.activeSelf) {
-                abilitiesPanel.SetActive(false);
-                explorerUI.ShowMe();
-                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-                CombatUIactive = false;
-                currentAbility = CombatAbilities.passive;
-            }
-            else {
-                abilitiesPanel.SetActive(true);
-                explorerUI.HideMe();
-                CombatUIactive = true;
+            } else {
+                World.PauseGame();
+                DisplayComponents();
+                combatUIactive = true;
             }
         }
 

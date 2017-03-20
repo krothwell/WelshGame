@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityUtilities;
+using System.Collections.Generic;
 
 
 namespace GameUI {
@@ -14,12 +15,13 @@ namespace GameUI {
         GameObject closeBtn;
         GameObject panel;
         GameObject selectedItem;
-        public GameObject[] equippedItemRigSlots = new GameObject[15];
+        private Dictionary<WorldItems.WorldItemTypes, WorldItem> equippedDict;
         GameObject ui;
         //bool followCursor = false;
         public GameObject inventoryItemPrefab;
         // Use this for initialization
         void Start() {
+            equippedDict = new Dictionary<WorldItems.WorldItemTypes, WorldItem>();
             ui = GameObject.Find("UI");
             panel = transform.FindChild("Panel").gameObject;
             items = panel.transform.FindChild("ItemSlots").gameObject;
@@ -101,10 +103,29 @@ namespace GameUI {
         public void InsertSelectedItemToSlot(GameObject selectedSlot, bool equip = false) {
             if (equip) {
                 selectedItem.GetComponent<WorldItem>().EquipToPlayerModel();
+                InsertToEquippedDict(selectedItem.GetComponent<WorldItem>());
             }
             selectedItem.transform.SetParent(selectedSlot.transform, false);
             selectedItem.transform.localPosition = new Vector3(0f, 0f, 0f);
             selectedItem = null;
+        }
+
+        public void InsertToEquippedDict(WorldItem worldItem) {
+            if (equippedDict.ContainsKey(worldItem.GetMyItemType())) {
+                equippedDict[worldItem.GetMyItemType()] = worldItem;
+            }
+            else {
+                equippedDict.Add(worldItem.GetMyItemType(), worldItem);
+            }
+        }
+
+        public WorldItem GetItemFromEquippedDict(WorldItems.WorldItemTypes itemType) {
+            if (equippedDict.ContainsKey(itemType)) {
+                return equippedDict[itemType];
+            }
+            else {
+                return null;
+            }
         }
 
     }

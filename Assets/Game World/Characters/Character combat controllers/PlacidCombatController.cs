@@ -6,10 +6,8 @@ using UnityEngine;
 public class PlacidCombatController : CharCombatController {
 
     void OnTriggerEnter2D(Collider2D incursionCollider) {
-        print("WHY???!");
         if (incursionCollider.transform.name == "Perimeter") {
             PlayerCharacter playerCharacter = incursionCollider.transform.parent.GetComponent<PlayerCharacter>();
-            print("incursion detected: " + incursionCollider.transform);
             if (playerCharacter != null) {
                 TriggerCombat(playerCharacter);
             }
@@ -27,7 +25,6 @@ public class PlacidCombatController : CharCombatController {
     }
 
     public override void TriggerCombat(Character charIn) {
-        print(myCharacter);
         charIn.GetCombatController().TriggerCombat(myCharacter);
     }
 

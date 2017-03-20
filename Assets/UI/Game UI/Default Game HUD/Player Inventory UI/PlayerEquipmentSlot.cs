@@ -2,7 +2,7 @@
 using System.Collections;
 
 namespace GameUI {
-    public class PlayerEquipmentSlot : MonoBehaviour {
+    public abstract class PlayerEquipmentSlot : MonoBehaviour {
         public WorldItems.WorldItemTypes itemType;
         PlayerInventoryUI inventory;
         // Use this for initialization
@@ -10,10 +10,6 @@ namespace GameUI {
             inventory = gameObject.transform.parent.parent.parent.GetComponent<PlayerInventoryUI>();
         }
 
-        // Update is called once per frame
-        void Update() {
-
-        }
         void OnMouseUp() {
             if (inventory.IsItemSelected()) {
                 inventory.AttemptToPutItemInSlot(gameObject);
@@ -22,5 +18,9 @@ namespace GameUI {
                 inventory.AttemptToPickUpItemInSlot(gameObject);
             }
         }
+
+        public abstract WorldItem GetEquipped();
     }
+
+    
 }

@@ -248,7 +248,7 @@ namespace GameUI {
             Debugging.PrintDbTable("ActivatedDialogues");
             currentDialogueID = DbCommands.GetFieldValueFromQry(qry, "DialogueIDs", currentCharID);
             currentDialogueID = (currentDialogueID == "") ? "-1" : currentDialogueID;
-            print(currentDialogueID);
+
             
         }
 
@@ -305,7 +305,7 @@ namespace GameUI {
             if (submissionScored) {
                 if (combatUI.currentAbility == (CombatUI.CombatAbilities.strike)) { 
                     //player.StrikeSelectedEnemy();
-                    combatUI.ToggleCombatMode();
+                    combatUI.ToggleCombatUI();
                     submissionScored = false;
                     SetBtnText("Submit answer");
                     SetNotInUse();

@@ -150,9 +150,6 @@ public class CollisionAvoider : MonoBehaviour {
         print(pOffSetX);
         pOffSetY = myPerimeter.transform.localPosition.y;
 
-        print("xDirection = " + xDirection);
-        print("yDirection = " + yDirection);
-
         corner1x = objPos.x + (-xDirection * (objColliderActualSize.x / 2)) //center char on corner
                  + (-xDirection * (pOffSetX * myPerimeter.transform.lossyScale.x)) //center char perimeter on corner
                  - (float)(xDirection * (0.1 + (myPerimeterSize.x / 2))); //offset perimeter x to 0.1 away from corner

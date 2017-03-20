@@ -8,8 +8,8 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
     protected Animator myAnimator;
     public Character currentTarget;
     protected Character myCharacter;
-
     public List<Character> CharacterEnemyList;
+    public float BaseWeaponReach = 0.1f;
 
     // Use this for initialization
 
@@ -36,7 +36,7 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
     public bool IsCurrentTargetInWeaponRange() {
         Vector2 distanceXYfromCharacter = World.GetVector2DistanceFromPositions2D(myCharacter.GetMyPosition(), currentTarget.transform.position);
         Vector2 weaponReachXY = GetWeaponReachXY();
-        return (distanceXYfromCharacter.x > weaponReachXY.x || distanceXYfromCharacter.y > weaponReachXY.y);
+        return (distanceXYfromCharacter.x < weaponReachXY.x && distanceXYfromCharacter.y < weaponReachXY.y);
     }
 
     public abstract Vector2 GetWeaponReachXY();
