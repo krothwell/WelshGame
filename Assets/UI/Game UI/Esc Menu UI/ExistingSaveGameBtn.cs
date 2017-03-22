@@ -20,7 +20,7 @@ namespace GameUI {
             }
         }
 
-        void OnMouseUp() {
+        void OnMouseUpAsButton() {
             //loadGameMenuUI.ToggleSelectionTo(this, loadGameMenuUI.saveGames);
         }
     }

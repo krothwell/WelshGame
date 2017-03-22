@@ -13,7 +13,7 @@ namespace DataUI.ListItems {
 
         protected string playerChoiceResultID;
 
-        protected void OnMouseUp() {
+        protected void OnMouseUpAsButton() {
             InsertResult();
         }
 

@@ -133,7 +133,7 @@ namespace DataUI {
                 Destroy(gameObject);
             }
 
-            void OnMouseUp() {
+            void OnMouseUpAsButton() {
                 ActivateRule(gameObject);
                 ActivateRuleOptions();
             }

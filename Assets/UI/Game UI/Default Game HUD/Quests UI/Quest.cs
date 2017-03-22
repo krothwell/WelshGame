@@ -45,7 +45,7 @@ namespace GameUI {
                 GetComponent<Image>().color = Colours.colorQuestPanel;
             }
 
-            void OnMouseUp () {
+            void OnMouseUpAsButton () {
                 questsUI.ToggleSelectionTo(this, questsUI.selectedQuest);
                 questsUI.SelectQuest(myName);
             }

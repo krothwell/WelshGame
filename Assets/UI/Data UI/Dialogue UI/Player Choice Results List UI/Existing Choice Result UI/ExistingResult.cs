@@ -37,7 +37,7 @@ namespace DataUI.ListItems {
             options.SetActive(false);
         }
 
-        void OnMouseUp() {
+        void OnMouseUpAsButton() {
             dialogueUI = FindObjectOfType<DialogueUI>();
             dialogueUI.ToggleSelectionTo(GetComponent<ExistingResult>(),dialogueUI.selectedChoiceResult);
         }

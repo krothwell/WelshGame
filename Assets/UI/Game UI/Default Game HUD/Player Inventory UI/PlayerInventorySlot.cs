@@ -17,7 +17,7 @@ namespace GameUI {
 
         // Update is called once per frame
 
-        void OnMouseUp() {
+        void OnMouseUpAsButton() {
             if (inventory.IsItemSelected()) {
                 inventory.AttemptToPutItemInSlot(gameObject);
             } else {

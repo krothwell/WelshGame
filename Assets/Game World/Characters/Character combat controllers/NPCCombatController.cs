@@ -137,7 +137,7 @@ public class NPCCloseCombatController : CharCombatController {
     //    }
     //}
 
-    //void OnMouseUp() {
+    //void OnMouseUpAsButton() {
     //    if (combatui.currentAbility == CombatUI.CombatAbilities.strike) {
     //        player.setSelectedEnemy(gameObject);
     //    }

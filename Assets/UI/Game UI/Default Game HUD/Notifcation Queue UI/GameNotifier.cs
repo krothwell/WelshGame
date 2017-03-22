@@ -47,7 +47,7 @@ namespace GameUI {
 
         public abstract void ActivateNotification();
 
-        void OnMouseUp() {
+        void OnMouseUpAsButton() {
             ActivateNotification();
             MouseSelection.DelayNextClickSelect();
         }

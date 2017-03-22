@@ -23,7 +23,7 @@ namespace DataUI {
                 dialogueUI = FindObjectOfType<DialogueUI>();
             }
 
-            void OnMouseUp() {
+            void OnMouseUpAsButton() {
                 dialogueUI.InsertDialogueNodeResult(gameObject);
             }
         }

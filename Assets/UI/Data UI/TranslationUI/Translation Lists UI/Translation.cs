@@ -167,7 +167,7 @@ namespace DataUI {
                 translationUI.FillRulesNotSelected();
             }
 
-            void OnMouseUpAsButton() {
+            void OnMouseUpAsButtonAsButton() {
                 if (!translationOptions.activeSelf && !panel.activeSelf) {
                     print("selected");
                     ActivateTranslationOptions();

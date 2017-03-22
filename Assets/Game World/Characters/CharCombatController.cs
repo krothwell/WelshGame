@@ -6,15 +6,16 @@ using GameUtilities;
 public abstract class CharCombatController : MonoBehaviour, IAttackable {
     protected bool isInCombat;
     protected Animator myAnimator;
-    public Character currentTarget;
+    public Character CurrentTarget;
     protected Character myCharacter;
     public List<Character> CharacterEnemyList;
     public float BaseWeaponReach = 0.1f;
+    private GameObject selectedAbility;
 
     // Use this for initialization
 
     public bool IsAttacking(Character characterIn) {
-        return (currentTarget == characterIn) ? true : false;
+        return (CurrentTarget == characterIn) ? true : false;
     }
 
     public void ToggleInCombat(bool active) {
@@ -34,7 +35,8 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
     }
 
     public bool IsCurrentTargetInWeaponRange() {
-        Vector2 distanceXYfromCharacter = World.GetVector2DistanceFromPositions2D(myCharacter.GetMyPosition(), currentTarget.transform.position);
+        Vector2 distanceXYfromCharacter = World.GetVector2DistanceFromPositions2D(myCharacter.GetMyPosition(), CurrentTarget.transform.position);
+        print(distanceXYfromCharacter);
         Vector2 weaponReachXY = GetWeaponReachXY();
         return (distanceXYfromCharacter.x < weaponReachXY.x && distanceXYfromCharacter.y < weaponReachXY.y);
     }
@@ -43,7 +45,11 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
 
 
     public void SetCurrentTarget(Character charTarget) {
-        currentTarget = charTarget;
+        CurrentTarget = charTarget;
+    }
+
+    public Character GetCurrentTarget() {
+        return CurrentTarget;
     }
 
     public abstract void TriggerCombat(Character charIn);
@@ -61,4 +67,10 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
     protected void RemoveFromEnemyList(Character charIn) {
         CharacterEnemyList.Remove(charIn);
     }
+
+    public void SetSelectedAbility (GameObject ability) {
+        selectedAbility = ability;
+        ability.transform.SetParent(transform, false);
+    }
 }
+

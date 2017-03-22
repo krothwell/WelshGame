@@ -6,9 +6,9 @@ namespace UnityUtilities {
     /// Ad hoc methods related to using the mouse in the game.
     /// </summary>
     public class MouseSelection : MonoBehaviour {
-        private static bool active;
+        private static bool active = true;
         private static float delayTime;
-        private bool countingDownFromMouseClicked, mouseClicked;
+        private bool countingDownFromMouseClicked;
         float timeDelayToDetectDblClick;
 
         void Start () {
@@ -45,7 +45,8 @@ namespace UnityUtilities {
 
         private void SetActiveIfInactiveAtEndOfDelay() {
             if (!active) {
-                if (delayTime >= 0f) { delayTime -= Time.deltaTime; }
+                if (delayTime >= 0f) {
+                    delayTime -= Time.deltaTime; }
                 else { active = true; }
             }
         }

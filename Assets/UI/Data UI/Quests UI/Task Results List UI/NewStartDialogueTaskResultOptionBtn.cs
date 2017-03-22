@@ -28,7 +28,7 @@ namespace DataUI {
                 descTxt.text = desc;
             }
 
-            void OnMouseUp() {
+            void OnMouseUpAsButton() {
                 questsUI.InsertTaskResultStartDialogue(myID);
             }
         }

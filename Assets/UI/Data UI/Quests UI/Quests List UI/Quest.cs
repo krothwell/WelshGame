@@ -34,7 +34,7 @@ namespace DataUI {
                 options = transform.FindChild("QuestOptions").gameObject;
             }
 
-            void OnMouseUp() {
+            void OnMouseUpAsButton() {
                 if (!questsUI.IsEditingDetails()) {
                     questsUI.ToggleSelectionTo(gameObject.GetComponent<Quest>(), questsUI.selectedQuest);
                 }

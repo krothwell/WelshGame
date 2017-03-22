@@ -19,7 +19,7 @@ namespace StartMenuUI {
             print(GetPlayerSavesController().SelectedSave.ID);
         }
 
-        void OnMouseUp() {
+        void OnMouseUpAsButton() {
             loadGameMenuUI.ToggleSelectionTo(this, loadGameMenuUI.saveGames);
         }
     }

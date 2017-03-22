@@ -43,7 +43,7 @@ namespace GameUI {
             GetComponentInChildren<Text>().color = Colours.colorCompletedQuestTask;
         }
 
-        void OnMouseUp() {
+        void OnMouseUpAsButton() {
             SelectSelf();
         }
 

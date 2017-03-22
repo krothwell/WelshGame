@@ -28,7 +28,7 @@ namespace DataUI {
                 options = transform.FindChild("PartOptions").gameObject;
             }
 
-            void OnMouseUp() {
+            void OnMouseUpAsButton() {
                 if (!questsUI.IsEditingDetails()) {
                     questsUI.ToggleSelectionTo(gameObject.GetComponent<TaskPart>(), questsUI.selectedTaskPart);
                 }

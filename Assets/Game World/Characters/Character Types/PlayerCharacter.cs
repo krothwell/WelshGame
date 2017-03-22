@@ -8,6 +8,7 @@ using UnityUtilities;
 /// to input from the player and game environment.  
 /// </summary>
 public class PlayerCharacter : Character {
+    public GameObject SelectionCirclePrefab;
     public Sprite backUpPlayerPortrait; //if the character portrait is null then this is used.
     public enum PlayerStatus {
         passive,
@@ -20,6 +21,7 @@ public class PlayerCharacter : Character {
     public PlayerStatus playerStatus;
     public GameObject currentObjectInteractingWith;
     private GameObject objectClickedByPlayer;
+    private GameWorldSelector currentSelectionCircle;
     private DialogueUI dialogueUI;
 
     void Awake() {
@@ -65,8 +67,8 @@ public class PlayerCharacter : Character {
 
     public void DestroySelectionCircleOfInteractiveObject() {
         if (currentObjectInteractingWith != null) {
-            if (currentObjectInteractingWith.GetComponent<GameWorldObjectSelector>() != null) {
-                currentObjectInteractingWith.GetComponent<GameWorldObjectSelector>().DestroyMe();
+            if (currentObjectInteractingWith.GetComponent<GameWorldSelector>() != null) {
+                currentObjectInteractingWith.GetComponent<GameWorldSelector>().DestroyMe();
             }
             currentObjectInteractingWith = null;
         }
@@ -74,6 +76,20 @@ public class PlayerCharacter : Character {
 
     public GameObject GetObjSelectedByPlayer() {
         return objectClickedByPlayer;
+    }
+
+    public void SetCurrentSelectionCircle(GameWorldSelector selectionCircle) {
+        currentSelectionCircle = selectionCircle;
+    }
+
+    public GameWorldSelector GetCurrentSelectionCircle() {
+        return currentSelectionCircle;
+    }
+
+    public void DestroyCurrentSelectionCircle() {
+        if (currentSelectionCircle != null) {
+            currentSelectionCircle.DestroyMe();
+        }
     }
 
     protected void MakeDecisionOnPlayerInput() {
@@ -84,7 +100,6 @@ public class PlayerCharacter : Character {
 
     protected void MakeDecisionOnPlayerMouseLeftClick() {
         MouseSelection.ClickSelect(out objectClickedByPlayer);
-        print(objectClickedByPlayer);
         if (objectClickedByPlayer != null) {
             if (combatController.IsInCombat()) {
                 combatController.ProcessAction();
@@ -106,6 +121,10 @@ public class PlayerCharacter : Character {
         else if (objectClickedByPlayer.GetComponent<CharCombatController>()
           || objectClickedByPlayer.tag == "World") {
             playerStatus = PlayerStatus.movingToLocation;
+            DestroyCurrentSelectionCircle();
+            //GameObject newSelectionCircle = Instantiate(SelectionCirclePrefab, new Vector3(MouseSelection.GetMouseCoords2D().x, MouseSelection.GetMouseCoords2D().y, 0), Quaternion.identity) as GameObject;
+            //newSelectionCircle.transform.SetParent()
+
         }
         if (movementController != null) {
             movementController.ProcessMovement();

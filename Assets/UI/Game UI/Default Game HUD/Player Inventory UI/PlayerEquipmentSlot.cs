@@ -10,7 +10,7 @@ namespace GameUI {
             inventory = gameObject.transform.parent.parent.parent.GetComponent<PlayerInventoryUI>();
         }
 
-        void OnMouseUp() {
+        void OnMouseUpAsButton() {
             if (inventory.IsItemSelected()) {
                 inventory.AttemptToPutItemInSlot(gameObject);
             }

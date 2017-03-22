@@ -88,6 +88,7 @@ namespace GameUI {
         public void StartNewDialogue(Character character) {
             ResetLowerDialogueContainer();
             currentChar = character;
+            print(character);
             currentCharID = character.CharacterName;
             SetDialogueID();
             DisplayFirstDialogueNode();
@@ -302,19 +303,19 @@ namespace GameUI {
         }
         
         public void ManageLowerUISubmission() {
-            if (submissionScored) {
-                if (combatUI.currentAbility == (CombatUI.CombatAbilities.strike)) { 
-                    //player.StrikeSelectedEnemy();
-                    combatUI.ToggleCombatUI();
-                    submissionScored = false;
-                    SetBtnText("Submit answer");
-                    SetNotInUse();
-                }
-            } else {
-                SetPercentageCorrect();
-                submissionScored = true;
-                SetBtnText("Finish move");
-            }
+            //if (submissionScored) {
+            //    if (combatUI.currentAbility == (CombatUI.CombatAbilities.strike)) { 
+            //        //player.StrikeSelectedEnemy();
+            //        combatUI.ToggleCombatUI();
+            //        submissionScored = false;
+            //        SetBtnText("Submit answer");
+            //        SetNotInUse();
+            //    }
+            //} else {
+            //    SetPercentageCorrect();
+            //    submissionScored = true;
+            //    SetBtnText("Finish move");
+            //}
         }
     
         public void SetObjectPortrait(Sprite portrait) {

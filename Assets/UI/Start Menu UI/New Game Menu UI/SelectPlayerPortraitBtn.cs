@@ -42,7 +42,7 @@ namespace StartMenuUI {
             }
         }
 
-        void OnMouseUp() {
+        void OnMouseUpAsButton() {
             newGame.ToggleSelectionTo(this, newGame.selectedPortrait);
         }
     }

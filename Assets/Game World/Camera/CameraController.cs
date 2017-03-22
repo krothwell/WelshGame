@@ -13,7 +13,6 @@ public class CameraController : MonoBehaviour {
         followingPlayer = false;
         camMovementDelayDefault = 0.3f;
         camMovementDelay = camMovementDelayDefault;
-        SetCamPosition();
         playerCharacter = FindObjectOfType<PlayerCharacter>();
         SetCamPosition();
     }
@@ -47,7 +46,8 @@ public class CameraController : MonoBehaviour {
 
     private void MonitorPlayerMovement() {
         if (playerCharacter.playerStatus == PlayerCharacter.PlayerStatus.movingToLocation ||
-            playerCharacter.playerStatus == PlayerCharacter.PlayerStatus.movingToObject) {
+            playerCharacter.playerStatus == PlayerCharacter.PlayerStatus.movingToObject ||
+            playerCharacter.playerStatus == PlayerCharacter.PlayerStatus.movingToWeaponRange) {
             if (!followingPlayer) {
                 StartFollowingPlayerCountDown();
                 if (camMovementDelay < 0f) {
@@ -55,6 +55,8 @@ public class CameraController : MonoBehaviour {
                     camMovementDelay = camMovementDelayDefault;
                 }
             }
+        } else if (camPosition != playerCharacter.GetMyPosition()) {
+            CentreOnPlayer();
         }
         FollowPlayer();
     }
@@ -68,6 +70,11 @@ public class CameraController : MonoBehaviour {
                 followingPlayer = false;
             }
         }
+    }
+
+    private void CentreOnPlayer() {
+        followingPlayer = false;
+        MoveCameraToCoordinates(playerCharacter.GetMyPosition());
     }
 
     private void StartFollowingPlayerCountDown() {

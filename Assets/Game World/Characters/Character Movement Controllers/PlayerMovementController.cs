@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityUtilities;
+using GameUI;
 
 public class PlayerMovementController : CharMovementController {
     Vector2 camPosition;
@@ -12,6 +13,7 @@ public class PlayerMovementController : CharMovementController {
     float walkSpeed;
     float runSpeed;
     bool isDecidingMovement = false, isDecisionRun = false;
+    CombatUI combatui;
 
     void Awake() {
         ResetPlayerMovementDelay();
@@ -19,6 +21,7 @@ public class PlayerMovementController : CharMovementController {
         interactionDistance = 1f;
         walkSpeed = 1.5f;
         runSpeed = 3.5f;
+        combatui = FindObjectOfType<CombatUI>();
     }
 
     void Update() {
@@ -53,6 +56,7 @@ public class PlayerMovementController : CharMovementController {
             if (playerCharacter.playerStatus == PlayerCharacter.PlayerStatus.movingToWeaponRange) {
                 if (character.GetCombatController().IsCurrentTargetInWeaponRange()) {
                     StopMoving();
+                    combatui.ToggleCombatUI();
                 }
             }
         }
@@ -65,6 +69,8 @@ public class PlayerMovementController : CharMovementController {
     public override void StopMoving() {
         ToggleIsMoving(false);
         rerouteCount = 0;
+        redirecting = false;
+        
         if (playerCharacter.playerStatus == PlayerCharacter.PlayerStatus.movingToObject) {
             playerCharacter.playerStatus = PlayerCharacter.PlayerStatus.passive;
             playerCharacter.PickUpObject();

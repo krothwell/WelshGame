@@ -39,7 +39,7 @@ namespace DataUI {
                 saveBtn = transform.FindChild("SaveBtn").GetComponent<Button>();
             }
 
-            void OnMouseUp() {
+            void OnMouseUpAsButton() {
                 if (!questsUI.IsEditingDetails()) {
                     questsUI.ToggleSelectionTo(gameObject.GetComponent<Task>(), questsUI.selectedTask);
                 }

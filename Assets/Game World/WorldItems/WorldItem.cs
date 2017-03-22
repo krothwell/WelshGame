@@ -28,7 +28,7 @@ public abstract class WorldItem : MonoBehaviour {
 
     //TODO: check if this is better staying with player class or implementing
     //here.
-    public void OnMouseUp() {
+    public void OnMouseUpAsButton() {
     }
 
     public WorldItems.WorldItemTypes GetMyItemType() {
@@ -41,7 +41,7 @@ public abstract class WorldItem : MonoBehaviour {
         SetChildrenActive(true);
         ImageLayerOrder.SetOrderOnTranformChildren(transform);
         GetComponent<Image>().enabled = false;
-        GetComponent<GameWorldObjectSelector>().enabled = true;
+        GetComponent<GameWorldSelector>().enabled = true;
     }
 
     protected void SetInventoryDisplay() {
@@ -49,7 +49,7 @@ public abstract class WorldItem : MonoBehaviour {
         rectTransform.localScale = inventoryScale;
         SetChildrenActive(false);
         GetComponent<Image>().enabled = true;
-        GetComponent<GameWorldObjectSelector>().enabled = false;
+        GetComponent<GameWorldSelector>().enabled = false;
     }
 
     protected void SetChildrenActive(bool active) {

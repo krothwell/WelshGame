@@ -54,7 +54,7 @@ namespace DataUI {
                 options.SetActive(false);
             }
 
-            void OnMouseUp() {
+            void OnMouseUpAsButton() {
                 questsUI.ToggleSelectionTo(this, questsUI.selectedTaskResult);
             }
         }

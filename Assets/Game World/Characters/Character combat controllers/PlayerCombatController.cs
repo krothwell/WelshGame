@@ -52,9 +52,10 @@ public class PlayerCombatController : CharCombatController {
         if (objSelected.GetComponent<Character>() != null) {
             Character characterSelected = objSelected.GetComponent<Character>();
             if (characterSelected.GetCombatController() != null) {
-                currentTarget = characterSelected;
+                CurrentTarget = characterSelected;
                 if (IsCurrentTargetInWeaponRange()) {
-                    combatui.p
+                    combatui.ToggleCombatUI();
+                } else { 
                     character.playerStatus = PlayerCharacter.PlayerStatus.movingToWeaponRange;
                     character.GetMovementController().ProcessMovement();
                 }
@@ -66,7 +67,7 @@ public class PlayerCombatController : CharCombatController {
 
     public override Vector2 GetWeaponReachXY() {
         WeaponItem weapon = (inventory.GetItemFromEquippedDict(WorldItems.WorldItemTypes.WeaponWearable) as WeaponItem);
-        float xRange = BaseWeaponReach, yRange = BaseWeaponReach/3;
+        float xRange = BaseWeaponReach, yRange = BaseWeaponReach/2.5f;
         if (weapon != null) {
             Vector2 weaponRange = (weapon.GetWeaponRange());
             xRange += weaponRange.x;

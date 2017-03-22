@@ -38,7 +38,7 @@ namespace DataUI {
                 activeToggle = transform.GetComponentInChildren<Toggle>();
             }
 
-            void OnMouseUp() {
+            void OnMouseUpAsButton() {
                 if (!editable) {
                     dialogueUI.ToggleSelectionTo(gameObject.GetComponent<Dialogue>(), dialogueUI.selectedDialogue);
                 }

@@ -29,6 +29,7 @@ public class PlacidCombatController : CharCombatController {
     }
 
     public override void GetHit() {
+        print(transform.parent + ": I got hit!");
 
     }
 

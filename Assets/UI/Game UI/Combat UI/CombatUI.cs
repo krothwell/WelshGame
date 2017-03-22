@@ -11,26 +11,28 @@ namespace GameUI {
     /// (and provide an outcome dealt with by the DialogueUI). 
     /// </summary>
     public class CombatUI : UIController {
-        public enum CombatAbilities { passive, strike }
-        public CombatAbilities currentAbility;
+        public string SelectedAbilityOption;
+        //public enum CombatAbilities { passive, strike }
+        public CharAbility currentAbility;
         DefaultGameHUD explorerUI;
         public Texture2D[] cursors;
         private bool combatUIactive;
-        PlayerCharacter mainChar;
-        //DialogueUI dialogueUI;
+        PlayerCharacter playerCharacter;
         // Use this for initialization
         void Start() {
             //dialogueUI = FindObjectOfType<DialogueUI>();
             explorerUI = FindObjectOfType<DefaultGameHUD>();
-            currentAbility = CombatAbilities.passive;
-            mainChar = FindObjectOfType<PlayerCharacter>();
+            //currentAbility = CombatAbilities.passive;
+            playerCharacter = FindObjectOfType<PlayerCharacter>();
+            SelectedAbilityOption = "selectedAbilityOption";
+            CreateSelectionToggleGroup(SelectedAbilityOption);
         }
 
         // Update is called once per frame
         void Update() {
-            if (mainChar.GetCombatController().IsInCombat()) {
+            if (playerCharacter.GetCombatController().IsInCombat()) {
                 if (Input.GetKeyUp(KeyCode.Space)) {
-                    DisplayComponents();
+                    ToggleCombatUI();
                 }
             }
         }
@@ -45,12 +47,31 @@ namespace GameUI {
                 World.PauseGame();
                 DisplayComponents();
                 combatUIactive = true;
+                playerCharacter.DestroyCurrentSelectionCircle();
             }
         }
 
-        public void SetStrikeAbility() {
-            currentAbility = CombatAbilities.strike;
+        public bool IsCombatUIActive() {
+            return combatUIactive;
         }
+
+        public void SetAbility(GameObject abilityPrefab) {
+            GameObject abilitySelected = Instantiate(abilityPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
+            abilitySelected.transform.SetParent(playerCharacter.GetCombatController().transform, false);
+            currentAbility = abilitySelected.GetComponent<CharAbility>();
+        }
+
+        public void DeselectAbility() {
+            if (currentAbility != null) {
+                Destroy(currentAbility.gameObject);
+                currentAbility = null;
+            }
+        }
+
+        public CharAbility GetCurrentAbility() {
+            return currentAbility;
+        }
+
         
         public void SetRandomVocab() {
     		//string[] testStrings = DbCommands.GetRandomTupleFromTable("VocabTranslations");

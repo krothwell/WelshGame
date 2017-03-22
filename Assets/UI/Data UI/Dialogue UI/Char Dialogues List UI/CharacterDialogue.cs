@@ -44,7 +44,7 @@ namespace DataUI {
                 }
             }
 
-            void OnMouseUp() {
+            void OnMouseUpAsButton() {
                 SelectCharDialogue();
             }
 

@@ -105,11 +105,13 @@
     <Compile Include="Assets\Data storage\Utilities\DbCommands.cs" />
     <Compile Include="Assets\Game World\Camera\CameraController.cs" />
     <Compile Include="Assets\Game World\Characters\Anim toggles\HumanCharAnimToggles.cs" />
-    <Compile Include="Assets\Game World\Characters\CharAbility.cs" />
     <Compile Include="Assets\Game World\Characters\CharAction.cs" />
     <Compile Include="Assets\Game World\Characters\CharActionContinuous.cs" />
     <Compile Include="Assets\Game World\Characters\CharCombatController.cs" />
     <Compile Include="Assets\Game World\Characters\CharMovementController.cs" />
+    <Compile Include="Assets\Game World\Characters\Character Abilities\CharAbility.cs" />
+    <Compile Include="Assets\Game World\Characters\Character Abilities\CharacterEffectAbility.cs" />
+    <Compile Include="Assets\Game World\Characters\Character Abilities\StrikeAbility.cs" />
     <Compile Include="Assets\Game World\Characters\Character Movement Controllers\NPCMovementController.cs" />
     <Compile Include="Assets\Game World\Characters\Character Movement Controllers\PlayerMovementController.cs" />
     <Compile Include="Assets\Game World\Characters\Character Movement Controllers\StaticMovementController.cs" />
@@ -117,6 +119,8 @@
     <Compile Include="Assets\Game World\Characters\Character Types\NPCHumanCharacter.cs" />
     <Compile Include="Assets\Game World\Characters\Character Types\PlayerCharacter.cs" />
     <Compile Include="Assets\Game World\Characters\Character Types\StaticCharacter.cs" />
+    <Compile Include="Assets\Game World\Characters\Character ability actions\CharAbilityAction.cs" />
+    <Compile Include="Assets\Game World\Characters\Character ability actions\StrikeAbilityAction.cs" />
     <Compile Include="Assets\Game World\Characters\Character actions\CombatStateAction.cs" />
     <Compile Include="Assets\Game World\Characters\Character combat controllers\NPCCombatController.cs" />
     <Compile Include="Assets\Game World\Characters\Character combat controllers\PlacidCombatController.cs" />
@@ -132,7 +136,9 @@
     <Compile Include="Assets\Game World\Quests\Quests\QuestTheBeginning.cs" />
     <Compile Include="Assets\Game World\Quests\Utilities\QuestActivators.cs" />
     <Compile Include="Assets\Game World\Scenery\level1\Scenery1.cs" />
-    <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldObjectSelector.cs" />
+    <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldCharacterSelector.cs" />
+    <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldItemSelector.cs" />
+    <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldSelector.cs" />
     <Compile Include="Assets\Game World\Utilities\Layers\ImageLayerOrder.cs" />
     <Compile Include="Assets\Game World\Utilities\World\World.cs" />
     <Compile Include="Assets\Game World\WorldItems\EquipableWorldItemWithMultiSprites.cs" />
@@ -179,6 +185,7 @@
     <Compile Include="Assets\UI\Data UI\TranslationUI\TranslationUI.cs" />
     <Compile Include="Assets\UI\Data UI\Utilities\Colours.cs" />
     <Compile Include="Assets\UI\ExistingSaveGame.cs" />
+    <Compile Include="Assets\UI\Game UI\Combat UI\AbilityButton.cs" />
     <Compile Include="Assets\UI\Game UI\Combat UI\CombatUI.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\DefaultGameHUD.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Notifcation Queue UI\GameNotifier.cs" />
@@ -199,6 +206,10 @@
     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueUI.cs" />
     <Compile Include="Assets\UI\Game UI\Esc Menu UI\EscMenuUI.cs" />
     <Compile Include="Assets\UI\Game UI\Esc Menu UI\ExistingSaveGameBtn.cs" />
+    <Compile Include="Assets\UI\Game UI\InspectorUI\CharacterInspector.cs" />
+    <Compile Include="Assets\UI\Game UI\InspectorUI\Inspector.cs" />
+    <Compile Include="Assets\UI\Game UI\InspectorUI\InspectorUI.cs" />
+    <Compile Include="Assets\UI\Game UI\InspectorUI\WorldItemInspector.cs" />
     <Compile Include="Assets\UI\Game UI\New Welsh Learned UI\List items\NewWelshGrammar.cs" />
     <Compile Include="Assets\UI\Game UI\New Welsh Learned UI\List items\NewWelshVocab.cs" />
     <Compile Include="Assets\UI\Game UI\New Welsh Learned UI\NewWelshLearnedUI.cs" />

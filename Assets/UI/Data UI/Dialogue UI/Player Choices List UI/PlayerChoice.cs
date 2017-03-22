@@ -41,7 +41,7 @@ namespace DataUI {
                 options = transform.FindChild("PlayerChoiceOptions").gameObject;
             }
 
-            void OnMouseUp() {
+            void OnMouseUpAsButton() {
                 dialogueUI.ToggleSelectionTo(GetComponent<PlayerChoice>(), dialogueUI.selectedChoice);
             }
 
