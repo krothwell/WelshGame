@@ -3,14 +3,15 @@ using System.Collections;
 
 namespace GameUI {
     public abstract class PlayerEquipmentSlot : MonoBehaviour {
-        public WorldItems.WorldItemTypes itemType;
+        public WorldItems.WorldItemTypes ItemType;
         PlayerInventoryUI inventory;
         // Use this for initialization
         void Start() {
-            inventory = gameObject.transform.parent.parent.parent.GetComponent<PlayerInventoryUI>();
+            inventory = FindObjectOfType<PlayerInventoryUI>();
         }
 
         void OnMouseUpAsButton() {
+            print(inventory);
             if (inventory.IsItemSelected()) {
                 inventory.AttemptToPutItemInSlot(gameObject);
             }

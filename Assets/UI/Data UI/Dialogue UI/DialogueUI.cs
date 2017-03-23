@@ -17,10 +17,6 @@ namespace DataUI {
     public class DialogueUI : UIController {
         
 
-        private enum ChoiceResultOptions {
-            DialogueNodes
-        };
-
         public string selectedDialogue,
                        selectedNode,
                        selectedChoice,
@@ -60,7 +56,7 @@ namespace DataUI {
         GameObject playerChoiceResultsListUI, playerChoiceResultsPanel, playerChoicesResultsList,
                    newChoiceResultUI, displayNewChoiceResultBtn, newChoiceResultPanel, selectedResultTypeList,
                    selectedChoiceResultOption;
-        ChoiceResultOptions choiceResultOptions;
+        //ChoiceResultOptions choiceResultOptions;
         ListSearcher newChoiceResultListSearcher;
         ListDisplayInfo newActivateWelshVocabListInfo,
                         newActivateGrammarListInfo;
@@ -81,7 +77,7 @@ namespace DataUI {
         void Start() {
             
             UpdateCharactersTableFromGame();
-            choiceResultOptions = new ChoiceResultOptions();
+            //choiceResultOptions = new ChoiceResultOptions();
 
             //DIALOGUE COMPONENTS
             dialoguesListUI = GetPanel().transform.FindChild("DialoguesListUI").gameObject;
@@ -272,7 +268,6 @@ namespace DataUI {
 
         public void InsertNewDialogue() {
             if ((inputShortDescriptionText.text != null) && (inputShortDescriptionText.text != "")) {
-                string dialogueActiveInNewGameStr = dialogueActive.isOn ? "1" : "0";
                 string dialogueID = DbCommands.GenerateUniqueID("Dialogues", "DialogueIDs", "DialogueID");
                 DbCommands.InsertTupleToTable("Dialogues", dialogueID, inputShortDescriptionText.text);
                 if (dialogueActive.isOn) {

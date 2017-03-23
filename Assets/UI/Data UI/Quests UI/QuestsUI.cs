@@ -312,7 +312,6 @@ namespace DataUI {
         }
 
         public void UpdateQuestInDb(string questName, string newName, string questDescription) {
-            Task selectedTaskObj = (GetSelectedItemFromGroup(selectedQuest) as Task);
             string[,] fields = new string[,]{
                                                 { "QuestNames", newName },
                                                 { "QuestDescriptions", questDescription }
@@ -324,7 +323,6 @@ namespace DataUI {
         }
 
         public void UpdateTaskInDb (string taskID, string taskDescription, bool activeAtStart) {
-            Task selectedTaskObj = (GetSelectedItemFromGroup(selectedQuest) as Task);
             string[,] fields = new string[,]{
                                             { "TaskDescriptions", taskDescription }
                                             };

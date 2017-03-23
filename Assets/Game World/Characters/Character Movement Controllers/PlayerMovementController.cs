@@ -7,7 +7,7 @@ using GameUI;
 public class PlayerMovementController : CharMovementController {
     Vector2 camPosition;
     float playerMovementDelay;
-    private float interactionDistance;
+    
     private MouseSelection mouseSelection;
     PlayerCharacter playerCharacter;
     float walkSpeed;
@@ -18,15 +18,15 @@ public class PlayerMovementController : CharMovementController {
     void Awake() {
         ResetPlayerMovementDelay();
         mouseSelection = FindObjectOfType<MouseSelection>();
-        interactionDistance = 1f;
         walkSpeed = 1.5f;
         runSpeed = 3.5f;
         combatui = FindObjectOfType<CombatUI>();
+        
     }
 
     void Update() {
+        SetIsDecisionRun();
         DecideMovement();
-        CheckToEndMovement();
         CheckToMakeMovement();
      }
 
@@ -34,67 +34,22 @@ public class PlayerMovementController : CharMovementController {
         playerCharacter = (character as PlayerCharacter);
     }
 
-
-    /// <summary>
-    /// If the player reaches the target destination or within interaction distance of the object
-    /// they are moving towards, or their status has changed then the movement can end.
-    /// </summary>
-    protected override void CheckToEndMovement() {
-        if (isMoving) {
-            if (playerCharacter.playerStatus == PlayerCharacter.PlayerStatus.movingToLocation) {
-                if (myPosition == targetPosition) {
-                    StopMoving();
-                }
-            }
-
-            if (playerCharacter.playerStatus == PlayerCharacter.PlayerStatus.movingToObject) {
-                if (GetDistanceFromMyPosition(playerCharacter.GetObjSelectedByPlayer().GetComponent<Transform>().position) < interactionDistance) {
-                    StopMoving();
-                }
-            }
-
-            if (playerCharacter.playerStatus == PlayerCharacter.PlayerStatus.movingToWeaponRange) {
-                if (character.GetCombatController().IsCurrentTargetInWeaponRange()) {
-                    StopMoving();
-                    combatui.ToggleCombatUI();
-                }
-            }
-        }
-    }
-
     public float GetMySpeed() {
         return movement.GetMovementSpeed();
     }
 
-    public override void StopMoving() {
-        ToggleIsMoving(false);
-        rerouteCount = 0;
-        redirecting = false;
-        
-        if (playerCharacter.playerStatus == PlayerCharacter.PlayerStatus.movingToObject) {
-            playerCharacter.playerStatus = PlayerCharacter.PlayerStatus.passive;
-            playerCharacter.PickUpObject();
+    public void SetIsDecisionRun() {
+        if (Input.GetMouseButtonUp(0)) {
+            isDecisionRun = mouseSelection.GetIsDoubleClick();
         }
-        else if (playerCharacter.playerStatus == PlayerCharacter.PlayerStatus.movingToCharacter) {
-            playerCharacter.playerStatus = PlayerCharacter.PlayerStatus.speakingToCharacter;
-            playerCharacter.SpeakToCharacter();
-        } else {
-            playerCharacter.playerStatus = PlayerCharacter.PlayerStatus.passive;
-        }
-        isDecisionRun = isDecidingMovement = false;
-
     }
 
     public override void ProcessMovement() {
-        if (playerCharacter.playerStatus != PlayerCharacter.PlayerStatus.passive) {
-            SetTargetPosition(MouseSelection.GetMouseCoords2D());
-            SetMyDirection(targetPosition, myPosition);
-            isDecisionRun = mouseSelection.GetIsDoubleClick();
-            isDecidingMovement = !isDecisionRun;
-        }
+        SetMyDirection(targetPosition, myPosition);
+        isDecidingMovement = !isDecisionRun;
     }
 
-    private void DecideMovement() {
+    public override void DecideMovement() {
         bool isDecisionWalk = false;
         if (isDecidingMovement) {
 

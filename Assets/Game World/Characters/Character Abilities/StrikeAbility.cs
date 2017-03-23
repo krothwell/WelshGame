@@ -2,9 +2,11 @@
 
 public class StrikeAbility : CharacterEffectAbility {
 
+
     public override void FollowThroughAbility() {
         if (myCharacter.GetCombatController().IsCurrentTargetInWeaponRange()) {
             print(myCharacter + " hit connected");
+            targetCharacter.GetCombatController().GetHit();
             StopAbility();
         }
     }
@@ -13,8 +15,5 @@ public class StrikeAbility : CharacterEffectAbility {
         myRange =  myCharacter.GetCombatController().GetWeaponReachXY();
     }
 
-    public override void InitialiseMe(Character character) {
-        SetMyCharacter(character);
-        SetCharAction(new StrikeAbilityAction(character.GetMyAnimator()));
-    }
+   
 }

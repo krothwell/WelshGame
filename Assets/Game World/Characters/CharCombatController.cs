@@ -54,6 +54,8 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
 
     public abstract void TriggerCombat(Character charIn);
 
+    public abstract void TriggerStrategyMode();
+
     public abstract void EndCombat(Character charIn);
 
     public abstract void GetHit();

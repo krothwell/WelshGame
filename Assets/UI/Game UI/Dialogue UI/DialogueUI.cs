@@ -20,7 +20,6 @@ using System;
 /// </summary>
 namespace GameUI {
     public class DialogueUI : UIController {
-        bool submissionScored = false;
     	private string testEnglish;
     	private string testWelsh;
     	public string TestEnglish {

@@ -71,7 +71,7 @@ namespace GameUI {
         public void AttemptToPutItemInSlot(GameObject slot) {
             if (slot.transform.childCount <= 0) {
                 if (slot.HasComponent<PlayerEquipmentSlot>()) {
-                    if (slot.GetComponent<PlayerEquipmentSlot>().itemType
+                    if (slot.GetComponent<PlayerEquipmentSlot>().ItemType
                         == selectedItem.GetComponent<WorldItem>().itemType) {
                         InsertSelectedItemToSlot(slot, true);
                     }

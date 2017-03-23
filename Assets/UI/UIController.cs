@@ -174,7 +174,9 @@ public class UIController : MonoBehaviour {
                     print(GetSelectedItemFromGroup(inGroup));
                     GetSelectedItemFromGroup(inGroup).DeselectSelf();
                     selectionToggleGroups[inGroup] = selection;
-                    selection.SelectSelf();
+                    if (selection != null) {
+                        selection.SelectSelf();
+                    }
                 }
             } else {
                 selectionToggleGroups[inGroup] = selection;

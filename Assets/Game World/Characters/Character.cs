@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System;
+using GameUI;
 
 /// <summary>
 /// Abstract class which provides default controls of all derived character
@@ -12,18 +13,20 @@ public abstract class Character : MonoBehaviour {
     //an easy way of checking the characters name and portrait have been loaded from db correctly.
     public Sprite CharacterPortrait;
     public string CharacterName;
-
+    protected Character currentlySpeakingTo;
     protected CharCombatController combatController;
     protected CharMovementController movementController;
     protected CharacterMovement movementType;
     protected Animator myAnimator;
-
+    protected float interactionDistance;
     public GameObject[] CharacterParts;
+    protected DialogueUI dialogueUI;
 
     //image root refers to first transform in editor heirarchy where the parts of the character are stored
     private Transform imageRoot;
 	
     public void InitialiseMe() {
+        dialogueUI = FindObjectOfType<DialogueUI>();
         movementController = GetComponent<CharMovementController>();
         imageRoot = transform.FindChild("CentreOfGravity").GetComponent<Transform>();
         print(imageRoot);
@@ -32,6 +35,7 @@ public abstract class Character : MonoBehaviour {
         combatController.SetAnimator(myAnimator);
         combatController.SetCharacter(this);
         SetMovementController();
+        interactionDistance = 1f;
     }
 
     public void SetHovered() {
@@ -80,5 +84,18 @@ public abstract class Character : MonoBehaviour {
 
     public CharCombatController GetCombatController() {
         return combatController;
+    }
+
+    public float GetInteractionDistance() {
+        return interactionDistance;
+    }
+
+    public void SpeakToCharacter(Character character) {
+        currentlySpeakingTo = character;
+        dialogueUI.StartNewDialogue(currentlySpeakingTo);
+    }
+
+    public void PickUpItem(WorldItem item) {
+        item.GetPickedUp();
     }
 }

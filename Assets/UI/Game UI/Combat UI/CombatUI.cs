@@ -14,14 +14,12 @@ namespace GameUI {
         public string SelectedAbilityOption;
         //public enum CombatAbilities { passive, strike }
         public CharAbility currentAbility;
-        DefaultGameHUD explorerUI;
         public Texture2D[] cursors;
         private bool combatUIactive;
         PlayerCharacter playerCharacter;
         // Use this for initialization
         void Start() {
             //dialogueUI = FindObjectOfType<DialogueUI>();
-            explorerUI = FindObjectOfType<DefaultGameHUD>();
             //currentAbility = CombatAbilities.passive;
             playerCharacter = FindObjectOfType<PlayerCharacter>();
             SelectedAbilityOption = "selectedAbilityOption";
@@ -47,8 +45,11 @@ namespace GameUI {
                 World.PauseGame();
                 DisplayComponents();
                 combatUIactive = true;
-                playerCharacter.DestroyCurrentSelectionCircle();
             }
+        }
+
+        public void EndCurrentSelection() {
+            playerCharacter.EndCurrentSelection();
         }
 
         public bool IsCombatUIActive() {
@@ -59,6 +60,8 @@ namespace GameUI {
             GameObject abilitySelected = Instantiate(abilityPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
             abilitySelected.transform.SetParent(playerCharacter.GetCombatController().transform, false);
             currentAbility = abilitySelected.GetComponent<CharAbility>();
+            currentAbility.InitialiseMe(playerCharacter);
+            SetAttackCursor();
         }
 
         public void DeselectAbility() {

@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 using GameUtilities.Display;
 using GameUtilities;
-using System;
 
 public abstract class CharMovementController : MonoBehaviour {
+
+    protected CharacterMovementDecision currentMovementDecision;
 
     protected Vector2 targetPosition, //the overall target unless changed for some reason
                     interimPosition, //the position to go to if there is something in the way
@@ -37,7 +37,7 @@ public abstract class CharMovementController : MonoBehaviour {
         character = GetComponent<Character>();
     }
 
-    protected void SetTargetPosition (Vector2 targetPos) {
+    public void SetTargetPosition (Vector2 targetPos) {
         targetPosition = targetPos;
     }
 
@@ -70,8 +70,6 @@ public abstract class CharMovementController : MonoBehaviour {
         }
     }
 
-    protected abstract void CheckToEndMovement();
-
     public void MoveTowardsPosition() {
         SetNextPosition();
         if (myPosition != nextPosition && rerouteCount < rerouteLimit) {
@@ -89,10 +87,16 @@ public abstract class CharMovementController : MonoBehaviour {
             SetMyOrder(characterParts);
             SetMyPosition(xModifier, yModifier, newX, newY);
         } else {
-            StopMoving();
+            currentMovementDecision.EndDecision();
             rerouteCount = 0;
         }
 
+    }
+
+    public void StopMoving() {
+        ToggleIsMoving(false);
+        ResetRerouteCount();
+        EndRedirect();
     }
 
     private void SetMyPosition(int xModifier, int yModifier, float newX, float newY) {
@@ -110,6 +114,10 @@ public abstract class CharMovementController : MonoBehaviour {
         redirecting = redirect;
         
         rerouteCount++;
+    }
+
+    public void ResetRerouteCount() {
+        rerouteCount = 0;
     }
 
     public int GetRerouteCount() {
@@ -154,5 +162,18 @@ public abstract class CharMovementController : MonoBehaviour {
 
     public abstract void ProcessMovement();
 
-    public abstract void StopMoving();
+    public void SetMovementDecision(CharacterMovementDecision movementDecision) {
+        currentMovementDecision = movementDecision;
+    }
+
+    public void EndRedirect() {
+        redirecting = false;
+    }
+
+    public float GetInteractionDistance() {
+        return 1f;
+    }
+
+    public abstract void DecideMovement();
+        
 }

@@ -9,7 +9,6 @@ namespace GameUI.ListItems {
         public string AbilityName;
         public GameObject AbilityPrefab;
         CombatUI combatUI;
-        Image icon;
         // Use this for initialization
         void Start() {
             combatUI = FindObjectOfType<CombatUI>();
@@ -24,10 +23,11 @@ namespace GameUI.ListItems {
         public void SelectSelf() {
             GetComponent<Image>().color = Colours.selectedAbility;
             combatUI.SetAbility(AbilityPrefab);
+            combatUI.EndCurrentSelection();
         }
 
         public void DeselectSelf() {
-            GetComponent<Image>().color = Colours.selectedAbility;
+            GetComponent<Image>().color = Colours.deselectedAbility;
             combatUI.DeselectAbility();
         }
 

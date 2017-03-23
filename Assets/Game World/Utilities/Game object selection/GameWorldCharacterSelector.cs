@@ -1,18 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
-using GameUI;
-using GameUtilities;
+
 
 public class GameWorldCharacterSelector : GameWorldSelector {
-    CombatUI combatUI;
-    void Start() {
-        combatUI = FindObjectOfType<CombatUI>();
-    }
+    bool abilityInRange;
     public override void DisplayCircle() {
-        CharAbility abilitySelected = combatUI.GetCurrentAbility();
         if (abilitySelected != null) {
             if(abilitySelected.IsInRangeOfCharacter(GetComponent<Character>())) {
+                abilityInRange = true;
                 BuildCircle();
             } else {
                 DisplayOutOfRange();
@@ -23,7 +18,24 @@ public class GameWorldCharacterSelector : GameWorldSelector {
 
     }
 
+    public override void SetSelected() {
+        if (abilitySelected) {
+            if (abilityInRange) {
+                Select();
+            }
+        } else {
+            Select();
+        }
+        
+    }
+
     public void DisplayOutOfRange() {
-        print("out of range");
+        BuildCircle();
+        ChangeColourToOutOfRange();
+    }
+
+    void ChangeColourToOutOfRange() {
+        myAnimator.Stop();
+        selectionCircle.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 0.1f); ;
     }
 }

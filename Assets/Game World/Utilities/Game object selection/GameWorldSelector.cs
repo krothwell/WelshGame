@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityUtilities;
+using GameUI;
 
 public abstract class GameWorldSelector : MonoBehaviour {
     /// <summary>
@@ -10,11 +11,14 @@ public abstract class GameWorldSelector : MonoBehaviour {
     /// circle prefab in the object hierarchy.
     /// </summary>
     public GameObject selectionCirclePrefab;
-    private GameObject selectionCircle;
+    protected CharAbility abilitySelected;
+    protected GameObject selectionCircle;
     Color selectedColour; 
-    private bool clicked;
+    protected bool clicked;
     public float Scale, xOffset, yOffset;
     protected PlayerCharacter playerCharacter;
+    protected Animator myAnimator;
+    protected CombatUI combatUI;
 
     void Start () {
         playerCharacter = FindObjectOfType<PlayerCharacter>();
@@ -32,6 +36,8 @@ public abstract class GameWorldSelector : MonoBehaviour {
     void OnMouseOver() {
         if (!clicked) {
             if (selectionCircle == null) {
+                combatUI = FindObjectOfType<CombatUI>();
+                abilitySelected = combatUI.GetCurrentAbility();
                 DisplayCircle();
             }
         }
@@ -40,10 +46,20 @@ public abstract class GameWorldSelector : MonoBehaviour {
     public abstract void DisplayCircle();
 
     public void BuildCircle() {
+        DestroyMe();
         selectionCircle = Instantiate(selectionCirclePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
         selectionCircle.GetComponent<Transform>().localScale = new Vector2(Scale, Scale);
         selectionCircle.GetComponent<Transform>().localPosition = new Vector2(xOffset, yOffset);
         selectionCircle.transform.SetParent(transform, false);
+        myAnimator = selectionCircle.GetComponent<Animator>();
+    }
+
+    public void BuildCircle(Vector2 atCoordinates) {
+        DestroyMe();
+        selectionCircle = Instantiate(selectionCirclePrefab, new Vector3(atCoordinates.x, atCoordinates.y, 0f), Quaternion.identity) as GameObject;
+        selectionCircle.GetComponent<Transform>().localScale = new Vector2(Scale, Scale);
+        selectionCircle.transform.SetParent(transform, false);
+        myAnimator = selectionCircle.GetComponent<Animator>();
     }
 
     void OnMouseExit() {
@@ -53,16 +69,21 @@ public abstract class GameWorldSelector : MonoBehaviour {
     }
 
     void OnMouseUpAsButton() {
+        SetSelected();
+    }
+
+    protected void Select() {
         clicked = true;
         ChangeColourToSelected();
-        print(playerCharacter);
         if (playerCharacter.GetCurrentSelectionCircle() != this) {
-            playerCharacter.DestroyCurrentSelectionCircle();
+            playerCharacter.EndCurrentSelection();
             playerCharacter.SetCurrentSelectionCircle(this);
         }
     }
 
-    void ChangeColourToSelected () {
+    public abstract void SetSelected();
+
+    protected void ChangeColourToSelected () {
         if (selectionCircle != null) {
             selectionCircle.GetComponent<SpriteRenderer>().color = selectedColour;
         }

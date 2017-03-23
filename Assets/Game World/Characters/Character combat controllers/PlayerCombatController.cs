@@ -27,6 +27,11 @@ public class PlayerCombatController : CharCombatController {
         ToggleInCombat(true);
         combatStateAction.MakeAction();
         character.GetMovementController().StopMoving();
+        TriggerStrategyMode();
+    }
+
+    public override void TriggerStrategyMode() {
+        combatui.ToggleCombatUI();
     }
 
     public override void GetHit() {
@@ -42,6 +47,7 @@ public class PlayerCombatController : CharCombatController {
             }
         }
     }
+
 
     public void SetCombatStateAction() {
         combatStateAction = new CombatStateAction(myAnimator);
@@ -61,7 +67,7 @@ public class PlayerCombatController : CharCombatController {
                 }
             }
         } else {
-            character.MakeMovementDecision();
+            //character.MakeMovementDecision();
         }
     }
 
