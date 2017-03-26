@@ -10,7 +10,7 @@ public abstract class CharacterEffectAbility : CharAbility {
     }
 
     public void SetTargetCharacter() {
-        targetCharacter = myCharacter.GetCombatController().GetCurrentTarget();
+        targetCharacter = myCharacter.GetCombatController().GetCurrentEnemyTarget();
     }
 
     public override void InitialiseMe(Character mCharacter) {

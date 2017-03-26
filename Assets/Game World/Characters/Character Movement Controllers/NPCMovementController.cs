@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,16 +13,7 @@ public class NPCMovementController : CharMovementController {
         playerCharacter = FindObjectOfType<PlayerCharacter>();
 	}
 
-    void Update() {
-        CheckToMakeMovement();
-        CheckToEndMovement();
-    }
 
-    protected override void CheckToEndMovement() {
-        if (myPosition == targetPosition) {
-            StopMoving();
-        }
-    }
 
     public void SetMyCombatController (NPCCloseCombatController cc) {
         combatController = cc;
@@ -51,9 +43,7 @@ public class NPCMovementController : CharMovementController {
         }
     }
 
-    public override void StopMoving() {
-        movement.StopAction();
-        rerouteCount = 0;
-        ToggleIsMoving(false);
+    public override void DecideMovement() {
+        throw new NotImplementedException();
     }
 }

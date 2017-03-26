@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>5.5.0f3</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -103,8 +101,8 @@
     <Compile Include="Assets\Data storage\PlayerPrefsManager.cs" />
     <Compile Include="Assets\Data storage\PlayerSavesController.cs" />
     <Compile Include="Assets\Data storage\SceneLoader.cs" />
-    <Compile Include="Assets\Data storage\Utilities\DBqueries.cs" />
     <Compile Include="Assets\Data storage\Utilities\DbCommands.cs" />
+    <Compile Include="Assets\Data storage\Utilities\DbQueries.cs" />
     <Compile Include="Assets\Game World\Camera\CameraController.cs" />
     <Compile Include="Assets\Game World\Characters\Anim toggles\HumanCharAnimToggles.cs" />
     <Compile Include="Assets\Game World\Characters\CharAction.cs" />
@@ -222,7 +220,10 @@
     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\DialogueNode.cs" />
     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\EndDialogueBtn.cs" />
     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\PlayerChoice.cs" />
+    <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\PlayerInputField.cs" />
+    <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\VocabTestNode.cs" />
     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueUI.cs" />
+    <Compile Include="Assets\UI\Game UI\Dialogue UI\TestUtilities\VocabIntroGetter.cs" />
     <Compile Include="Assets\UI\Game UI\Esc Menu UI\EscMenuUI.cs" />
     <Compile Include="Assets\UI\Game UI\Esc Menu UI\ExistingSaveGameBtn.cs" />
     <Compile Include="Assets\UI\Game UI\InspectorUI\CharacterInspector.cs" />

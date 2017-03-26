@@ -3,7 +3,8 @@ using UnityEngine;
 
 
 public class GameWorldCharacterSelector : GameWorldSelector {
-    bool abilityInRange;
+    public GameObject moveToEnemyDecisionPrefab;
+    bool abilityInRange, abilityConfirm;
     public override void DisplayCircle() {
         if (abilitySelected != null) {
             if(abilitySelected.IsInRangeOfCharacter(GetComponent<Character>())) {
@@ -20,11 +21,26 @@ public class GameWorldCharacterSelector : GameWorldSelector {
 
     public override void SetSelected() {
         if (abilitySelected) {
-            if (abilityInRange) {
+            if (abilityConfirm) {
+                ChangeColourToAbilityConfirmed();
+                combatUI.ConfirmAbility();
+                abilityConfirm = false;
+            }
+            else if (abilityInRange) {
                 Select();
+                abilityConfirm = true;
             }
         } else {
             Select();
+            if (GetComponent<Character>().GetCombatController().GetCurrentEnemyTarget() == playerCharacter) {
+                BuildSelectionPlayerDecision(moveToEnemyDecisionPrefab);
+                (myDecision as MoveToEnemyDecision).SetCharacterToMoveTo(GetComponent<Character>());
+            }
+            else {
+                BuildSelectionPlayerDecision(selectionDecisionPrefab);
+                (myDecision as MoveToCharacterDecision).SetCharacterToMoveTo(GetComponent<Character>());
+            }
+            QueueDecisionToRun();
         }
         
     }
@@ -37,5 +53,9 @@ public class GameWorldCharacterSelector : GameWorldSelector {
     void ChangeColourToOutOfRange() {
         myAnimator.Stop();
         selectionCircle.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 0.1f); ;
+    }
+
+    void ChangeColourToAbilityConfirmed() {
+        selectionCircle.GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255); ;
     }
 }

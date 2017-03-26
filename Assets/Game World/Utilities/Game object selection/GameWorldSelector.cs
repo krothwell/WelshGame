@@ -10,7 +10,8 @@ public abstract class GameWorldSelector : MonoBehaviour {
     /// over an object / has selected an object by instantiating a selection 
     /// circle prefab in the object hierarchy.
     /// </summary>
-    public GameObject selectionCirclePrefab;
+    public GameObject selectionCirclePrefab, selectionDecisionPrefab;
+    protected CharacterDecision myDecision;
     protected CharAbility abilitySelected;
     protected GameObject selectionCircle;
     Color selectedColour; 
@@ -76,8 +77,8 @@ public abstract class GameWorldSelector : MonoBehaviour {
         clicked = true;
         ChangeColourToSelected();
         if (playerCharacter.GetCurrentSelectionCircle() != this) {
-            playerCharacter.EndCurrentSelection();
-            playerCharacter.SetCurrentSelectionCircle(this);
+            playerCharacter.EndSelection();
+            playerCharacter.SetCurrentSelection(this);
         }
     }
 
@@ -86,6 +87,22 @@ public abstract class GameWorldSelector : MonoBehaviour {
     protected void ChangeColourToSelected () {
         if (selectionCircle != null) {
             selectionCircle.GetComponent<SpriteRenderer>().color = selectedColour;
+        }
+    }
+
+    protected void BuildSelectionPlayerDecision(GameObject decisionPrefab) {
+        GameObject decision = Instantiate(decisionPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+        decision.GetComponent<CharacterDecision>().InitialiseMe(playerCharacter);
+        decision.transform.SetParent(playerCharacter.transform, false);
+        myDecision = decision.GetComponent<CharacterDecision>();
+    }
+
+    protected void QueueDecisionToRun() {
+        if (combatUI.IsCombatUIActive()) {
+            combatUI.QueueDecision(myDecision);
+        }
+        else {
+            myDecision.ProcessDecision();
         }
     }
 }

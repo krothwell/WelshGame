@@ -49,7 +49,9 @@ namespace GameUI {
             inGamePlayerChoice, 
             endDialogueBtn, 
             spacer, 
-            emptyBlockPrefab;
+            emptyBlockPrefab,
+            vocabTestNodePrefab,
+            playerInputFieldPrefab;
         private ScrollRect dialogueScroller;
         private GameObject currentDialogueHolder, currentDialogueNode, currentCharSpeaking;
         private string currentCharID, currentDialogueID;
@@ -85,7 +87,6 @@ namespace GameUI {
         }
 
         public void StartNewDialogue(Character character) {
-            ResetLowerDialogueContainer();
             currentChar = character;
             print(character);
             currentCharID = character.CharacterName;
@@ -94,7 +95,6 @@ namespace GameUI {
         }
 
         public void StartNewDialogue(string dialogueID) {
-            ResetLowerDialogueContainer();
             currentCharID = DbCommands.GetFieldValueFromTable("CharacterDialogues", "CharacterNames", "DialogueIDs = " + dialogueID);
             currentChar = npcs.GetCharacterFromName(currentCharID);
             currentDialogueID = dialogueID;
@@ -110,9 +110,8 @@ namespace GameUI {
 
         private void DisplayFirstDialogueNode() {
             if (!IsDialogueComplete()) {
+                SetNewDialogueHolder();
                 SetInUse();
-                currentDialogueHolder = Instantiate(dialogueHolderPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
-                currentDialogueHolder.transform.SetParent(dialogueScroller.gameObject.transform, false);
                 dialogueScroller.GetComponent<ScrollRect>().content = currentDialogueHolder.GetComponent<RectTransform>();
                 string[] nodeArray = DbCommands.GetTupleFromTable("DialogueNodes", "DialogueIDs = " + currentDialogueID, "NodeIDs ASC");
                 DisplayDialogueNode(nodeArray);
@@ -120,6 +119,12 @@ namespace GameUI {
             else {
                 SetNotInUse();
             }
+        }
+
+        private void SetNewDialogueHolder() {
+            ResetLowerDialogueContainer();
+            currentDialogueHolder = Instantiate(dialogueHolderPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+            currentDialogueHolder.transform.SetParent(dialogueScroller.gameObject.transform, false);
         }
 
         private bool IsDialogueComplete() {
@@ -151,14 +156,7 @@ namespace GameUI {
             InsertCharName(charName);
             GameObject speakerScrollObj = currentCharSpeaking.gameObject;
             SetCurrentPortraitFromName(charName);
-            DialogueNode dialogueNode = (Instantiate(
-                inGameDialogueNode,
-                new Vector3(0f, 0f, 0f),
-                Quaternion.identity) as GameObject).GetComponent<DialogueNode>();
-            dialogueNode.MyID = nodeArray[0];
-            dialogueNode.MyText = nodeArray[1];
-            dialogueNode.transform.SetParent(currentDialogueHolder.transform, false);
-            dialogueNode.GetComponent<DialogueNode>().SetDisplay();
+            InsertDialogueNode(nodeArray);
             DisplayNodeChoices(nodeArray[0]);
             ScrollToDialogueElement(speakerScrollObj);
         }
@@ -235,6 +233,42 @@ namespace GameUI {
             GameObject endDialogue = Instantiate(endDialogueBtn, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
             endDialogue.transform.SetParent(currentDialogueHolder.transform, false);
             endDialogue.GetComponent<Text>().text = "\t<i>End Dialogue</i>";
+        }
+
+        public void InsertDialogueNode(string[] nodeArray) {
+            DialogueNode dialogueNode = (Instantiate(
+            inGameDialogueNode,
+            new Vector3(0f, 0f, 0f),
+            Quaternion.identity) as GameObject).GetComponent<DialogueNode>();
+            dialogueNode.MyID = nodeArray[0];
+            dialogueNode.MyText = nodeArray[1];
+            dialogueNode.transform.SetParent(currentDialogueHolder.transform, false);
+            dialogueNode.GetComponent<DialogueNode>().SetDisplay();
+        }
+
+        public void InsertVocabTestNode(string[] detailsArray) {
+            VocabTestNode node = (Instantiate(
+                vocabTestNodePrefab,
+                new Vector3(0f, 0f, 0f),
+                Quaternion.identity) as GameObject).GetComponent<VocabTestNode>();
+            node.InitialiseMe(detailsArray[0], detailsArray[1]);
+            node.transform.SetParent(currentDialogueHolder.transform, false);
+        }
+
+        public void InsertPlayerInputField(string answerText) {
+            PlayerInputField input = (Instantiate(
+                playerInputFieldPrefab,
+                new Vector3(0f, 0f, 0f),
+                Quaternion.identity) as GameObject).GetComponent<PlayerInputField>();
+            input.InitialiseMe(answerText);
+            input.transform.SetParent(currentDialogueHolder.transform, false);
+        }
+
+        public void InsertRelatedGrammarTag() {
+            string[] nodeArray = new string[2];
+            nodeArray[0] = "-1";
+            nodeArray[1] = "<i>Related grammar: </i>";
+            InsertDialogueNode(nodeArray);
         }
 
 
@@ -388,6 +422,46 @@ namespace GameUI {
         public int GetChoiceResultsCount(string choiceID) {
             int countChoiceResults = DbCommands.GetCountFromTable("PlayerChoiceResults", "ChoiceIDs = " + choiceID);
             return countChoiceResults;
+        }
+
+        public void ProcessAbilityTest(CharAbility ability) {
+            SetNewDialogueHolder();
+            InsertSpacer();
+            string[] vocabToTest = GetVocabToTestPlayer();
+            string[] vocabTestData = GetTestDataFromVocab(vocabToTest);
+            InsertDialogueNode(GetVocabTestIntroNodeArray(vocabToTest)); //text instruction to player
+            InsertVocabTestNode(vocabTestData);
+            InsertPlayerInputField(vocabTestData[1]);
+            InsertRelatedGrammarTag();
+            List<string[]> grammarList = new List<string[]>();
+            DbCommands.GetDataStringsFromQry(DbQueries.GetGrammarRuleDisplayQry(vocabIDArray[0], vocabIDArray[1]), out grammarList, vocabIDArray[0], vocabIDArray[1]);
+            foreach (string[] grammarRule in grammarList) {
+                string strGrammarID = grammarRule[0];
+                int intGrammarID = int.Parse(strGrammarID);
+                if (vocabIntroDict.ContainsKey(intGrammarID)) {
+                    introTxt = vocabIntroDict[intGrammarID];
+                    break;
+                }
+            }
+
+            SetInUse();
+        }
+
+        public string[] GetVocabToTestPlayer() {
+            string[] vocabDetails = DbCommands.GetRandomTupleFromTable("DiscoveredVocab");
+            string[] vocabKey = new string[2];
+            vocabKey[0] = vocabDetails[0];
+            vocabKey[1] = vocabDetails[1];
+            return vocabKey;
+        }
+
+        public string[] GetVocabTestIntroNodeArray(string[] vocab) {
+            VocabIntroGetter introGetter = new VocabIntroGetter(vocab);
+            return introGetter.GetIntroNodeArray();
+        }
+
+        public string[] GetTestDataFromVocab(string[] vocabToTest) {
+            return vocabToTest;
         }
 
     }

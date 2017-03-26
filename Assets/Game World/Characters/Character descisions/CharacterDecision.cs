@@ -11,4 +11,6 @@ public abstract class CharacterDecision : MonoBehaviour {
     public abstract void ProcessDecision();
 
     public abstract void EndDecision();
+
+
 }

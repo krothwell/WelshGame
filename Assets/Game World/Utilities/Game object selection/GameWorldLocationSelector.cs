@@ -18,6 +18,9 @@ public class GameWorldLocationSelector : GameWorldSelector {
             DestroyMe();
             BuildCircle(MouseSelection.GetMouseCoords2D());
             Select();
+            BuildSelectionPlayerDecision(selectionDecisionPrefab);
+            (myDecision as MoveToLocationDecision).SetTargetPosition(selectionCircle.transform.position);
+            QueueDecisionToRun();
         }
     }
 }

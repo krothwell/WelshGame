@@ -26,7 +26,6 @@ public class PlayerCombatController : CharCombatController {
         AddToEnemyList(charIn);
         ToggleInCombat(true);
         combatStateAction.MakeAction();
-        character.GetMovementController().StopMoving();
         TriggerStrategyMode();
     }
 
@@ -58,7 +57,7 @@ public class PlayerCombatController : CharCombatController {
         if (objSelected.GetComponent<Character>() != null) {
             Character characterSelected = objSelected.GetComponent<Character>();
             if (characterSelected.GetCombatController() != null) {
-                CurrentTarget = characterSelected;
+                CurrentEnemyTarget = characterSelected;
                 if (IsCurrentTargetInWeaponRange()) {
                     combatui.ToggleCombatUI();
                 } else { 

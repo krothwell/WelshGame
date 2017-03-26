@@ -45,9 +45,7 @@ public class CameraController : MonoBehaviour {
     }
 
     private void MonitorPlayerMovement() {
-        if (playerCharacter.playerStatus == PlayerCharacter.PlayerStatus.movingToLocation ||
-            playerCharacter.playerStatus == PlayerCharacter.PlayerStatus.movingToObject ||
-            playerCharacter.playerStatus == PlayerCharacter.PlayerStatus.movingToWeaponRange) {
+        if (playerCharacter.GetMovementController().GetIsMoving()) {
             if (!followingPlayer) {
                 StartFollowingPlayerCountDown();
                 if (camMovementDelay < 0f) {

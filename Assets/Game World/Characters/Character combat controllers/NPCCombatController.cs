@@ -80,6 +80,10 @@ public class NPCCloseCombatController : CharCombatController {
 
     }
 
+    public override void TriggerStrategyMode() {
+        throw new NotImplementedException();
+    }
+
     private void SetCombatSlot() {
         GameObject side;
         int sideRaw = player.GetMyPosition().x >= character.GetMyPosition().x ? -1 : 1;

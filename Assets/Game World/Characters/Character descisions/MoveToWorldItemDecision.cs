@@ -5,7 +5,7 @@ using UnityEngine;
 public class MoveToWorldItemDecision : CharacterMovementDecision {
     protected WorldItem itemSelected;
     public override void CheckToEndMovement() {
-        if (movementController.GetDistanceFromMyPosition(targetPosition) < myCharacter.GetInteractionDistance()) {
+        if (myCharacter.GetMovementController().GetDistanceFromMyPosition(targetPosition) < myCharacter.GetInteractionDistance()) {
             myCharacter.PickUpItem(itemSelected);
             EndDecision();
         }
@@ -14,7 +14,9 @@ public class MoveToWorldItemDecision : CharacterMovementDecision {
 
 
     public void SetItemToMoveTo(WorldItem item) {
+        print(item + " " + item.transform + " " + item.transform.position);
         itemSelected = item;
-        movementController.SetTargetPosition(item.GetComponent<Transform>().position);
+        targetPosition = item.transform.position;
+        myCharacter.GetMovementController().SetTargetPosition(targetPosition);
     }
 }

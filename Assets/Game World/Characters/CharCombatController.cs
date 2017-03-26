@@ -6,7 +6,7 @@ using GameUtilities;
 public abstract class CharCombatController : MonoBehaviour, IAttackable {
     protected bool isInCombat;
     protected Animator myAnimator;
-    public Character CurrentTarget;
+    public Character CurrentEnemyTarget;
     protected Character myCharacter;
     public List<Character> CharacterEnemyList;
     public float BaseWeaponReach = 0.1f;
@@ -15,7 +15,7 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
     // Use this for initialization
 
     public bool IsAttacking(Character characterIn) {
-        return (CurrentTarget == characterIn) ? true : false;
+        return (CurrentEnemyTarget == characterIn) ? true : false;
     }
 
     public void ToggleInCombat(bool active) {
@@ -35,7 +35,7 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
     }
 
     public bool IsCurrentTargetInWeaponRange() {
-        Vector2 distanceXYfromCharacter = World.GetVector2DistanceFromPositions2D(myCharacter.GetMyPosition(), CurrentTarget.transform.position);
+        Vector2 distanceXYfromCharacter = World.GetVector2DistanceFromPositions2D(myCharacter.GetMyPosition(), CurrentEnemyTarget.transform.position);
         print(distanceXYfromCharacter);
         Vector2 weaponReachXY = GetWeaponReachXY();
         return (distanceXYfromCharacter.x < weaponReachXY.x && distanceXYfromCharacter.y < weaponReachXY.y);
@@ -45,11 +45,11 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
 
 
     public void SetCurrentTarget(Character charTarget) {
-        CurrentTarget = charTarget;
+        CurrentEnemyTarget = charTarget;
     }
 
-    public Character GetCurrentTarget() {
-        return CurrentTarget;
+    public Character GetCurrentEnemyTarget() {
+        return CurrentEnemyTarget;
     }
 
     public abstract void TriggerCombat(Character charIn);

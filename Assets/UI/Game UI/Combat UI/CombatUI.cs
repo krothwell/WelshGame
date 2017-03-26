@@ -14,12 +14,14 @@ namespace GameUI {
         public string SelectedAbilityOption;
         //public enum CombatAbilities { passive, strike }
         public CharAbility currentAbility;
+        private CharacterDecision pendingDecision;
         public Texture2D[] cursors;
         private bool combatUIactive;
         PlayerCharacter playerCharacter;
+        DialogueUI dialogueUI;
         // Use this for initialization
         void Start() {
-            //dialogueUI = FindObjectOfType<DialogueUI>();
+            dialogueUI = FindObjectOfType<DialogueUI>();
             //currentAbility = CombatAbilities.passive;
             playerCharacter = FindObjectOfType<PlayerCharacter>();
             SelectedAbilityOption = "selectedAbilityOption";
@@ -40,20 +42,27 @@ namespace GameUI {
                 HideComponents();
                 World.UnpauseGame();
                 combatUIactive = false;
-
+                if (pendingDecision != null) {
+                    pendingDecision.ProcessDecision();
+                }
             } else {
                 World.PauseGame();
                 DisplayComponents();
                 combatUIactive = true;
+                pendingDecision = null;
             }
         }
 
         public void EndCurrentSelection() {
-            playerCharacter.EndCurrentSelection();
+            playerCharacter.EndSelection();
         }
 
         public bool IsCombatUIActive() {
             return combatUIactive;
+        }
+
+        public void QueueDecision(CharacterDecision decision) {
+            pendingDecision = decision;
         }
 
         public void SetAbility(GameObject abilityPrefab) {
@@ -62,6 +71,10 @@ namespace GameUI {
             currentAbility = abilitySelected.GetComponent<CharAbility>();
             currentAbility.InitialiseMe(playerCharacter);
             SetAttackCursor();
+        }
+
+        public void ConfirmAbility() {
+            dialogueUI.ProcessAbilityTest(currentAbility);
         }
 
         public void DeselectAbility() {

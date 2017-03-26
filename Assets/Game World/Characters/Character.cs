@@ -90,6 +90,8 @@ public abstract class Character : MonoBehaviour {
         return interactionDistance;
     }
 
+    public abstract void EndSelection();
+
     public void SpeakToCharacter(Character character) {
         currentlySpeakingTo = character;
         dialogueUI.StartNewDialogue(currentlySpeakingTo);

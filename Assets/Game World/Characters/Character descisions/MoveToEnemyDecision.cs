@@ -14,7 +14,7 @@ public class MoveToEnemyDecision : CharacterMovementDecision {
 
     public void SetCharacterToMoveTo(Character character) {
         characterSelected = character;
-        movementController.SetTargetPosition(characterSelected.GetMyPosition());
+        myCharacter.GetMovementController().SetTargetPosition(characterSelected.GetMyPosition());
         character.GetCombatController().SetCurrentTarget(character);
     }
 }

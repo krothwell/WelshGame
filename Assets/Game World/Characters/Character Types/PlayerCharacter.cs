@@ -22,7 +22,6 @@ public class PlayerCharacter : Character {
     public GameObject currentObjectInteractingWith;
     private GameObject objectClickedByPlayer;
     private GameWorldSelector currentSelectionCircle;
-    private DialogueUI dialogueUI;
 
     void Awake() {
         combatController = GetComponent<CharCombatController>();
@@ -70,7 +69,7 @@ public class PlayerCharacter : Character {
         return objectClickedByPlayer;
     }
 
-    public void SetCurrentSelectionCircle(GameWorldSelector selectionCircle) {
+    public void SetCurrentSelection(GameWorldSelector selectionCircle) {
         currentSelectionCircle = selectionCircle;
     }
 
@@ -78,13 +77,15 @@ public class PlayerCharacter : Character {
         return currentSelectionCircle;
     }
 
-    public void EndCurrentSelection() {
+    public override void EndSelection() {
         if (currentSelectionCircle != null) {
             currentSelectionCircle.DestroyMe();
         }
         currentObjectInteractingWith = null;
         GetCombatController().SetCurrentTarget(null);
     }
+
+
 
     //protected void MakeDecisionOnPlayerInput() {
     //    if (Input.GetMouseButtonUp(0)) {

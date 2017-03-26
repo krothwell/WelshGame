@@ -5,7 +5,6 @@ using UnityUtilities;
 using GameUI;
 
 public class PlayerMovementController : CharMovementController {
-    Vector2 camPosition;
     float playerMovementDelay;
     
     private MouseSelection mouseSelection;
@@ -46,7 +45,7 @@ public class PlayerMovementController : CharMovementController {
 
     public override void ProcessMovement() {
         SetMyDirection(targetPosition, myPosition);
-        isDecidingMovement = !isDecisionRun;
+        isDecidingMovement = true;
     }
 
     public override void DecideMovement() {
@@ -61,21 +60,24 @@ public class PlayerMovementController : CharMovementController {
                 isDecidingMovement = false;
                 ResetPlayerMovementDelay();
             }
-        }
 
-        if (isDecisionRun || isDecisionWalk) {
-            if (movement != null) {
-                movement.StopAction();
+            if (isDecisionRun || isDecisionWalk) {
+                if (movement != null) {
+                    movement.StopAction();
+                }
+                if (isDecisionRun) {
+                    movement = new RunMovement(character.GetMyAnimator(), runSpeed);
+                }
+                else if (isDecisionWalk) {
+                    movement = new WalkMovement(character.GetMyAnimator(), walkSpeed);
+                }
+                movement.MakeAction();
+                if (movement != null) {
+                    ToggleIsMoving(true);
+                }
             }
-            if (isDecisionRun) {
-                movement = new RunMovement(character.GetMyAnimator(), runSpeed);
-            }
-            else if (isDecisionWalk) {
-                movement = new WalkMovement(character.GetMyAnimator(), walkSpeed);
-            }
-            movement.MakeAction();
-            ToggleIsMoving(true);
         }
+        
     }
 
     private void ResetPlayerMovementDelay() {

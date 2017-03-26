@@ -4,22 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class CharacterMovementDecision : CharacterDecision {
-    protected CharMovementController movementController;
     protected Vector2 targetPosition;
-    void Start() {
-        movementController = myCharacter.GetMovementController();
-    }
 	// Update is called once per frame
 	void Update () {
         CheckToEndMovement();
     }
 
     public override void ProcessDecision() {
-        movementController.ProcessMovement();
+        myCharacter.GetMovementController().SetMovementDecision(this);
+        myCharacter.GetMovementController().ProcessMovement();
     }
 
     public override void EndDecision() {
-        movementController.StopMoving();
+        myCharacter.GetMovementController().StopMoving();
+        myCharacter.EndSelection();
+        Destroy(gameObject);
         Destroy(this);
     }
 
