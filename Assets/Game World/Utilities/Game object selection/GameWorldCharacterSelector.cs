@@ -23,6 +23,8 @@ public class GameWorldCharacterSelector : GameWorldSelector {
         if (abilitySelected) {
             if (abilityConfirm) {
                 ChangeColourToAbilityConfirmed();
+                (abilitySelected as CharacterEffectAbility).SetTargetCharacter(GetComponent<Character>());
+                playerCharacter.GetCombatController().SetCurrentTarget(GetComponent<Character>());
                 combatUI.ConfirmAbility();
                 abilityConfirm = false;
             }
@@ -33,6 +35,7 @@ public class GameWorldCharacterSelector : GameWorldSelector {
         } else {
             Select();
             if (GetComponent<Character>().GetCombatController().GetCurrentEnemyTarget() == playerCharacter) {
+                playerCharacter.GetCombatController().SetCurrentTarget(GetComponent<Character>());
                 BuildSelectionPlayerDecision(moveToEnemyDecisionPrefab);
                 (myDecision as MoveToEnemyDecision).SetCharacterToMoveTo(GetComponent<Character>());
             }

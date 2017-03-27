@@ -9,12 +9,24 @@ namespace GameUI {
                 set { correctAnswer = value; }
             }
 
+            private bool submitted;
+            public bool Submitted {
+                get { return submitted; }
+                set { submitted = value; }
+            }
+
             DialogueUI dialogueManager;
             // Use this for initialization
 
             public void InitialiseMe(string answerTxt) {
                 correctAnswer = answerTxt;
             }
+
+            public void SetSubmitted() {
+                GetComponent<InputField>().enabled = false;
+                submitted = true;
+            }
+
         }
     }
 }

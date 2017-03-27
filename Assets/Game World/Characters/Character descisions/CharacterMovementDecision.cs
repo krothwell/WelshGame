@@ -18,8 +18,10 @@ public abstract class CharacterMovementDecision : CharacterDecision {
     public override void EndDecision() {
         myCharacter.GetMovementController().StopMoving();
         myCharacter.EndSelection();
-        Destroy(gameObject);
-        Destroy(this);
+        if (gameObject != null) {
+            Destroy(gameObject);
+            Destroy(this);
+        }
     }
 
     /// <summary>

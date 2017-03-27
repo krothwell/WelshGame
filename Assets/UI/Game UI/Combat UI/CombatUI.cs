@@ -45,6 +45,7 @@ namespace GameUI {
                 if (pendingDecision != null) {
                     pendingDecision.ProcessDecision();
                 }
+                SetCursorDefault();
             } else {
                 World.PauseGame();
                 DisplayComponents();
@@ -75,12 +76,14 @@ namespace GameUI {
 
         public void ConfirmAbility() {
             dialogueUI.ProcessAbilityTest(currentAbility);
+            SetCursorDefault();
         }
 
         public void DeselectAbility() {
             if (currentAbility != null) {
                 Destroy(currentAbility.gameObject);
                 currentAbility = null;
+                SetCursorDefault();
             }
         }
 
@@ -88,18 +91,14 @@ namespace GameUI {
             return currentAbility;
         }
 
-        
-        public void SetRandomVocab() {
-    		//string[] testStrings = DbCommands.GetRandomTupleFromTable("VocabTranslations");
-    		//testEnglish = testStrings[0];
-    		//testWelsh = testStrings[1];
-    		//lowerUItxt.text = "Translate the following into Welsh: " + testEnglish;
-	    }
-
         public void SetAttackCursor() {
             Texture2D cursorTexture = cursors[0];
             CursorMode cursorMode = CursorMode.ForceSoftware;
             Cursor.SetCursor(cursorTexture, Vector2.zero, cursorMode);
+        }
+
+        public void SetCursorDefault() {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         }
     }
 }

@@ -7,7 +7,7 @@ public class MoveToEnemyDecision : CharacterMovementDecision {
 
     public override void CheckToEndMovement() {
         if (myCharacter.GetCombatController().IsCurrentTargetInWeaponRange()) {
-            characterSelected.GetCombatController().TriggerStrategyMode();
+            myCharacter.GetCombatController().TriggerStrategyMode();
             EndDecision();
         }
     }

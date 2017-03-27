@@ -18,10 +18,14 @@ namespace GameUI {
 
         public void DisplayNewWelsh(string choiceID) {
             newWelshList = GetPanel().transform.FindChild("ScrollWindow").FindChild("NewWelshList").gameObject;
-            FillDisplayFromDb(DbQueries.GetCurrentActivateGrammarPlayerChoiceResultQry(choiceID), newWelshList.transform, BuildNewGrammar);
+            EmptyDisplay(newWelshList.transform);
+            AppendDisplayFromDb(DbQueries.GetCurrentActivateGrammarPlayerChoiceResultQry(choiceID), newWelshList.transform, BuildNewGrammar);
             AppendDisplayFromDb(DbQueries.GetCurrentActivateVocabPlayerChoiceResultQry(choiceID), newWelshList.transform, BuildNewVocab);
-            DisplayComponents();
             Canvas.ForceUpdateCanvases();
+            if (newWelshList.transform.childCount > 0) {
+                DisplayComponents();
+                Canvas.ForceUpdateCanvases();
+            }
         }
 
         public Transform BuildNewVocab(string[] vocabData) {

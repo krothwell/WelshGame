@@ -20,6 +20,8 @@ using System;
 /// </summary>
 namespace GameUI {
     public class DialogueUI : UIController {
+        private PlayerInputField currentInputField;
+        private string[] currentVocabTestData;
     	private string testEnglish;
     	private string testWelsh;
     	public string TestEnglish {
@@ -30,6 +32,7 @@ namespace GameUI {
     		get {return testWelsh;}
     		set {testWelsh = value;}
     	}
+        CharAbility queuedAbility;
     	Text answerTxt, percentageTxt;
         GameObject answerField;
         InputField answerInput;
@@ -51,11 +54,12 @@ namespace GameUI {
             spacer, 
             emptyBlockPrefab,
             vocabTestNodePrefab,
-            playerInputFieldPrefab;
+            playerInputFieldPrefab,
+            grammarShortDescPrefab;
         private ScrollRect dialogueScroller;
         private GameObject currentDialogueHolder, currentDialogueNode, currentCharSpeaking;
         private string currentCharID, currentDialogueID;
-        private PlayerCharacter player;
+        private PlayerCharacter playerCharacter;
         public Character currentChar;
         private Sprite currentPortrait;
         private NPCs npcs;
@@ -68,17 +72,15 @@ namespace GameUI {
             questsUI = FindObjectOfType<QuestsUI>();
             newWelshLearnedUI = FindObjectOfType<NewWelshLearnedUI>();
             npcs = FindObjectOfType<NPCs>();
-            player = FindObjectOfType<PlayerCharacter>();
+            playerCharacter = FindObjectOfType<PlayerCharacter>();
             panel = transform.FindChild("Panel").gameObject;
-            answerField = panel.transform.FindChild("InputField").gameObject;
-            answerInput = answerField.GetComponent<InputField>();
-            answerTxt = answerInput.transform.FindChild("Text").GetComponent<Text>();
             submitBtn = panel.transform.FindChild("SubmitBtn").gameObject;
             percentageTxt = panel.transform.FindChild("PercentageTxt").GetComponent<Text>();
             combatUI = FindObjectOfType<CombatUI>();
             btnTxt = submitBtn.transform.FindChild("Text").gameObject.GetComponent<Text>();
-            player = FindObjectOfType<PlayerCharacter>();
+            playerCharacter = FindObjectOfType<PlayerCharacter>();
             objPortrait = panel.transform.FindChild("CharacterPortrait").GetComponent<Image>();
+            DisableSubmitBtn();
         }
 
         // Update is called once per frame
@@ -143,7 +145,7 @@ namespace GameUI {
                 return currentChar.CharacterName;
             }
             else if (overrideName == "!Player") {
-                return player.GetMyName();
+                return playerCharacter.GetMyName();
             }
             else {
                 return overrideName;
@@ -162,14 +164,14 @@ namespace GameUI {
         }
 
         public void SetCurrentPortraitFromName(string charName) {
-            if (charName != player.GetMyName()) {
+            if (charName != playerCharacter.GetMyName()) {
                 Character charOfName = npcs.GetCharacterFromName(charName);
                 currentPortrait = charOfName.GetMyPortrait();
                 SetObjectPortrait(currentPortrait);
             }
             else {
-                SetObjectPortrait(player.GetPlayerPortrait());
-                currentPortrait = player.GetPlayerPortrait();
+                SetObjectPortrait(playerCharacter.GetPlayerPortrait());
+                currentPortrait = playerCharacter.GetPlayerPortrait();
             }
 
         }
@@ -181,8 +183,8 @@ namespace GameUI {
         private void DisplayNodeChoices(string nodeID) {
             InsertSpacer();
             //check if player is node character override, if not then the name can be inserted
-            if (GetSpeakersName(nodeID) != player.GetMyName()) {
-                InsertCharName(player.GetMyName());
+            if (GetSpeakersName(nodeID) != playerCharacter.GetMyName()) {
+                InsertCharName(playerCharacter.GetMyName());
             }
             string nodeChoiceQry = "SELECT * FROM PlayerChoices WHERE NodeIDs = " + nodeID + ";";
             AppendDisplayFromDb(nodeChoiceQry, currentDialogueHolder.transform, BuildNodeChoice);
@@ -262,6 +264,7 @@ namespace GameUI {
                 Quaternion.identity) as GameObject).GetComponent<PlayerInputField>();
             input.InitialiseMe(answerText);
             input.transform.SetParent(currentDialogueHolder.transform, false);
+            currentInputField = input;
         }
 
         public void InsertRelatedGrammarTag() {
@@ -269,6 +272,15 @@ namespace GameUI {
             nodeArray[0] = "-1";
             nodeArray[1] = "<i>Related grammar: </i>";
             InsertDialogueNode(nodeArray);
+        }
+
+        public void InsertGrammarShortDesc(string grammarstr) {
+            GameObject grammarShortDesc = (Instantiate(
+                grammarShortDescPrefab,
+                new Vector3(0f, 0f, 0f),
+                Quaternion.identity) as GameObject);
+            grammarShortDesc.GetComponent<Text>().text = "\t- " + grammarstr;
+            grammarShortDesc.transform.SetParent(currentDialogueHolder.transform, false);
         }
 
 
@@ -295,28 +307,24 @@ namespace GameUI {
         }
         
     	public void SetPercentageCorrect() {
-    		int welshLength = testWelsh.Length;
+            string correctAnswer = currentInputField.CorrectAnswer;
+            string playerAnswer = currentInputField.GetComponent<InputField>().text;
+            int answerLength = correctAnswer.Length;
     		int percentage = 0;
     		int countCorrect = 0;
-    		string answer = answerTxt.text;
-    		for(int i = 0; i < welshLength; i++) {
-    			if (i < answer.Length) {
-    				if (answer[i] == testWelsh[i]) {
+    		for(int i = 0; i < answerLength; i++) {
+    			if (i < playerAnswer.Length) {
+    				if (playerAnswer[i] == correctAnswer[i]) {
     					countCorrect++;
     				} 
     			} else { break; }
     		}
     
-    		percentage = (int)Mathf.Round((100f/welshLength) * countCorrect);
+    		percentage = (int)Mathf.Round((100f/answerLength) * countCorrect);
     		Debug.Log(countCorrect);
     		percentageTxt.text = percentage.ToString() + "%";
     
     	}
-    	
-    	public void ActivateAnswerField() {
-            //answerField.SetActive(true);
-            //answerInput.Select();
-        }
         
         public void SetInUse() {
             animator = GetComponent<Animator>();
@@ -327,28 +335,37 @@ namespace GameUI {
         public void SetNotInUse() {
             animator = GetComponent<Animator>();
             animator.SetBool("InUse", false);
-            player.DestroySelectionCircleOfInteractiveObject();
-            player.playerStatus = PlayerCharacter.PlayerStatus.passive;
+            playerCharacter.DestroySelectionCircleOfInteractiveObject();
+            playerCharacter.playerStatus = PlayerCharacter.PlayerStatus.passive;
         }
         
-        public void SetBtnText(string newText) {
+        private void SetBtnText(string newText) {
             btnTxt.text = newText;
         }
-        
-        public void ManageLowerUISubmission() {
-            //if (submissionScored) {
-            //    if (combatUI.currentAbility == (CombatUI.CombatAbilities.strike)) { 
-            //        //player.StrikeSelectedEnemy();
-            //        combatUI.ToggleCombatUI();
-            //        submissionScored = false;
-            //        SetBtnText("Submit answer");
-            //        SetNotInUse();
-            //    }
-            //} else {
-            //    SetPercentageCorrect();
-            //    submissionScored = true;
-            //    SetBtnText("Finish move");
-            //}
+
+        private void EnableSubmitBtn() {
+            submitBtn.GetComponent<Button>().interactable = true;
+        }
+
+        private void DisableSubmitBtn() {
+            SetBtnText("...");
+            submitBtn.GetComponent<Button>().interactable = false;
+        }
+
+        public void SubmitTestAnswer() {
+            if(currentInputField != null) {
+                if (currentInputField.Submitted) {
+                    SetNotInUse();
+                    combatUI.ToggleCombatUI();
+                    queuedAbility.UseAbility();
+                    playerCharacter.GetCurrentSelectionCircle().DestroyMe();
+                }
+                else {
+                    SetPercentageCorrect();
+                    SetBtnText("Continue...");
+                    currentInputField.SetSubmitted();
+                }
+            } 
         }
     
         public void SetObjectPortrait(Sprite portrait) {
@@ -425,25 +442,25 @@ namespace GameUI {
         }
 
         public void ProcessAbilityTest(CharAbility ability) {
+            queuedAbility = ability;
+            EnableSubmitBtn();
+            SetBtnText("Submit answer");
             SetNewDialogueHolder();
             InsertSpacer();
             string[] vocabToTest = GetVocabToTestPlayer();
-            string[] vocabTestData = GetTestDataFromVocab(vocabToTest);
+            currentVocabTestData = GetTestDataFromVocab(vocabToTest);
             InsertDialogueNode(GetVocabTestIntroNodeArray(vocabToTest)); //text instruction to player
-            InsertVocabTestNode(vocabTestData);
-            InsertPlayerInputField(vocabTestData[1]);
+            InsertVocabTestNode(currentVocabTestData);
             InsertRelatedGrammarTag();
             List<string[]> grammarList = new List<string[]>();
-            DbCommands.GetDataStringsFromQry(DbQueries.GetGrammarRuleDisplayQry(vocabIDArray[0], vocabIDArray[1]), out grammarList, vocabIDArray[0], vocabIDArray[1]);
+            DbCommands.GetDataStringsFromQry(DbQueries.GetGrammarRuleDisplayQry(vocabToTest[0], vocabToTest[1]), out grammarList, vocabToTest[0], vocabToTest[1]);
             foreach (string[] grammarRule in grammarList) {
-                string strGrammarID = grammarRule[0];
-                int intGrammarID = int.Parse(strGrammarID);
-                if (vocabIntroDict.ContainsKey(intGrammarID)) {
-                    introTxt = vocabIntroDict[intGrammarID];
-                    break;
+                if (grammarRule[2] == "1") {
+                    string strGrammarShorDesc = grammarRule[1];
+                    InsertGrammarShortDesc(strGrammarShorDesc);
                 }
             }
-
+            InsertPlayerInputField(currentVocabTestData[1]);
             SetInUse();
         }
 

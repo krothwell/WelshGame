@@ -5,12 +5,9 @@ using UnityEngine;
 public abstract class CharacterEffectAbility : CharAbility {
     protected Character targetCharacter;
 
-    public void SetTargetCharacter(Character character) {
-        targetCharacter = character;
-    }
-
-    public void SetTargetCharacter() {
-        targetCharacter = myCharacter.GetCombatController().GetCurrentEnemyTarget();
+    public void SetTargetCharacter(Character characterTarget) {
+        targetCharacter = characterTarget;
+        myCharacter.GetMovementController().SetMyDirection(targetCharacter.GetMyPosition(), myCharacter.GetMyPosition());
     }
 
     public override void InitialiseMe(Character mCharacter) {

@@ -13,7 +13,6 @@ namespace Quests {
             //quests.ActivateDialogue("1");
             
             player = FindObjectOfType<PlayerCharacter>();
-            player.playerStatus = PlayerCharacter.PlayerStatus.speakingToCharacter;
             dialogueUI = FindObjectOfType<DialogueUI>();
             //dialogueUI.SetInUse();
             

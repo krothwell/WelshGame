@@ -87,26 +87,4 @@ public class PlayerCombatController : CharCombatController {
     public bool IsCharacterEnemy(Character characterIn) {
         return characterIn.GetCombatController().IsAttacking(character);
     }
-
-    void AttemptStrikeToSelectedEnemy() {
-        //if (distanceX > strikeRangeX || distanceY > strikeRangeY) {
-        //    print("Enemy too far away");
-        //}
-        //else {
-            //print("attempting strike");
-            //Vector2 enemyPosition = selectedEnemy.GetComponent<Transform>().position;
-            //SetMyDirection(enemyPosition, myCurrentPosition);
-            //SetDistanceFromNewPosition(enemyPosition, myCurrentPosition);
-            //Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-            ////dialogueUI.SetInUse();
-            ////dialogueUI.SetRandomVocab();
-        //}
-    }
-
-    public void StrikeSelectedEnemy() {
-        //print("striking enemy");
-        //animToggles.Strike();
-        //selectedEnemy.GetComponent<Character>().SetUnhovered();
-        //selectedEnemy = null;
-    }
 }
