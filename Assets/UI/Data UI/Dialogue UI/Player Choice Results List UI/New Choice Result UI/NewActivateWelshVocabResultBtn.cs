@@ -30,7 +30,7 @@ namespace DataUI.ListItems {
 
         protected override void InsertResult() {
             InsertNewPlayerChoiceResultID();
-            DbCommands.InsertTupleToTable("WelshVocabActivatedByDialogueChoices", playerChoiceResultID, PlayerChoiceID, welshText, englishText);
+            DbCommands.InsertTupleToTable("WelshVocabActivatedByDialogueChoices", playerChoiceResultID, PlayerChoiceID, englishText, welshText);
             dialogueUI.DisplayResultsRelatedToChoices();
             dialogueUI.DeactivateNewChoiceResult();
         }

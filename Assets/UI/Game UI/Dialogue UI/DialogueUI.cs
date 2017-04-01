@@ -83,10 +83,6 @@ namespace GameUI {
             DisableSubmitBtn();
         }
 
-        // Update is called once per frame
-        void Update() {
-
-        }
 
         public void StartNewDialogue(Character character) {
             currentChar = character;
@@ -333,6 +329,7 @@ namespace GameUI {
 
 
         public void SetNotInUse() {
+            DisableSubmitBtn();
             animator = GetComponent<Animator>();
             animator.SetBool("InUse", false);
             playerCharacter.DestroySelectionCircleOfInteractiveObject();
@@ -356,9 +353,8 @@ namespace GameUI {
             if(currentInputField != null) {
                 if (currentInputField.Submitted) {
                     SetNotInUse();
-                    combatUI.ToggleCombatUI();
-                    queuedAbility.UseAbility();
-                    playerCharacter.GetCurrentSelectionCircle().DestroyMe();
+                    combatUI.UseSelectedAbility();
+                    
                 }
                 else {
                     SetPercentageCorrect();

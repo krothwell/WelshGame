@@ -81,10 +81,24 @@ namespace GameUI {
 
         public void DeselectAbility() {
             if (currentAbility != null) {
-                Destroy(currentAbility.gameObject);
-                currentAbility = null;
-                SetCursorDefault();
+                ToggleSelectionTo(null, SelectedAbilityOption);
+                //Destroy(currentAbility.gameObject);
+                RemoveCurrentAbility();
             }
+        }
+
+        public void UseSelectedAbility() {
+            if (currentAbility != null) {
+                ToggleCombatUI();
+                currentAbility.UseAbility();
+                DeselectAbility();
+                playerCharacter.GetCurrentSelectionCircle().DestroyMe();
+            }
+        }
+
+        public void RemoveCurrentAbility() {
+            currentAbility = null;
+            SetCursorDefault();
         }
 
         public CharAbility GetCurrentAbility() {

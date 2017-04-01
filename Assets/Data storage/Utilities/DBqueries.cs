@@ -289,5 +289,13 @@ namespace DbUtilities {
                     + " AND VocabRuleList.WelshText = " + DbCommands.GetParameterNameFromValue(WelshTxt)
                     + " AND DiscoveredVocabGrammar.SaveIDs = 0";
         }
+
+        public static string GetPlayerVocabSkillsQry() {
+            return "SELECT EnglishText, WelshText, CorrectTallies FROM DiscoveredVocab WHERE SaveIDs = 0";
+        }
+
+        public static string GetWelshThresholdsQry() {
+            return "SELECT * FROM Proficiencies ORDER BY Thresholds DESC;";
+        }
     }
 }

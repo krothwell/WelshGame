@@ -6,9 +6,9 @@ using UIUtilities;
 
 public class NewWelshVocab : MonoBehaviour {
     public GameObject relatedGrammarPrefab, grammarListPrefab;
-    GameObject myGrammarList;
-    string enVocab;
-    string cyVocab;
+    protected GameObject myGrammarList;
+    protected string enVocab;
+    protected string cyVocab;
     
 
     public void InitialiseMe(string engVocab, string cymVocab) {

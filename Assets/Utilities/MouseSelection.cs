@@ -23,21 +23,29 @@ namespace UnityUtilities {
 
         private void CountDownFromMouseClick() {
             if (countingDownFromMouseClicked) {
-                if (timeDelayToDetectDblClick >= 0f) { timeDelayToDetectDblClick -= Time.deltaTime; }
+                if (timeDelayToDetectDblClick >= 0f) {
+                    timeDelayToDetectDblClick -= Time.deltaTime; }
                 else {
-                    countingDownFromMouseClicked = false;
                     ResetTimeDelayToDetectDblClick();
+                    countingDownFromMouseClicked = false;
                     }
             }
         }
 
+        public void ResetTimeDelayToDetectDblClick() {
+            timeDelayToDetectDblClick = 0.2f;
+        }
+
         public bool GetIsDoubleClick() {
             if (countingDownFromMouseClicked) {
+                countingDownFromMouseClicked = false;
+                ResetTimeDelayToDetectDblClick();
                 return true;
             }
             else {
                 countingDownFromMouseClicked = true;
                 return false;
+                
             }
             
         }
@@ -97,8 +105,5 @@ namespace UnityUtilities {
             return rayPos;
         }
 
-        public void ResetTimeDelayToDetectDblClick() {
-            timeDelayToDetectDblClick = 0.2f;
-        }
     }
 }

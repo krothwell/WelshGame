@@ -32,8 +32,7 @@ public abstract class Character : MonoBehaviour {
         print(imageRoot);
         print(CharacterParts);
         myAnimator = gameObject.GetComponent<Animator>();
-        combatController.SetAnimator(myAnimator);
-        combatController.SetCharacter(this);
+        SetCombatController();
         SetMovementController();
         interactionDistance = 1f;
     }
@@ -80,6 +79,13 @@ public abstract class Character : MonoBehaviour {
 
     public CharMovementController GetMovementController() {
         return movementController;
+    }
+
+    private void SetCombatController() {
+        if (combatController != null) {
+            combatController.SetAnimator(myAnimator);
+            combatController.SetCharacter(this);
+        }
     }
 
     public CharCombatController GetCombatController() {

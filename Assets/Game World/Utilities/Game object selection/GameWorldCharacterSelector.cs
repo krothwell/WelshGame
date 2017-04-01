@@ -34,10 +34,12 @@ public class GameWorldCharacterSelector : GameWorldSelector {
             }
         } else {
             Select();
-            if (GetComponent<Character>().GetCombatController().GetCurrentEnemyTarget() == playerCharacter) {
-                playerCharacter.GetCombatController().SetCurrentTarget(GetComponent<Character>());
-                BuildSelectionPlayerDecision(moveToEnemyDecisionPrefab);
-                (myDecision as MoveToEnemyDecision).SetCharacterToMoveTo(GetComponent<Character>());
+            if (GetComponent<Character>().GetCombatController() != null) {
+                if (GetComponent<Character>().GetCombatController().GetCurrentEnemyTarget() == playerCharacter) {
+                    playerCharacter.GetCombatController().SetCurrentTarget(GetComponent<Character>());
+                    BuildSelectionPlayerDecision(moveToEnemyDecisionPrefab);
+                    (myDecision as MoveToEnemyDecision).SetCharacterToMoveTo(GetComponent<Character>());
+                }
             }
             else {
                 BuildSelectionPlayerDecision(selectionDecisionPrefab);

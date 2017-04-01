@@ -42,6 +42,7 @@ public class PlayerCombatController : CharCombatController {
         if (CharacterEnemyList.Contains(charIn)) {
             RemoveFromEnemyList(charIn);
             if (CharacterEnemyList.Count < 1) {
+                ToggleInCombat(false);
                 combatStateAction.StopAction();
             }
         }

@@ -779,13 +779,18 @@ namespace DataUI {
             NPCs npcs = FindObjectOfType<NPCs>();
             foreach (string[] nameBox in namesList) {
                 string npcName = nameBox[0];
+                string npcParam;
+                if (npcName == "") {
+                    npcParam = "''";
+                } else {
+                    npcParam = DbCommands.GetParameterNameFromValue(npcName);
+                }
                 if (!npcs.IsNameInCharDict(npcName)) {
                     DbCommands.UpdateTableField(
                         "Characters",
                         "Scenes",
                         "null",
-                        "CharacterNames = " + DbCommands.GetParameterNameFromValue(npcName),
-                        DbCommands.GetParameterNameFromValue(npcName),
+                        "CharacterNames = " + npcParam,
                         npcName
                         );
                 }

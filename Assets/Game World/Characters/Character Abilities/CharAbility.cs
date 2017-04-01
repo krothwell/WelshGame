@@ -17,8 +17,6 @@ public abstract class CharAbility : MonoBehaviour {
         }
 	}
 
-    public abstract void SetMyRange();
-
     public abstract void InitialiseMe(Character character);
 
     public void UseAbility() {
@@ -30,9 +28,10 @@ public abstract class CharAbility : MonoBehaviour {
     protected void StartUsingAbility() {
         if (countDownToFollowThrough <= 0) {
             FollowThroughAbility();
+            followingThrough = true;
+            StopAbility();
         }
         else {
-            followingThrough = true;
             countDownToFollowThrough -= Time.deltaTime;
         }
     }
@@ -60,6 +59,8 @@ public abstract class CharAbility : MonoBehaviour {
     public void SetMyCharacter(Character character) {
         myCharacter = character;
     }
+
+    public abstract void SetMyRange();
 
     public Vector2 GetMyRange() {
         return myRange;

@@ -15,11 +15,6 @@ namespace GameUI.ListItems {
             DeselectSelf();
         }
 
-        // Update is called once per frame
-        void Update() {
-
-        }
-
         public void SelectSelf() {
             GetComponent<Image>().color = Colours.selectedAbility;
             combatUI.SetAbility(AbilityPrefab);
@@ -28,7 +23,7 @@ namespace GameUI.ListItems {
 
         public void DeselectSelf() {
             GetComponent<Image>().color = Colours.deselectedAbility;
-            combatUI.DeselectAbility();
+            combatUI.RemoveCurrentAbility();
         }
 
         void OnMouseUpAsButton() {
