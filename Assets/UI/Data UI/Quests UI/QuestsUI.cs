@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using DataUI.ListItems;
 using DbUtilities;
 using System;
+using UnityUtilities;
 
 namespace DataUI {
     /// <summary>
@@ -17,10 +18,10 @@ namespace DataUI {
         private bool editMode;
         public string selectedQuest, selectedTask, selectedTaskPart, selectedTaskResult;
         //Prefabs
-        public GameObject 
+        public GameObject
             QuestPrefab,
-            TaskPrefab, 
-            TaskPartEquipItemPrefab, 
+            TaskPrefab,
+            TaskPartEquipItemPrefab,
             EquipItemPartOptionBtnPrefab,
             startDialogueTaskResultOptionBtnPrefab,
             existingStartDialogueTaskResultPrefab;
@@ -101,7 +102,7 @@ namespace DataUI {
             CreateSelectionToggleGroup(selectedTaskPart);
             CreateSelectionToggleGroup(selectedTaskResult);
 
-            SceneLoader sceneLoader = FindObjectOfType<SceneLoader>();
+            SceneLoader sceneLoader = new SceneLoader();
             string currentScene = sceneLoader.GetCurrentSceneName();
             InsertWorldItemsNotInDbFromScene(currentScene);
 
@@ -124,7 +125,7 @@ namespace DataUI {
             inputQuestDetailsName.text = questsData[0];
             inputQuestDetailsDesc.text = questsData[1];
         }
-        
+
         public void AddNewQuest() {
             DisplayQuestDetails();
             inputQuestDetailsName.text = "";
@@ -243,14 +244,16 @@ namespace DataUI {
                     print("selectedQuestObj not null, checking selected object is in edit mode");
                     if (selectedQuestObj.IsInEditMode()) {
                         print("selectedQuestObj is in edit mode, attempting to update quest in db with name " + selectedQuestObj.MyName + " and description " + inputQuestDetailsDesc.text);
-                        UpdateQuestInDb (selectedQuestObj.MyName, inputQuestDetailsName.text, inputQuestDetailsDesc.text);
+                        UpdateQuestInDb(selectedQuestObj.MyName, inputQuestDetailsName.text, inputQuestDetailsDesc.text);
                         selectedQuestObj.UpdateSelf(inputQuestDetailsName.text, inputQuestDetailsDesc.text);
-                    } else { InsertQuest(); }
-                } else { InsertQuest(); };
+                    }
+                    else { InsertQuest(); }
+                }
+                else { InsertQuest(); };
             }
         }
 
-        private void InsertQuest () {
+        private void InsertQuest() {
             DbCommands.InsertTupleToTable("Quests",
                                             inputQuestDetailsName.text,
                                             inputQuestDetailsDesc.text);
@@ -272,7 +275,7 @@ namespace DataUI {
 
         public void InsertPart(string partID) {
             string currentTaskID = (GetSelectedItemFromGroup(selectedTask) as Task).MyID;
-            
+
             DbCommands.InsertTupleToTable("QuestTaskParts",
                                             partID,
                                             currentTaskID
@@ -284,7 +287,7 @@ namespace DataUI {
             string partID = DbCommands.GenerateUniqueID("QuestTaskParts", "PartIDs", "PartID");
             InsertPart(partID);
             DbCommands.InsertTupleToTable("QuestTaskPartsEquipItem",
-                                            itemName, 
+                                            itemName,
                                             partID
                                          );
             DisplayPartsRelatedToTask(currentTaskID);
@@ -322,7 +325,7 @@ namespace DataUI {
                                      questName);
         }
 
-        public void UpdateTaskInDb (string taskID, string taskDescription, bool activeAtStart) {
+        public void UpdateTaskInDb(string taskID, string taskDescription, bool activeAtStart) {
             string[,] fields = new string[,]{
                                             { "TaskDescriptions", taskDescription }
                                             };
@@ -331,7 +334,8 @@ namespace DataUI {
                                      fields);
             if (activeAtStart) {
                 DbCommands.InsertTupleToTable("QuestTasksActivated", taskID, "-1", "0");
-            } else {
+            }
+            else {
                 string[,] activeTaskfields = { { "TaskIDs", taskID }, { "SaveIDs", "-1" } };
                 DbCommands.DeleteTupleInTable("QuestTasksActivated", activeTaskfields); //Removes the task in activated tasks if it is marked as inactive.
             }
@@ -374,17 +378,17 @@ namespace DataUI {
 
         }
 
-        private Transform BuildEquipItemPartOptionBtn(string [] strArray) {
+        private Transform BuildEquipItemPartOptionBtn(string[] strArray) {
             string itemNameStr = strArray[0];
             EquipItemPartOptionBtn equipItemPartOptionBtn = (
                 Instantiate(EquipItemPartOptionBtnPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject).GetComponent<EquipItemPartOptionBtn>();
             equipItemPartOptionBtn.SetText(itemNameStr);
             equipItemPartOptionBtn.MyName = itemNameStr;
             return equipItemPartOptionBtn.transform;
-            
+
         }
 
-        private Transform BuildStartDialogueTaskResultOptionBtn (string[] strArray) {
+        private Transform BuildStartDialogueTaskResultOptionBtn(string[] strArray) {
             string dialogueID = strArray[0];
             string dialogueDesc = strArray[1];
             string speakerName = strArray[2];
@@ -395,7 +399,7 @@ namespace DataUI {
             return startDialogueTaskResultOptionBtn.transform;
         }
 
-        private Transform BuildCurrentStartDialogueTaskResult (string [] strArray) {
+        private Transform BuildCurrentStartDialogueTaskResult(string[] strArray) {
             string resultID = strArray[0];
             string dialogueID = strArray[1];
             string dialogueDesc = strArray[2];
@@ -429,20 +433,34 @@ namespace DataUI {
             return editMode;
         }
 
+        
         private void InsertWorldItemsNotInDbFromScene(string scene) {
             WorldItems worldItems = FindObjectOfType<WorldItems>();
             foreach (string[] worldItemDetailsArray in worldItems.GetWorldItemsList()) {
-                DbCommands.InsertTupleToTable(  "WorldItems",
-                                                worldItemDetailsArray[0], //x
-                                                worldItemDetailsArray[1], //y
-                                                worldItemDetailsArray[2], //z
-                                                worldItemDetailsArray[3], //parent
-                                                scene,
-                                                worldItemDetailsArray[4]); //item name
+                bool itemExists = DbCommands.IsRecordInTable("PremadeWorldItems",
+                    "StartingLocationX = " + DbCommands.GetParameterNameFromValue(worldItemDetailsArray[0]) + " AND " +
+                    "StartingLocationY = " + DbCommands.GetParameterNameFromValue(worldItemDetailsArray[1]) + " AND " +
+                    "StartingLocationZ = " + DbCommands.GetParameterNameFromValue(worldItemDetailsArray[2]) + " AND " +
+                    "StartingParentPath = " + DbCommands.GetParameterNameFromValue(worldItemDetailsArray[3]) + " AND " +
+                    "StartingSceneNames = " + DbCommands.GetParameterNameFromValue(scene),
+                    worldItemDetailsArray[0],
+                    worldItemDetailsArray[1],
+                    worldItemDetailsArray[2],
+                    worldItemDetailsArray[3],
+                    scene
+                    );
+                if (!itemExists) {
+                    DbCommands.InsertTupleToTable("PremadeWorldItems",
+                                                    worldItemDetailsArray[0], //x
+                                                    worldItemDetailsArray[1], //y
+                                                    worldItemDetailsArray[2], //z
+                                                    worldItemDetailsArray[3], //parent
+                                                    scene,
+                                                    worldItemDetailsArray[4]); //item name
+                }
             }
-            //Debugging.PrintDbTable("WorldItems");
+
+
         }
-
-
     }
 }

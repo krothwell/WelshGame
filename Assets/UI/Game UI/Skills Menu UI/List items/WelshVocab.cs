@@ -4,16 +4,36 @@ using UnityEngine.UI;
 using UnityEngine;
 
 public class WelshVocab : NewWelshVocab {
-    Slider progressSlider;
-    Text progressLbl;
+    Slider readProgressSlider;
+    Slider writeProgressSlider;
+    Text readProgressLbl;
+    Text writeProgressLbl;
+    Transform extraInfo;
     WelshSkillsListUI welshSkillListUI;
-    public void InitialiseMe(string engVocab, string cymVocab, string correctTally) {
+    public void InitialiseMe(string engVocab, string cymVocab, string readTally, string writeTally) {
         base.InitialiseMe(engVocab, cymVocab);
+        extraInfo = transform.FindChild("ExtraInformation");
         welshSkillListUI = FindObjectOfType<WelshSkillsListUI>();
-        progressSlider = GetComponentInChildren<Slider>();
-        progressLbl = transform.FindChild("ExtraInformation").FindChild("Progresslbl").GetComponent<Text>();
-        int tallyInt = int.Parse(correctTally);
-        progressSlider.value = tallyInt;
-        progressLbl.text = welshSkillListUI.GetProficiencyString(tallyInt);
+        readProgressSlider = extraInfo.FindChild("ReadProgressSlider").GetComponent<Slider>();
+        writeProgressSlider = extraInfo.FindChild("WriteProgressSlider").GetComponent<Slider>();
+        readProgressLbl = extraInfo.FindChild("ReadProgressLbl").GetComponent<Text>();
+        writeProgressLbl = extraInfo.FindChild("WriteProgressLbl").GetComponent<Text>();
+        int readTallyInt = int.Parse(readTally);
+        int writeTallyInt = int.Parse(writeTally);
+        int readThreshold;
+        int writeThreshold;
+        string readProficiencyString;
+        string writeProficiencyString;
+        ReadProficienciesHandler readProficienciesHandler = new ReadProficienciesHandler(engVocab, cymVocab);
+        readProficienciesHandler.GetProficiencyDetailsFromTally(readTallyInt, out readProficiencyString, out readThreshold);
+        WriteProficienciesHandler writeProficienciesHandler = new WriteProficienciesHandler(engVocab, cymVocab);
+        writeProficienciesHandler.GetProficiencyDetailsFromTally(writeTallyInt, out writeProficiencyString, out writeThreshold);
+        readProgressSlider.maxValue = readThreshold;
+        writeProgressSlider.maxValue = writeThreshold;
+        readProgressSlider.value = readTallyInt;
+        writeProgressSlider.value = writeTallyInt;
+        readProgressLbl.text = readProficiencyString;
+        writeProgressLbl.text = writeProficiencyString;
+        
     }
 }

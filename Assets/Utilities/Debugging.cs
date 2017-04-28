@@ -15,6 +15,12 @@ namespace UnityUtilities {
             }
         }
 
+        public static void PrintArrayItems(object[] objArray) {
+            foreach (string obj in objArray) {
+                print(obj);
+            }
+        }
+
         public static void PrintDbTable(string tblName) {
             List<string[]> strArray = new List<string[]>();
             DbCommands.GetDbTableListToPrint(tblName, out strArray);

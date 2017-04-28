@@ -12,19 +12,21 @@ namespace GameUI {
     /// </summary>
     public class PlayerInventoryUI : MonoBehaviour {
         GameObject items;
-        GameObject closeBtn;
         GameObject panel;
         GameObject selectedItem;
+        private PlayerEquipmentSlot[] equipmentSlots;
         private Dictionary<WorldItems.WorldItemTypes, WorldItem> equippedDict;
         GameObject ui;
-        //bool followCursor = false;
         public GameObject inventoryItemPrefab;
-        // Use this for initialization
-        void Start() {
+
+        void Awake() {
             equippedDict = new Dictionary<WorldItems.WorldItemTypes, WorldItem>();
-            ui = GameObject.Find("UI");
             panel = transform.FindChild("Panel").gameObject;
             items = panel.transform.FindChild("ItemSlots").gameObject;
+        }
+        void Start() {
+            ui = GameObject.Find("UI");
+            InitialiseEquippedItemsDict();
         }
 
         void Update() {
@@ -126,6 +128,24 @@ namespace GameUI {
             else {
                 return null;
             }
+        }
+
+        public void InitialiseEquippedItemsDict() {
+            OpenInventory();
+            equipmentSlots = FindObjectsOfType<PlayerEquipmentSlot>();
+            foreach (PlayerEquipmentSlot equipmentSlot in equipmentSlots) {
+                if (equipmentSlot.transform.childCount > 0) {
+                    WorldItem item = equipmentSlot.transform.GetChild(0).GetComponent<WorldItem>();
+                    if (item != null) {
+                        InsertToEquippedDict(item);
+                    }
+                }
+            }
+            CloseInventory();
+            //print("PRINTING DICTIONARY");
+            //foreach(KeyValuePair<WorldItems.WorldItemTypes, WorldItem> pair in equippedDict) {
+            //    print(pair.Key + ":" + pair.Value);
+            //}
         }
 
     }

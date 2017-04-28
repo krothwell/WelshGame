@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Collections.Generic;
 //using StartMenuUI;
 using DbUtilities;
 using GameUI;
@@ -8,14 +9,11 @@ using UnityUtilities;
 
 public class PlayerSavesController : MonoBehaviour {
     GameObject player;
-    GameObject saveGameManager;
     public GameObject saveGamePrefab;
     public string playerName, playerPortraitPath;
     public int saveID;
     GameObject saveGame;
-    GameObject saveGamesList;
     SceneLoader sceneLoader;
-
     private ExistingSaveGame selectedSave;
     public ExistingSaveGame SelectedSave {
         get { return selectedSave; }
@@ -36,8 +34,8 @@ public class PlayerSavesController : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start() {
-        sceneLoader = FindObjectOfType<SceneLoader>();
+    void Awake() {
+        sceneLoader = new SceneLoader();
     }
 
     private void SetPlayerName(string name) {
@@ -61,7 +59,8 @@ public class PlayerSavesController : MonoBehaviour {
                                                 { "Dates", DateTime.Now.ToString() },
                                                 { "LocationName", "Start" },
                                                 { "LocationX", "0.0" },
-                                                { "LocationY", "0.0" }
+                                                { "LocationY", "0.0" },
+                                                { "SkillPointsSpent", "0" }
                                             };
         DbCommands.UpdateTableTuple("PlayerGames", "SaveIDs = 0", pgFields);
 
@@ -91,8 +90,23 @@ public class PlayerSavesController : MonoBehaviour {
         //Task parts completed
         DbCommands.DeleteTupleInTable("CompletedQuestTaskParts", delFields);
 
-        PlayerPrefsManager.SetSaveGame(0);
+        //discovered vocabulary
+        DbCommands.DeleteTupleInTable("DiscoveredVocab", delFields);
 
+        //discovered vocabulary
+        DbCommands.DeleteTupleInTable("DiscoveredVocabGrammar", delFields);
+
+        //acquired vocabulary read proficiencies
+        DbCommands.DeleteTupleInTable("AcquiredVocabReadSkills", delFields);
+
+        //acquired vocabulary write proficiencies
+        DbCommands.DeleteTupleInTable("AcquiredVocabWriteSkills", delFields);
+
+        //acquired grammar proficiencies
+        DbCommands.DeleteTupleInTable("AcquiredGrammarSkills", delFields);
+
+        PlayerPrefsManager.SetSaveGame(0);
+        sceneLoader.LoadSceneByName("Start");
     }
 
     /*used in game to create a new save with player referenced save slot */
@@ -106,12 +120,15 @@ public class PlayerSavesController : MonoBehaviour {
             print("saving over selected");
             SaveSelected();
         }
+        CopyCurrentGameToPlayerSave(saveID);
+        SaveWorldItems();
     }
     public void SaveNew() {
+        SkillsMenuUI skillsMenuUI = FindObjectOfType<SkillsMenuUI>();
         SetSaveID(DbCommands.GenerateUniqueID("PlayerGames", "SaveIDs", "SaveID"));
         string saveRef = FindObjectOfType<EscMenuUI>().transform
             .FindChild("Panel")
-            .FindChild("SaveOptions")
+            .FindChild("SaveGameUI")
             .FindChild("SaveInput").GetComponent<InputField>().text;
 
         if (saveRef != "") {
@@ -123,10 +140,9 @@ public class PlayerSavesController : MonoBehaviour {
                                         DateTime.Now.ToString(),
                                         sceneLoader.GetCurrentSceneName(),
                                         player.GetComponent<Transform>().position.x.ToString(),
-                                        player.GetComponent<Transform>().position.y.ToString());
+                                        player.GetComponent<Transform>().position.y.ToString(),
+                                        skillsMenuUI.GetSkillPointsSpent().ToString());
         }
-
-        CopyCurrentGameToPlayerSave(saveID);
     }
 
     public void CopyCurrentGameToPlayerSave(int saveID) {
@@ -160,19 +176,56 @@ public class PlayerSavesController : MonoBehaviour {
                                                     new string[] { "SaveIDs" },
                                                     new string[] { saveIDstr },
                                                     new string[] { "0" });
+
+        //Discovered vocab
+        DbCommands.DeleteTupleInTable("DiscoveredVocab", delFields);
+        DbCommands.InsertExistingValuesInSameTableWithNewPK("DiscoveredVocab",
+                                                    new string[] { "SaveIDs" },
+                                                    new string[] { saveIDstr },
+                                                    new string[] { "0" });
+
+        //Discovered grammar
+        DbCommands.DeleteTupleInTable("DiscoveredVocabGrammar", delFields);
+        DbCommands.InsertExistingValuesInSameTableWithNewPK("DiscoveredVocabGrammar",
+                                                    new string[] { "SaveIDs" },
+                                                    new string[] { saveIDstr },
+                                                    new string[] { "0" });
+
+        //acquired vocabulary read proficiencies
+        DbCommands.DeleteTupleInTable("AcquiredVocabReadSkills", delFields);
+        DbCommands.InsertExistingValuesInSameTableWithNewPK("AcquiredVocabReadSkills",
+                                                    new string[] { "SaveIDs" },
+                                                    new string[] { saveIDstr },
+                                                    new string[] { "0" });
+
+        //acquired vocabulary write proficiencies
+        DbCommands.DeleteTupleInTable("AcquiredVocabWriteSkills", delFields);
+        DbCommands.InsertExistingValuesInSameTableWithNewPK("AcquiredVocabWriteSkills",
+                                                    new string[] { "SaveIDs" },
+                                                    new string[] { saveIDstr },
+                                                    new string[] { "0" });
+
+        //acquired grammar proficiencies
+        DbCommands.DeleteTupleInTable("AcquiredGrammarSkills", delFields);
+        DbCommands.InsertExistingValuesInSameTableWithNewPK("AcquiredGrammarSkills",
+                                                    new string[] { "SaveIDs" },
+                                                    new string[] { saveIDstr },
+                                                    new string[] { "0" });
+
     }
 
     public void SaveSelected() {
         SetSaveID(selectedSave.ID.ToString());
+        SkillsMenuUI skillsMenuUI = FindObjectOfType<SkillsMenuUI>();
         string[,] fieldVals = new string[,] {
                                                 { "PlayerNames", player.GetComponent<PlayerCharacter>().GetMyName() },
                                                 { "Dates", DateTime.Now.ToString() },
                                                 { "LocationName", sceneLoader.GetCurrentSceneName() },
                                                 { "LocationX", player.GetComponent<Transform>().position.x.ToString() },
-                                                { "LocationY", player.GetComponent<Transform>().position.y.ToString() }
+                                                { "LocationY", player.GetComponent<Transform>().position.y.ToString() },
+                                                { "SkillPointsSpent", skillsMenuUI.GetSkillPointsSpent().ToString() }
                                             };
         DbCommands.UpdateTableTuple("PlayerGames", "SaveIDs = " + saveID, fieldVals);
-        CopyCurrentGameToPlayerSave(saveID);
     }
 
     public Transform BuildSaveGameRow(string[] strArray) {
@@ -196,22 +249,24 @@ public class PlayerSavesController : MonoBehaviour {
      * game, other details are loaded using the loadSave function from the Start method. */
     public void LoadFromGameID() {
         print(selectedSave);
-        int id = selectedSave.ID;
-        print("ready to load game from id: " + id);
-        PlayerPrefsManager.SetSaveGame(id);
-        string sceneName = DbCommands.GetFieldValueFromTable("PlayerGames", "LocationName", "SaveIDs = " + id);
+        saveID = selectedSave.ID;
+        print("ready to load game from id: " + saveID);
+        PlayerPrefsManager.SetSaveGame(saveID);
+        string sceneName = DbCommands.GetFieldValueFromTable("PlayerGames", "LocationName", "SaveIDs = " + saveID);
         sceneLoader.LoadSceneByName(sceneName);
     }
 
     /*loads all the details of the saved game except for the scene, since loading a scene destroys saveGameManager obj*/
     public void LoadSave() {
+        SkillsMenuUI skillsMenuUI = FindObjectOfType<SkillsMenuUI>();
         int id = PlayerPrefsManager.GetSaveGame();
         //print(DbCommands.GetConn());
         string[] playerSave = DbCommands.GetTupleFromTable("PlayerGames", " SaveIDs = " + id);
         print("Loading save reference: " 
             + playerSave[1] + " PlayerName: " 
             + playerSave[2] + " Portrait path: " 
-            + playerSave[3]);
+            + playerSave[3] + " Save ID: "
+            + id);
         SetPlayerName(playerSave[2]);
         SetPlayerPortraitPath(playerSave[3]);
         player.GetComponent<PlayerCharacter>().SetMyName(playerName);
@@ -220,11 +275,14 @@ public class PlayerSavesController : MonoBehaviour {
         float playerYpos = float.Parse(playerSave[7]);
         player.GetComponent<Transform>().position = new Vector2(playerXpos, playerYpos);
         Camera.main.transform.position =  new Vector3(playerXpos, playerYpos, Camera.main.transform.position.z);
+        skillsMenuUI.SetSkillPointsSpent(int.Parse(playerSave[8]));
         Time.timeScale = 1;
 
         //Need to update currentgame with data from player save
-        
         CopyPlayerSaveToCurrentGame(playerSave);
+        if (id != 0) {
+            LoadWorldItems();
+        }
     }
 
     public void CopyPlayerSaveToCurrentGame(string[] playerGameData) {
@@ -261,15 +319,100 @@ public class PlayerSavesController : MonoBehaviour {
                                                                 new string[] { "0" },
                                                                 new string[] { playerGameData[0] });
             //Task parts completed
-
-
             DbCommands.DeleteTupleInTable("CompletedQuestTaskParts", delFields);
             DbCommands.InsertExistingValuesInSameTableWithNewPK("CompletedQuestTaskParts",
                                                         new string[] { "SaveIDs" },
                                                         new string[] { "0" },
                                                         new string[] { playerGameData[0] });
-            Debugging.PrintDbTable("CompletedQuestTaskParts");
+
+            //discovered vocab
+            DbCommands.DeleteTupleInTable("DiscoveredVocab", delFields);
+            DbCommands.InsertExistingValuesInSameTableWithNewPK("DiscoveredVocab",
+                                                        new string[] { "SaveIDs" },
+                                                        new string[] { "0" },
+                                                        new string[] { playerGameData[0] });
+
+            //discovered grammar
+            DbCommands.DeleteTupleInTable("DiscoveredVocabGrammar", delFields);
+            DbCommands.InsertExistingValuesInSameTableWithNewPK("DiscoveredVocabGrammar",
+                                                        new string[] { "SaveIDs" },
+                                                        new string[] { "0" },
+                                                        new string[] { playerGameData[0] });
+
+            //acquired vocabulary read proficiencies
+            DbCommands.DeleteTupleInTable("AcquiredVocabReadSkills", delFields);
+            DbCommands.InsertExistingValuesInSameTableWithNewPK("AcquiredVocabReadSkills",
+                                                        new string[] { "SaveIDs" },
+                                                        new string[] { "0" },
+                                                        new string[] { playerGameData[0] });
+
+            //acquired vocabulary write proficiencies
+            DbCommands.DeleteTupleInTable("AcquiredVocabWriteSkills", delFields);
+            DbCommands.InsertExistingValuesInSameTableWithNewPK("AcquiredVocabWriteSkills",
+                                                        new string[] { "SaveIDs" },
+                                                        new string[] { "0" },
+                                                        new string[] { playerGameData[0] });
+
+            //acquired grammar proficiencies
+            DbCommands.DeleteTupleInTable("AcquiredGrammarSkills", delFields);
+            DbCommands.InsertExistingValuesInSameTableWithNewPK("AcquiredGrammarSkills",
+                                                        new string[] { "SaveIDs" },
+                                                        new string[] { "0" },
+                                                        new string[] { playerGameData[0] });
         }
+    }
+
+    private void SaveWorldItems() {
+        string saveIDstr = saveID.ToString();
+        string[,] delFields = new string[,] {
+            {"SaveIDs", saveIDstr}
+        };
+        DbCommands.DeleteTupleInTable("SavedWorldItems", delFields);
+        WorldItems worldItems = FindObjectOfType<WorldItems>();
+        worldItems.SetWorldItemsList();
+        List<string[]> worldItemsList = worldItems.GetWorldItemsList();
+        foreach (string[] worldItemData in worldItemsList) {
+            DbCommands.InsertTupleToTable("SavedWorldItems",
+                saveIDstr,
+                worldItemData[0],
+                worldItemData[1],
+                worldItemData[2],
+                worldItemData[3],
+                sceneLoader.GetCurrentSceneName(),
+                worldItemData[4],
+                worldItemData[5]);
+        }
+    }
+
+    private void LoadWorldItems() {
+        PlayerInventoryUI playerInventory;
+        playerInventory = FindObjectOfType<PlayerInventoryUI>();
+        playerInventory.OpenInventory();
+        string saveIDstr = PlayerPrefsManager.GetSaveGame().ToString();
+        WorldItems worldItems = FindObjectOfType<WorldItems>();
+        worldItems.DestroyWorldItems();
+        List<string[]> newWorldItemsList = new List<string[]>();
+        Debugging.PrintDbQryResults(DbQueries.GetSavedWorldItemsQry(saveIDstr, sceneLoader.GetCurrentSceneName()), saveIDstr, sceneLoader.GetCurrentSceneName());
+        DbCommands.GetDataStringsFromQry(DbQueries.GetSavedWorldItemsQry(saveIDstr, sceneLoader.GetCurrentSceneName()), out newWorldItemsList, saveIDstr, sceneLoader.GetCurrentSceneName());
+        foreach (string[] worldItemData in newWorldItemsList) {
+            string prefabPath = worldItemData[5];
+            //print(prefabPath);
+            UnityEngine.Object worldItemPrefab = Resources.Load(prefabPath);
+            print(worldItemPrefab);
+            GameObject worldItem = Instantiate(worldItemPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
+            string[] parentPath = worldItemData[3].Split('/');
+            //print(parentPath[1]);
+            Transform parentTransform = GameObject.Find(parentPath[1]).transform;
+            //print(parentTransform);
+            for (int i = 2; i < parentPath.Length -1; i++) {
+                parentTransform = parentTransform.FindChild(parentPath[i]);
+            }
+            print(parentTransform);
+            worldItem.transform.SetParent(parentTransform, false);
+            worldItem.transform.position = new Vector3(float.Parse(worldItemData[0]), float.Parse(worldItemData[1]), float.Parse(worldItemData[2]));
+            worldItem.name = worldItemData[4];
+        }
+        playerInventory.CloseInventory();
     }
 
     public void DeleteSave() {

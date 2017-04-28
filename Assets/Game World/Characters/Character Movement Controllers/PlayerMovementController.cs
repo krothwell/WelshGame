@@ -34,7 +34,12 @@ public class PlayerMovementController : CharMovementController {
     }
 
     public float GetMySpeed() {
-        return movement.GetMovementSpeed();
+        if (movement == null) {
+            return 0;
+        }
+        else {
+            return movement.GetMovementSpeed();
+        }
     }
 
     public void SetIsDecisionRun() {

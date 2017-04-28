@@ -21,7 +21,7 @@ using System;
 namespace GameUI {
     public class DialogueUI : UIController {
         private PlayerInputField currentInputField;
-        private string[] currentVocabTestData;
+        private DialogueTestDataController currentDialogueTestData;
     	private string testEnglish;
     	private string testWelsh;
     	public string TestEnglish {
@@ -33,9 +33,7 @@ namespace GameUI {
     		set {testWelsh = value;}
     	}
         CharAbility queuedAbility;
-    	Text answerTxt, percentageTxt;
-        GameObject answerField;
-        InputField answerInput;
+    	Text percentageTxt;
         GameObject submitBtn;
         CombatUI combatUI;
         Text btnTxt;
@@ -57,13 +55,12 @@ namespace GameUI {
             playerInputFieldPrefab,
             grammarShortDescPrefab;
         private ScrollRect dialogueScroller;
-        private GameObject currentDialogueHolder, currentDialogueNode, currentCharSpeaking;
+        private GameObject currentDialogueHolder, currentCharSpeaking;
         private string currentCharID, currentDialogueID;
         private PlayerCharacter playerCharacter;
         public Character currentChar;
         private Sprite currentPortrait;
         private NPCs npcs;
-
         void Awake() {
             dialogueScroller = transform.GetComponentInChildren<ScrollRect>();
         }
@@ -75,7 +72,7 @@ namespace GameUI {
             playerCharacter = FindObjectOfType<PlayerCharacter>();
             panel = transform.FindChild("Panel").gameObject;
             submitBtn = panel.transform.FindChild("SubmitBtn").gameObject;
-            percentageTxt = panel.transform.FindChild("PercentageTxt").GetComponent<Text>();
+            percentageTxt = panel.transform.FindChild("TestResultsBtn").GetComponent<Text>();
             combatUI = FindObjectOfType<CombatUI>();
             btnTxt = submitBtn.transform.FindChild("Text").gameObject.GetComponent<Text>();
             playerCharacter = FindObjectOfType<PlayerCharacter>();
@@ -86,7 +83,7 @@ namespace GameUI {
 
         public void StartNewDialogue(Character character) {
             currentChar = character;
-            print(character);
+            //print(character);
             currentCharID = character.CharacterName;
             SetDialogueID();
             DisplayFirstDialogueNode();
@@ -253,12 +250,11 @@ namespace GameUI {
             node.transform.SetParent(currentDialogueHolder.transform, false);
         }
 
-        public void InsertPlayerInputField(string answerText) {
+        public void InsertPlayerInputField() {
             PlayerInputField input = (Instantiate(
                 playerInputFieldPrefab,
                 new Vector3(0f, 0f, 0f),
                 Quaternion.identity) as GameObject).GetComponent<PlayerInputField>();
-            input.InitialiseMe(answerText);
             input.transform.SetParent(currentDialogueHolder.transform, false);
             currentInputField = input;
         }
@@ -301,27 +297,25 @@ namespace GameUI {
         public GameObject GetCurrentSpeaker() {
             return currentCharSpeaking;
         }
+
+        public void SetScoreBreakdownDisplay() {
+            SetPercentageCorrect();
+            //SetTalliesChange();
+            //SetSkillPointsChange();
+        }
         
-    	public void SetPercentageCorrect() {
-            string correctAnswer = currentInputField.CorrectAnswer;
-            string playerAnswer = currentInputField.GetComponent<InputField>().text;
-            int answerLength = correctAnswer.Length;
-    		int percentage = 0;
-    		int countCorrect = 0;
-    		for(int i = 0; i < answerLength; i++) {
-    			if (i < playerAnswer.Length) {
-    				if (playerAnswer[i] == correctAnswer[i]) {
-    					countCorrect++;
-    				} 
-    			} else { break; }
-    		}
-    
-    		percentage = (int)Mathf.Round((100f/answerLength) * countCorrect);
-    		Debug.Log(countCorrect);
-    		percentageTxt.text = percentage.ToString() + "%";
-    
-    	}
-        
+    	private void SetPercentageCorrect() {
+            percentageTxt.text = currentDialogueTestData.GetAnswerPercentageCorrect().ToString() + "%";
+        }
+
+        private void SetTalliesChange() {
+            percentageTxt.text = currentDialogueTestData.GetAnswerPercentageCorrect().ToString() + "%";
+        }
+
+        private void SetSkillPointsChange() {
+            percentageTxt.text = currentDialogueTestData.GetAnswerPercentageCorrect().ToString() + "%";
+        }
+
         public void SetInUse() {
             animator = GetComponent<Animator>();
             animator.SetBool("InUse", true);
@@ -336,7 +330,7 @@ namespace GameUI {
             playerCharacter.playerStatus = PlayerCharacter.PlayerStatus.passive;
         }
         
-        private void SetBtnText(string newText) {
+        private void SetSubmitBtnText(string newText) {
             btnTxt.text = newText;
         }
 
@@ -345,11 +339,11 @@ namespace GameUI {
         }
 
         private void DisableSubmitBtn() {
-            SetBtnText("...");
+            SetSubmitBtnText("...");
             submitBtn.GetComponent<Button>().interactable = false;
         }
 
-        public void SubmitTestAnswer() {
+        public void SubmitAnswer() {
             if(currentInputField != null) {
                 if (currentInputField.Submitted) {
                     SetNotInUse();
@@ -357,8 +351,9 @@ namespace GameUI {
                     
                 }
                 else {
-                    SetPercentageCorrect();
-                    SetBtnText("Continue...");
+                    currentDialogueTestData.SetResultsData(currentInputField.GetPlayerInputString());
+                    SetScoreBreakdownDisplay();
+                    SetSubmitBtnText("Continue...");
                     currentInputField.SetSubmitted();
                 }
             } 
@@ -440,42 +435,26 @@ namespace GameUI {
         public void ProcessAbilityTest(CharAbility ability) {
             queuedAbility = ability;
             EnableSubmitBtn();
-            SetBtnText("Submit answer");
+            SetSubmitBtnText("Submit answer");
             SetNewDialogueHolder();
             InsertSpacer();
-            string[] vocabToTest = GetVocabToTestPlayer();
-            currentVocabTestData = GetTestDataFromVocab(vocabToTest);
-            InsertDialogueNode(GetVocabTestIntroNodeArray(vocabToTest)); //text instruction to player
-            InsertVocabTestNode(currentVocabTestData);
+            currentDialogueTestData = new DialogueTestDataController(); 
+            InsertDialogueNode(currentDialogueTestData.GetVocabIntro()); //text instruction to player
+            InsertVocabTestNode(currentDialogueTestData.GetVocab());
             InsertRelatedGrammarTag();
-            List<string[]> grammarList = new List<string[]>();
-            DbCommands.GetDataStringsFromQry(DbQueries.GetGrammarRuleDisplayQry(vocabToTest[0], vocabToTest[1]), out grammarList, vocabToTest[0], vocabToTest[1]);
-            foreach (string[] grammarRule in grammarList) {
-                if (grammarRule[2] == "1") {
-                    string strGrammarShorDesc = grammarRule[1];
-                    InsertGrammarShortDesc(strGrammarShorDesc);
-                }
+            foreach (string[] grammarRule in currentDialogueTestData.GetGrammar()) {
+                string strGrammarShortDesc = grammarRule[1];
+                InsertGrammarShortDesc(strGrammarShortDesc);
             }
-            InsertPlayerInputField(currentVocabTestData[1]);
+            InsertPlayerInputField();
             SetInUse();
         }
 
-        public string[] GetVocabToTestPlayer() {
-            string[] vocabDetails = DbCommands.GetRandomTupleFromTable("DiscoveredVocab");
-            string[] vocabKey = new string[2];
-            vocabKey[0] = vocabDetails[0];
-            vocabKey[1] = vocabDetails[1];
-            return vocabKey;
+        public void DisplayTestResult() {
+            SkillsResultsUI skillsResultsUI = FindObjectOfType<SkillsResultsUI>();
+            if (currentDialogueTestData != null) {
+                skillsResultsUI.DisplayResults(currentDialogueTestData);
+            }
         }
-
-        public string[] GetVocabTestIntroNodeArray(string[] vocab) {
-            VocabIntroGetter introGetter = new VocabIntroGetter(vocab);
-            return introGetter.GetIntroNodeArray();
-        }
-
-        public string[] GetTestDataFromVocab(string[] vocabToTest) {
-            return vocabToTest;
-        }
-
     }
 }

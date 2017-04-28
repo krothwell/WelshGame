@@ -8,4 +8,8 @@ public class WeaponItem : EquipableWorldItemWithSingleSprite {
     public Vector2 GetWeaponRange () {
         return new Vector2(WeaponRangeX, WeaponRangeX/2.5f);
     }
+
+    void Awake() {
+        equipToPlayerPart = FindObjectOfType<RightHandWearable>().gameObject;
+    }
 }

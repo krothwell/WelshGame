@@ -29,8 +29,6 @@ public abstract class Character : MonoBehaviour {
         dialogueUI = FindObjectOfType<DialogueUI>();
         movementController = GetComponent<CharMovementController>();
         imageRoot = transform.FindChild("CentreOfGravity").GetComponent<Transform>();
-        print(imageRoot);
-        print(CharacterParts);
         myAnimator = gameObject.GetComponent<Animator>();
         SetCombatController();
         SetMovementController();

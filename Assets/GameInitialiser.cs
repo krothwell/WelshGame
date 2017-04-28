@@ -15,19 +15,22 @@ public class GameInitialiser : MonoBehaviour {
     // Use this for initialization
     private static string DB_PATH = "/GameDb.s3db";
 
-    void Awake() {
+    void Start() {
         DbCommands.SetConnectionString("URI=file:" + Application.dataPath + DB_PATH);
         dbSetup = new DbSetup();
-        //Debugging.PrintDbTable("VocabRuleList");
+        Debugging.PrintDbTable("PlayerGames");
+
+        //DbCommands.UpdateTableField("PlayerGames", "SkillPointsSpent", "0");
         dbSetup.CreateTables();
-        //dbSetup.CopyTable("Dialogues", "Copied");
+        //print("tables created");
+        //dbSetup.CopyTable("PlayerGames", "Copied");
         //string[,] delFields = { { "EnglishText", "''" }, { "WelshText", "''" } };
         //DbCommands.DeleteTupleInTable("VocabTranslations", delFields);
-        //dbSetup.ReplaceTable("Dialogues");
-        //DbCommands.UpdateTableField("QuestsActivated", "Completed", "0");
+        //dbSetup.ReplaceTable("PlayerGames");
+        
         //Debugging.PrintDbTable("VocabTranslations");
-        DbCommands.InsertTupleToTable("PlayerGames", "0", "Current Game", "Current player", "No path", DateTime.Now.ToString(), "Start", "0", "0");
-        DbCommands.InsertTupleToTable("PlayerGames", "-1", "New game", "New player", "No path", DateTime.Now.ToString(), "Start", "0", "0");
+        DbCommands.InsertTupleToTable("PlayerGames", "0", "Current Game", "Current player", "No path", DateTime.Now.ToString(), "Start", "0", "0", "0");
+        DbCommands.InsertTupleToTable("PlayerGames", "-1", "New game", "New player", "No path", DateTime.Now.ToString(), "Start", "0", "0", "0");
         playerSavesController = FindObjectOfType<PlayerSavesController>();
         // when playerSavesController is first initialised it tries to load the
         // game, manually initialising rather than using Start() or Awake()

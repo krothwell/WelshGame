@@ -37,7 +37,7 @@ public class UIController : MonoBehaviour {
                                   Func<string [], Transform> buildItem,
                                   params string[] qryParameterValues) {
         EmptyDisplay(display);
-        print(query);
+        //print(query);
         AppendDisplayFromDb(query,display,buildItem, qryParameterValues);
     }
 
@@ -72,8 +72,9 @@ public class UIController : MonoBehaviour {
     }
 
     public void EmptyDisplay(Transform display) {
+        print(display);
         foreach (Transform item in display) {
-            print("Should destroy " + item);
+            //print("Should destroy " + item);
             Destroy(item.gameObject);
         }
     }

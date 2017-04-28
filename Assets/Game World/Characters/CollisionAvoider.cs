@@ -34,7 +34,7 @@ public class CollisionAvoider : MonoBehaviour {
         myPerimeterSize = GetPerimeterSize(myPerimeter);
         collisionDetector = GetComponent<EdgeCollider2D>();
         mainChar = FindObjectOfType<PlayerCharacter>();
-        print(transform.parent + " perimeter size = " + myPerimeterSize);
+        //print(transform.parent + " perimeter size = " + myPerimeterSize);
     }
 
     void Update () {
@@ -69,7 +69,8 @@ public class CollisionAvoider : MonoBehaviour {
     }
 
     public Vector2 GetPerimeterSize(GameObject perimObj) {
-        Vector2 objScale = perimObj.GetComponent<Transform>().lossyScale;
+        Vector2 objScale = new Vector2(Math.Abs(perimObj.GetComponent<Transform>().lossyScale.x),
+                                       Math.Abs(perimObj.GetComponent<Transform>().lossyScale.y));
         Vector2 objColliderChildSize = perimObj.GetComponent<BoxCollider2D>().size;
         return new Vector2(objColliderChildSize.x * objScale.x, objColliderChildSize.y * objScale.y);
     }

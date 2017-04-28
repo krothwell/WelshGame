@@ -38,6 +38,29 @@ namespace DbUtilities {
             return sql;
         }
 
+        public static string GetDiscoveredGrammarRelatedToVocab(string englishStr = null, string welshStr = null) {
+            string englishStrQry = "''";
+            string welshStrQry = "''";
+            if (englishStr != null) {
+                englishStrQry = DbCommands.GetParameterNameFromValue(englishStr);
+                englishStrQry = (englishStrQry == null) ? "''" : englishStrQry;
+            }
+            if (welshStr != null) {
+                welshStrQry = DbCommands.GetParameterNameFromValue(welshStr);
+                welshStrQry = (welshStrQry == null) ? "''" : welshStrQry;
+            }
+
+            string sql = "SELECT VocabGrammar.RuleIDs, VocabGrammar.ShortDescriptions " +
+                        "FROM VocabGrammar " +
+                            "INNER JOIN DiscoveredVocabGrammar ON VocabGrammar.RuleIDs = DiscoveredVocabGrammar.RuleIDs " +
+                                "AND DiscoveredVocabGrammar.SaveIDs = 0 " +
+                            "INNER JOIN VocabRuleList ON VocabGrammar.RuleIDs = VocabRuleList.RuleIDs " +
+                                "AND VocabRuleList.EnglishText = " + englishStrQry + " AND VocabRuleList.WelshText = " + welshStrQry + " " +
+                        "ORDER BY VocabGrammar.RuleIDs ASC;";
+            Debug.Log(sql);
+            return sql;
+        }
+
         public static string GetTranslationSearchQry(string searchStr) {
             string searchParam = DbCommands.GetParameterNameFromValue(searchStr);
             return "SELECT * FROM VocabTranslations WHERE EnglishText LIKE " + searchParam + " OR WelshText LIKE " + searchParam + " ORDER BY EnglishText ASC;";
@@ -193,12 +216,15 @@ namespace DbUtilities {
             return "SELECT QuestTaskPartsEquipItem.PartIDs, QuestTaskParts.TaskIDs, QuestTasks.QuestNames "
                 + "FROM QuestTaskPartsEquipItem "
                 + "INNER JOIN QuestTaskParts ON QuestTaskPartsEquipItem.PartIDs = QuestTaskParts.PartIDs "
+                + "INNER JOIN QuestTasksActivated ON QuestTaskParts.TaskIDs = QuestTasksActivated.TaskIDs "
                 + "LEFT JOIN QuestTasks ON QuestTaskParts.TaskIDs = QuestTasks.TaskIDs "
                 + "LEFT JOIN QuestsActivated ON QuestTasks.QuestNames = QuestsActivated.QuestNames "
                 + "WHERE QuestTaskPartsEquipItem.ItemNames = " + DbCommands.GetParameterNameFromValue(itemName)
                     + " AND QuestsActivated.SaveIDs = " + saveID
                     + " AND QuestTaskPartsEquipItem.PartIDs NOT IN (SELECT CompletedQuestTaskParts.PartIDs FROM CompletedQuestTaskParts WHERE CompletedQuestTaskParts.SaveIDs = 0)";
         }
+
+
 
         public static string GetCharLinkDisplayQry() {
             return "SELECT * FROM Characters WHERE CharacterNames != '!Player' ORDER BY CharacterNames ASC;";
@@ -291,11 +317,56 @@ namespace DbUtilities {
         }
 
         public static string GetPlayerVocabSkillsQry() {
-            return "SELECT EnglishText, WelshText, CorrectTallies FROM DiscoveredVocab WHERE SaveIDs = 0";
+            return "SELECT EnglishText, WelshText, ReadCorrectTallies, WriteCorrectTallies FROM DiscoveredVocab WHERE SaveIDs = 0";
+        }
+
+        public static string GetPlayerGrammarSkillsQry() {
+            return "SELECT VocabGrammar.RuleIDs, VocabGrammar.ShortDescriptions, VocabGrammar.LongDescriptions, DiscoveredVocabGrammar.CorrectTallies " +
+                "FROM DiscoveredVocabGrammar " +
+                    "INNER JOIN VocabGrammar ON VocabGrammar.RuleIDs = DiscoveredVocabGrammar.RuleIDs " +
+                "WHERE DiscoveredVocabGrammar.SaveIDs = 0";
         }
 
         public static string GetWelshThresholdsQry() {
-            return "SELECT * FROM Proficiencies ORDER BY Thresholds DESC;";
+            return "SELECT * FROM Proficiencies ORDER BY Thresholds ASC;";
+        }
+
+        public static string GetSavedWorldItemsQry(string saveID, string sceneName) {
+            string sql = "SELECT LocationX, LocationY, LocationZ, ParentPath, ItemNames, PrefabPath, SaveIDs " +
+                   "FROM SavedWorldItems " +
+                   "WHERE SaveIDs = " + DbCommands.GetParameterNameFromValue(saveID) + " " +
+                   "AND SceneNames = " + DbCommands.GetParameterNameFromValue(sceneName) + ";";
+            //Debug.Log(sql);
+            return sql;
+        }
+
+        public static string GetWriteSkillAcquiredForVocabQry(string en, string cy) {
+            string sql = "SELECT ProficiencyNames " +
+                   "FROM AcquiredVocabWriteSkills " +
+                   "WHERE SaveIDs = 0 " +
+                   "AND EnglishText = " + DbCommands.GetParameterNameFromValue(en) + " " +
+                   "AND WelshText = " + DbCommands.GetParameterNameFromValue(cy);
+            Debug.Log(sql);
+            return sql;
+        }
+
+        public static string GetReadSkillAcquiredForVocabQry(string en, string cy) {
+            string sql = "SELECT ProficiencyNames " +
+                   "FROM AcquiredVocabReadSkills " +
+                   "WHERE SaveIDs = 0 " +
+                   "AND EnglishText = " + DbCommands.GetParameterNameFromValue(en) + " " +
+                   "AND WelshText = " + DbCommands.GetParameterNameFromValue(cy);
+            Debug.Log(sql);
+            return sql;
+        }
+
+        public static string GetGrammarSkillAcquiredForVocabQry(string grammarID) {
+            string sql = "SELECT ProficiencyNames " +
+                   "FROM AcquiredGrammarSkills " +
+                   "WHERE SaveIDs = 0 " +
+                   "AND RuleIDs = " + grammarID + ";";
+            Debug.Log(sql);
+            return sql;
         }
     }
 }

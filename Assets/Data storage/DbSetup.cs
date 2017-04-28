@@ -15,7 +15,8 @@ public class DbSetup {
 						DiscoveredGrammar,
 						VocabRuleList,
 						Proficiencies,
-						AcquiredVocabSkills,
+						AcquiredVocabReadSkills,
+                        AcquiredVocabWriteSkills,
 						AcquiredGrammarSkills,
 						SentenceIdentifications,
 						SentenceTranslations,
@@ -42,7 +43,8 @@ public class DbSetup {
                         QuestTaskParts,
                         CompletedQuestTaskParts,
                         QuestTaskPartsEquipItem,
-                        WorldItems
+                        SavedWorldItems,
+                        PremadeWorldItems
 						};
 
 	private enum tblSqlStrs {header,body, pk};
@@ -72,7 +74,8 @@ public class DbSetup {
 																				+   "Dates VARCHAR(50), "
                                                                                 +   "LocationName VARCHAR(25), "
                                                                                 +   "LocationX REAL NOT NULL, "
-                                                                                +   "LocationY REAL NOT NULL, ";
+                                                                                +   "LocationY REAL NOT NULL, "
+                                                                                +   "SkillPointsSpent INT,";
         tblSqlArray[(int)tbls.PlayerGames, (int)tblSqlStrs.pk] 					=	"SaveIDs"; 
 
 		tblSqlArray[(int)tbls.EnglishVocab, (int)tblSqlStrs.header]				= 	"EnglishVocab";
@@ -102,8 +105,9 @@ public class DbSetup {
 		tblSqlArray[(int)tbls.DiscoveredVocab, (int)tblSqlStrs.body]			= 	"EnglishText VARCHAR(140) NOT NULL, "
 																				+	"WelshText VARCHAR(140) NOT NULL, "
 																				+	"SaveIDs INT NOT NULL, "
-																				+	"CorrectTallies INT NOT NULL, "
-																				+	"FOREIGN KEY (EnglishText, WelshText) "
+																				+	"ReadCorrectTallies INT NOT NULL, "
+                                                                                +   "WriteCorrectTallies INT NOT NULL, "
+                                                                                +	"FOREIGN KEY (EnglishText, WelshText) "
 																					+ "REFERENCES VocabTranslations(EnglishText,WelshText) "
 																					+ "ON DELETE CASCADE ON UPDATE CASCADE, "
 																				+	"FOREIGN KEY (SaveIDs) REFERENCES PlayerGames(SaveIDs) ON DELETE CASCADE, ";
@@ -132,8 +136,8 @@ public class DbSetup {
 																				+	"Thresholds INT NOT NULL, ";
 		tblSqlArray[(int)tbls.Proficiencies, (int)tblSqlStrs.pk]				= 	"ProficiencyNames";
 
-		tblSqlArray[(int)tbls.AcquiredVocabSkills, (int)tblSqlStrs.header]		= 	"AcquiredVocabSkills";
-		tblSqlArray[(int)tbls.AcquiredVocabSkills, (int)tblSqlStrs.body]		= 	"EnglishText VARCHAR(140) NOT NULL, "
+		tblSqlArray[(int)tbls.AcquiredVocabWriteSkills, (int)tblSqlStrs.header]	= 	"AcquiredVocabWriteSkills";
+		tblSqlArray[(int)tbls.AcquiredVocabWriteSkills, (int)tblSqlStrs.body]	= 	"EnglishText VARCHAR(140) NOT NULL, "
 																				+ 	"WelshText VARCHAR(140) NOT NULL, "
 																				+	"ProficiencyNames VARCHAR(20) NOT NULL, "
 																				+	"SaveIDs INT NOT NULL, "
@@ -143,9 +147,22 @@ public class DbSetup {
 																				+	"FOREIGN KEY (ProficiencyNames) REFERENCES Proficiencies(ProficiencyNames) "
 																					+ "ON DELETE CASCADE ON UPDATE CASCADE, "
 																				+	"FOREIGN KEY (SaveIDs) REFERENCES PlayerGames(SaveIDs) ON DELETE CASCADE, ";
-		tblSqlArray[(int)tbls.AcquiredVocabSkills, (int)tblSqlStrs.pk]			= 	"EnglishText, WelshText, ProficiencyNames, SaveIDs";
+		tblSqlArray[(int)tbls.AcquiredVocabWriteSkills, (int)tblSqlStrs.pk]		= 	"EnglishText, WelshText, ProficiencyNames, SaveIDs";
 
-		tblSqlArray[(int)tbls.AcquiredGrammarSkills, (int)tblSqlStrs.header]	= 	"AcquiredGrammarSkills";
+        tblSqlArray[(int)tbls.AcquiredVocabReadSkills, (int)tblSqlStrs.header]  =   "AcquiredVocabReadSkills";
+        tblSqlArray[(int)tbls.AcquiredVocabReadSkills, (int)tblSqlStrs.body]    =   "EnglishText VARCHAR(140) NOT NULL, "
+                                                                                +   "WelshText VARCHAR(140) NOT NULL, "
+                                                                                +   "ProficiencyNames VARCHAR(20) NOT NULL, "
+                                                                                +   "SaveIDs INT NOT NULL, "
+                                                                                +   "FOREIGN KEY (EnglishText, WelshText) "
+                                                                                    + "REFERENCES VocabTranslations(EnglishText,WelshText) "
+                                                                                    + "ON DELETE CASCADE ON UPDATE CASCADE, "
+                                                                                +   "FOREIGN KEY (ProficiencyNames) REFERENCES Proficiencies(ProficiencyNames) "
+                                                                                    + "ON DELETE CASCADE ON UPDATE CASCADE, "
+                                                                                +   "FOREIGN KEY (SaveIDs) REFERENCES PlayerGames(SaveIDs) ON DELETE CASCADE, ";
+        tblSqlArray[(int)tbls.AcquiredVocabReadSkills, (int)tblSqlStrs.pk]      =   "EnglishText, WelshText, ProficiencyNames, SaveIDs";
+
+        tblSqlArray[(int)tbls.AcquiredGrammarSkills, (int)tblSqlStrs.header]	= 	"AcquiredGrammarSkills";
 		tblSqlArray[(int)tbls.AcquiredGrammarSkills, (int)tblSqlStrs.body]		= 	"RuleIDs INT NOT NULL, "
 																				+	"ProficiencyNames VARCHAR(20) NOT NULL, "
 																				+	"SaveIDs INT NOT NULL, "
@@ -352,14 +369,48 @@ public class DbSetup {
         tblSqlArray[(int)tbls.QuestTaskPartsEquipItem, (int)tblSqlStrs.pk]      = "ItemNames, PartIDs";
 
         //NB: world items should never be in the same location at same time to avoid duplicate errors
-        tblSqlArray[(int)tbls.WorldItems, (int)tblSqlStrs.header]               = "WorldItems";
-        tblSqlArray[(int)tbls.WorldItems, (int)tblSqlStrs.body]                 = "StartingLocationX INT, "
+        tblSqlArray[(int)tbls.SavedWorldItems, (int)tblSqlStrs.header]          = "SavedWorldItems";
+        tblSqlArray[(int)tbls.SavedWorldItems, (int)tblSqlStrs.body]            = "SaveIDs, "
+                                                                                + "LocationX INT, "
+                                                                                + "LocationY INT, "
+                                                                                + "LocationZ INT, "
+                                                                                + "ParentPath VARCHAR(250), "
+                                                                                + "SceneNames VARCHAR(50), "
+                                                                                + "ItemNames VARCHAR(50), "
+                                                                                + "PrefabPath VARCHAR(250), "
+                                                                                + "FOREIGN KEY (SaveIDs) "
+                                                                                    + "REFERENCES PlayerGames(SaveIDs) ON DELETE CASCADE, "; 
+        tblSqlArray[(int)tbls.SavedWorldItems, (int)tblSqlStrs.pk]              = "SaveIDs, LocationX, LocationY, LocationZ, ParentPath, SceneNames, ItemNames";
+
+        tblSqlArray[(int)tbls.PremadeWorldItems, (int)tblSqlStrs.header]        = "PremadeWorldItems";
+        tblSqlArray[(int)tbls.PremadeWorldItems, (int)tblSqlStrs.body]          = "StartingLocationX INT, "
                                                                                 + "StartingLocationY INT, "
                                                                                 + "StartingLocationZ INT, "
                                                                                 + "StartingParentPath VARCHAR(250), "
-                                                                                + "SceneNames VARCHAR(50), "
+                                                                                + "StartingSceneNames VARCHAR(50), "
                                                                                 + "ItemNames VARCHAR(50), ";
-        tblSqlArray[(int)tbls.WorldItems, (int)tblSqlStrs.pk]                   = "StartingLocationX, StartingLocationY, StartingLocationZ, StartingParentPath, SceneNames, ItemNames";
+        tblSqlArray[(int)tbls.PremadeWorldItems, (int)tblSqlStrs.pk]            = "StartingLocationX, StartingLocationY, StartingLocationZ, StartingParentPath, StartingSceneNames";
+
+        //tblSqlArray[(int)tbls.SavedPremadeWorldItems, (int)tblSqlStrs.header]   = "SavedPremadeWorldItems";
+        //tblSqlArray[(int)tbls.SavedPremadeWorldItems, (int)tblSqlStrs.body]     = "SaveIDs, "
+        //                                                                        + "StartingLocationX INT, "
+        //                                                                        + "StartingLocationY INT, "
+        //                                                                        + "StartingLocationZ INT, "
+        //                                                                        + "StartingParentPath VARCHAR(250), "
+        //                                                                        + "StartingSceneNames VARCHAR(50), "
+        //                                                                        + "ItemNames VARCHAR(50), "
+        //                                                                        + "CurrentLocationX INT, "
+        //                                                                        + "CurrentLocationY INT, "
+        //                                                                        + "CurrentLocationZ INT, "
+        //                                                                        + "CurrentParentPath VARCHAR(250), "
+        //                                                                        + "CurrentSceneNames VARCHAR(50), "
+        //                                                                        + "Destroyed INT, "
+        //                                                                        + "FOREIGN KEY (StartingLocationX, StartingLocationY, StartingLocationZ, StartingParentPath, StartingSceneNames, ItemNames) "
+        //                                                                            + "REFERENCES PremadeWorldItems(StartingLocationX, StartingLocationY, StartingLocationZ, StartingParentPath, StartingSceneNames, ItemNames) ON UPDATE CASCADE, "
+        //                                                                        + "FOREIGN KEY (SaveIDs) "
+        //                                                                            + "REFERENCES PlayerGames(SaveIDs) ON DELETE CASCADE, ";
+        //tblSqlArray[(int)tbls.SavedPremadeWorldItems, (int)tblSqlStrs.pk]       = "StartingLocationX, StartingLocationY, StartingLocationZ, StartingParentPath, StartingSceneNames, ItemNames, "
+        //                                                                        + "SaveIDs";
     }
 
     public void ReplaceTable(string tblName) {
@@ -447,7 +498,10 @@ public class DbSetup {
             _dbcm.CommandText = "PRAGMA foreign_keys=ON;";
             _dbcm.ExecuteNonQuery();
         }
-        _dbcm.CommandText = "DROP TABLE IF EXISTS " + tblName + ";";
+        //Debug.Log("DROP TABLE");
+        string sql = "DROP TABLE IF EXISTS " + tblName + ";";
+        Debug.Log(sql);
+        _dbcm.CommandText = sql;
         _dbcm.ExecuteNonQuery();
         _dbcm.Dispose();
         _dbcm = null;

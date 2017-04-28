@@ -40,7 +40,7 @@ namespace DbUtilities {
                 string value;
                 if (values[i] != "null") {
                     value = "@value" + i;
-                    Debug.Log(values[i]);
+                    //Debug.Log(values[i]);
                     _dbcm.Parameters.Add(new SqliteParameter(value, values[i]));
                 }
                 else { value = values[i]; }
@@ -53,7 +53,7 @@ namespace DbUtilities {
 
             }
             string sql = sqlInsert + sqlValues;
-            Debug.Log(sql);
+            //Debug.Log(sql);
             _dbcm.CommandText = sql;
             _dbcm.ExecuteNonQuery();
             //Debug.Log("inserted");
@@ -73,7 +73,7 @@ namespace DbUtilities {
             _dbcm.CommandText = "PRAGMA foreign_keys=ON;";
             _dbcm.ExecuteNonQuery();
             string pkColumnsStr = string.Join(",", pkColumns);
-            Debug.Log(pkColumnsStr);
+            //Debug.Log(pkColumnsStr);
 
             string sql = "SELECT * FROM " + tblName;
             _dbcm.CommandText = sql;
@@ -131,7 +131,7 @@ namespace DbUtilities {
             _dbc = null;
 
 
-            Debugging.PrintDbTable(tblName);
+            //Debugging.PrintDbTable(tblName);
         }
 
 
@@ -144,7 +144,7 @@ namespace DbUtilities {
             _dbcm.ExecuteNonQuery();
             string sqlRead = "SELECT * FROM " + tableName + ";";
             _dbcm.CommandText = sqlRead;
-            Debug.Log(sqlRead);
+            //Debug.Log(sqlRead);
             IDataReader _dbr = _dbcm.ExecuteReader();
             string sqlDelete = "DELETE FROM " + tableName + " ";
             string sqlValues = "WHERE ";
@@ -367,13 +367,62 @@ namespace DbUtilities {
                 _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(qryParameter), qryParameter));
             }
             _dbcm.CommandText = sql;
-            Debug.Log("COUNT QRY: " + sql);
+            //Debug.Log("COUNT QRY: " + sql);
             int count = int.Parse(_dbcm.ExecuteScalar().ToString());
             _dbcm.Dispose();
             _dbcm = null;
             _dbc.Close();
             _dbc = null;
             return count;
+        }
+
+        public static int GetMaxFromTable(string tblName, string field, string condition = null, params string[] qryParameters) {
+            IDbConnection _dbc = new SqliteConnection(conn);
+            _dbc.Open(); //Open connection to the database.
+            IDbCommand _dbcm = _dbc.CreateCommand();
+            _dbcm.CommandText = "PRAGMA foreign_keys=ON;";
+            _dbcm.ExecuteNonQuery();
+            string sql;
+            sql = "SELECT MAX(" + field + ") FROM " + tblName + " ";
+            if (condition != null) {
+                sql += "WHERE " + condition + ";";
+            }
+            foreach (string qryParameter in qryParameters) {
+                _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(qryParameter), qryParameter));
+            }
+            _dbcm.CommandText = sql;
+            //Debug.Log("COUNT QRY: " + sql);
+            int max = int.Parse(_dbcm.ExecuteScalar().ToString());
+            _dbcm.Dispose();
+            _dbcm = null;
+            _dbc.Close();
+            _dbc = null;
+            return max;
+        }
+
+        public static bool IsRecordInTable(string tblName, string condition = null, params string[] qryParameters) {
+            IDbConnection _dbc = new SqliteConnection(conn);
+            _dbc.Open(); //Open connection to the database.
+            IDbCommand _dbcm = _dbc.CreateCommand();
+            _dbcm.CommandText = "PRAGMA foreign_keys=ON;";
+            _dbcm.ExecuteNonQuery();
+            string sql;
+            sql = "SELECT COUNT(*) FROM " + tblName + " ";
+            if (condition != null) {
+                sql += "WHERE " + condition + ";";
+            }
+            foreach (string qryParameter in qryParameters) {
+                _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(qryParameter), qryParameter));
+            }
+            _dbcm.CommandText = sql;
+            Debug.Log("COUNT QRY: " + sql);
+            int count = (int.Parse(_dbcm.ExecuteScalar().ToString()));
+            bool inTable = (count >= 1) ? true : false;
+            _dbcm.Dispose();
+            _dbcm = null;
+            _dbc.Close();
+            _dbc = null;
+            return inTable;
         }
 
         public static int GetCountFromQry(string qry, params string[] qryParameters) {
@@ -477,11 +526,14 @@ namespace DbUtilities {
             return tupleArray;
         }
 
-        public static string GetFieldValueFromTable(string tblName, string field, string condition = "") {
+        public static string GetFieldValueFromTable(string tblName, string field, string condition = "", params string[] qryParams) {
             IDbConnection _dbc = new SqliteConnection(conn);
             _dbc.Open(); //Open connection to the database.
             IDbCommand _dbcm = _dbc.CreateCommand();
             string sql;
+            foreach (string qryParameter in qryParams) {
+                _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(qryParameter), qryParameter));
+            }
             sql = "SELECT * FROM " + tblName + " WHERE " + condition + " LIMIT 1;";
             //print(sql);
             _dbcm.CommandText = sql;

@@ -11,6 +11,9 @@ namespace GameUI {
             public static Color32 colorCompletedQuestTask = new Color32(150, 150, 150, 125);
             public static Color32 selectedAbility = new Color32(255, 246, 231, 255);
             public static Color32 deselectedAbility = new Color32(255, 246, 231, 125);
+            public static Color32 tallyPlus = new Color32(0, 135, 40, 255);
+            public static Color32 tallyMinus = new Color32(200, 35, 5, 255);
+            public static Color32 skillPlus = new Color32(0, 107, 255, 255);
         }
     }
 }

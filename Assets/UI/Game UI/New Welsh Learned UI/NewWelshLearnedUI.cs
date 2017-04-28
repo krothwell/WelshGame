@@ -9,7 +9,7 @@ namespace GameUI {
         private GameObject newWelshList;
 
         public void InsertDiscoveredVocab(string vocabEn, string vocabCy) {
-            DbCommands.InsertTupleToTable("DiscoveredVocab", vocabEn, vocabCy, "0", "0");
+            DbCommands.InsertTupleToTable("DiscoveredVocab", vocabEn, vocabCy, "0", "0", "0");
         }
 
         public void InsertDiscoveredGrammar(string grammarID) {

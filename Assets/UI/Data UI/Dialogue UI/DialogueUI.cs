@@ -750,7 +750,7 @@ namespace DataUI {
         /// to delete them (from the Data UI -> Dialogues UI -> Character lists(s?)) when the list is built. New characters in the scene are also added.
         /// </summary>
         private void UpdateCharactersTableFromGame() {
-            SceneLoader sceneLoader = FindObjectOfType<SceneLoader>();
+            SceneLoader sceneLoader = new SceneLoader();
             string currentScene = sceneLoader.GetCurrentSceneName();
             InsertCharsNotInDbFromScene(currentScene);
             List<string[]> characterNamesList = new List<string[]>();

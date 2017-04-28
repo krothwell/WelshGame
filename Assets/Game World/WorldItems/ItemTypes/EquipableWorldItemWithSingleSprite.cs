@@ -21,6 +21,9 @@ public class EquipableWorldItemWithSingleSprite : WorldItem {
         }
 
         questsUI = FindObjectOfType<QuestsUI>();
+        if (transform.parent.GetComponent<PlayerEquipmentSlot>() != null) {
+            EquipToPlayerModel();
+        }
     }
 
     public override void EquipToPlayerModel() {
