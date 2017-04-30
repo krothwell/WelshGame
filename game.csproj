@@ -152,7 +152,9 @@
     <Compile Include="Assets\Game World\Characters\Player\UpperRightLegWearable.cs" />
     <Compile Include="Assets\Game World\Characters\Player\UpperTorsoWearable.cs" />
     <Compile Include="Assets\Game World\IAttackable.cs" />
+    <Compile Include="Assets\Game World\Quests\Quests\QuestTaskPart.cs" />
     <Compile Include="Assets\Game World\Quests\Quests\QuestTheBeginning.cs" />
+    <Compile Include="Assets\Game World\Quests\Quests\TaskPartGetSkillPoint.cs" />
     <Compile Include="Assets\Game World\Quests\Utilities\QuestActivators.cs" />
     <Compile Include="Assets\Game World\Scenery\level1\Scenery1.cs" />
     <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldCharacterSelector.cs" />
@@ -198,6 +200,7 @@
     <Compile Include="Assets\UI\Data UI\Quests UI\Quests List UI\Quest.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\QuestsUI.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\Part Options\EquipItemPartOptionBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\Part Options\PrefabPartOptionBtn.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\TaskPart.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\TaskPartEquipItem.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\ExistingStartDialogueTaskResult.cs" />

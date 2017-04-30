@@ -14,7 +14,7 @@ public class GameInitialiser : MonoBehaviour {
     PlayerSavesController playerSavesController;
     // Use this for initialization
     private static string DB_PATH = "/GameDb.s3db";
-
+    
     void Start() {
         DbCommands.SetConnectionString("URI=file:" + Application.dataPath + DB_PATH);
         dbSetup = new DbSetup();

@@ -17,12 +17,14 @@ public class DialogueTestDataController {
     int tallyModifier, readTally, writeTally, skillPointsGainedTotal, tallyShiftTotal;
     bool vocabSkillIncremented;
     string resultString, playerAnswer;
-    public DialogueTestDataController() {
+    TestTrigger testTrigger;
+    public DialogueTestDataController(TestTrigger trigger) {
         tallyShiftTotal = skillPointsGainedTotal = 0;
         answerCorrectPercent = -1; //-1 when not set
         SetTestData();
         SetVocabIntro(vocab);
         grammarDetailsDict = new Dictionary<int, string[]>();
+        testTrigger = trigger;
         highestTallyPossible = DbCommands.GetMaxFromTable("Proficiencies", "Thresholds");
     }
 
@@ -376,6 +378,18 @@ public class DialogueTestDataController {
 
     public Dictionary<int, string[]> GetGrammarUpdateDict() {
         return grammarDetailsDict;
+    }
+
+    public string GetTriggerName() {
+        return testTrigger.GetTriggerName();
+    }
+
+    public string GetTriggerLabel() {
+        return testTrigger.GetTriggerLabel();
+    }
+
+    public Sprite GetTriggerSprite() {
+        return testTrigger.GetTriggerSprite();
     }
 }
 

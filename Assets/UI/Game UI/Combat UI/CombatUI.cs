@@ -66,11 +66,11 @@ namespace GameUI {
             pendingDecision = decision;
         }
 
-        public void SetAbility(GameObject abilityPrefab) {
+        public void SetAbility(GameObject abilityPrefab, string abilityName, Sprite abilityIcon) {
             GameObject abilitySelected = Instantiate(abilityPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
             abilitySelected.transform.SetParent(playerCharacter.GetCombatController().transform, false);
             currentAbility = abilitySelected.GetComponent<CharAbility>();
-            currentAbility.InitialiseMe(playerCharacter);
+            currentAbility.InitialiseMe(playerCharacter, abilityName, abilityIcon);
             SetAttackCursor();
         }
 

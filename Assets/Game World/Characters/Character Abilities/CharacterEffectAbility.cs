@@ -10,8 +10,8 @@ public abstract class CharacterEffectAbility : CharAbility {
         myCharacter.GetMovementController().SetMyDirection(targetCharacter.GetMyPosition(), myCharacter.GetMyPosition());
     }
 
-    public override void InitialiseMe(Character mCharacter) {
-        SetMyCharacter(mCharacter);
+    public override void InitialiseMe(Character mCharacter, string nameStr, Sprite iconSprite) {
+        base.InitialiseMe(mCharacter, nameStr, iconSprite);
         SetCharAction(new StrikeAbilityAction(myCharacter.GetMyAnimator()));
         SetMyRange();
     }

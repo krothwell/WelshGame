@@ -22,7 +22,7 @@ namespace DataUI {
             QuestPrefab,
             TaskPrefab,
             TaskPartEquipItemPrefab,
-            EquipItemPartOptionBtnPrefab,
+            EquipItemPartOptionBtnPrefab, PrefabPartOptionBtnPrefab,
             startDialogueTaskResultOptionBtnPrefab,
             existingStartDialogueTaskResultPrefab;
 
@@ -191,6 +191,20 @@ namespace DataUI {
 
         public void DisplayPartOptionsRelatedToEquipItem() {
             FillDisplayFromDb(DbQueries.GetTaskPartOptionsEquipItemDisplayQry(), partOptionSelectedList.transform, BuildEquipItemPartOptionBtn);
+        }
+
+        public void DisplayPrefabOptions() {
+            EmptyDisplay(partOptionSelectedList.transform);
+            GameObject[] questPrefabs = Resources.LoadAll<GameObject>("QuestParts");
+            //GameObject[] questPrefabs = (GameObject[])Resources.LoadAll("QuestParts");
+            print(questPrefabs.Length);
+            foreach(GameObject questPrefab in questPrefabs) {
+                string[] strArray = new string[2];
+                strArray[0] = "QuestParts/" + questPrefab.name;
+                strArray[1] = questPrefab.GetComponent<TaskPartGetSkillPoint>().GetMyLabel();
+                Transform questOption = BuildPrefabPartOptionBtn(strArray);
+                questOption.SetParent(partOptionSelectedList.transform, false);
+            }
         }
 
         public void DisplayTaskResultOptionsRelatedToStartDialogue() {
@@ -386,6 +400,15 @@ namespace DataUI {
             equipItemPartOptionBtn.MyName = itemNameStr;
             return equipItemPartOptionBtn.transform;
 
+        }
+
+        private Transform BuildPrefabPartOptionBtn(string[] strArray) {
+            string prefabPath = strArray[0];
+            string label = strArray[1];
+            PrefabPartOptionBtn prefabPartOptionBtn = (
+                Instantiate(PrefabPartOptionBtnPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject).GetComponent<PrefabPartOptionBtn>();
+            prefabPartOptionBtn.InitialiseMe(prefabPath, label);
+            return prefabPartOptionBtn.transform;
         }
 
         private Transform BuildStartDialogueTaskResultOptionBtn(string[] strArray) {

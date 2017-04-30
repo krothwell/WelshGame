@@ -9,14 +9,18 @@ using GameUI.ListItems;
 public class SkillsResultsUI : UIController {
     public GameObject WelshVocabUpdatePrefab, WelshGrammarUpdatePrefab;
     DialogueTestDataController testData;
-    Text percentageCorrect, resultLabel, talliesShift, testType, skillPointsGained, answerGiven;
-    Transform summaryBreakdown, welshTestOverview, mainOverview, welshSkillsList;
+    Text percentageCorrect, resultLabel, testTriggerLbl, talliesShift, testType, skillPointsGained, answerGiven;
+    Transform summaryBreakdown, welshTestOverview, mainOverview, welshSkillsList, testTriggerIcon;
+    Image testTriggerIconImage;
 	void Awake () {
         summaryBreakdown = GetPanel().transform.FindChild("SummaryBreakdown");
         welshTestOverview = GetPanel().transform.FindChild("WelshTestOverview");
         mainOverview = summaryBreakdown.FindChild("MainOverview");
         percentageCorrect = mainOverview.FindChild("PercentageCorrect").GetComponentInChildren<Text>();
         resultLabel = mainOverview.FindChild("ResultLbl").GetComponent<Text>();
+        testTriggerLbl = mainOverview.FindChild("TriggerLbl").GetComponent<Text>();
+        testTriggerIcon = mainOverview.FindChild("TriggerIcon");
+        testTriggerIconImage = testTriggerIcon.FindChild("Image").GetComponent<Image>();
         talliesShift = mainOverview.FindChild("TalliesShift").GetComponent<Text>();
         testType = mainOverview.FindChild("TestType").GetComponent<Text>();
         skillPointsGained = mainOverview.FindChild("SkillPointsGained").GetComponent<Text>();
@@ -29,6 +33,7 @@ public class SkillsResultsUI : UIController {
         testData = testDataController;
         SetPercentageCorrect();
         SetResultLabel();
+        SetTriggerDetails();
         SetTestType();
         SetTalliesShift();
         SetSkillPointsGained();
@@ -42,6 +47,11 @@ public class SkillsResultsUI : UIController {
 
     public void SetResultLabel() {
         resultLabel.text = testData.GetResultString();
+    }
+
+    public void SetTriggerDetails() {
+        testTriggerLbl.text = testData.GetTriggerLabel();
+        testTriggerIconImage.sprite = testData.GetTriggerSprite();
     }
 
     public void SetTalliesShift() {

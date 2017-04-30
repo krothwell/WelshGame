@@ -41,6 +41,7 @@ public class DbSetup {
                         QuestTaskResults,
                         QuestTaskStartDialogueResults,
                         QuestTaskParts,
+                        QuestTaskPartsPrefab,
                         CompletedQuestTaskParts,
                         QuestTaskPartsEquipItem,
                         SavedWorldItems,
@@ -368,6 +369,13 @@ public class DbSetup {
                                                                                 + "FOREIGN KEY (PartIDs) REFERENCES QuestTaskParts(PartIDs) ON DELETE CASCADE, ";
         tblSqlArray[(int)tbls.QuestTaskPartsEquipItem, (int)tblSqlStrs.pk]      = "ItemNames, PartIDs";
 
+        tblSqlArray[(int)tbls.QuestTaskPartsPrefab, (int)tblSqlStrs.header]     = "QuestTaskPartsPrefab";
+        tblSqlArray[(int)tbls.QuestTaskPartsPrefab, (int)tblSqlStrs.body]       = "PrefabPath VARCHAR(200) NOT NULL, "
+                                                                                + "PrefabLabel VarChar(140) NOT NULL, "
+                                                                                + "PartIDs INT, "
+                                                                                + "FOREIGN KEY (PartIDs) REFERENCES QuestTaskParts(PartIDs) ON DELETE CASCADE, ";
+        tblSqlArray[(int)tbls.QuestTaskPartsPrefab, (int)tblSqlStrs.pk]         = "PrefabPath, PartIDs";
+
         //NB: world items should never be in the same location at same time to avoid duplicate errors
         tblSqlArray[(int)tbls.SavedWorldItems, (int)tblSqlStrs.header]          = "SavedWorldItems";
         tblSqlArray[(int)tbls.SavedWorldItems, (int)tblSqlStrs.body]            = "SaveIDs, "
@@ -482,7 +490,7 @@ public class DbSetup {
 							+ tblSqlArray[sqlArrayRow, (int)tblSqlStrs.body] 
 							+ "PRIMARY KEY (" + tblSqlArray[sqlArrayRow, (int)tblSqlStrs.pk] + ")"	
 							+ ");";
-        //Debug.Log(_dbcm.CommandText);
+        Debug.Log(_dbcm.CommandText);
 		_dbcm.ExecuteNonQuery();
 		_dbcm.Dispose();
 		_dbcm = null;

@@ -90,6 +90,10 @@ namespace DbUtilities {
             return "SELECT DISTINCT ItemNames FROM WorldItems;";
         }
 
+        public static string GetTaskPartOptionsPrefabQry() {
+            return "";
+        }
+
         public static string GetDialogueDisplayQry() {
             return "SELECT Dialogues.DialogueIDs, Dialogues.DialogueDescriptions, ActivatedDialogues.SaveIDs "
                 + "FROM Dialogues LEFT JOIN ActivatedDialogues ON Dialogues.DialogueIDs = ActivatedDialogues.DialogueIDs AND ActivatedDialogues.SaveIDS = -1 "

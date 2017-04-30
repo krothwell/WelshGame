@@ -32,11 +32,12 @@ namespace GameUI {
     		get {return testWelsh;}
     		set {testWelsh = value;}
     	}
+
+        List<Character> dialogueQueue;
         CharAbility queuedAbility;
-    	Text percentageTxt;
+    	Text percentageTxt, btnTxt;
         GameObject submitBtn;
         CombatUI combatUI;
-        Text btnTxt;
         Animator animator;
         QuestsUI questsUI;
         NewWelshLearnedUI newWelshLearnedUI;
@@ -62,10 +63,12 @@ namespace GameUI {
         private Sprite currentPortrait;
         private NPCs npcs;
         void Awake() {
+            animator = GetComponent<Animator>();
             dialogueScroller = transform.GetComponentInChildren<ScrollRect>();
         }
         // Use this for initialization
         void Start() {
+            dialogueQueue = new List<Character>();
             questsUI = FindObjectOfType<QuestsUI>();
             newWelshLearnedUI = FindObjectOfType<NewWelshLearnedUI>();
             npcs = FindObjectOfType<NPCs>();
@@ -80,13 +83,37 @@ namespace GameUI {
             DisableSubmitBtn();
         }
 
+        public bool IsReadyForNewDialogue() {
+            bool ready;
+            print(animator);
+            if (animator.GetBool("InUse")) {
+                ready = false;
+            } else {
+                ready = true;
+            }
+            return ready;
+        }
+
+        void QueueNewDialogue(Character character) {
+            dialogueQueue.Add(character);
+        }
+
 
         public void StartNewDialogue(Character character) {
-            currentChar = character;
-            //print(character);
-            currentCharID = character.CharacterName;
-            SetDialogueID();
-            DisplayFirstDialogueNode();
+            if (IsReadyForNewDialogue()) {
+                currentChar = character;
+                //print(character);
+                currentCharID = character.CharacterName;
+                SetDialogueID();
+                DisplayFirstDialogueNode();
+            } else {
+                QueueNewDialogue(character);
+            }
+        }
+
+        private void StartNewDialogueFromQueue() {
+            StartNewDialogue(dialogueQueue[0]);
+            dialogueQueue.RemoveAt(0);
         }
 
         public void StartNewDialogue(string dialogueID) {
@@ -317,17 +344,18 @@ namespace GameUI {
         }
 
         public void SetInUse() {
-            animator = GetComponent<Animator>();
             animator.SetBool("InUse", true);
         }
 
 
         public void SetNotInUse() {
             DisableSubmitBtn();
-            animator = GetComponent<Animator>();
             animator.SetBool("InUse", false);
             playerCharacter.DestroySelectionCircleOfInteractiveObject();
             playerCharacter.playerStatus = PlayerCharacter.PlayerStatus.passive;
+            if (dialogueQueue.Count > 0) {
+                Invoke("StartNewDialogueFromQueue", 1f);
+            }
         }
         
         private void SetSubmitBtnText(string newText) {
@@ -438,7 +466,8 @@ namespace GameUI {
             SetSubmitBtnText("Submit answer");
             SetNewDialogueHolder();
             InsertSpacer();
-            currentDialogueTestData = new DialogueTestDataController(); 
+            TestTrigger testTrigger = new TestTrigger(ability.GetMyName(), ability.GetMyIcon(), TestTrigger.TriggerType.Ability);
+            currentDialogueTestData = new DialogueTestDataController(testTrigger); 
             InsertDialogueNode(currentDialogueTestData.GetVocabIntro()); //text instruction to player
             InsertVocabTestNode(currentDialogueTestData.GetVocab());
             InsertRelatedGrammarTag();

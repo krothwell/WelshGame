@@ -10,6 +10,8 @@ public abstract class CharAbility : MonoBehaviour {
     protected float countDownToFollowThrough;
     public float TimeToComplete, InterruptDelay;
     protected bool isInUse, followingThrough;
+    protected Sprite myIcon;
+    protected string myName;
 	
 	void Update () {
 		if(isInUse) {
@@ -17,7 +19,11 @@ public abstract class CharAbility : MonoBehaviour {
         }
 	}
 
-    public abstract void InitialiseMe(Character character);
+    public virtual void InitialiseMe(Character character, string nameStr, Sprite spriteIcon) {
+        SetMyCharacter(character);
+        SetMyName(nameStr);
+        SetMyIcon(spriteIcon);
+    }
 
     public void UseAbility() {
         countDownToFollowThrough = TimeToComplete;
@@ -61,6 +67,22 @@ public abstract class CharAbility : MonoBehaviour {
     }
 
     public abstract void SetMyRange();
+
+    public void SetMyName (string nameStr) {
+        myName = nameStr;
+    }
+
+    public void SetMyIcon (Sprite icon) {
+        myIcon = icon;
+    }
+
+    public string GetMyName() {
+        return myName;
+    }
+
+    public Sprite GetMyIcon() {
+        return myIcon;
+    }
 
     public Vector2 GetMyRange() {
         return myRange;
