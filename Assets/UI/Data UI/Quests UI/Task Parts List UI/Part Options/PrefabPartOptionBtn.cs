@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DbUtilities;
 
 
 namespace DataUI {
@@ -35,8 +36,16 @@ namespace DataUI {
                 SetText(label);
             }
 
-            public void InsertAsTaskPart() {
-                questsUI.InsertPartEquipItem(myPath);
+            public void InsertMe() {
+                string currentTaskID = questsUI.GetCurrentTaskID();
+                string partID = DbCommands.GenerateUniqueID("QuestTaskParts", "PartIDs", "PartID");
+                questsUI.InsertPart(partID);
+                DbCommands.InsertTupleToTable("QuestTaskPartsPrefab",
+                                                myPath,
+                                                myLabel,
+                                                partID
+                                             );
+                questsUI.DisplayPartsRelatedToTask(currentTaskID);
                 questsUI.HideNewPartPanel();
             }
 

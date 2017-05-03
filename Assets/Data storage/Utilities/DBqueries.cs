@@ -82,7 +82,14 @@ namespace DbUtilities {
         public static string GetEquipItemPartsRelatedToTask(string taskID) {
             return "SELECT QuestTaskParts.PartIDs, QuestTaskPartsEquipItem.ItemNames "
                 + "FROM QuestTaskParts "
-                + "LEFT JOIN QuestTaskPartsEquipItem ON QuestTaskPartsEquipItem.PartIDs = QuestTaskParts.PartIDs "
+                + "INNER JOIN QuestTaskPartsEquipItem ON QuestTaskPartsEquipItem.PartIDs = QuestTaskParts.PartIDs "
+                + "WHERE TaskIDs = " + DbCommands.GetParameterNameFromValue(taskID) + ";";
+        }
+
+        public static string GetPrefabPartsRelatedToTask(string taskID) {
+            return "SELECT QuestTaskParts.PartIDs, QuestTaskPartsPrefab.PrefabLabel "
+                + "FROM QuestTaskParts "
+                + "INNER JOIN QuestTaskPartsPrefab ON QuestTaskPartsPrefab.PartIDs = QuestTaskParts.PartIDs "
                 + "WHERE TaskIDs = " + DbCommands.GetParameterNameFromValue(taskID) + ";";
         }
 
@@ -178,6 +185,14 @@ namespace DbUtilities {
                 + "WHERE PlayerChoiceResults.ChoiceIDs = " + choiceID + ";";
         }
 
+        public static string GetPrefabTaskPartsFromTaskIDqry(string taskID) {
+            string sql = "SELECT QuestTaskPartsPrefab.PrefabPath, QuestTaskPartsPrefab.PartIDs FROM QuestTasksActivated "
+                + "INNER JOIN QuestTaskParts ON QuestTasksActivated.TaskIDs = QuestTaskParts.TaskIDs "
+                + "INNER JOIN QuestTaskPartsPrefab ON QuestTaskParts.PartIDs = QuestTaskPartsPrefab.PartIDs "
+                + "WHERE QuestTasksActivated.TaskIDs = " + taskID + ";";
+            return sql;
+        }
+
         public static string GetVocabActivateCountFromChoiceIDqry(string choiceID) {
             return "SELECT COUNT(*) FROM WelshVocabActivatedByDialogueChoices "
                 + "INNER JOIN PlayerChoiceResults ON WelshVocabActivatedByDialogueChoices.ResultIDs = PlayerChoiceResults.ResultIDs "
@@ -216,16 +231,19 @@ namespace DbUtilities {
                     + " AND QuestTasksActivated.SaveIDs = " + saveID;
         }
 
+
         public static string GetEquipItemTasksData(string itemName, string saveID) {
-            return "SELECT QuestTaskPartsEquipItem.PartIDs, QuestTaskParts.TaskIDs, QuestTasks.QuestNames "
+            
+            string sql = "SELECT DISTINCT QuestTaskPartsEquipItem.PartIDs, QuestTaskParts.TaskIDs, QuestTasks.QuestNames "
                 + "FROM QuestTaskPartsEquipItem "
                 + "INNER JOIN QuestTaskParts ON QuestTaskPartsEquipItem.PartIDs = QuestTaskParts.PartIDs "
                 + "INNER JOIN QuestTasksActivated ON QuestTaskParts.TaskIDs = QuestTasksActivated.TaskIDs "
-                + "LEFT JOIN QuestTasks ON QuestTaskParts.TaskIDs = QuestTasks.TaskIDs "
-                + "LEFT JOIN QuestsActivated ON QuestTasks.QuestNames = QuestsActivated.QuestNames "
+                + "INNER JOIN QuestTasks ON QuestTaskParts.TaskIDs = QuestTasks.TaskIDs "
+                + "INNER JOIN QuestsActivated ON QuestTasks.QuestNames = QuestsActivated.QuestNames "
                 + "WHERE QuestTaskPartsEquipItem.ItemNames = " + DbCommands.GetParameterNameFromValue(itemName)
                     + " AND QuestsActivated.SaveIDs = " + saveID
                     + " AND QuestTaskPartsEquipItem.PartIDs NOT IN (SELECT CompletedQuestTaskParts.PartIDs FROM CompletedQuestTaskParts WHERE CompletedQuestTaskParts.SaveIDs = 0)";
+            return sql;
         }
 
 
@@ -369,6 +387,19 @@ namespace DbUtilities {
                    "FROM AcquiredGrammarSkills " +
                    "WHERE SaveIDs = 0 " +
                    "AND RuleIDs = " + grammarID + ";";
+            Debug.Log(sql);
+            return sql;
+        }
+
+        public static string GetPathsForActivePrefabQuestParts(string saveID) {
+            string sql = "SELECT QuestTaskPartsPrefab.PrefabPath, QuestTaskParts.PartIDs, QuestTasks.TaskIDs, QuestTasks.QuestNames " +
+                   "FROM QuestTaskPartsPrefab " +
+                   "INNER JOIN QuestTaskParts ON QuestTaskParts.PartIDs = QuestTaskPartsPrefab.PartIDs " +
+                   "INNER JOIN QuestTasksActivated ON QuestTasksActivated.TaskIDs = QuestTaskParts.TaskIDs " +
+                   "INNER JOIN QuestTasks ON QuestTasks.TaskIDs = QuestTasksActivated.TaskIDs " +
+                   "WHERE QuestTaskPartsPrefab.PartIDs " +
+                    "NOT IN (SELECT CompletedQuestTaskParts.PartIDs FROM CompletedQuestTaskParts WHERE CompletedQuestTaskParts.SaveIDs = " + saveID + ") " +
+                   "AND SaveIDs = " + saveID;
             Debug.Log(sql);
             return sql;
         }

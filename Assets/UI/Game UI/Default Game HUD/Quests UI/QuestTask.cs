@@ -64,6 +64,7 @@ namespace GameUI {
             partsList.transform.SetParent(transform.parent, false);
             partsList.transform.SetSiblingIndex(transform.GetSiblingIndex() + 1);
             FillDisplayFromDb(DbQueries.GetEquipItemPartsRelatedToTask(myID), partsList.transform, BuildEquipItemPart, myID);
+            AppendDisplayFromDb(DbQueries.GetPrefabPartsRelatedToTask(myID), partsList.transform, BuildPrefabPart, myID);
             arrowTransform.Rotate(0, 0, -90);
         }
 
@@ -78,12 +79,25 @@ namespace GameUI {
             string itemNameStr = strArray[1];
             GameObject taskPartEquipItem = (Instantiate(partPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject);
             taskPartEquipItem.GetComponent<Text>().text = "Equip " + itemNameStr;
+            SetPartCompleted(partID, taskPartEquipItem);
+            return taskPartEquipItem.transform;
+        }
+
+        private Transform BuildPrefabPart(string[] strArray) {
+            string partID = strArray[0];
+            string prefabLbl = strArray[1];
+            GameObject taskPartPrefab = (Instantiate(partPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject);
+            taskPartPrefab.GetComponent<Text>().text = prefabLbl;
+            SetPartCompleted(partID, taskPartPrefab);
+            return taskPartPrefab.transform;
+        }
+
+        private void SetPartCompleted(string partID, GameObject partTransform) {
             bool completed = Convert.ToBoolean(DbCommands.GetCountFromTable("CompletedQuestTaskParts", "PartIDs = " + partID + " AND SaveIDs = 0"));
             if (completed) {
                 print("part complete!");
-                taskPartEquipItem.GetComponent<Text>().color = Colours.colorCompletedQuestTaskPart;
+                partTransform.GetComponent<Text>().color = Colours.colorCompletedQuestTaskPart;
             }
-            return taskPartEquipItem.transform;
         }
     }
 }

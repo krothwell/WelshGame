@@ -18,6 +18,10 @@ public class SkillsMenuUI : UIController {
         welshSkillsListUI.DisplayWelshSkills();
     }
 
+    public void IncrementTotalSkillPoints(int increment) {
+        totalSkillPoints += increment;
+    }
+
     public int GetTotalSkillPoints() {
         if (totalSkillPoints == -1) {
             int writeSkillPoints = DbCommands.GetCountFromTable("AcquiredVocabWriteSkills", "SaveIDs = 0");

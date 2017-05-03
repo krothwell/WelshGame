@@ -21,7 +21,7 @@ namespace DataUI {
         public GameObject
             QuestPrefab,
             TaskPrefab,
-            TaskPartEquipItemPrefab,
+            TaskPartEquipItemPrefab, TaskPartPrefabPrefab,
             EquipItemPartOptionBtnPrefab, PrefabPartOptionBtnPrefab,
             startDialogueTaskResultOptionBtnPrefab,
             existingStartDialogueTaskResultPrefab;
@@ -168,6 +168,7 @@ namespace DataUI {
         public void DisplayPartsRelatedToTask(string taskID) {
             partsListUIPanel.SetActive(true);
             DisplayEquipItemPartsRelatedToTask(taskID);
+            DisplayPrefabPartsRelatedToTask(taskID);
         }
 
         public void DisplayResultsRelatedToTaskCompletion(string taskID) {
@@ -183,6 +184,10 @@ namespace DataUI {
 
         public void DisplayEquipItemPartsRelatedToTask(string taskID) {
             FillDisplayFromDb(DbQueries.GetEquipItemPartsRelatedToTask(taskID), partsList.transform, BuildEquipItemPart, taskID);
+        }
+
+        public void DisplayPrefabPartsRelatedToTask(string taskID) {
+            AppendDisplayFromDb(DbQueries.GetPrefabPartsRelatedToTask(taskID), partsList.transform, BuildPrefabPart, taskID);
         }
 
         public void DisplayStartDialogueResultRelatedToTask(string taskID) {
@@ -392,6 +397,16 @@ namespace DataUI {
 
         }
 
+        private Transform BuildPrefabPart(string[] strArray) {
+            string partID = strArray[0];
+            string prefabLbl = strArray[1];
+            TaskPartPrefab taskPartPrefab = (
+                Instantiate(TaskPartPrefabPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject).GetComponent<TaskPartPrefab>();
+            taskPartPrefab.InitialiseMe(prefabLbl, partID);
+            return taskPartPrefab.transform;
+
+        }
+
         private Transform BuildEquipItemPartOptionBtn(string[] strArray) {
             string itemNameStr = strArray[0];
             EquipItemPartOptionBtn equipItemPartOptionBtn = (
@@ -485,5 +500,9 @@ namespace DataUI {
 
 
         }
+
+        public string GetCurrentTaskID() {
+            return (GetSelectedItemFromGroup(selectedTask) as Task).MyID; 
+        } 
     }
 }

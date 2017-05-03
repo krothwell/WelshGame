@@ -490,7 +490,7 @@ public class DbSetup {
 							+ tblSqlArray[sqlArrayRow, (int)tblSqlStrs.body] 
 							+ "PRIMARY KEY (" + tblSqlArray[sqlArrayRow, (int)tblSqlStrs.pk] + ")"	
 							+ ");";
-        Debug.Log(_dbcm.CommandText);
+        //Debug.Log(_dbcm.CommandText);
 		_dbcm.ExecuteNonQuery();
 		_dbcm.Dispose();
 		_dbcm = null;

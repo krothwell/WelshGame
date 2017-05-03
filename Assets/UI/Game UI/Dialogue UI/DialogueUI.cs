@@ -62,12 +62,14 @@ namespace GameUI {
         public Character currentChar;
         private Sprite currentPortrait;
         private NPCs npcs;
+        SkillsMenuUI skillsMenuUI;
         void Awake() {
             animator = GetComponent<Animator>();
             dialogueScroller = transform.GetComponentInChildren<ScrollRect>();
         }
         // Use this for initialization
         void Start() {
+            skillsMenuUI = FindObjectOfType<SkillsMenuUI>();
             dialogueQueue = new List<Character>();
             questsUI = FindObjectOfType<QuestsUI>();
             newWelshLearnedUI = FindObjectOfType<NewWelshLearnedUI>();
@@ -85,7 +87,7 @@ namespace GameUI {
 
         public bool IsReadyForNewDialogue() {
             bool ready;
-            print(animator);
+            //print(animator);
             if (animator.GetBool("InUse")) {
                 ready = false;
             } else {
@@ -95,7 +97,9 @@ namespace GameUI {
         }
 
         void QueueNewDialogue(Character character) {
-            dialogueQueue.Add(character);
+            if (!dialogueQueue.Contains(character)) {
+                dialogueQueue.Add(character);
+            }
         }
 
 
@@ -112,15 +116,25 @@ namespace GameUI {
         }
 
         private void StartNewDialogueFromQueue() {
-            StartNewDialogue(dialogueQueue[0]);
-            dialogueQueue.RemoveAt(0);
+            print("Dialogue queue count: " + dialogueQueue.Count);
+            if (dialogueQueue.Count > 0) {
+                Character newCharForDialogue = dialogueQueue[0];
+                dialogueQueue.RemoveAt(0);
+                StartNewDialogue(newCharForDialogue);
+                print("Dialogue queue count: " + dialogueQueue.Count);
+                
+            }
         }
 
         public void StartNewDialogue(string dialogueID) {
-            currentCharID = DbCommands.GetFieldValueFromTable("CharacterDialogues", "CharacterNames", "DialogueIDs = " + dialogueID);
-            currentChar = npcs.GetCharacterFromName(currentCharID);
-            currentDialogueID = dialogueID;
-            DisplayFirstDialogueNode();
+            if (IsReadyForNewDialogue()) {
+                currentCharID = DbCommands.GetFieldValueFromTable("CharacterDialogues", "CharacterNames", "DialogueIDs = " + dialogueID);
+                currentChar = npcs.GetCharacterFromName(currentCharID);
+                currentDialogueID = dialogueID;
+                DisplayFirstDialogueNode();
+            } else {
+                QueueNewDialogue(currentChar);
+            }
         }
 
         public void ResetLowerDialogueContainer() {
@@ -327,19 +341,9 @@ namespace GameUI {
 
         public void SetScoreBreakdownDisplay() {
             SetPercentageCorrect();
-            //SetTalliesChange();
-            //SetSkillPointsChange();
         }
         
     	private void SetPercentageCorrect() {
-            percentageTxt.text = currentDialogueTestData.GetAnswerPercentageCorrect().ToString() + "%";
-        }
-
-        private void SetTalliesChange() {
-            percentageTxt.text = currentDialogueTestData.GetAnswerPercentageCorrect().ToString() + "%";
-        }
-
-        private void SetSkillPointsChange() {
             percentageTxt.text = currentDialogueTestData.GetAnswerPercentageCorrect().ToString() + "%";
         }
 
@@ -383,6 +387,7 @@ namespace GameUI {
                     SetScoreBreakdownDisplay();
                     SetSubmitBtnText("Continue...");
                     currentInputField.SetSubmitted();
+                    skillsMenuUI.IncrementTotalSkillPoints(currentDialogueTestData.GetSkillPointsGainedTotal());
                 }
             } 
         }
@@ -403,9 +408,11 @@ namespace GameUI {
 
         public void ActivateQuests(string choiceID) {
             int countQuestActivateResults = DbCommands.GetCountFromQry(DbQueries.GetQuestActivateCountFromChoiceIDqry(choiceID));
+            print(countQuestActivateResults);
             if (countQuestActivateResults > 0) {
                 List<string[]> questsActivatedList;
                 DbCommands.GetDataStringsFromQry(DbQueries.GetCurrentActivateQuestsPlayerChoiceResultQry(choiceID), out questsActivatedList);
+                print(questsActivatedList.Count);
                 foreach (string[] activatedQuest in questsActivatedList) {
                     questsUI.InsertActivatedQuest(activatedQuest[1]);
                 }
@@ -413,6 +420,7 @@ namespace GameUI {
         }
 
         public void ActivateQuestTasks(string choiceID) {
+            QuestsController questsController = FindObjectOfType<QuestsController>();
             int countTaskActivateResults = DbCommands.GetCountFromQry(DbQueries.GetTaskActivateCountFromChoiceIDqry(choiceID));
             if (countTaskActivateResults > 0) {
                 print("Task ACTIVATING!!!!");
@@ -420,6 +428,18 @@ namespace GameUI {
                 DbCommands.GetDataStringsFromQry(DbQueries.GetCurrentActivateTasksPlayerChoiceResultQry(choiceID), out tasksActivatedList);
                 foreach (string[] activatedTask in tasksActivatedList) {
                     questsUI.InsertActivatedTask(activatedTask[1], activatedTask[3], activatedTask[2]);
+                    //a list of task parts in task that are prefab types are iterated over (if any) and instantiated.
+                    List<string[]> prefabParts = new List<string[]>();
+                    DbCommands.GetDataStringsFromQry(DbQueries.GetPrefabTaskPartsFromTaskIDqry(activatedTask[1]), out prefabParts);
+                    foreach(string[] prefabPart in prefabParts) {
+                        string prefabPath = prefabPart[0];
+                        string partID = prefabPart[1];
+                        UnityEngine.Object prefabTaskPartObj = Resources.Load(prefabPath);
+                        print(prefabPath);
+                        GameObject prefabTaskPart = Instantiate(prefabTaskPartObj, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
+                        prefabTaskPart.GetComponent<QuestTaskPart>().InitialiseMe(partID, activatedTask[1], activatedTask[3]);
+                        prefabTaskPart.transform.SetParent(questsController.transform, false);
+                    }
                 }
             }
         }

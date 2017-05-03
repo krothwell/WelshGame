@@ -259,14 +259,14 @@ public class PlayerSavesController : MonoBehaviour {
     /*loads all the details of the saved game except for the scene, since loading a scene destroys saveGameManager obj*/
     public void LoadSave() {
         SkillsMenuUI skillsMenuUI = FindObjectOfType<SkillsMenuUI>();
-        int id = PlayerPrefsManager.GetSaveGame();
+        int saveID = PlayerPrefsManager.GetSaveGame();
         //print(DbCommands.GetConn());
-        string[] playerSave = DbCommands.GetTupleFromTable("PlayerGames", " SaveIDs = " + id);
+        string[] playerSave = DbCommands.GetTupleFromTable("PlayerGames", " SaveIDs = " + saveID);
         print("Loading save reference: " 
             + playerSave[1] + " PlayerName: " 
             + playerSave[2] + " Portrait path: " 
             + playerSave[3] + " Save ID: "
-            + id);
+            + saveID);
         SetPlayerName(playerSave[2]);
         SetPlayerPortraitPath(playerSave[3]);
         player.GetComponent<PlayerCharacter>().SetMyName(playerName);
@@ -280,8 +280,9 @@ public class PlayerSavesController : MonoBehaviour {
 
         //Need to update currentgame with data from player save
         CopyPlayerSaveToCurrentGame(playerSave);
-        if (id != 0) {
+        if (saveID != 0) {
             LoadWorldItems();
+            LoadPrefabQuests();
         }
     }
 
@@ -392,13 +393,13 @@ public class PlayerSavesController : MonoBehaviour {
         WorldItems worldItems = FindObjectOfType<WorldItems>();
         worldItems.DestroyWorldItems();
         List<string[]> newWorldItemsList = new List<string[]>();
-        Debugging.PrintDbQryResults(DbQueries.GetSavedWorldItemsQry(saveIDstr, sceneLoader.GetCurrentSceneName()), saveIDstr, sceneLoader.GetCurrentSceneName());
+        //Debugging.PrintDbQryResults(DbQueries.GetSavedWorldItemsQry(saveIDstr, sceneLoader.GetCurrentSceneName()), saveIDstr, sceneLoader.GetCurrentSceneName());
         DbCommands.GetDataStringsFromQry(DbQueries.GetSavedWorldItemsQry(saveIDstr, sceneLoader.GetCurrentSceneName()), out newWorldItemsList, saveIDstr, sceneLoader.GetCurrentSceneName());
         foreach (string[] worldItemData in newWorldItemsList) {
             string prefabPath = worldItemData[5];
             //print(prefabPath);
             UnityEngine.Object worldItemPrefab = Resources.Load(prefabPath);
-            print(worldItemPrefab);
+            //print(worldItemPrefab);
             GameObject worldItem = Instantiate(worldItemPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
             string[] parentPath = worldItemData[3].Split('/');
             //print(parentPath[1]);
@@ -407,12 +408,26 @@ public class PlayerSavesController : MonoBehaviour {
             for (int i = 2; i < parentPath.Length -1; i++) {
                 parentTransform = parentTransform.FindChild(parentPath[i]);
             }
-            print(parentTransform);
+            //print(parentTransform);
             worldItem.transform.SetParent(parentTransform, false);
             worldItem.transform.position = new Vector3(float.Parse(worldItemData[0]), float.Parse(worldItemData[1]), float.Parse(worldItemData[2]));
             worldItem.name = worldItemData[4];
         }
         playerInventory.CloseInventory();
+    }
+
+    private void LoadPrefabQuests() {
+        List<string[]> prefabQuestsPathList = new List<string[]>();
+        string saveIDstr = PlayerPrefsManager.GetSaveGame().ToString();
+        DbCommands.GetDataStringsFromQry(DbQueries.GetPathsForActivePrefabQuestParts(saveIDstr), out prefabQuestsPathList);
+        foreach (string[] questPrefabArray in prefabQuestsPathList) {
+            string prefabPath = questPrefabArray[0];
+            UnityEngine.Object prefabObj = Resources.Load(prefabPath);
+            GameObject questPrefab = Instantiate(prefabObj, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
+            QuestsController questsController = FindObjectOfType<QuestsController>();
+            questPrefab.GetComponent<QuestTaskPart>().InitialiseMe(questPrefabArray[1], questPrefabArray[2], questPrefabArray[3]);
+            questPrefab.transform.SetParent(questsController.transform, false);
+        }
     }
 
     public void DeleteSave() {

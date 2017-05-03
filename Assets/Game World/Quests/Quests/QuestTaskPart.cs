@@ -13,16 +13,20 @@ public abstract class QuestTaskPart : MonoBehaviour {
     void Update() {
         if (isQuestComplete) {
             SetQuestTaskPartComplete();
+            Destroy(gameObject);
+            Destroy(this);
         } else { 
             CheckQuestPartComplete();
         }
     }
 
     public void SetQuestTaskPartComplete() {
+        print(questsUI);
         questsUI.CompleteTaskPart(partID, taskID, questName);
     }
 
     public void InitialiseMe(string partIDstr, string taskIDstr, string questNameStr) {
+        questsUI = FindObjectOfType<QuestsUI>();
         SetTaskPartID(partIDstr);
         SetTaskID(taskIDstr);
         SetQuestName(questNameStr);

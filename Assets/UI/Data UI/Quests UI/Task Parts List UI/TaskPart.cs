@@ -37,7 +37,6 @@ namespace DataUI {
             public void SelectSelf() {
                 DisplayOptions();
                 SetPanelColour(Colours.colorDataUIInputSelected);
-                questsUI.DisplayTasksRelatedToDialogue(myID);
             }
 
             public void DeselectSelf() {

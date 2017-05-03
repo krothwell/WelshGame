@@ -82,7 +82,10 @@ namespace GameUI {
         }
 
         public void AddQuestToDictionary(GameObject newQuest) {
-            questDict.Add(newQuest.GetComponent<Quest>().MyName, newQuest.GetComponent<Quest>());
+            string questName = newQuest.GetComponent<Quest>().MyName;
+            if (!questDict.ContainsKey(questName)) {
+                questDict.Add(newQuest.GetComponent<Quest>().MyName, newQuest.GetComponent<Quest>());
+            }
         }
 
         public void SelectQuest(string questName) {
@@ -106,7 +109,6 @@ namespace GameUI {
         public Transform BuildQuestTask(string[] taskData) {
             string taskID = taskData[0];
             string taskDesc = taskData[1];
-            print(taskID);
             print(DbCommands.GetFieldValueFromTable("QuestTasksActivated", "Completed", "TaskIDs = " + taskID + " AND SaveIDs = 0"));
             bool completed = Convert.ToBoolean(int.Parse(DbCommands.GetFieldValueFromTable("QuestTasksActivated", "Completed", "TaskIDs = " + taskID + " AND SaveIDs = 0")));
             GameObject task = Instantiate(taskPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
@@ -127,11 +129,13 @@ namespace GameUI {
         }
 
         public void CompleteEquipItemTaskPart(string itemName) {
+            print("Complete equip item task part");
+            Debugging.PrintDbQryResults(DbQueries.GetEquipItemTasksData(itemName, "0"), itemName);
             List<string[]> partsToComplete = new List<string[]>();
             DbCommands.GetDataStringsFromQry(DbQueries.GetEquipItemTasksData(itemName, "0"), out partsToComplete, itemName);
             if (partsToComplete.Count > 0) {
                 foreach (string[] tuple in partsToComplete) {
-                    print("completing task part");
+                    print("completing task part " + itemName);
                     CompleteTaskPart(tuple[0], tuple[1], tuple[2]);
                     print("task part completed");
                 }
@@ -139,13 +143,14 @@ namespace GameUI {
         }
 
         public void CompleteTaskPart(string partID, string taskID, string questName) {
+            
             DbCommands.InsertTupleToTable("CompletedQuestTaskParts", partID, "0");
-            print("inserted tuple to completed task parts");
+            //print("inserted tuple to completed task parts");
             int taskPartsCount = DbCommands.GetCountFromTable("QuestTaskParts", "TaskIDs = " + taskID);
-            print("task parts with id " + taskID + " = " + taskPartsCount);
+            //print("task parts with id " + taskID + " = " + taskPartsCount);
             int taskPartsCompletedCount = DbCommands.GetCountFromQry(DbQueries.GetTaskPartsCompleteFromTaskID(taskID, "0"));
-            print("task parts completed with id " + taskID + " = " + taskPartsCompletedCount);
-            Debugging.PrintDbTable("CompletedQuestTaskParts");
+            //print("task parts completed with id " + taskID + " = " + taskPartsCompletedCount);
+            //Debugging.PrintDbTable("CompletedQuestTaskParts");
             if (taskPartsCount == taskPartsCompletedCount) {
                 DbCommands.UpdateTableField("QuestTasksActivated", "Completed", "1", "TaskIDs = " + taskID + " AND SaveIDs = 0");
                 int tasksCount = DbCommands.GetCountFromTable(
@@ -160,8 +165,10 @@ namespace GameUI {
                     DbQueries.GetTasksCompleteFromQuestName(questName, "0"),
                     questName);
                 if (tasksCount == tasksCompletedCount) {
-                    DbCommands.UpdateTableField("QuestsActivated", "Completed", "1");
-                    
+                    DbCommands.UpdateTableField("QuestsActivated", 
+                        "Completed", "1", 
+                        "SaveIDs = 0 AND QuestNames = " + DbCommands.GetParameterNameFromValue(questName), 
+                        questName);
                 }
             }
             SetQuestDetails(questName);

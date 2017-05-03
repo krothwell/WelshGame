@@ -88,7 +88,7 @@ namespace DbUtilities {
                 }
             }
             updFieldNames = updFieldNames.Substring(0, updFieldNames.Length - 2);
-            Debug.Log(updFieldNames);
+            //Debug.Log(updFieldNames);
             _dbr.Dispose();
             _dbr = null;
 
@@ -121,7 +121,7 @@ namespace DbUtilities {
                              + "SELECT " + newPKstr + ", " + updFieldNames + " "
                              + "FROM " + tblName + " "
                              + "WHERE " + whereSql;
-            Debug.Log(sqlInsert);
+            //Debug.Log(sqlInsert);
             
             _dbcm.CommandText = sqlInsert;
             _dbcm.ExecuteNonQuery();
@@ -178,7 +178,7 @@ namespace DbUtilities {
             //_dbcm.Cancel();
             _dbr.Dispose();
             _dbr = null;
-            Debug.Log(sqlDelete);
+            //Debug.Log(sqlDelete);
             _dbcm.CommandText = sqlDelete;
             _dbcm.ExecuteNonQuery();
             _dbcm.Dispose();
@@ -250,7 +250,7 @@ namespace DbUtilities {
 
             string whereSql = " WHERE " + condition;
             string sql = updateSql + setSql + whereSql + ";";
-            Debug.Log(sql);
+            //Debug.Log(sql);
             _dbcm.CommandText = sql;
 
             _dbcm.ExecuteNonQuery();
