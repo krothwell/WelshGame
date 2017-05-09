@@ -29,7 +29,6 @@ namespace DataUI {
             }
 
             void OnMouseUpAsButton() {
-                print("SOMETHUNG");
                 questsUI.InsertTaskResultStartDialogue(myID);
             }
         }

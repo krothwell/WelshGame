@@ -10,7 +10,7 @@ public abstract class GameWorldSelector : MonoBehaviour {
     /// over an object / has selected an object by instantiating a selection 
     /// circle prefab in the object hierarchy.
     /// </summary>
-    public GameObject selectionCirclePrefab, selectionDecisionPrefab;
+    public GameObject selectionCirclePrefab, DefaultSelectionDecisionPrefab;
     protected CharacterDecision myDecision;
     protected CharAbility abilitySelected;
     protected GameObject selectionCircle;
@@ -92,6 +92,8 @@ public abstract class GameWorldSelector : MonoBehaviour {
 
     protected void BuildSelectionPlayerDecision(GameObject decisionPrefab) {
         GameObject decision = Instantiate(decisionPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+        print(playerCharacter);
+        print(decision);
         decision.GetComponent<CharacterDecision>().InitialiseMe(playerCharacter);
         decision.transform.SetParent(playerCharacter.transform, false);
         myDecision = decision.GetComponent<CharacterDecision>();

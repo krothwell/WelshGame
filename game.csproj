@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>5.5.2f1</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -154,11 +152,13 @@
     <Compile Include="Assets\Game World\Characters\Player\UpperRightLegWearable.cs" />
     <Compile Include="Assets\Game World\Characters\Player\UpperTorsoWearable.cs" />
     <Compile Include="Assets\Game World\IAttackable.cs" />
-    <Compile Include="Assets\Game World\Quests\Quests\QuestTaskPart.cs" />
-    <Compile Include="Assets\Game World\Quests\Quests\StartDialogue.cs" />
-    <Compile Include="Assets\Game World\Quests\Quests\TaskPartGetSkillPoint.cs" />
-    <Compile Include="Assets\Game World\Quests\QuestsController.cs" />
-    <Compile Include="Assets\Game World\Quests\Utilities\QuestActivators.cs" />
+    <Compile Include="Assets\Game World\QuestController\Quests\Quest activators\StartDialogue.cs" />
+    <Compile Include="Assets\Game World\QuestController\Quests\Quest parts\QuestTaskPart.cs" />
+    <Compile Include="Assets\Game World\QuestController\Quests\Quest parts\TaskPartGetSkillPoint.cs" />
+    <Compile Include="Assets\Game World\QuestController\Quests\Quest results\EndCombatWithCharacter.cs" />
+    <Compile Include="Assets\Game World\QuestController\Quests\Quest results\QuestTaskResult.cs" />
+    <Compile Include="Assets\Game World\QuestController\QuestsController.cs" />
+    <Compile Include="Assets\Game World\QuestController\Utilities\QuestActivators.cs" />
     <Compile Include="Assets\Game World\Scenery\level1\Scenery1.cs" />
     <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldCharacterSelector.cs" />
     <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldItemSelector.cs" />
@@ -207,7 +207,10 @@
     <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\TaskPart.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\TaskPartEquipItem.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\TaskPartPrefab.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\ExistingEndCombatWithCharTaskResult.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\ExistingStartDialogueTaskResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\ExistingTaskResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\NewEndCombatWithCharTaskResultOptionBtn.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\NewStartDialogueTaskResultOptionBtn.cs" />
     <Compile Include="Assets\UI\Data UI\Quests UI\Tasks List UI\Task.cs" />
     <Compile Include="Assets\UI\Data UI\TranslationUI\Grammar List UI\GrammarListUI.cs" />

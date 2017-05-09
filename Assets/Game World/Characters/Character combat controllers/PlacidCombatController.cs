@@ -25,8 +25,9 @@ public class PlacidCombatController : CharCombatController {
     }
 
     public override void TriggerCombat(Character charIn) {
-        charIn.GetCombatController().TriggerCombat(myCharacter);
         CurrentEnemyTarget = charIn;
+        charIn.GetCombatController().TriggerCombat(myCharacter);
+        
     }
 
     public override void TriggerStrategyMode() {

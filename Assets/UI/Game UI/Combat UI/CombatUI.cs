@@ -19,9 +19,11 @@ namespace GameUI {
         private bool combatUIactive;
         PlayerCharacter playerCharacter;
         DialogueUI dialogueUI;
+        NPCs npcController;
         // Use this for initialization
         void Start() {
             dialogueUI = FindObjectOfType<DialogueUI>();
+            npcController = FindObjectOfType<NPCs>();
             //currentAbility = CombatAbilities.passive;
             playerCharacter = FindObjectOfType<PlayerCharacter>();
             SelectedAbilityOption = "selectedAbilityOption";
@@ -113,6 +115,12 @@ namespace GameUI {
 
         public void SetCursorDefault() {
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        }
+
+        public void EndCombatWithCharacter(string charName) {
+            Character characterNPC = npcController.GetCharacterFromName(charName);
+            characterNPC.GetCombatController().gameObject.SetActive(false);
+            playerCharacter.GetCombatController().EndCombat(characterNPC);
         }
     }
 }

@@ -105,7 +105,7 @@ public class UIController : MonoBehaviour {
     /// All the components desired to be hidden should be stored in a panel on the next level down in the heirarchy.
     /// "Panel" should be used as the GameObject name so that it can always be found when this function is called.
     /// </summary>
-    public void HideComponents() {
+    public virtual void HideComponents() {
         GameObject panel = transform.FindChild("Panel").gameObject;
         panel.SetActive(false);
         MouseSelection.DelayNextClickSelect();

@@ -13,12 +13,14 @@ namespace GameUI {
         Dictionary<string, Quest> questDict;
         GameObject questsList, questDetailsList, questTasksList;
         NotificationQueue notificationQueue;
+        CombatUI combatUI;
         Text selectedQuestTitleLbl, selectedQuestDescriptionLbl;
         DialogueUI dialogueUI;
 
         // Use this for initialization
         void Start() {
             dialogueUI = FindObjectOfType<DialogueUI>();
+            combatUI = FindObjectOfType<CombatUI>();
             notificationQueue = FindObjectOfType<NotificationQueue>();
             selectedQuest = "selectedQuest";
             CreateSelectionToggleGroup(selectedQuest);
@@ -89,10 +91,13 @@ namespace GameUI {
         }
 
         public void SelectQuest(string questName) {
-            DisplayComponents();
             Quest quest = questDict[questName];
-            quest.SelectSelf();
             SetQuestDetails(questName);
+        }
+
+        public void ToggleToQuestNotified (string questName) {
+            DisplayComponents();
+            ToggleSelectionTo(questDict[questName], selectedQuest);
         }
 
         public void SetQuestDetails(string questName) {
@@ -124,7 +129,7 @@ namespace GameUI {
 
         public void SelectFirstQuest() {
             if (GetSelectedItemFromGroup(selectedQuest) == null) {
-                SelectQuest(questsList.transform.GetChild(0).GetComponent<Quest>().MyName);
+                ToggleSelectionTo(questsList.transform.GetChild(0).GetComponent<Quest>(), selectedQuest);
             }
         }
 
@@ -157,7 +162,13 @@ namespace GameUI {
                     "QuestTasks", 
                     "QuestNames = " + DbCommands.GetParameterNameFromValue(questName),
                     questName);
-                string startDialogueID = DbCommands.GetFieldValueFromTable("QuestTaskStartDialogueResults", "DialogueIDs", "TaskIDs = " + taskID);
+                string[] taskResults = DbCommands.GetTupleFromQry(DbQueries.GetAllTaskResultsQry(taskID));
+                //string startDialogueID = DbCommands.GetFieldValueFromTable("QuestTaskStartDialogueResults", "DialogueIDs", "TaskIDs = " + taskID);
+                string endCombatWithCharName = taskResults[0];
+                string startDialogueID = taskResults[1];
+                if (endCombatWithCharName != "") {
+                    combatUI.EndCombatWithCharacter(endCombatWithCharName);
+                }
                 if (startDialogueID != "") {
                     dialogueUI.StartNewDialogue(startDialogueID);
                 }

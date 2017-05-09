@@ -15,7 +15,7 @@ public class GameWorldItemSelector : GameWorldSelector{
     public override void SetSelected() {
         if (abilitySelected == null) {
             Select();
-            BuildSelectionPlayerDecision(selectionDecisionPrefab);
+            BuildSelectionPlayerDecision(DefaultSelectionDecisionPrefab);
             (myDecision as MoveToWorldItemDecision).SetItemToMoveTo(GetComponent<WorldItem>());
             QueueDecisionToRun();
         }

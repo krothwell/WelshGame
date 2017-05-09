@@ -6,7 +6,11 @@ public class MoveToEnemyDecision : CharacterMovementDecision {
     Character characterSelected;
 
     public override void CheckToEndMovement() {
-        if (myCharacter.GetCombatController().IsCurrentTargetInWeaponRange()) {
+        if (myCharacter.GetCombatController().GetCurrentEnemyTarget() == null) {
+            EndDecision();
+        }
+        else if (myCharacter.GetCombatController().IsCurrentTargetInWeaponRange()) {
+            print("in weapon range");
             myCharacter.GetCombatController().TriggerStrategyMode();
             EndDecision();
         }
@@ -14,7 +18,8 @@ public class MoveToEnemyDecision : CharacterMovementDecision {
 
     public void SetCharacterToMoveTo(Character character) {
         characterSelected = character;
+        myCharacter.GetCombatController().SetCurrentEnemyTarget(character);
         myCharacter.GetMovementController().SetTargetPosition(characterSelected.GetMyPosition());
-        character.GetCombatController().SetCurrentTarget(character);
+        
     }
 }

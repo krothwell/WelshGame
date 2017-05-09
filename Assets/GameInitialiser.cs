@@ -19,7 +19,6 @@ public class GameInitialiser : MonoBehaviour {
         DbCommands.SetConnectionString("URI=file:" + Application.dataPath + DB_PATH);
         dbSetup = new DbSetup();
         //Debugging.PrintDbTable("PlayerGames");
-
         //DbCommands.UpdateTableField("PlayerGames", "SkillPointsSpent", "0");
         dbSetup.CreateTables();
         //print("tables created");

@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 namespace GameUI {
     
@@ -19,7 +16,7 @@ namespace GameUI {
         }
 
         public override void ActivateNotification() {
-            questsUI.SelectQuest(myData.MyNotificationDetail);
+            questsUI.ToggleToQuestNotified(myData.MyNotificationDetail);
             DestroySelf();
         }
 

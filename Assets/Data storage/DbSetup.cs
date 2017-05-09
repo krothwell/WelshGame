@@ -40,6 +40,7 @@ public class DbSetup {
                         QuestTasksActivated,
                         QuestTaskResults,
                         QuestTaskStartDialogueResults,
+                        QuestTaskEndCombatWithCharResults,
                         QuestTaskParts,
                         QuestTaskPartsPrefab,
                         CompletedQuestTaskParts,
@@ -341,6 +342,15 @@ public class DbSetup {
                                                                                             + "FOREIGN KEY (ResultIDs, TaskIDs) REFERENCES QuestTaskResults(ResultIDs, TaskIDs) ON DELETE CASCADE ON UPDATE CASCADE, "
                                                                                             + "FOREIGN KEY (DialogueIDs) REFERENCES Dialogues(DialogueIDs) ON DELETE CASCADE ON UPDATE CASCADE, ";
         tblSqlArray[(int)tbls.QuestTaskStartDialogueResults, (int)tblSqlStrs.pk]            = "ResultIDs, TaskIDs, DialogueIDs";
+
+        tblSqlArray[(int)tbls.QuestTaskEndCombatWithCharResults, (int)tblSqlStrs.header] = "QuestTaskEndCombatWithCharResults";
+        tblSqlArray[(int)tbls.QuestTaskEndCombatWithCharResults, (int)tblSqlStrs.body]   = "ResultIDs INT NOT NULL, "
+                                                                                            + "TaskIDs INT, "
+                                                                                            + "CharacterNames VARCHAR(100) NOT NULL, "
+                                                                                            + "Scenes VARCHAR(100) NULL, "
+                                                                                            + "FOREIGN KEY (ResultIDs, TaskIDs) REFERENCES QuestTaskResults(ResultIDs, TaskIDs) ON DELETE CASCADE ON UPDATE CASCADE, "
+                                                                                            + "FOREIGN KEY (CharacterNames, Scenes) REFERENCES Characters(CharacterNames, Scenes) ON DELETE CASCADE ON UPDATE CASCADE, ";
+        tblSqlArray[(int)tbls.QuestTaskEndCombatWithCharResults, (int)tblSqlStrs.pk] = "ResultIDs, TaskIDs, CharacterNames, Scenes";
 
         tblSqlArray[(int)tbls.QuestTasksActivated, (int)tblSqlStrs.header]          = "QuestTasksActivated";
         tblSqlArray[(int)tbls.QuestTasksActivated, (int)tblSqlStrs.body]            = "TaskIDs INT, "

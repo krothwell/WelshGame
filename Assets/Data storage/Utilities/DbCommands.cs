@@ -573,5 +573,32 @@ namespace DbUtilities {
             
         }
 
+        public static string[] GetTupleFromQry(string qry, params string[] qryParams) {
+            IDbConnection _dbc = new SqliteConnection(conn);
+            _dbc.Open(); //Open connection to the database.
+            IDbCommand _dbcm = _dbc.CreateCommand();
+            foreach (string qryParameter in qryParams) {
+                _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(qryParameter), qryParameter));
+            }
+            string sql = qry + " LIMIT 1;";
+            //Debug.Log(sql);
+            _dbcm.CommandText = sql;
+            IDataReader _dbr = _dbcm.ExecuteReader();
+            _dbr.Read();
+
+            string[] tupleArray = new string[_dbr.FieldCount];
+            for (int i = 0; i < _dbr.FieldCount; i++) {
+                tupleArray[i] = _dbr[_dbr.GetName(i)].ToString();
+            }
+            _dbr.Dispose();
+            _dbr = null;
+            _dbcm.Dispose();
+            _dbcm = null;
+            _dbc.Close();
+            _dbc = null;
+            return tupleArray;
+
+        }
+
     }
 }

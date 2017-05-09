@@ -35,6 +35,7 @@ namespace GameUI {
 
             public void SelectSelf() {
                 GetComponent<Image>().color = Colours.colorSelectedQuestPanel;
+                questsUI.SelectQuest(myName);
             }
 
             public void SetCompleted() {
@@ -47,7 +48,6 @@ namespace GameUI {
 
             void OnMouseUpAsButton () {
                 questsUI.ToggleSelectionTo(this, questsUI.selectedQuest);
-                questsUI.SelectQuest(myName);
             }
         }
     }

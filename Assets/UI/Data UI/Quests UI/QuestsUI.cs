@@ -23,8 +23,8 @@ namespace DataUI {
             TaskPrefab,
             TaskPartEquipItemPrefab, TaskPartPrefabPrefab,
             EquipItemPartOptionBtnPrefab, PrefabPartOptionBtnPrefab,
-            startDialogueTaskResultOptionBtnPrefab,
-            existingStartDialogueTaskResultPrefab;
+            startDialogueTaskResultOptionBtnPrefab, endCombatWithCharTaskResultOptionBtnPrefab,
+            existingStartDialogueTaskResultPrefab, existingEndCombatWithCharTaskResultPrefab;
 
         //Quests
         GameObject questsListUI, questsListUIPanel, questsList,
@@ -174,6 +174,15 @@ namespace DataUI {
         public void DisplayResultsRelatedToTaskCompletion(string taskID) {
             taskResultsListUIPanel.SetActive(true);
             DisplayStartDialogueResultRelatedToTask(taskID);
+            DisplayEndCombatWithCharResultRelatedToTask(taskID);
+        }
+
+        public void DisplayStartDialogueResultRelatedToTask(string taskID) {
+            FillDisplayFromDb(DbQueries.GetStartDialogueResultsRelatedToTaskQry(taskID), taskResultsList.transform, BuildCurrentStartDialogueTaskResult, taskID);
+        }
+
+        public void DisplayEndCombatWithCharResultRelatedToTask(string taskID) {
+            AppendDisplayFromDb(DbQueries.GetEndCombatWithCharResultsRelatedToTaskQry(taskID), taskResultsList.transform, BuildCurrentEndCombatWithCharTaskResult, taskID);
         }
 
         public void DisplayNewTaskResultPanel() {
@@ -188,10 +197,6 @@ namespace DataUI {
 
         public void DisplayPrefabPartsRelatedToTask(string taskID) {
             AppendDisplayFromDb(DbQueries.GetPrefabPartsRelatedToTask(taskID), partsList.transform, BuildPrefabPart, taskID);
-        }
-
-        public void DisplayStartDialogueResultRelatedToTask(string taskID) {
-            FillDisplayFromDb(DbQueries.GetStartDialogueResultsRelatedToTaskQry(taskID), taskResultsList.transform, BuildCurrentStartDialogueTaskResult, taskID);
         }
 
         public void DisplayPartOptionsRelatedToEquipItem() {
@@ -214,6 +219,10 @@ namespace DataUI {
 
         public void DisplayTaskResultOptionsRelatedToStartDialogue() {
             FillDisplayFromDb(DbQueries.GetTaskResultOptionsToStartDialogueQry(), taskResultOptionSelectedList.transform, BuildStartDialogueTaskResultOptionBtn);
+        }
+
+        public void DisplayTaskResultOptionsRelatedToEndCombatWithChar() {
+            FillDisplayFromDb(DbQueries.GetTaskResultOptionsToEndCombatWithCharQry(), taskResultOptionSelectedList.transform, BuildEndCombatWithCharTaskResultOptionBtn);
         }
 
         public void HideTasksListUI() {
@@ -437,15 +446,34 @@ namespace DataUI {
             return startDialogueTaskResultOptionBtn.transform;
         }
 
+        private Transform BuildEndCombatWithCharTaskResultOptionBtn(string[] strArray) {
+            string charName = strArray[0];
+            string sceneName = strArray[1];
+            NewEndCombatWithCharTaskResultOptionBtn endCombatWithCharTaskResultOptionBtn = (
+                Instantiate(endCombatWithCharTaskResultOptionBtnPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject).GetComponent<NewEndCombatWithCharTaskResultOptionBtn>();
+            endCombatWithCharTaskResultOptionBtn.InitialiseMe(charName, sceneName);
+            return endCombatWithCharTaskResultOptionBtn.transform;
+        }
+
         private Transform BuildCurrentStartDialogueTaskResult(string[] strArray) {
             string resultID = strArray[0];
             string dialogueID = strArray[1];
             string dialogueDesc = strArray[2];
             ExistingStartDialogueTaskResult existingStartDialogueTaskResult = (
                 Instantiate(existingStartDialogueTaskResultPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject).GetComponent<ExistingStartDialogueTaskResult>();
-            existingStartDialogueTaskResult.ResultID = resultID;
-            existingStartDialogueTaskResult.SetMyText(dialogueID, dialogueDesc);
+            existingStartDialogueTaskResult.InitialiseMe(resultID, dialogueID, dialogueDesc);
             return existingStartDialogueTaskResult.transform;
+        }
+
+        private Transform BuildCurrentEndCombatWithCharTaskResult(string[] strArray) {
+            string resultID = strArray[0];
+            string charName = strArray[1];
+            string sceneName = strArray[2];
+            ExistingEndCombatWithCharTaskResult existingEndCombatWithCharTaskResult = (
+                Instantiate(existingEndCombatWithCharTaskResultPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject).GetComponent<ExistingEndCombatWithCharTaskResult>();
+            print(existingEndCombatWithCharTaskResult);
+            existingEndCombatWithCharTaskResult.InitialiseMe(resultID, charName, sceneName);
+            return existingEndCombatWithCharTaskResult.transform;
         }
 
         public void DeleteTaskFromDb(string taskID) {
@@ -458,7 +486,7 @@ namespace DataUI {
             DbCommands.DeleteTupleInTable("QuestTaskParts", fields);
         }
 
-        public void DeleteStartDialogueTaskResultFromDB(string resultID) {
+        public void DeleteTaskResultFromDB(string resultID) {
             string[,] fields = { { "ResultIDs", resultID } };
             DbCommands.DeleteTupleInTable("QuestTaskResults", fields);
         }

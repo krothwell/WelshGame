@@ -16,6 +16,11 @@ namespace GameUI {
             DbCommands.InsertTupleToTable("DiscoveredVocabGrammar", grammarID, "0", "0");
         }
 
+        public override void HideComponents() {
+            base.HideComponents();
+            EmptyDisplay(newWelshList.transform);
+        }
+
         public void DisplayNewWelsh(string choiceID) {
             newWelshList = GetPanel().transform.FindChild("ScrollWindow").FindChild("NewWelshList").gameObject;
             EmptyDisplay(newWelshList.transform);

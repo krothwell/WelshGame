@@ -307,10 +307,34 @@ namespace DbUtilities {
                 + "ORDER BY CharacterDialogues.CharacterNames";
         }
 
+        public static string GetTaskResultOptionsToEndCombatWithCharQry() {
+            return "SELECT Characters.CharacterNames, Characters.Scenes "
+                + "FROM Characters "
+                + "ORDER BY CharacterNames";
+        }
+
         public static string GetStartDialogueResultsRelatedToTaskQry(string taskID) {
             return "SELECT QuestTaskStartDialogueResults.ResultIDs, Dialogues.DialogueIDs, Dialogues.DialogueDescriptions "
                 + "FROM QuestTaskStartDialogueResults INNER JOIN Dialogues ON Dialogues.DialogueIDs = QuestTaskStartDialogueResults.DialogueIDs "
                 + "WHERE TaskIDs = " + taskID;
+        }
+
+        public static string GetEndCombatWithCharResultsRelatedToTaskQry(string taskID) {
+            return "SELECT QuestTaskEndCombatWithCharResults.ResultIDs, QuestTaskEndCombatWithCharResults.CharacterNames, QuestTaskEndCombatWithCharResults.Scenes "
+                + "FROM QuestTaskEndCombatWithCharResults "
+                + "WHERE QuestTaskEndCombatWithCharResults.TaskIDs = " + taskID;
+        }
+
+        public static string GetAllTaskResultsQry(string taskID) {
+            return "SELECT "
+                    + "QuestTaskEndCombatWithCharResults.CharacterNames, "
+                    + "QuestTaskStartDialogueResults.DialogueIDs "
+                + "FROM "
+                    + "QuestTaskEndCombatWithCharResults "
+                    + "INNER JOIN QuestTaskStartDialogueResults ON "
+                        + "QuestTaskEndCombatWithCharResults.TaskIDs = QuestTaskStartDialogueResults.TaskIDs "
+                + "WHERE "
+                    + "QuestTaskEndCombatWithCharResults.TaskIDs = " + taskID;
         }
 
         public static string GetSearchQry(string tableName, params string[] fieldNames) {

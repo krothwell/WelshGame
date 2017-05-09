@@ -82,7 +82,7 @@ public class PlayerCharacter : Character {
             currentSelectionCircle.DestroyMe();
         }
         currentObjectInteractingWith = null;
-        GetCombatController().SetCurrentTarget(null);
+        GetCombatController().SetCurrentEnemyTarget(null);
     }
 
 

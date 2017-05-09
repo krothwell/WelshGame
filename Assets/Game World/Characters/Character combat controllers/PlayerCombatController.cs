@@ -80,7 +80,7 @@ public class PlayerCombatController : CharCombatController {
             yRange += weaponRange.y;
         }
         Vector2 reach = new Vector2(xRange, yRange);
-        print(reach);
+        //print(reach);
         return reach;
         //return weaponRange + BaseWeaponReach;
     }
