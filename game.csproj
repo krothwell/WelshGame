@@ -178,6 +178,7 @@
     <Compile Include="Assets\Game World\WorldItems\ItemTypes\WorldItems.cs" />
     <Compile Include="Assets\GameInitialiser.cs" />
     <Compile Include="Assets\NotificationQueue.cs" />
+    <Compile Include="Assets\TimeOfDayController.cs" />
     <Compile Include="Assets\UI\Data UI\DataUIController.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Char Dialogues List UI\Add Char Dialogues UI\AddCharDialogueBtn.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Char Dialogues List UI\Add Char Dialogues UI\Dialogue Nodes List UI\DialogueNode.cs" />

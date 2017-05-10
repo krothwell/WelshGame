@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlacidCombatController : CharCombatController {
-
     void OnTriggerEnter2D(Collider2D incursionCollider) {
         if (incursionCollider.transform.name == "Perimeter") {
             PlayerCharacter playerCharacter = incursionCollider.transform.parent.GetComponent<PlayerCharacter>();
