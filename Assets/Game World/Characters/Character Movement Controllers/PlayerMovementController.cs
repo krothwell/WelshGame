@@ -59,6 +59,7 @@ public class PlayerMovementController : CharMovementController {
 
             if (playerMovementDelay >= 0f) {
                 playerMovementDelay -= Time.deltaTime;
+                print(playerMovementDelay);
             }
             else {
                 isDecisionWalk = true;

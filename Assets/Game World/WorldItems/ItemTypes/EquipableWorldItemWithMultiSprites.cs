@@ -33,6 +33,7 @@ public class EquipableWorldItemWithMultiSprites : WorldItem {
         for (int i = 0; i < transform.childCount; i++) {
             if (transform.GetChild(i).GetComponent<SpriteRenderer>().sprite != null) {
                 equipToPlayerParts[i].GetComponent<SpriteRenderer>().sprite = transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
+                equipToPlayerParts[i].GetComponent<SpriteRenderer>().material = transform.GetChild(i).GetComponent<SpriteRenderer>().material;
             }
             else {
                 equipToPlayerParts[i].GetComponent<SpriteRenderer>().sprite = null;

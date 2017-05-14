@@ -5,8 +5,18 @@ using GameUtilities.Display;
 public class Scenery1 : MonoBehaviour {
 
     PlayerInventoryUI inventory;
-	// Use this for initialization
-	void Start () {
-        gameObject.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = ImageLayerOrder.GetOrderInt(gameObject);
-	}
+    SpriteRenderer[] mySprites;
+    // Use this for initialization
+    void Start () {
+        mySprites = transform.FindChild("CentreOfGravity").GetComponentsInChildren<SpriteRenderer>();
+        SetMyLayer();
+    }
+
+    public void SetMyLayer() {
+        int layerOrder = ImageLayerOrder.GetOrderInt(gameObject);
+        print(mySprites);
+        ImageLayerOrder.SetOrderOnSpriteObjectArray(mySprites, layerOrder);
+        ImageLayerOrder.SetZ(gameObject);
+    }
+
 }

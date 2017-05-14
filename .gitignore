@@ -7,6 +7,15 @@
 *.png
 *.dll
 *.cd
+*.docx
+*.pdf
+*.mat
+*.tpsheet
+*.shader
+*.tif
+*.psd
+*.txt 
+
 Library/
 Resources/
 Temp/
