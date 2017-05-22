@@ -6,7 +6,7 @@ public class NightLight : MonoBehaviour {
     ParticleSystemRenderer lightingParticleEffect;
     Light lightSource;
 
-    void Start() {
+    void Awake() {
         lightSource = GetComponentInChildren<Light>();
         lightingParticleEffect = GetComponentInChildren<ParticleSystemRenderer>();
         SetParticleLayer();

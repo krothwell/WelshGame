@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityUtilities;
 using GameUI;
+using GameUtilities.Display;
 
 public abstract class GameWorldSelector : MonoBehaviour {
     /// <summary>
@@ -50,17 +51,18 @@ public abstract class GameWorldSelector : MonoBehaviour {
         DestroyMe();
         selectionCircle = Instantiate(selectionCirclePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
         selectionCircle.GetComponent<Transform>().localScale = new Vector2(Scale, Scale);
-        selectionCircle.GetComponent<Transform>().localPosition = new Vector2(xOffset, yOffset);
+        selectionCircle.GetComponent<Transform>().localPosition = new Vector3(xOffset, yOffset, 0.1f);
         selectionCircle.transform.SetParent(transform, false);
         myAnimator = selectionCircle.GetComponent<Animator>();
     }
 
     public void BuildCircle(Vector2 atCoordinates) {
         DestroyMe();
-        selectionCircle = Instantiate(selectionCirclePrefab, new Vector3(atCoordinates.x, atCoordinates.y, 0f), Quaternion.identity) as GameObject;
+        selectionCircle = Instantiate(selectionCirclePrefab, new Vector3(atCoordinates.x, atCoordinates.y, -0.0001f), Quaternion.identity) as GameObject;
         selectionCircle.GetComponent<Transform>().localScale = new Vector2(Scale, Scale);
         selectionCircle.transform.SetParent(transform, false);
         myAnimator = selectionCircle.GetComponent<Animator>();
+
     }
 
     void OnMouseExit() {

@@ -13,5 +13,9 @@ public class StaticCharacter : NPCCharacter {
         combatController = GetComponentInChildren<CharCombatController>();
         InitialiseMe();
     }
+
+    void Update() {
+        //print(GetMyPosition());
+    }
 	
 }

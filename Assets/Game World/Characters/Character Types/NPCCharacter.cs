@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class NPCCharacter : Character {
 
-    void Awake() {
-
-    }
 
     public override void EndSelection() {
         throw new NotImplementedException();

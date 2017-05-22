@@ -58,8 +58,8 @@ public class PlayerSavesController : MonoBehaviour {
                                                 { "PortraitImages", portraitPath },
                                                 { "Dates", DateTime.Now.ToString() },
                                                 { "LocationName", "Start" },
-                                                { "LocationX", "0.0" },
-                                                { "LocationY", "0.0" },
+                                                { "LocationX", "-30.0" },
+                                                { "LocationY", "-8.0" },
                                                 { "SkillPointsSpent", "0" }
                                             };
         DbCommands.UpdateTableTuple("PlayerGames", "SaveIDs = 0", pgFields);
@@ -273,8 +273,10 @@ public class PlayerSavesController : MonoBehaviour {
         player.GetComponent<PlayerCharacter>().SetMyPortrait(playerPortraitPath);
         float playerXpos = float.Parse(playerSave[6]);
         float playerYpos = float.Parse(playerSave[7]);
-        player.GetComponent<Transform>().position = new Vector2(playerXpos, playerYpos);
-        Camera.main.transform.position =  new Vector3(playerXpos, playerYpos, Camera.main.transform.position.z);
+        print(playerXpos + ", " + playerYpos);
+        Transform playerTransform = player.GetComponent<Transform>();
+        playerTransform.localPosition = new Vector2(playerXpos, playerYpos);
+        Camera.main.transform.position =  new Vector3(playerTransform.position.x, playerTransform.position.y, Camera.main.transform.position.z);
         skillsMenuUI.SetSkillPointsSpent(int.Parse(playerSave[8]));
         Time.timeScale = 1;
 
@@ -284,6 +286,8 @@ public class PlayerSavesController : MonoBehaviour {
             LoadWorldItems();
             LoadPrefabQuests();
         }
+
+        print("game loaded");
     }
 
     public void CopyPlayerSaveToCurrentGame(string[] playerGameData) {

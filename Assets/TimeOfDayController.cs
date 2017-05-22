@@ -62,7 +62,7 @@ public class TimeOfDayController : MonoBehaviour {
         timeOfDayEarthRotationDict = new Dictionary<TimesOfDay, float>();
         timeOfDayEarthRotationDict.Add(TimesOfDay.daytime, 0f);
         timeOfDayEarthRotationDict.Add(TimesOfDay.evening, 65f);
-        timeOfDayEarthRotationDict.Add(TimesOfDay.lateEvening, 35f);
+        timeOfDayEarthRotationDict.Add(TimesOfDay.lateEvening, 45f);
         timeOfDayEarthRotationDict.Add(TimesOfDay.night, 0f);
         timeOfDayEarthRotationDict.Add(TimesOfDay.lateNight, -35f);
         timeOfDayEarthRotationDict.Add(TimesOfDay.dawn, -65f);
@@ -71,7 +71,7 @@ public class TimeOfDayController : MonoBehaviour {
         timeofDayIntensityDict.Add(TimesOfDay.evening, 1.2f);
         timeofDayIntensityDict.Add(TimesOfDay.lateEvening, 0.25f);
         timeofDayIntensityDict.Add(TimesOfDay.night, 0.2f);
-        timeofDayIntensityDict.Add(TimesOfDay.lateNight, 0.28f);
+        timeofDayIntensityDict.Add(TimesOfDay.lateNight, 0.25f);
         timeofDayIntensityDict.Add(TimesOfDay.dawn, 1.2f);
 
 
@@ -107,8 +107,8 @@ public class TimeOfDayController : MonoBehaviour {
         } else {
             currentTime += Time.deltaTime;
         }
-        print("late night starts: " + timeOfDayStartDict[TimesOfDay.lateNight]);
-        print("current time = " + currentTime + " (" + timeOfDayStatus + ")");
+        //print("late night starts: " + timeOfDayStartDict[TimesOfDay.lateNight]);
+        //print("current time = " + currentTime + " (" + timeOfDayStatus + ")");
     }
 
     void CheckToStartTransition() {

@@ -17,8 +17,8 @@ public class PlayerMovementController : CharMovementController {
     void Awake() {
         ResetPlayerMovementDelay();
         mouseSelection = FindObjectOfType<MouseSelection>();
-        walkSpeed = 1.5f;
-        runSpeed = 3.5f;
+        walkSpeed = 1f;
+        runSpeed = 3f;
         combatui = FindObjectOfType<CombatUI>();
         
     }
@@ -27,6 +27,7 @@ public class PlayerMovementController : CharMovementController {
         SetIsDecisionRun();
         DecideMovement();
         CheckToMakeMovement();
+
      }
 
     public void SetCharacter(Character character) {
@@ -59,7 +60,7 @@ public class PlayerMovementController : CharMovementController {
 
             if (playerMovementDelay >= 0f) {
                 playerMovementDelay -= Time.deltaTime;
-                print(playerMovementDelay);
+                //print(playerMovementDelay);
             }
             else {
                 isDecisionWalk = true;
