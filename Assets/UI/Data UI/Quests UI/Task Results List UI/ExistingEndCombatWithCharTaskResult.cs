@@ -11,8 +11,8 @@ namespace DataUI {
 
             public void InitialiseMe(string resID, string charName, string sceneName) {
                 base.InitialiseMe(resID);
-                characterNameText = transform.FindChild("CharName").GetComponent<Text>();
-                sceneNameText = transform.FindChild("SceneName").GetComponent<Text>();
+                characterNameText = transform.Find("CharName").GetComponent<Text>();
+                sceneNameText = transform.Find("SceneName").GetComponent<Text>();
                 characterNameText.text = charName;
                 sceneNameText.text = sceneName;
             }

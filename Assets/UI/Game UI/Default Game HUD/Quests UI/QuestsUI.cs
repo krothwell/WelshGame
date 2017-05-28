@@ -25,11 +25,11 @@ namespace GameUI {
             selectedQuest = "selectedQuest";
             CreateSelectionToggleGroup(selectedQuest);
             questDict = new Dictionary<string, Quest>();
-            questsList = GetPanel().transform.FindChild("QuestsScroller").FindChild("QuestsList").gameObject;
-            questDetailsList = GetPanel().transform.FindChild("QuestDetailsScroller").FindChild("QuestDetailsList").gameObject;
-            questTasksList = questDetailsList.transform.FindChild("SelectedQuestTasksList").gameObject;
-            selectedQuestTitleLbl = questDetailsList.transform.FindChild("SelectedQuestTitleLbl").GetComponent<Text>();
-            selectedQuestDescriptionLbl = questDetailsList.transform.FindChild("SelectedQuestDescriptionLbl").GetComponent<Text>();
+            questsList = GetPanel().transform.Find("QuestsScroller").Find("QuestsList").gameObject;
+            questDetailsList = GetPanel().transform.Find("QuestDetailsScroller").Find("QuestDetailsList").gameObject;
+            questTasksList = questDetailsList.transform.Find("SelectedQuestTasksList").gameObject;
+            selectedQuestTitleLbl = questDetailsList.transform.Find("SelectedQuestTitleLbl").GetComponent<Text>();
+            selectedQuestDescriptionLbl = questDetailsList.transform.Find("SelectedQuestDescriptionLbl").GetComponent<Text>();
             DisplayQuests();
             FillQuestDictionary();
         }

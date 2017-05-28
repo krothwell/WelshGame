@@ -12,8 +12,8 @@ namespace DataUI {
 
             public void InitialiseMe(string resID, string dialogueID, string dialogueDesc) {
                 base.InitialiseMe(resID);
-                dialogueIDTxt = transform.FindChild("DialogueIDLbl").GetComponent<Text>();
-                dialogueDescTxt = transform.FindChild("DialogueDescriptionLbl").GetComponent<Text>();
+                dialogueIDTxt = transform.Find("DialogueIDLbl").GetComponent<Text>();
+                dialogueDescTxt = transform.Find("DialogueDescriptionLbl").GetComponent<Text>();
                 dialogueIDTxt.text = dialogueID;
                 dialogueDescTxt.text = dialogueDesc;
             }

@@ -3,7 +3,7 @@ using UnityEngine;
 using GameUtilities.Display;
 using GameUtilities;
 
-public abstract class CharMovementController : MonoBehaviour {
+public class CharMovementController : MonoBehaviour {
 
     protected CharacterMovementDecision currentMovementDecision;
 
@@ -17,24 +17,32 @@ public abstract class CharMovementController : MonoBehaviour {
 
     protected bool redirecting = false, isMoving = false;
 
-    public CollisionAvoider CollisionAvoider;
+    private CollisionAvoider collisionAvoider;
 
     private GameObject[] characterParts;
 
     private Transform imageRoot;
 
     protected CharacterMovement movement;
+    public CharacterMovement Movement {
+        get { return movement; }
+        set { movement = value; }
+    }
     protected Character character;
+    public Character Character {
+        get { return character; }
+        set { character = value; }
+    }
 
 
-
-    public void InitialiseMe (GameObject[] charParts, Transform imageRt) {
-        CollisionAvoider = transform.GetComponentInChildren<CollisionAvoider>();
-        imageRoot = imageRt;
+    public void InitialiseMe () {
+        collisionAvoider = GetComponent<CollisionAvoider>();
+        collisionAvoider.InitialiseMe(character, this);
+        imageRoot = character.ImageRoot;
         rerouteLimit = 50;
-        characterParts = charParts;
+        characterParts = character.CharacterParts;
         SetMyOrder(characterParts);
-        character = GetComponent<Character>();
+        character.MovementController = this;
     }
 
     public void SetTargetPosition (Vector2 targetPos) {
@@ -64,7 +72,7 @@ public abstract class CharMovementController : MonoBehaviour {
         return nextPosition;
     }
 
-    protected void CheckToMakeMovement() {
+    public void CheckToMakeMovement() {
         if (isMoving) {
             MoveTowardsPosition();
         }
@@ -75,7 +83,7 @@ public abstract class CharMovementController : MonoBehaviour {
         if (myPosition != nextPosition && rerouteCount < rerouteLimit) {
             float speed = movement.GetMovementSpeed();
             Vector2 distanceXY = GetXYDistancesFromMyPositonToNextPosition();
-            CollisionAvoider.SetCollisionDetector();
+            collisionAvoider.SetCollisionDetector();
             //to walk as the crow flies diagonally, a percentage is captured for each axis
             float percentageOfTravelX = (100f / distanceXY.x) * (1 * speed * Time.deltaTime);
             float percentageOfTravelY = (100f / distanceXY.y) * (1 * speed * Time.deltaTime);
@@ -100,7 +108,7 @@ public abstract class CharMovementController : MonoBehaviour {
     }
 
     private void SetMyPosition(int xModifier, int yModifier, float newX, float newY) {
-        transform.Translate(new Vector2(xModifier * newX, yModifier * newY));
+        character.transform.Translate(new Vector2(xModifier * newX, yModifier * newY));
         myPosition = character.GetMyPosition();
         if (myPosition == interimPosition) {
             redirecting = false;
@@ -137,7 +145,7 @@ public abstract class CharMovementController : MonoBehaviour {
 
     public void SetMyOrder(GameObject[] characterParts) {
         ImageLayerOrder.SetOrderOnGameObjectArray(characterParts, ImageLayerOrder.GetOrderInt(gameObject) - 1);
-        ImageLayerOrder.SetZ(gameObject);
+        ImageLayerOrder.SetZ(character.gameObject);
     }
 
     public Vector2 GetXYDistancesFromMyPositonToNextPosition() {
@@ -149,6 +157,7 @@ public abstract class CharMovementController : MonoBehaviour {
     }
     
     public void ToggleIsMoving(bool moving) {
+        print("moving? : " + moving);
         isMoving = moving;
     }
 
@@ -159,8 +168,6 @@ public abstract class CharMovementController : MonoBehaviour {
     public CharacterMovement GetMyMovement() {
         return movement;
     }
-
-    public abstract void ProcessMovement();
 
     public void SetMovementDecision(CharacterMovementDecision movementDecision) {
         currentMovementDecision = movementDecision;
@@ -174,6 +181,19 @@ public abstract class CharMovementController : MonoBehaviour {
         return 1f;
     }
 
-    public abstract void DecideMovement();
-        
+    public void ProcessMovement(CharacterMovement movementType) {
+        movement = movementType;
+        SetMyDirection(targetPosition, myPosition);
+        print(character);
+        CharacterDecision decision = character.MyDecision;
+        print(decision);
+        if (decision.GetType() == typeof(CharacterMovementDecision)) {
+            collisionAvoider = character.MyDecision.GetComponent<CollisionAvoider>();
+        }
+        movement.MakeAction();
+        ToggleIsMoving(true);
+    }
+
+
+
 }

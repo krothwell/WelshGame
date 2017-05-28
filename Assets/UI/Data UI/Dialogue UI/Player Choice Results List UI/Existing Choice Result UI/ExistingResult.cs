@@ -28,12 +28,12 @@ namespace DataUI.ListItems {
         }
 
         void DisplayOptions() {
-            options = transform.FindChild("Options").gameObject;
+            options = transform.Find("Options").gameObject;
             options.SetActive(true);
         }
 
         private void HideOptions() {
-            options = transform.FindChild("Options").gameObject;
+            options = transform.Find("Options").gameObject;
             options.SetActive(false);
         }
 

@@ -7,7 +7,7 @@ public class MoveToLocationDecision : CharacterMovementDecision {
 
 
     public override void CheckToEndMovement() {
-        if (myCharacter.GetMyPosition() == myCharacter.GetMovementController().GetTargetPosition()) {
+        if (myCharacter.GetMyPosition() == movementController.GetTargetPosition()) {
             EndDecision();
         }
     }
@@ -15,6 +15,6 @@ public class MoveToLocationDecision : CharacterMovementDecision {
 
     public void SetTargetPosition(Vector2 target) {
         targetPosition = target;
-        myCharacter.GetMovementController().SetTargetPosition(targetPosition);
+        movementController.SetTargetPosition(targetPosition);
     }
 }

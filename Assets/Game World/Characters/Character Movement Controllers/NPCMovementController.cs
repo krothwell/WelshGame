@@ -19,31 +19,31 @@ public class NPCMovementController : CharMovementController {
         combatController = cc;
     }
 
-    public override void ProcessMovement() {
-        if (!isMoving) {
-            //Decide to walk or run... should be determined by if npc is attacking player, and if so , the distance from the player
-            if (combatController.IsInCombat()) {
-                if (movement != null) {
-                    movement.StopAction();
-                }
-                if (GetDistanceFromMyPosition(playerCharacter.GetMyPosition()) < 1f) {
-                    movement = new WalkMovement(character.GetMyAnimator(), WalkSpeed);
+    //public void ProcessMovement() {
+    //    if (!isMoving) {
+    //        //Decide to walk or run... should be determined by if npc is attacking player, and if so , the distance from the player
+    //        if (combatController.IsInCombat()) {
+    //            if (movement != null) {
+    //                movement.StopAction();
+    //            }
+    //            if (GetDistanceFromMyPosition(playerCharacter.GetMyPosition()) < 1f) {
+    //                movement = new WalkMovement(character.GetMyAnimator(), WalkSpeed);
 
-                }
-                else {
-                    movement = new RunMovement(character.GetMyAnimator(), RunSpeed);
-                }
-                movement.MakeAction();
-                ToggleIsMoving(true);
-                SetTargetPosition(combatController.GetCombatSlotPosition());
-            }
-            else {
-                //not sure what else yet
-            }
-        }
-    }
+    //            }
+    //            else {
+    //                movement = new RunMovement(character.GetMyAnimator(), RunSpeed);
+    //            }
+    //            movement.MakeAction();
+    //            ToggleIsMoving(true);
+    //            SetTargetPosition(combatController.GetCombatSlotPosition());
+    //        }
+    //        else {
+    //            //not sure what else yet
+    //        }
+    //    }
+    //}
 
-    public override void DecideMovement() {
-        throw new NotImplementedException();
-    }
+    //public void DecideMovement() {
+    //    throw new NotImplementedException();
+    //}
 }

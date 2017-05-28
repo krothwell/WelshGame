@@ -14,13 +14,13 @@ namespace GameUI {
         GameObject saveInput;
         // Use this for initialization
         void Start() {
-            myPanel = transform.FindChild("Panel").gameObject;
+            myPanel = transform.Find("Panel").gameObject;
             playerSavesController = FindObjectOfType<PlayerSavesController>();
             ui = transform.parent.parent.gameObject.GetComponent<UIController>();
-            saveGameList = options[0].transform.FindChild("SaveGamesList").gameObject;
-            loadGameList = options[1].transform.FindChild("LoadGamesList").gameObject;
-            saveInput = options[0].transform.FindChild("SaveInput").gameObject;
-            submitSaveBtn = options[0].transform.FindChild("SubmitSaveBtn").gameObject;
+            saveGameList = options[0].transform.Find("SaveGamesList").gameObject;
+            loadGameList = options[1].transform.Find("LoadGamesList").gameObject;
+            saveInput = options[0].transform.Find("SaveInput").gameObject;
+            submitSaveBtn = options[0].transform.Find("SubmitSaveBtn").gameObject;
         }
 
         // Update is called once per frame

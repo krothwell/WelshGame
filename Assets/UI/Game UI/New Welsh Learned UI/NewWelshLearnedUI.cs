@@ -22,7 +22,7 @@ namespace GameUI {
         }
 
         public void DisplayNewWelsh(string choiceID) {
-            newWelshList = GetPanel().transform.FindChild("ScrollWindow").FindChild("NewWelshList").gameObject;
+            newWelshList = GetPanel().transform.Find("ScrollWindow").Find("NewWelshList").gameObject;
             EmptyDisplay(newWelshList.transform);
             AppendDisplayFromDb(DbQueries.GetCurrentActivateGrammarPlayerChoiceResultQry(choiceID), newWelshList.transform, BuildNewGrammar);
             AppendDisplayFromDb(DbQueries.GetCurrentActivateVocabPlayerChoiceResultQry(choiceID), newWelshList.transform, BuildNewVocab);

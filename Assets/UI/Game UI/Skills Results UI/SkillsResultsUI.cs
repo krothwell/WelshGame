@@ -13,18 +13,18 @@ public class SkillsResultsUI : UIController {
     Transform summaryBreakdown, welshTestOverview, mainOverview, welshSkillsList, testTriggerIcon;
     Image testTriggerIconImage;
 	void Awake () {
-        summaryBreakdown = GetPanel().transform.FindChild("SummaryBreakdown");
-        welshTestOverview = GetPanel().transform.FindChild("WelshTestOverview");
-        mainOverview = summaryBreakdown.FindChild("MainOverview");
-        percentageCorrect = mainOverview.FindChild("PercentageCorrect").GetComponentInChildren<Text>();
-        resultLabel = mainOverview.FindChild("ResultLbl").GetComponent<Text>();
-        testTriggerLbl = mainOverview.FindChild("TriggerLbl").GetComponent<Text>();
-        testTriggerIcon = mainOverview.FindChild("TriggerIcon");
-        testTriggerIconImage = testTriggerIcon.FindChild("Image").GetComponent<Image>();
-        talliesShift = mainOverview.FindChild("TalliesShift").GetComponent<Text>();
-        testType = mainOverview.FindChild("TestType").GetComponent<Text>();
-        skillPointsGained = mainOverview.FindChild("SkillPointsGained").GetComponent<Text>();
-        answerGiven = summaryBreakdown.FindChild("AnswerGiven").GetComponent<Text>();
+        summaryBreakdown = GetPanel().transform.Find("SummaryBreakdown");
+        welshTestOverview = GetPanel().transform.Find("WelshTestOverview");
+        mainOverview = summaryBreakdown.Find("MainOverview");
+        percentageCorrect = mainOverview.Find("PercentageCorrect").GetComponentInChildren<Text>();
+        resultLabel = mainOverview.Find("ResultLbl").GetComponent<Text>();
+        testTriggerLbl = mainOverview.Find("TriggerLbl").GetComponent<Text>();
+        testTriggerIcon = mainOverview.Find("TriggerIcon");
+        testTriggerIconImage = testTriggerIcon.Find("Image").GetComponent<Image>();
+        talliesShift = mainOverview.Find("TalliesShift").GetComponent<Text>();
+        testType = mainOverview.Find("TestType").GetComponent<Text>();
+        skillPointsGained = mainOverview.Find("SkillPointsGained").GetComponent<Text>();
+        answerGiven = summaryBreakdown.Find("AnswerGiven").GetComponent<Text>();
         welshSkillsList = welshTestOverview.GetComponentInChildren<VerticalLayoutGroup>().transform;
     }
 

@@ -80,62 +80,62 @@ namespace DataUI {
             //choiceResultOptions = new ChoiceResultOptions();
 
             //DIALOGUE COMPONENTS
-            dialoguesListUI = GetPanel().transform.FindChild("DialoguesListUI").gameObject;
-            dialoguesPanel = dialoguesListUI.transform.FindChild("Panel").gameObject;
-            dialogueList = dialoguesPanel.transform.FindChild("DialoguesList").gameObject; 
+            dialoguesListUI = GetPanel().transform.Find("DialoguesListUI").gameObject;
+            dialoguesPanel = dialoguesListUI.transform.Find("Panel").gameObject;
+            dialogueList = dialoguesPanel.transform.Find("DialoguesList").gameObject; 
              //add
-            submitNewDialogue = dialoguesPanel.transform.FindChild("SubmitNewDialog").gameObject;
-            newDialoguePanel = submitNewDialogue.transform.FindChild("NewDialogPanel").gameObject;
-            activateNewDialogueBtn = submitNewDialogue.transform.FindChild("ActivateNewDialogBtn").gameObject;
-            inputShortDescriptionText = newDialoguePanel.transform.FindChild("InputShortDescriptionText").GetComponent<InputField>();
+            submitNewDialogue = dialoguesPanel.transform.Find("SubmitNewDialog").gameObject;
+            newDialoguePanel = submitNewDialogue.transform.Find("NewDialogPanel").gameObject;
+            activateNewDialogueBtn = submitNewDialogue.transform.Find("ActivateNewDialogBtn").gameObject;
+            inputShortDescriptionText = newDialoguePanel.transform.Find("InputShortDescriptionText").GetComponent<InputField>();
             dialogueActive = newDialoguePanel.transform.GetComponentInChildren<Toggle>();
 
             //CHARACTER DIALOGUES COMPONENTS
-            charDialoguesListUI = GetPanel().transform.FindChild("CharDialoguesListUI").gameObject;
-            charDialoguesPanel = charDialoguesListUI.transform.FindChild("CharDialoguesPanel").gameObject;
-            characterList = charDialoguesPanel.transform.FindChild("CharDialoguesList").gameObject;
+            charDialoguesListUI = GetPanel().transform.Find("CharDialoguesListUI").gameObject;
+            charDialoguesPanel = charDialoguesListUI.transform.Find("CharDialoguesPanel").gameObject;
+            characterList = charDialoguesPanel.transform.Find("CharDialoguesList").gameObject;
             //add
-            addCharDialoguesUI = charDialoguesPanel.transform.FindChild("AddCharDialoguesUI").gameObject;
-            addCharDialoguesPanel = addCharDialoguesUI.transform.FindChild("AddCharDialoguesPanel").gameObject;
-            addCharDialogueList = addCharDialoguesPanel.transform.FindChild("CharacterList").gameObject;
-            activateAddCharBtn = addCharDialoguesUI.transform.FindChild("ActivateAddCharBtn").gameObject;
+            addCharDialoguesUI = charDialoguesPanel.transform.Find("AddCharDialoguesUI").gameObject;
+            addCharDialoguesPanel = addCharDialoguesUI.transform.Find("AddCharDialoguesPanel").gameObject;
+            addCharDialogueList = addCharDialoguesPanel.transform.Find("CharacterList").gameObject;
+            activateAddCharBtn = addCharDialoguesUI.transform.Find("ActivateAddCharBtn").gameObject;
 
             //NODE COMPONENTS
-            dialogueNodesListUI = GetPanel().transform.FindChild("DialogueNodesListUI").gameObject;
-            dialogueNodesPanel = dialogueNodesListUI.transform.FindChild("DialogueNodesPanel").gameObject;
+            dialogueNodesListUI = GetPanel().transform.Find("DialogueNodesListUI").gameObject;
+            dialogueNodesPanel = dialogueNodesListUI.transform.Find("DialogueNodesPanel").gameObject;
             dialogueNodesScrollView = dialogueNodesListUI.transform.GetComponentInChildren<ScrollRect>().gameObject;
             dialogueNodesList = dialogueNodesScrollView.transform.GetComponentInChildren<VerticalLayoutGroup>().gameObject;
             //add
-            nodeDetailsUI = dialogueNodesPanel.transform.FindChild("NodeDetailsUI").gameObject;
-            nodeDetailsUIPanel = nodeDetailsUI.transform.FindChild("Panel").gameObject;
-            activateNodeDetailsBtn = nodeDetailsUI.transform.FindChild("ActivateNodeDetailsBtn").gameObject;
+            nodeDetailsUI = dialogueNodesPanel.transform.Find("NodeDetailsUI").gameObject;
+            nodeDetailsUIPanel = nodeDetailsUI.transform.Find("Panel").gameObject;
+            activateNodeDetailsBtn = nodeDetailsUI.transform.Find("ActivateNodeDetailsBtn").gameObject;
             inputNodeText = nodeDetailsUIPanel.transform.GetComponentInChildren<InputField>();
             endDialogueOptionToggle = nodeDetailsUIPanel.transform.GetComponentInChildren<Toggle>();
-            selectNodeSpeakersUI = nodeDetailsUIPanel.transform.FindChild("SelectNodeSpeakersUI").gameObject;
-            selectNodeSpeakersUIpanel = selectNodeSpeakersUI.transform.FindChild("Panel").gameObject;
-            nodeSpeakerBtn = nodeDetailsUIPanel.transform.FindChild("NodeSpeakerBtn").gameObject;
+            selectNodeSpeakersUI = nodeDetailsUIPanel.transform.Find("SelectNodeSpeakersUI").gameObject;
+            selectNodeSpeakersUIpanel = selectNodeSpeakersUI.transform.Find("Panel").gameObject;
+            nodeSpeakerBtn = nodeDetailsUIPanel.transform.Find("NodeSpeakerBtn").gameObject;
             charOverrideList = selectNodeSpeakersUIpanel.GetComponentInChildren<VerticalLayoutGroup>().gameObject;
 
             //PLAYER CHOICE COMPONENTS
-            playerChoicesListUI = GetPanel().transform.FindChild("PlayerChoicesListUI").gameObject;
-            playerChoicesPanel = playerChoicesListUI.transform.FindChild("Panel").gameObject;
-            playerChoicesList = playerChoicesPanel.transform.FindChild("PlayerChoicesList").gameObject;
+            playerChoicesListUI = GetPanel().transform.Find("PlayerChoicesListUI").gameObject;
+            playerChoicesPanel = playerChoicesListUI.transform.Find("Panel").gameObject;
+            playerChoicesList = playerChoicesPanel.transform.Find("PlayerChoicesList").gameObject;
             //add
-            playerChoiceDetails = playerChoicesPanel.transform.FindChild("PlayerChoiceDetails").gameObject;
-            newPlayerChoicePanel = playerChoiceDetails.transform.FindChild("NewPlayerChoicePanel").gameObject;
-            displayPlayerChoiceDetailsBtn = playerChoiceDetails.transform.FindChild("DisplayPlayerChoiceDetailsBtn").gameObject;
+            playerChoiceDetails = playerChoicesPanel.transform.Find("PlayerChoiceDetails").gameObject;
+            newPlayerChoicePanel = playerChoiceDetails.transform.Find("NewPlayerChoicePanel").gameObject;
+            displayPlayerChoiceDetailsBtn = playerChoiceDetails.transform.Find("DisplayPlayerChoiceDetailsBtn").gameObject;
             inputChoiceText = newPlayerChoicePanel.transform.GetComponentInChildren<InputField>();
 
             //PLAYER CHOICE RESULTS COMPONENTS
-            playerChoiceResultsListUI = GetPanel().transform.FindChild("PlayerChoiceResultsListUI").gameObject;
-            playerChoiceResultsPanel = playerChoiceResultsListUI.transform.FindChild("Panel").gameObject;
+            playerChoiceResultsListUI = GetPanel().transform.Find("PlayerChoiceResultsListUI").gameObject;
+            playerChoiceResultsPanel = playerChoiceResultsListUI.transform.Find("Panel").gameObject;
             playerChoicesResultsList = playerChoiceResultsPanel.GetComponentInChildren<VerticalLayoutGroup>().gameObject;
             //add
-            newChoiceResultUI = playerChoiceResultsPanel.transform.FindChild("NewChoiceResultUI").gameObject;
-            displayNewChoiceResultBtn = newChoiceResultUI.transform.FindChild("DisplayNewChoiceResultBtn").gameObject;
-            newChoiceResultPanel = newChoiceResultUI.transform.FindChild("Panel").gameObject;
+            newChoiceResultUI = playerChoiceResultsPanel.transform.Find("NewChoiceResultUI").gameObject;
+            displayNewChoiceResultBtn = newChoiceResultUI.transform.Find("DisplayNewChoiceResultBtn").gameObject;
+            newChoiceResultPanel = newChoiceResultUI.transform.Find("Panel").gameObject;
             choiceResultOptionsScrollView = newChoiceResultPanel.GetComponentInChildren<ScrollRect>();
-            selectedResultTypeList = choiceResultOptionsScrollView.transform.FindChild("SelectedResultTypeList").gameObject;
+            selectedResultTypeList = choiceResultOptionsScrollView.transform.Find("SelectedResultTypeList").gameObject;
             newChoiceResultListSearcher = newChoiceResultPanel.GetComponentInChildren<ListSearcher>();
 
             newActivateWelshVocabListInfo = new ListDisplayInfo(
@@ -393,7 +393,7 @@ namespace DataUI {
                 activeAtStartOfGameBool = (int.Parse(strArray[2]) == -1) ? true : false;
             }
             GameObject dialogue = Instantiate(dialoguePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
-            dialogue.transform.FindChild("DescriptionInput").GetComponent<InputField>().text = descStr;
+            dialogue.transform.Find("DescriptionInput").GetComponent<InputField>().text = descStr;
             dialogue.transform.Find("DialogueID").GetComponent<Text>().text = idStr;
             dialogue.transform.GetComponentInChildren<Toggle>().isOn = activeAtStartOfGameBool;
             dialogue.GetComponent<Dialogue>().MyID = idStr;
@@ -411,7 +411,7 @@ namespace DataUI {
                 sceneStr = " <i>scene not found</i>";
                 charLink.GetComponent<AddCharDialogueBtn>().DisplayDeletionOption();
             }
-            charLink.transform.FindChild("CharacterName").GetComponent<Text>().text = charName + sceneStr;
+            charLink.transform.Find("CharacterName").GetComponent<Text>().text = charName + sceneStr;
             charLink.GetComponent<AddCharDialogueBtn>().CharacterName = charName;
             charLink.GetComponent<AddCharDialogueBtn>().SceneName = sceneName;
 
@@ -427,7 +427,7 @@ namespace DataUI {
                 sceneStr = " <i>in " + sceneName + "</i>";
             }
             GameObject charDialogue = Instantiate(charDialoguePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
-            charDialogue.transform.FindChild("CharacterInput").GetComponent<InputField>().text = charName + sceneStr;
+            charDialogue.transform.Find("CharacterInput").GetComponent<InputField>().text = charName + sceneStr;
             charDialogue.GetComponent<CharacterDialogue>().CharacterName = charName;
             charDialogue.GetComponent<CharacterDialogue>().DialogueID = dialogueID;
             charDialogue.GetComponent<CharacterDialogue>().SceneName = sceneName;
@@ -546,8 +546,8 @@ namespace DataUI {
             string questName = strArray[1];
             string questDescription = strArray[2];
             GameObject choiceResult = Instantiate(existingActivateQuestResultPrefab, new Vector3(0f, 0f), Quaternion.identity) as GameObject;
-            choiceResult.transform.FindChild("QuestNameLbl").GetComponent<Text>().text = questName;
-            choiceResult.transform.FindChild("QuestDescriptionLbl").GetComponent<Text>().text = questDescription;
+            choiceResult.transform.Find("QuestNameLbl").GetComponent<Text>().text = questName;
+            choiceResult.transform.Find("QuestDescriptionLbl").GetComponent<Text>().text = questDescription;
             choiceResult.GetComponent<ExistingResult>().MyID = resultID;
             choiceResult.GetComponent<ExistingActivateQuestResult>().MyName = questName;
             choiceResult.GetComponent<ExistingActivateQuestResult>().MyDescription = questDescription;

@@ -13,11 +13,11 @@ namespace GameUI.ListItems {
             base.InitialiseMe(english, welsh);
             welshSkillListUI = FindObjectOfType<WelshSkillsListUI>();
             print("WELSH SKILLS LIST UI: " + welshSkillListUI);
-            extraInfo = transform.FindChild("ExtraInformation");
-            progressSlider = extraInfo.FindChild("ProgressSlider").GetComponent<Slider>();
-            progressLbl = extraInfo.FindChild("ProgressLbl").GetComponent<Text>();
-            tallyModifier = extraInfo.FindChild("TallyModifier").GetComponent<Text>();
-            skillsIncrementer = extraInfo.FindChild("SkillPointIncrementer").GetComponent<Text>();
+            extraInfo = transform.Find("ExtraInformation");
+            progressSlider = extraInfo.Find("ProgressSlider").GetComponent<Slider>();
+            progressLbl = extraInfo.Find("ProgressLbl").GetComponent<Text>();
+            tallyModifier = extraInfo.Find("TallyModifier").GetComponent<Text>();
+            skillsIncrementer = extraInfo.Find("SkillPointIncrementer").GetComponent<Text>();
             int tallyInt = int.Parse(tally);
             int threshold;
             string proficiencyString;

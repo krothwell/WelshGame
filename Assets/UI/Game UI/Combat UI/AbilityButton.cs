@@ -14,7 +14,7 @@ namespace GameUI.ListItems {
         void Start() {
             combatUI = FindObjectOfType<CombatUI>();
             DeselectSelf();
-            icon = transform.FindChild("Image").GetComponent<Image>().sprite;
+            icon = transform.Find("Image").GetComponent<Image>().sprite;
         }
 
         public void SelectSelf() {

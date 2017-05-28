@@ -13,25 +13,55 @@ public abstract class GameWorldSelector : MonoBehaviour {
     /// </summary>
     public GameObject selectionCirclePrefab, DefaultSelectionDecisionPrefab;
     protected CharacterDecision myDecision;
+    public CharacterDecision MyDecision {
+        get { return myDecision; }
+    }
     protected CharAbility abilitySelected;
     protected GameObject selectionCircle;
     Color selectedColour; 
-    protected bool clicked;
+    protected bool clicked, countingDown;
     public float Scale, xOffset, yOffset;
     protected PlayerCharacter playerCharacter;
     protected Animator myAnimator;
     protected CombatUI combatUI;
-
-    void Start () {
-        playerCharacter = FindObjectOfType<PlayerCharacter>();
-        selectedColour = new Color(0.27f, 0.53f, 0.94f);
+    protected float countdown;
+    protected CharacterMovement movementType;
+    protected bool doubleClicks;
+    public bool DoubleClicks {
+        get { return doubleClicks; }
     }
 
-    public void DestroyMe() {
+    protected MouseSelection mouseSelection;
+
+    void Start () {
+        countdown = 0.2f;
+        playerCharacter = FindObjectOfType<PlayerCharacter>();
+        selectedColour = new Color(0.27f, 0.53f, 0.94f);
+        mouseSelection = FindObjectOfType<MouseSelection>();
+    }
+
+    void Update() {
+        if (countingDown) {
+            countdown -= Time.deltaTime;
+            if (countdown <= 0) {
+                countingDown = false;
+                countdown = 0.2f;
+                SetSelected();
+                doubleClicks = false;
+            }
+        }
+    }
+
+    public void EndCurrentSelection() {
         if (selectionCircle != null) {
             Destroy(selectionCircle);
             selectionCircle = null;
             clicked = false;
+            //doubleClicks = false;
+            if (myDecision != null) {
+                myDecision.EndDecision();
+                myDecision = null;
+            }
         }
     }
 
@@ -48,7 +78,7 @@ public abstract class GameWorldSelector : MonoBehaviour {
     public abstract void DisplayCircle();
 
     public void BuildCircle() {
-        DestroyMe();
+        EndCurrentSelection();
         selectionCircle = Instantiate(selectionCirclePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
         selectionCircle.GetComponent<Transform>().localScale = new Vector2(Scale, Scale);
         selectionCircle.GetComponent<Transform>().localPosition = new Vector3(xOffset, yOffset, 0.1f);
@@ -57,7 +87,7 @@ public abstract class GameWorldSelector : MonoBehaviour {
     }
 
     public void BuildCircle(Vector2 atCoordinates) {
-        DestroyMe();
+        EndCurrentSelection();
         selectionCircle = Instantiate(selectionCirclePrefab, new Vector3(atCoordinates.x, atCoordinates.y, -0.0001f), Quaternion.identity) as GameObject;
         selectionCircle.GetComponent<Transform>().localScale = new Vector2(Scale, Scale);
         selectionCircle.transform.SetParent(transform, false);
@@ -67,18 +97,32 @@ public abstract class GameWorldSelector : MonoBehaviour {
 
     void OnMouseExit() {
         if (!clicked) {
-            DestroyMe();
+            EndCurrentSelection();
         }
     }
 
     void OnMouseUpAsButton() {
-        SetSelected();
+        if (!countingDown) {
+            CountDownToDecision();
+        }
+
+        SetMouseClicks();
+    }
+
+    public void CountDownToDecision() {
+        countingDown = true;
+    }
+
+    public void SetMouseClicks() {
+        if (Input.GetMouseButtonUp(0)) {
+            doubleClicks = mouseSelection.GetIsDoubleClick();
+        }
     }
 
     protected void Select() {
         clicked = true;
         ChangeColourToSelected();
-        if (playerCharacter.GetCurrentSelectionCircle() != this) {
+        if (playerCharacter.GetCurrentSelection() != this) {
             playerCharacter.EndSelection();
             playerCharacter.SetCurrentSelection(this);
         }
@@ -93,12 +137,12 @@ public abstract class GameWorldSelector : MonoBehaviour {
     }
 
     protected void BuildSelectionPlayerDecision(GameObject decisionPrefab) {
-        GameObject decision = Instantiate(decisionPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
-        print(playerCharacter);
-        print(decision);
-        decision.GetComponent<CharacterDecision>().InitialiseMe(playerCharacter);
-        decision.transform.SetParent(playerCharacter.transform, false);
-        myDecision = decision.GetComponent<CharacterDecision>();
+        if (myDecision == null) {
+            GameObject decision = Instantiate(decisionPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
+            decision.GetComponent<CharacterDecision>().InitialiseMe(playerCharacter);
+            decision.transform.SetParent(playerCharacter.transform, false);
+            myDecision = decision.GetComponent<CharacterDecision>();
+        }
     }
 
     protected void QueueDecisionToRun() {
@@ -106,7 +150,9 @@ public abstract class GameWorldSelector : MonoBehaviour {
             combatUI.QueueDecision(myDecision);
         }
         else {
-            myDecision.ProcessDecision();
+            if (myDecision != null) {
+                myDecision.ProcessDecision();
+            }
         }
     }
 }

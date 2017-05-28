@@ -5,22 +5,44 @@ using UnityEngine;
 
 public abstract class CharacterMovementDecision : CharacterDecision {
     protected Vector2 targetPosition;
+    protected CharMovementController movementController;
+    public CharMovementController MovementController {
+        get { return movementController; }
+    }
+    protected CharacterMovement movementType;
+    public CharacterMovement MovementType {
+        get { return movementType; }
+    }
 	// Update is called once per frame
 	void Update () {
+        movementController.CheckToMakeMovement();
         CheckToEndMovement();
     }
 
+    void Awake() {
+        movementController = GetComponent<CharMovementController>();
+    }
+
+
     public override void ProcessDecision() {
-        myCharacter.GetMovementController().SetMovementDecision(this);
-        myCharacter.GetMovementController().ProcessMovement();
+        movementController.SetMovementDecision(this);
+        movementController.ProcessMovement(movementType);
     }
 
     public override void EndDecision() {
-        myCharacter.GetMovementController().StopMoving();
+        movementController.StopMoving();
+        movementType.StopAction();
         myCharacter.EndSelection();
         if (gameObject != null) {
             Destroy(gameObject);
-            Destroy(this);
+        }
+    }
+
+    public void SetMovementType(bool dblClick) {
+        if(dblClick) {
+            movementType = new RunMovement(myCharacter.GetMyAnimator(), 3f);
+        } else {
+            movementType = new WalkMovement(myCharacter.GetMyAnimator(), 1f);
         }
     }
 

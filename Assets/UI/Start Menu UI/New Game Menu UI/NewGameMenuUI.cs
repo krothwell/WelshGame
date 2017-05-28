@@ -15,7 +15,7 @@ namespace StartMenuUI {
             portraitSelectedColor = new Color(0f, 0.35f, 66.6f, 0.6f);
             portraitHoverColor = new Color(0f, 0.15f, 46.6f, 0.6f);
             portraitDeselectedColor = new Color(0f, 0f, 0f, 0.50196f);
-            portraitGrid = GetPanel().transform.FindChild("PortraitGrid").gameObject;
+            portraitGrid = GetPanel().transform.Find("PortraitGrid").gameObject;
             selectedPortrait = "selectedPortrait";
             CreateSelectionToggleGroup(selectedPortrait);
             playerSavesController = FindObjectOfType<PlayerSavesController>();
@@ -44,7 +44,7 @@ namespace StartMenuUI {
 
         public string GetNameInput() {
             return GetComponentInChildren<InputField>().text == "" ?
-                GetComponentInChildren<InputField>().gameObject.transform.FindChild("Placeholder").GetComponent<Text>().text :
+                GetComponentInChildren<InputField>().gameObject.transform.Find("Placeholder").GetComponent<Text>().text :
                 GetComponentInChildren<InputField>().text;
         }
 

@@ -29,7 +29,7 @@ namespace DataUI {
             }
 
             public void DisplayDeletionOption() {
-                transform.FindChild("DeletionOption").gameObject.SetActive(true);
+                transform.Find("DeletionOption").gameObject.SetActive(true);
             }
 
             public void Delete() {

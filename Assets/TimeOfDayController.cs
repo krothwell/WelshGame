@@ -31,7 +31,7 @@ public class TimeOfDayController : MonoBehaviour {
         TurnOffNightLights();
         print(nightLights.Length + " nightlights found");
 
-        sun = transform.FindChild("Sun").GetComponent<Light>();
+        sun = transform.Find("Sun").GetComponent<Light>();
         fullDayCycle = 100f;
         fullDayCyclePortion = fullDayCycle / 10f;
         cycleTransition = fullDayCycle / 10f;
@@ -117,7 +117,6 @@ public class TimeOfDayController : MonoBehaviour {
             SetTimeOfDay(TimesOfDay.dawn);
         }
         else if (currentTime >= timeOfDayStartDict[TimesOfDay.lateNight]) {
-            print("WTF");
             SetTimeOfDay(TimesOfDay.lateNight);
         }
 
@@ -170,7 +169,7 @@ public class TimeOfDayController : MonoBehaviour {
         //print("using colour: " + usingColour.r + ", " + usingColour.g + ", " + usingColour.b);
         //print("transitioning to: " + timeOfDayStatus + ", current transition = " + currentTransition);
         sun.color = new Color32(newRed, newGreen, newBlue, 255);
-        sun.transform.rotation = Quaternion.Euler(0, newRotation, 0);
+        sun.transform.rotation = Quaternion.Euler(-20f, newRotation, 0);
         sun.intensity = newIntensity;
 
         if (currentTransition > cycleTransition) {

@@ -4,16 +4,17 @@ using UnityEngine;
 public class CameraController : MonoBehaviour {
     private float camMovementDelay, camMovementDelayDefault;
     PlayerCharacter playerCharacter;
-    PlayerMovementController playerMovementController;
+    CharMovementController playerMovementController;
     bool followingPlayer;
     Vector2 camPosition;
+    float speed;
     // Use this for initialization
     void Awake () {
-        playerMovementController = FindObjectOfType<PlayerMovementController>();
         followingPlayer = false;
         camMovementDelayDefault = 0.3f;
         camMovementDelay = camMovementDelayDefault;
         playerCharacter = FindObjectOfType<PlayerCharacter>();
+        playerMovementController = playerCharacter.MovementController;
         SetCamPosition();
     }
 	
@@ -29,15 +30,15 @@ public class CameraController : MonoBehaviour {
     }
 
     private void MoveCameraToCoordinates(Vector2 newPosition) {
-        float playerSpeed = playerMovementController.GetMySpeed();
+        SetMySpeed();
         float distanceX = Math.Abs(newPosition.x - camPosition.x);
         float distanceY = Math.Abs(newPosition.y - camPosition.y);
-        float percentageOfTravelX = (100f / distanceX) * (1 * playerSpeed * Time.deltaTime);
-        float percentageOfTravelY = (100f / distanceY) * (1 * playerSpeed * Time.deltaTime);
+        float percentageOfTravelX = (100f / distanceX) * (1 * speed * Time.deltaTime);
+        float percentageOfTravelY = (100f / distanceY) * (1 * speed * Time.deltaTime);
         int xModifier = camPosition.x >= newPosition.x ? -1 : 1;
         int yModifier = camPosition.y >= newPosition.y ? -1 : 1;
-        float newX = distanceX > distanceY ? (playerSpeed * Time.deltaTime) : distanceX / 100 * percentageOfTravelY;
-        float newY = distanceY > distanceX ? (playerSpeed * Time.deltaTime) : distanceY / 100 * percentageOfTravelX;
+        float newX = distanceX > distanceY ? (speed * Time.deltaTime) : distanceX / 100 * percentageOfTravelY;
+        float newY = distanceY > distanceX ? (speed * Time.deltaTime) : distanceY / 100 * percentageOfTravelX;
         //print(distanceX + " " + distanceY + " " + playerSpeed + " " + percentageOfTravelX + " " + percentageOfTravelY);
         //print(newX + " " + newY + " " + xModifier + " " + yModifier);
         Camera.main.transform.Translate(new Vector2(xModifier * newX, yModifier * newY));
@@ -45,15 +46,18 @@ public class CameraController : MonoBehaviour {
     }
 
     private void MonitorPlayerMovement() {
-        if (playerCharacter.GetMovementController().GetIsMoving()) {
+        if ((CharacterMovementDecision) playerCharacter.MyDecision) {
+            playerMovementController = playerCharacter.MovementController;
             if (!followingPlayer) {
                 StartFollowingPlayerCountDown();
                 if (camMovementDelay < 0f) {
+                    
                     followingPlayer = true;
                     camMovementDelay = camMovementDelayDefault;
                 }
             }
         } else if (camPosition != playerCharacter.GetMyPosition()) {
+            print(playerCharacter.GetMyPosition());
             CentreOnPlayer();
         }
         FollowPlayer();
@@ -77,6 +81,17 @@ public class CameraController : MonoBehaviour {
 
     private void StartFollowingPlayerCountDown() {
         camMovementDelay -= Time.deltaTime;
+    }
+
+    public void SetMySpeed() {
+        if(playerMovementController!= null) {
+            CharacterMovement movement = playerMovementController.GetMyMovement();
+            if (movement != null) {
+                speed = movement.GetMovementSpeed();
+                print(speed);
+            }
+        }
+
     }
 
 }

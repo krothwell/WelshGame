@@ -33,7 +33,7 @@ public abstract class ExistingSaveGame : MonoBehaviour, ISelectableUI {
     }
 
     protected GameObject GetPanel() {
-        return transform.FindChild("Panel").gameObject;
+        return transform.Find("Panel").gameObject;
     }
 
     public abstract void SelectSelf();

@@ -19,23 +19,22 @@ using UnityUtilities;
 /// </summary>
 public class CollisionAvoider : MonoBehaviour {
     float xDirection, yDirection, distanceX, distanceY;
-    CharMovementController characterMovementController;
-    Character character;
+    private CharMovementController characterMovementController;
+    public CharMovementController CharacterMovementController {
+        get { return characterMovementController; }
+        //set { characterMovementController = value; }
+    }
+    private Character character;
+    public Character Character {
+        get { return character; }
+        //set { character = value; }
+    }
     Vector2 charPos;
     Vector2 closestCorner;
     GameObject myPerimeter, selected, objCurrentlyAvoiding;
     EdgeCollider2D collisionDetector;
     Vector2 myPerimeterSize;
     PlayerCharacter mainChar;
-    void Start() {
-        characterMovementController = transform.parent.GetComponentInChildren<CharMovementController>();
-        character = transform.parent.GetComponentInChildren<Character>();
-        myPerimeter = transform.parent.FindChild("Perimeter").gameObject;
-        myPerimeterSize = GetPerimeterSize(myPerimeter);
-        collisionDetector = GetComponent<EdgeCollider2D>();
-        mainChar = FindObjectOfType<PlayerCharacter>();
-        //print(transform.parent + " perimeter size = " + myPerimeterSize);
-    }
 
     void Update () {
         //Time.timeScale = 0.5f;
@@ -44,6 +43,14 @@ public class CollisionAvoider : MonoBehaviour {
         }
         
     }
+
+    public void InitialiseMe(Character character_, CharMovementController movementController_) {
+        character = character_;
+        characterMovementController = movementController_;
+        myPerimeter = character.Perimeter;
+        myPerimeterSize = GetPerimeterSize(myPerimeter);
+        collisionDetector = GetComponent<EdgeCollider2D>();
+}
 
     void OnTriggerEnter2D(Collider2D trigger) {
         RedirectWhenObstacleDetected(trigger.gameObject);
@@ -64,7 +71,6 @@ public class CollisionAvoider : MonoBehaviour {
                     RedirectCharacter(obstacle);
                 }
             }
-
         }
     }
 
@@ -148,7 +154,6 @@ public class CollisionAvoider : MonoBehaviour {
         Vector2 objColliderActualSize = GetPerimeterSize(objToAvoid);
         float corner1x, corner1y, corner2x, corner2y, pOffSetX, pOffSetY;
         pOffSetX = myPerimeter.transform.localPosition.x;
-        print(pOffSetX);
         pOffSetY = myPerimeter.transform.localPosition.y;
 
         corner1x = objPos.x + (-xDirection * (objColliderActualSize.x / 2)) //center char on corner

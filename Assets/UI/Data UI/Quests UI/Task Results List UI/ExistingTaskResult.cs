@@ -18,7 +18,7 @@ namespace DataUI {
             // Use this for initialization
             void Start() {
                 questsUI = FindObjectOfType<QuestsUI>();
-                options = transform.FindChild("Options").gameObject;
+                options = transform.Find("Options").gameObject;
             }
 
             public virtual void InitialiseMe(string resID) {

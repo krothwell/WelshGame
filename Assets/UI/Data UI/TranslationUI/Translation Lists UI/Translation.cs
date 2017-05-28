@@ -27,11 +27,11 @@ namespace DataUI {
 
             // Use this for initialization
             void Start() {
-                translationOptions = gameObject.transform.FindChild("TranslationOptions").gameObject;
-                englishText = gameObject.transform.FindChild("EnglishVocab").gameObject;
-                welshText = gameObject.transform.FindChild("WelshVocab").gameObject;
-                panel = gameObject.transform.FindChild("Panel").gameObject;
-                saveBtn = gameObject.transform.FindChild("Save").gameObject;
+                translationOptions = gameObject.transform.Find("TranslationOptions").gameObject;
+                englishText = gameObject.transform.Find("EnglishVocab").gameObject;
+                welshText = gameObject.transform.Find("WelshVocab").gameObject;
+                panel = gameObject.transform.Find("Panel").gameObject;
+                saveBtn = gameObject.transform.Find("Save").gameObject;
                 translationUI = FindObjectOfType<TranslationUI>();
             }
 

@@ -15,8 +15,8 @@ namespace DataUI {
                 questsUI = FindObjectOfType<QuestsUI>();
             }
             public void InitialiseMe(string charName, string sceneName) {
-                characterNameText = transform.FindChild("CharName").GetComponent<Text>();
-                sceneNameText = transform.FindChild("SceneName").GetComponent<Text>();
+                characterNameText = transform.Find("CharName").GetComponent<Text>();
+                sceneNameText = transform.Find("SceneName").GetComponent<Text>();
                 characterNameText.text = charName;
                 sceneNameText.text = sceneName;
                 scene = sceneName;

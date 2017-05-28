@@ -16,22 +16,37 @@ public abstract class Character : MonoBehaviour {
     protected Character currentlySpeakingTo;
     protected CharCombatController combatController;
     protected CharMovementController movementController;
+    public CharMovementController MovementController {
+        get { return movementController; }
+        set { movementController = value; }
+    }
     protected CharacterMovement movementType;
     protected Animator myAnimator;
     protected float interactionDistance;
     public GameObject[] CharacterParts;
     protected DialogueUI dialogueUI;
+    protected CharacterDecision myDecision;
+    public CharacterDecision MyDecision {
+        get { return myDecision; }
+        set { myDecision = value; }
+    }
 
     //image root refers to first transform in editor heirarchy where the parts of the character are stored
     private Transform imageRoot;
+    public Transform ImageRoot {
+        get { return imageRoot; }
+    }
+
+    protected GameObject perimeter;
+    public GameObject Perimeter {
+        get { return transform.Find("Perimeter").gameObject; }
+    }
 	
     public void InitialiseMe() {
         dialogueUI = FindObjectOfType<DialogueUI>();
-        movementController = GetComponent<CharMovementController>();
-        imageRoot = transform.FindChild("CentreOfGravity").GetComponent<Transform>();
+        imageRoot = transform.Find("CentreOfGravity").GetComponent<Transform>();
         myAnimator = gameObject.GetComponent<Animator>();
         SetCombatController();
-        SetMovementController();
         interactionDistance = 1f;
     }
 
@@ -67,16 +82,6 @@ public abstract class Character : MonoBehaviour {
 
     public Animator GetMyAnimator() {
         return myAnimator;
-    }
-
-    private void SetMovementController() {
-        if (movementController != null) {
-            movementController.InitialiseMe(CharacterParts, imageRoot);
-        }
-    }
-
-    public CharMovementController GetMovementController() {
-        return movementController;
     }
 
     private void SetCombatController() {

@@ -127,9 +127,9 @@ public class PlayerSavesController : MonoBehaviour {
         SkillsMenuUI skillsMenuUI = FindObjectOfType<SkillsMenuUI>();
         SetSaveID(DbCommands.GenerateUniqueID("PlayerGames", "SaveIDs", "SaveID"));
         string saveRef = FindObjectOfType<EscMenuUI>().transform
-            .FindChild("Panel")
-            .FindChild("SaveGameUI")
-            .FindChild("SaveInput").GetComponent<InputField>().text;
+            .Find("Panel")
+            .Find("SaveGameUI")
+            .Find("SaveInput").GetComponent<InputField>().text;
 
         if (saveRef != "") {
             DbCommands.InsertTupleToTable("PlayerGames",
@@ -234,9 +234,9 @@ public class PlayerSavesController : MonoBehaviour {
         string playerNameStr = strArray[2].ToString();
         string dateStr = strArray[4].ToString();
         saveGame = Instantiate(saveGamePrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
-        saveGame.transform.FindChild("Panel").FindChild("SaveRef").gameObject.GetComponent<Text>().text = saveRefStr;
-        saveGame.transform.FindChild("Panel").FindChild("CharName").GetComponent<Text>().text = playerNameStr;
-        saveGame.transform.FindChild("Panel").FindChild("Date").GetComponent<Text>().text = dateStr;
+        saveGame.transform.Find("Panel").Find("SaveRef").gameObject.GetComponent<Text>().text = saveRefStr;
+        saveGame.transform.Find("Panel").Find("CharName").GetComponent<Text>().text = playerNameStr;
+        saveGame.transform.Find("Panel").Find("Date").GetComponent<Text>().text = dateStr;
         saveGame.GetComponent<ExistingSaveGame>().ID = saveID;
         saveGame.GetComponent<ExistingSaveGame>().SaveRef = saveRefStr;
         saveGame.GetComponent<ExistingSaveGame>().CharName = playerNameStr;
@@ -410,7 +410,7 @@ public class PlayerSavesController : MonoBehaviour {
             Transform parentTransform = GameObject.Find(parentPath[1]).transform;
             //print(parentTransform);
             for (int i = 2; i < parentPath.Length -1; i++) {
-                parentTransform = parentTransform.FindChild(parentPath[i]);
+                parentTransform = parentTransform.Find(parentPath[i]);
             }
             //print(parentTransform);
             worldItem.transform.SetParent(parentTransform, false);
@@ -442,10 +442,10 @@ public class PlayerSavesController : MonoBehaviour {
     }
 
     public void ShowSelectedSaveInInput() {
-        newSaveInput.transform.FindChild("Placeholder").GetComponent<Text>().text = SelectedSave.SaveRef;
+        newSaveInput.transform.Find("Placeholder").GetComponent<Text>().text = SelectedSave.SaveRef;
     }
 
     public void ShowDefaultTextInInput() {
-        newSaveInput.transform.FindChild("Placeholder").GetComponent<Text>().text = "... or enter a new save";
+        newSaveInput.transform.Find("Placeholder").GetComponent<Text>().text = "... or enter a new save";
     }
 }

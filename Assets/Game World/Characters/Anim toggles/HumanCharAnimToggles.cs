@@ -44,7 +44,7 @@ public class HumanCharAnimToggles : MonoBehaviour {
     }
 
     private bool isMoving() {
-        return character.GetMovementController().GetIsMoving();
+        return character.MovementController.GetIsMoving();
     }
 
     public void StartFighting() {
@@ -60,6 +60,6 @@ public class HumanCharAnimToggles : MonoBehaviour {
     }
 
     public CharacterMovement GetMovement() {
-        return character.GetMovementController().GetMyMovement();
+        return character.MovementController.GetMyMovement();
     }
 }

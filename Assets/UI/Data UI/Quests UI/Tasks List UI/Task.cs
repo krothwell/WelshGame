@@ -35,8 +35,8 @@ namespace DataUI {
             // Use this for initialization
             void Start() {
                 questsUI = FindObjectOfType<QuestsUI>();
-                options = transform.FindChild("TaskOptions").gameObject;
-                saveBtn = transform.FindChild("SaveBtn").GetComponent<Button>();
+                options = transform.Find("TaskOptions").gameObject;
+                saveBtn = transform.Find("SaveBtn").GetComponent<Button>();
             }
 
             void OnMouseUpAsButton() {

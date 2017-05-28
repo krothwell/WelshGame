@@ -63,7 +63,7 @@ public class PlayerCombatController : CharCombatController {
                     combatui.ToggleCombatUI();
                 } else { 
                     character.playerStatus = PlayerCharacter.PlayerStatus.movingToWeaponRange;
-                    character.GetMovementController().ProcessMovement();
+                    //character.MovementController.ProcessMovement();
                 }
             }
         } else {

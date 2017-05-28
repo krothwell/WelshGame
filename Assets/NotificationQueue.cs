@@ -13,7 +13,7 @@ namespace GameUI {
         void Start() {
             notificationDataList = new List<NotificationData>();
             notificationList = GetComponentInChildren<HorizontalLayoutGroup>().transform;
-            notificationLbl = transform.FindChild("NotificationsLbl").gameObject;
+            notificationLbl = transform.Find("NotificationsLbl").gameObject;
             ClearNotifications();
         }
 

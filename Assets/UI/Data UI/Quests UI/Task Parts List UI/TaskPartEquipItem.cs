@@ -12,7 +12,7 @@ namespace DataUI {
             }
 
             public void SetItemNameText(string newText) {
-                transform.FindChild("ItemNameLbl").GetComponent<Text>().text = newText;
+                transform.Find("ItemNameLbl").GetComponent<Text>().text = newText;
             }
         }
 

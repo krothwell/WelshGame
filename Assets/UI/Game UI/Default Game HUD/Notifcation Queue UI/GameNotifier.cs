@@ -11,12 +11,12 @@ namespace GameUI {
     
 
         public void SetDetailText(string detail) {
-            detailText = transform.FindChild("QuestNameLbl").GetComponent<Text>();
+            detailText = transform.Find("QuestNameLbl").GetComponent<Text>();
             detailText.text = detail;
         }
 
         public void SetNotificationMsg(string msg) {
-            lblText = transform.FindChild("QuestNotifierLbl").GetComponent<Text>();
+            lblText = transform.Find("QuestNotifierLbl").GetComponent<Text>();
             lblText.text = msg;
         }
 

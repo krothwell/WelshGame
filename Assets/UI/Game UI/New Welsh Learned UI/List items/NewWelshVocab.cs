@@ -12,12 +12,12 @@ public class NewWelshVocab : MonoBehaviour {
     
 
     public void InitialiseMe(string engVocab, string cymVocab) {
-        transform.FindChild("EnglishVocabulary").GetComponent<Text>().text = engVocab;
-        transform.FindChild("WelshVocabulary").GetComponent<Text>().text = cymVocab;
+        transform.Find("EnglishVocabulary").GetComponent<Text>().text = engVocab;
+        transform.Find("WelshVocabulary").GetComponent<Text>().text = cymVocab;
         enVocab = engVocab;
         cyVocab = cymVocab;
         if (enVocab == cyVocab) {
-            Destroy(transform.FindChild("WelshVocabulary").gameObject);
+            Destroy(transform.Find("WelshVocabulary").gameObject);
         }
     }
 
@@ -39,8 +39,8 @@ public class NewWelshVocab : MonoBehaviour {
         grammarList.transform.SetParent(gameObject.transform, false);
         foreach (string[] grammarRuleData in grammarData) {
             GameObject grammarRule = Instantiate(relatedGrammarPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
-            grammarRule.transform.FindChild("GrammarIntro").GetComponent<Text>().text = grammarRuleData[0];
-            grammarRule.transform.FindChild("GrammarBody").GetComponent<Text>().text = grammarRuleData[1];
+            grammarRule.transform.Find("GrammarIntro").GetComponent<Text>().text = grammarRuleData[0];
+            grammarRule.transform.Find("GrammarBody").GetComponent<Text>().text = grammarRuleData[1];
             grammarRule.transform.SetParent(grammarList.transform, false);
             GetComponentInChildren<Button>().GetComponentInChildren<Image>().GetComponent<Transform>().Rotate(0, 0, -90);
         }

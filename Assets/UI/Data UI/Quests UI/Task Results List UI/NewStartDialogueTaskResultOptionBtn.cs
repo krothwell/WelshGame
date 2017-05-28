@@ -20,9 +20,9 @@ namespace DataUI {
                 questsUI = FindObjectOfType<QuestsUI>();
             }
             public void SetMyText(string id, string desc, string speaker) {
-                idTxt = transform.FindChild("DialogueIDLbl").GetComponent<Text>();
-                descTxt = transform.FindChild("DialogueDescriptionLbl").GetComponent<Text>();
-                speakerTxt = transform.FindChild("DialogueSpeakerLbl").GetComponent<Text>();
+                idTxt = transform.Find("DialogueIDLbl").GetComponent<Text>();
+                descTxt = transform.Find("DialogueDescriptionLbl").GetComponent<Text>();
+                speakerTxt = transform.Find("DialogueSpeakerLbl").GetComponent<Text>();
                 idTxt.text = id;
                 speakerTxt.text = speaker;
                 descTxt.text = desc;

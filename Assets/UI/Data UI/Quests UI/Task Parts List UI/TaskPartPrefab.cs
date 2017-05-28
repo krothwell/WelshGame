@@ -17,7 +17,7 @@ namespace DataUI {
             }
 
             public void SetDescriptionText(string description) {
-                transform.FindChild("DescriptionLbl").GetComponent<Text>().text = description;
+                transform.Find("DescriptionLbl").GetComponent<Text>().text = description;
             }
         }
     }

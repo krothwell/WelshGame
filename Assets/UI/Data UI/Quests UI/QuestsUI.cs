@@ -48,46 +48,46 @@ namespace DataUI {
         void Start() {
 
             //QUEST COMPONENTS
-            questsListUI = GetPanel().transform.FindChild("QuestsListUI").gameObject;
-            questsListUIPanel = questsListUI.transform.FindChild("Panel").gameObject;
-            questsList = questsListUIPanel.transform.FindChild("QuestsList").gameObject;
+            questsListUI = GetPanel().transform.Find("QuestsListUI").gameObject;
+            questsListUIPanel = questsListUI.transform.Find("Panel").gameObject;
+            questsList = questsListUIPanel.transform.Find("QuestsList").gameObject;
             //add
-            questDetails = questsListUIPanel.transform.FindChild("QuestDetails").gameObject;
-            questDetailsPanel = questDetails.transform.FindChild("QuestDetailsPanel").gameObject;
-            activateQuestDetailsBtn = questDetails.transform.FindChild("ActivateQuestDetailsBtn").gameObject;
-            inputQuestDetailsName = questDetailsPanel.transform.FindChild("InputNameText").GetComponent<InputField>();
-            inputQuestDetailsDesc = questDetailsPanel.transform.FindChild("InputDescriptionText").GetComponent<InputField>();
+            questDetails = questsListUIPanel.transform.Find("QuestDetails").gameObject;
+            questDetailsPanel = questDetails.transform.Find("QuestDetailsPanel").gameObject;
+            activateQuestDetailsBtn = questDetails.transform.Find("ActivateQuestDetailsBtn").gameObject;
+            inputQuestDetailsName = questDetailsPanel.transform.Find("InputNameText").GetComponent<InputField>();
+            inputQuestDetailsDesc = questDetailsPanel.transform.Find("InputDescriptionText").GetComponent<InputField>();
 
             //TASK COMPONENTS
-            tasksListUI = GetPanel().transform.FindChild("QuestTasksListUI").gameObject;
-            tasksListUIPanel = tasksListUI.transform.FindChild("Panel").gameObject;
-            tasksList = tasksListUIPanel.transform.FindChild("TasksList").gameObject;
+            tasksListUI = GetPanel().transform.Find("QuestTasksListUI").gameObject;
+            tasksListUIPanel = tasksListUI.transform.Find("Panel").gameObject;
+            tasksList = tasksListUIPanel.transform.Find("TasksList").gameObject;
             //add
-            addTask = tasksListUIPanel.transform.FindChild("AddTask").gameObject;
-            addTaskPanel = addTask.transform.FindChild("AddTaskPanel").gameObject;
-            activateAddTaskBtn = addTask.transform.FindChild("ActivateAddTaskBtn").gameObject;
-            inputTaskDescription = addTaskPanel.transform.FindChild("InputDescriptionText").GetComponent<InputField>();
+            addTask = tasksListUIPanel.transform.Find("AddTask").gameObject;
+            addTaskPanel = addTask.transform.Find("AddTaskPanel").gameObject;
+            activateAddTaskBtn = addTask.transform.Find("ActivateAddTaskBtn").gameObject;
+            inputTaskDescription = addTaskPanel.transform.Find("InputDescriptionText").GetComponent<InputField>();
             taskActiveAtStart = addTaskPanel.GetComponentInChildren<Toggle>();
 
             //PART COMPONENTS
-            partsListUI = GetPanel().transform.FindChild("QuestTaskPartsListUI").gameObject;
-            partsListUIPanel = partsListUI.transform.FindChild("Panel").gameObject;
-            partsList = partsListUIPanel.transform.FindChild("PartsList").gameObject;
+            partsListUI = GetPanel().transform.Find("QuestTaskPartsListUI").gameObject;
+            partsListUIPanel = partsListUI.transform.Find("Panel").gameObject;
+            partsList = partsListUIPanel.transform.Find("PartsList").gameObject;
             //add
-            addPart = partsListUIPanel.transform.FindChild("AddPart").gameObject;
-            addPartPanel = addPart.transform.FindChild("AddPartPanel").gameObject;
-            activateAddPartBtn = addPart.transform.FindChild("ActivateAddPartBtn").gameObject;
-            partOptionSelectedList = addPartPanel.transform.FindChild("OptionSelectedList").gameObject;
+            addPart = partsListUIPanel.transform.Find("AddPart").gameObject;
+            addPartPanel = addPart.transform.Find("AddPartPanel").gameObject;
+            activateAddPartBtn = addPart.transform.Find("ActivateAddPartBtn").gameObject;
+            partOptionSelectedList = addPartPanel.transform.Find("OptionSelectedList").gameObject;
 
             //TASK RESULTS COMPONENTS
-            taskResultsListUI = GetPanel().transform.FindChild("QuestTaskCompleteResultsUI").gameObject;
-            taskResultsListUIPanel = taskResultsListUI.transform.FindChild("Panel").gameObject;
-            taskResultsList = taskResultsListUIPanel.transform.FindChild("ResultsList").gameObject;
+            taskResultsListUI = GetPanel().transform.Find("QuestTaskCompleteResultsUI").gameObject;
+            taskResultsListUIPanel = taskResultsListUI.transform.Find("Panel").gameObject;
+            taskResultsList = taskResultsListUIPanel.transform.Find("ResultsList").gameObject;
             //add
-            addTaskResult = taskResultsListUIPanel.transform.FindChild("AddTaskResult").gameObject;
-            addTaskResultPanel = addTaskResult.transform.FindChild("AddResultPanel").gameObject;
-            activateAddTaskResultBtn = addTaskResult.transform.FindChild("ActivateAddTaskResultBtn").gameObject;
-            taskResultOptionSelectedList = addTaskResultPanel.transform.FindChild("OptionSelectedList").gameObject;
+            addTaskResult = taskResultsListUIPanel.transform.Find("AddTaskResult").gameObject;
+            addTaskResultPanel = addTaskResult.transform.Find("AddResultPanel").gameObject;
+            activateAddTaskResultBtn = addTaskResult.transform.Find("ActivateAddTaskResultBtn").gameObject;
+            taskResultOptionSelectedList = addTaskResultPanel.transform.Find("OptionSelectedList").gameObject;
 
 
             FillDisplayFromDb(DbQueries.GetQuestsDisplayQry(), questsList.transform, BuildQuest);

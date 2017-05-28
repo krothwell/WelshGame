@@ -33,8 +33,8 @@ namespace DataUI {
             // Use this for initialization
             void Start() {
                 dialogueUI = FindObjectOfType<DialogueUI>();
-                options = transform.FindChild("DialogueOptions").gameObject;
-                saveDialogue = transform.FindChild("Save").gameObject;
+                options = transform.Find("DialogueOptions").gameObject;
+                saveDialogue = transform.Find("Save").gameObject;
                 activeToggle = transform.GetComponentInChildren<Toggle>();
             }
 

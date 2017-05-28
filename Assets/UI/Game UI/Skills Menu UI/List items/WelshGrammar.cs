@@ -10,10 +10,10 @@ public class WelshGrammar : NewWelshGrammar {
     WelshSkillsListUI welshSkillListUI;
     public void InitialiseMe(string grammarID, string shortDesc, string longDesc, string tally) {
         base.InitialiseMe(grammarID, shortDesc, longDesc);
-        extraInfo = transform.FindChild("ExtraInformation");
+        extraInfo = transform.Find("ExtraInformation");
         welshSkillListUI = FindObjectOfType<WelshSkillsListUI>();
-        progressSlider = extraInfo.FindChild("ProgressSlider").GetComponent<Slider>();
-        progressLbl = extraInfo.FindChild("ProgressLbl").GetComponent<Text>();
+        progressSlider = extraInfo.Find("ProgressSlider").GetComponent<Slider>();
+        progressLbl = extraInfo.Find("ProgressLbl").GetComponent<Text>();
         int tallyInt = int.Parse(tally);
         progressSlider.value = tallyInt;
         int threshold;

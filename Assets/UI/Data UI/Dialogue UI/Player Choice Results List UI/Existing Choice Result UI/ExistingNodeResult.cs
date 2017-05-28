@@ -21,9 +21,9 @@ namespace DataUI.ListItems {
         }
 
         public void InitialiseMe(string nodeID, string nodeText) {
-            transform.FindChild("NodeIDLbl").GetComponent<Text>().text = nodeID;
+            transform.Find("NodeIDLbl").GetComponent<Text>().text = nodeID;
             MyID = nodeID;
-            transform.FindChild("NodeTextLbl").GetComponent<Text>().text = nodeText;
+            transform.Find("NodeTextLbl").GetComponent<Text>().text = nodeText;
             myText = nodeText;
         }
     }

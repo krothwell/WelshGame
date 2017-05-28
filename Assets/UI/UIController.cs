@@ -97,7 +97,7 @@ public class UIController : MonoBehaviour {
     /// "Panel" should be used as the GameObject name so that it can always be found when this function is called.
     /// </summary>
     public void DisplayComponents() {
-        panel = transform.FindChild("Panel").gameObject;
+        panel = transform.Find("Panel").gameObject;
         panel.SetActive(true);
     }
 
@@ -106,13 +106,13 @@ public class UIController : MonoBehaviour {
     /// "Panel" should be used as the GameObject name so that it can always be found when this function is called.
     /// </summary>
     public virtual void HideComponents() {
-        GameObject panel = transform.FindChild("Panel").gameObject;
+        GameObject panel = transform.Find("Panel").gameObject;
         panel.SetActive(false);
         MouseSelection.DelayNextClickSelect();
     }
 
     public GameObject GetPanel() {
-        return transform.FindChild("Panel").gameObject;
+        return transform.Find("Panel").gameObject;
     }
 
     public void CreateNewMenuToggleGroup(string groupName) {

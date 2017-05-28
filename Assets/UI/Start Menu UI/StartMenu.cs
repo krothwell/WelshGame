@@ -18,7 +18,7 @@ namespace StartMenuUI {
             saveGameManager = FindObjectOfType<PlayerSavesController>();
             loadGameMenuUI = FindObjectOfType<LoadGameMenuUI>();
             newGameMenuUI = FindObjectOfType<NewGameMenuUI>();
-            saveGamesList = loadGameMenuUI.transform.FindChild("Panel").FindChild("SaveGamesList").gameObject;
+            saveGamesList = loadGameMenuUI.transform.Find("Panel").Find("SaveGamesList").gameObject;
             print(saveGamesList);
             mainMenus = "mainMenus";
             CreateNewMenuToggleGroup(mainMenus);

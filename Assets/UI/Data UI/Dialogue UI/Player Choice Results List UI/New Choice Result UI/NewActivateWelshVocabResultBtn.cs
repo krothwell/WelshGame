@@ -21,8 +21,8 @@ namespace DataUI.ListItems {
         }
 
         public void InitialiseMe(string englishTxt, string welshTxt, string playerChoiceIDStr) {
-            transform.FindChild("English").GetComponent<Text>().text = englishTxt;
-            transform.FindChild("Welsh").GetComponent<Text>().text = welshTxt;
+            transform.Find("English").GetComponent<Text>().text = englishTxt;
+            transform.Find("Welsh").GetComponent<Text>().text = welshTxt;
             englishText = englishTxt;
             welshText = welshTxt;
             PlayerChoiceID = playerChoiceIDStr;

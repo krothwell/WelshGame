@@ -147,7 +147,7 @@ public class EasySpriteSheetCopy{
 	private static void PasteSpriteTextureSettings(MenuCommand command){
 		//Grab current Texture Importer
 		TextureImporter currentTexture = command.context as TextureImporter;
-		
+        TextureImporterPlatformSettings textureImporterPFsettings = new TextureImporterPlatformSettings();
 
 
 		//Copy over platform specific settings
@@ -162,18 +162,28 @@ public class EasySpriteSheetCopy{
 
 			//Copy over overrides
 			foreach(string tempString in availablePlatforms){
-				#if UNITY_4_5 || UNITY_4_6 || UNITY_5_0 || UNITY_5_1
+#if UNITY_4_5 || UNITY_4_6 || UNITY_5_0 || UNITY_5_1
 					currentTexture.SetPlatformTextureSettings(tempString,1024,TextureImporterFormat.AutomaticCompressed,0);
-				#else
-					currentTexture.SetPlatformTextureSettings(tempString,1024,TextureImporterFormat.AutomaticCompressed,0, true);
+#else
+                    textureImporterPFsettings.maxTextureSize = 1024;
+                    textureImporterPFsettings.format = TextureImporterFormat.Automatic;
+                    textureImporterPFsettings.compressionQuality = 0;
+                    textureImporterPFsettings.allowsAlphaSplitting = true;
+
+                    currentTexture.SetPlatformTextureSettings(textureImporterPFsettings);
 				#endif
 				currentTexture.ClearPlatformTextureSettings(tempString);
 			}
 			foreach (PlatformTextureSettings tempPlatSettings in platformTextureSettings){
-				#if UNITY_4_5 || UNITY_4_6 || UNITY_5_0 || UNITY_5_1 || UNITY_5_0
+#if UNITY_4_5 || UNITY_4_6 || UNITY_5_0 || UNITY_5_1 || UNITY_5_0
 					currentTexture.SetPlatformTextureSettings(tempPlatSettings.spritePlatform,tempPlatSettings.spriteMaxTextureSize,tempPlatSettings.spriteTextureFormat,tempPlatSettings.spriteCompressionQuality);
-				#else
-					currentTexture.SetPlatformTextureSettings(tempPlatSettings.spritePlatform,tempPlatSettings.spriteMaxTextureSize,tempPlatSettings.spriteTextureFormat,tempPlatSettings.spriteCompressionQuality, true);
+#else
+                    textureImporterPFsettings.maxTextureSize = tempPlatSettings.spriteMaxTextureSize;
+                    textureImporterPFsettings.format = tempPlatSettings.spriteTextureFormat;
+                    textureImporterPFsettings.compressionQuality = tempPlatSettings.spriteCompressionQuality;
+                    textureImporterPFsettings.allowsAlphaSplitting = true;
+
+                    currentTexture.SetPlatformTextureSettings(textureImporterPFsettings);
 				#endif
 				
 			}
@@ -195,7 +205,11 @@ public class EasySpriteSheetCopy{
 				#if UNITY_4_5 || UNITY_4_6 || UNITY_5_0 || UNITY_5_1
 					currentTexture.SetPlatformTextureSettings(tempString,1024,TextureImporterFormat.AutomaticCompressed,0);
 				#else
-					currentTexture.SetPlatformTextureSettings(tempString,1024,TextureImporterFormat.AutomaticCompressed,0, true);
+                    textureImporterPFsettings.maxTextureSize = 1024;
+                    textureImporterPFsettings.format = TextureImporterFormat.Automatic;
+                    textureImporterPFsettings.compressionQuality = 0;
+                    textureImporterPFsettings.allowsAlphaSplitting = true;
+					currentTexture.SetPlatformTextureSettings(textureImporterPFsettings);
 				#endif
 				
 				currentTexture.ClearPlatformTextureSettings(tempString);
@@ -204,7 +218,11 @@ public class EasySpriteSheetCopy{
 				#if UNITY_4_5 || UNITY_4_6 || UNITY_5_0 || UNITY_5_1
 					currentTexture.SetPlatformTextureSettings(tempPlatSettings.spritePlatform,tempPlatSettings.spriteMaxTextureSize,tempPlatSettings.spriteTextureFormat,tempPlatSettings.spriteCompressionQuality);
 				#else
-					currentTexture.SetPlatformTextureSettings(tempPlatSettings.spritePlatform,tempPlatSettings.spriteMaxTextureSize,tempPlatSettings.spriteTextureFormat,tempPlatSettings.spriteCompressionQuality, true);
+                    textureImporterPFsettings.maxTextureSize = tempPlatSettings.spriteMaxTextureSize;
+                    textureImporterPFsettings.format = tempPlatSettings.spriteTextureFormat;
+                    textureImporterPFsettings.compressionQuality = tempPlatSettings.spriteCompressionQuality;
+                    textureImporterPFsettings.allowsAlphaSplitting = true;
+					currentTexture.SetPlatformTextureSettings(textureImporterPFsettings);
 				#endif
 			}
 			break;
@@ -223,10 +241,15 @@ public class EasySpriteSheetCopy{
 
 		//Clear overrides from current texture
 		foreach(string tempString in availablePlatforms){
-			#if UNITY_4_5 || UNITY_4_6 || UNITY_5_0 || UNITY_5_1
+#if UNITY_4_5 || UNITY_4_6 || UNITY_5_0 || UNITY_5_1
 				currentTexture.SetPlatformTextureSettings(tempString,1024,TextureImporterFormat.AutomaticCompressed,0);
-			#else
-				currentTexture.SetPlatformTextureSettings(tempString,1024,TextureImporterFormat.AutomaticCompressed,0,true);
+#else
+            TextureImporterPlatformSettings textureImporterPFsettings = new TextureImporterPlatformSettings();
+            textureImporterPFsettings.maxTextureSize = 1024;
+                textureImporterPFsettings.format = TextureImporterFormat.Automatic;
+                textureImporterPFsettings.compressionQuality = 0;
+                textureImporterPFsettings.allowsAlphaSplitting = true;
+				currentTexture.SetPlatformTextureSettings(textureImporterPFsettings);
 			#endif
 			currentTexture.ClearPlatformTextureSettings(tempString);
 		}
@@ -238,6 +261,7 @@ public class EasySpriteSheetCopy{
 
 	[MenuItem("CONTEXT/TextureImporter/Reset Sprite Settings (Excludes Overrides)", false,301)]
 	private static void ClearSpriteSettings(MenuCommand command){
+        TextureImporterPlatformSettings textureImporterPFsettings = new TextureImporterPlatformSettings();
 		//Grab current Texture Importer
 		TextureImporter currentTexture = command.context as TextureImporter;
 		
@@ -252,7 +276,11 @@ public class EasySpriteSheetCopy{
 		#endif
 		currentTexture.filterMode = FilterMode.Bilinear;
 		currentTexture.maxTextureSize = 1024;
-		currentTexture.textureFormat = TextureImporterFormat.AutomaticCompressed;
+        textureImporterPFsettings.maxTextureSize = 1024;
+        textureImporterPFsettings.format = TextureImporterFormat.Automatic;
+        textureImporterPFsettings.compressionQuality = 0;
+        textureImporterPFsettings.allowsAlphaSplitting = true;
+        currentTexture.SetPlatformTextureSettings(textureImporterPFsettings);
 
 		//Refresh asset/apply settings
 		AssetDatabase.ImportAsset(currentTexture.assetPath, ImportAssetOptions.ForceUpdate);

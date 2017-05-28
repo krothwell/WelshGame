@@ -35,8 +35,8 @@ namespace DataUI {
             // Use this for initialization
             void Start() {
                 translationUI = GameObject.FindObjectOfType<TranslationUI>().GetComponent<TranslationUI>();
-                ruleOptions = gameObject.transform.FindChild("RuleOptions").gameObject;
-                descriptionInput = gameObject.transform.FindChild("DescriptionInput").gameObject;
+                ruleOptions = gameObject.transform.Find("RuleOptions").gameObject;
+                descriptionInput = gameObject.transform.Find("DescriptionInput").gameObject;
             }
 
             void Update() {
@@ -86,7 +86,7 @@ namespace DataUI {
             }
 
             public void ActivateAddRule(bool related) {
-                addRuleBtn = gameObject.transform.FindChild("AddRemoveRule").gameObject;
+                addRuleBtn = gameObject.transform.Find("AddRemoveRule").gameObject;
                 if (related) {
                     addRuleBtn.GetComponent<Text>().text = "Remove";
                     Image btnImg = gameObject.transform.Find("DescriptionInput").GetComponent<Image>();

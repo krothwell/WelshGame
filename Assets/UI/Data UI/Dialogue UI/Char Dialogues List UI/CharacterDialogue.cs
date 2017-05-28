@@ -28,7 +28,7 @@ namespace DataUI {
             InputField input;
             // Use this for initialization
             void Start() {
-                removeLinkBtn = transform.FindChild("RemoveLink").gameObject;
+                removeLinkBtn = transform.Find("RemoveLink").gameObject;
                 input = transform.GetComponentInChildren<InputField>();
             }
             void Update() {

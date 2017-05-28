@@ -14,11 +14,11 @@ namespace GameUI.ListItems {
         public void InitialiseMe(string grammarID, string grammarSummaryStr, string grammarDetailsStr, string tally, string tallyMod, string skillInc) {
             base.InitialiseMe(grammarID, grammarSummaryStr, grammarDetailsStr);
             welshSkillListUI = FindObjectOfType<WelshSkillsListUI>();
-            extraInfo = transform.FindChild("ExtraInformation");
-            progressSlider = extraInfo.FindChild("ProgressSlider").GetComponent<Slider>();
-            progressLbl = extraInfo.FindChild("ProgressLbl").GetComponent<Text>();
-            tallyModifier = extraInfo.FindChild("TallyModifier").GetComponent<Text>();
-            skillsIncrementer = extraInfo.FindChild("SkillPointIncrementer").GetComponent<Text>();
+            extraInfo = transform.Find("ExtraInformation");
+            progressSlider = extraInfo.Find("ProgressSlider").GetComponent<Slider>();
+            progressLbl = extraInfo.Find("ProgressLbl").GetComponent<Text>();
+            tallyModifier = extraInfo.Find("TallyModifier").GetComponent<Text>();
+            skillsIncrementer = extraInfo.Find("SkillPointIncrementer").GetComponent<Text>();
             int tallyInt = int.Parse(tally);
             int threshold;
             string proficiencyString;

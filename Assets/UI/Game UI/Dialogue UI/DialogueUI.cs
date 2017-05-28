@@ -75,13 +75,13 @@ namespace GameUI {
             newWelshLearnedUI = FindObjectOfType<NewWelshLearnedUI>();
             npcs = FindObjectOfType<NPCs>();
             playerCharacter = FindObjectOfType<PlayerCharacter>();
-            panel = transform.FindChild("Panel").gameObject;
-            submitBtn = panel.transform.FindChild("SubmitBtn").gameObject;
-            percentageTxt = panel.transform.FindChild("TestResultsBtn").GetComponent<Text>();
+            panel = transform.Find("Panel").gameObject;
+            submitBtn = panel.transform.Find("SubmitBtn").gameObject;
+            percentageTxt = panel.transform.Find("TestResultsBtn").GetComponent<Text>();
             combatUI = FindObjectOfType<CombatUI>();
-            btnTxt = submitBtn.transform.FindChild("Text").gameObject.GetComponent<Text>();
+            btnTxt = submitBtn.transform.Find("Text").gameObject.GetComponent<Text>();
             playerCharacter = FindObjectOfType<PlayerCharacter>();
-            objPortrait = panel.transform.FindChild("CharacterPortrait").GetComponent<Image>();
+            objPortrait = panel.transform.Find("CharacterPortrait").GetComponent<Image>();
             DisableSubmitBtn();
         }
 

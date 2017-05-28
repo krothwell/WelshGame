@@ -29,7 +29,7 @@ namespace DataUI {
             // Use this for initialization
             void Start() {
                 dialogueUI = FindObjectOfType<DialogueUI>();
-                options = transform.FindChild("NodeOptions").gameObject;
+                options = transform.Find("NodeOptions").gameObject;
             }
 
             void OnMouseUpAsButton() {

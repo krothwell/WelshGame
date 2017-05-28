@@ -7,7 +7,7 @@ public class MoveToCharacterDecision : CharacterMovementDecision {
     Character characterSelected;
 
     public override void CheckToEndMovement() {
-        if (myCharacter.GetMovementController().GetDistanceFromMyPosition(targetPosition) < myCharacter.GetInteractionDistance()) {
+        if (myCharacter.MovementController.GetDistanceFromMyPosition(targetPosition) < myCharacter.GetInteractionDistance()) {
             myCharacter.SpeakToCharacter(characterSelected);
             EndDecision();
         }
@@ -17,6 +17,6 @@ public class MoveToCharacterDecision : CharacterMovementDecision {
     public void SetCharacterToMoveTo(Character character) {
         characterSelected = character;
         targetPosition = characterSelected.GetMyPosition();
-        myCharacter.GetMovementController().SetTargetPosition(targetPosition);
+        myCharacter.MovementController.SetTargetPosition(targetPosition);
     }
 }

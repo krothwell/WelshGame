@@ -15,11 +15,16 @@ public class GameWorldLocationSelector : GameWorldSelector {
 
     public override void SetSelected() {
         if (abilitySelected == null) {
-            DestroyMe();
+            EndCurrentSelection();
             BuildCircle(MouseSelection.GetMouseCoords2D());
             Select();
             BuildSelectionPlayerDecision(DefaultSelectionDecisionPrefab);
-            (myDecision as MoveToLocationDecision).SetTargetPosition(selectionCircle.transform.position);
+            MoveToLocationDecision movementDecision = (MoveToLocationDecision)myDecision;
+            movementDecision.SetTargetPosition(selectionCircle.transform.position);
+            movementDecision.MovementController.Character = playerCharacter;
+            movementDecision.MovementController.InitialiseMe();
+            movementDecision.SetMovementType(doubleClicks);
+            playerCharacter.MyDecision = myDecision;
             QueueDecisionToRun();
         }
     }

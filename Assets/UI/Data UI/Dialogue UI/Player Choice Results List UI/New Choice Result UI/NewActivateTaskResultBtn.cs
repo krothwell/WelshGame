@@ -15,9 +15,9 @@ namespace DataUI.ListItems {
         }
 
         public void InitialiseMe(string taskIDStr, string taskDesc, string playerChoiceIDStr, string questName) {
-            transform.FindChild("TaskID").GetComponent<Text>().text = taskIDStr;
-            transform.FindChild("TaskDescription").GetComponent<Text>().text = taskDesc;
-            transform.FindChild("QuestName").GetComponent<Text>().text = questName;
+            transform.Find("TaskID").GetComponent<Text>().text = taskIDStr;
+            transform.Find("TaskDescription").GetComponent<Text>().text = taskDesc;
+            transform.Find("QuestName").GetComponent<Text>().text = questName;
             taskID = taskIDStr;
             PlayerChoiceID = playerChoiceIDStr;
         }

@@ -89,9 +89,10 @@ public abstract class CharAbility : MonoBehaviour {
     }
 
     public bool IsInRangeOfCharacter(Character character) {
+        bool inRange;
         Vector2 distanceXYfromCharacter = World.GetVector2DistanceFromPositions2D(myCharacter.GetMyPosition(), character.GetMyPosition());
         print(distanceXYfromCharacter + " (disance from characters) " + GetMyRange() + " (ability range)");
-        bool inRange = (distanceXYfromCharacter.x <= GetMyRange().x && distanceXYfromCharacter.y <= GetMyRange().y) ? true : false;
+        inRange = (distanceXYfromCharacter.x <= GetMyRange().x && distanceXYfromCharacter.y <= GetMyRange().y) ? true : false;
         return inRange;
     }
 }

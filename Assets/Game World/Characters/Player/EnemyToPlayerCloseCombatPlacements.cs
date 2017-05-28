@@ -9,10 +9,10 @@ public class EnemyToPlayerCloseCombatPlacements : MonoBehaviour {
     
     // Use this for initialization
     void Start () {
-        left = transform.FindChild("Left").gameObject;
-        right = transform.FindChild("Right").gameObject;
-        int leftCount = transform.FindChild("Left").childCount;
-        int rightCount = transform.FindChild("Right").childCount;
+        left = transform.Find("Left").gameObject;
+        right = transform.Find("Right").gameObject;
+        int leftCount = transform.Find("Left").childCount;
+        int rightCount = transform.Find("Right").childCount;
         leftPlacements = new GameObject[leftCount];
         rightPlacements = new GameObject[rightCount];
         

@@ -7,7 +7,7 @@ public abstract class CharacterEffectAbility : CharAbility {
 
     public void SetTargetCharacter(Character characterTarget) {
         targetCharacter = characterTarget;
-        myCharacter.GetMovementController().SetMyDirection(targetCharacter.GetMyPosition(), myCharacter.GetMyPosition());
+        myCharacter.MovementController.SetMyDirection(targetCharacter.GetMyPosition(), myCharacter.GetMyPosition());
     }
 
     public override void InitialiseMe(Character mCharacter, string nameStr, Sprite iconSprite) {

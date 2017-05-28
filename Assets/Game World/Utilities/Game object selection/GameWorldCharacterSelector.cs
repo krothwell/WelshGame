@@ -59,7 +59,7 @@ public class GameWorldCharacterSelector : GameWorldSelector {
     }
 
     void ChangeColourToOutOfRange() {
-        myAnimator.Stop();
+        myAnimator.StopPlayback();
         selectionCircle.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 0.1f); ;
     }
 

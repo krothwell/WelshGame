@@ -12,12 +12,12 @@ public class WelshVocab : NewWelshVocab {
     WelshSkillsListUI welshSkillListUI;
     public void InitialiseMe(string engVocab, string cymVocab, string readTally, string writeTally) {
         base.InitialiseMe(engVocab, cymVocab);
-        extraInfo = transform.FindChild("ExtraInformation");
+        extraInfo = transform.Find("ExtraInformation");
         welshSkillListUI = FindObjectOfType<WelshSkillsListUI>();
-        readProgressSlider = extraInfo.FindChild("ReadProgressSlider").GetComponent<Slider>();
-        writeProgressSlider = extraInfo.FindChild("WriteProgressSlider").GetComponent<Slider>();
-        readProgressLbl = extraInfo.FindChild("ReadProgressLbl").GetComponent<Text>();
-        writeProgressLbl = extraInfo.FindChild("WriteProgressLbl").GetComponent<Text>();
+        readProgressSlider = extraInfo.Find("ReadProgressSlider").GetComponent<Slider>();
+        writeProgressSlider = extraInfo.Find("WriteProgressSlider").GetComponent<Slider>();
+        readProgressLbl = extraInfo.Find("ReadProgressLbl").GetComponent<Text>();
+        writeProgressLbl = extraInfo.Find("WriteProgressLbl").GetComponent<Text>();
         int readTallyInt = int.Parse(readTally);
         int writeTallyInt = int.Parse(writeTally);
         int readThreshold;

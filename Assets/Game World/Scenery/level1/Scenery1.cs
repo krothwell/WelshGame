@@ -8,7 +8,7 @@ public class Scenery1 : MonoBehaviour {
     SpriteRenderer[] mySprites;
     // Use this for initialization
     void Start () {
-        mySprites = transform.FindChild("CentreOfGravity").GetComponentsInChildren<SpriteRenderer>();
+        mySprites = transform.Find("CentreOfGravity").GetComponentsInChildren<SpriteRenderer>();
         SetMyLayer();
     }
 

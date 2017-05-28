@@ -27,11 +27,11 @@ namespace DataUI {
 
             void Start() {
 
-                proficiencyText = gameObject.transform.FindChild("ProficiencyText").gameObject;
-                proficiencySelector = proficiencyText.transform.FindChild("Selector").gameObject;
-                proficiencyOptions = gameObject.transform.FindChild("ProficiencyOptions").gameObject;
-                proficiencySaveBtn = gameObject.transform.FindChild("Save").gameObject;
-                thresholdText = gameObject.transform.FindChild("ThresholdInput").gameObject;
+                proficiencyText = gameObject.transform.Find("ProficiencyText").gameObject;
+                proficiencySelector = proficiencyText.transform.Find("Selector").gameObject;
+                proficiencyOptions = gameObject.transform.Find("ProficiencyOptions").gameObject;
+                proficiencySaveBtn = gameObject.transform.Find("Save").gameObject;
+                thresholdText = gameObject.transform.Find("ThresholdInput").gameObject;
                 defaultProficiencyTxtBgColor = proficiencyText.GetComponent<Image>().color;
             }
 

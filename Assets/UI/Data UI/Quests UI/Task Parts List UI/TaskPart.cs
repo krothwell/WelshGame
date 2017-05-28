@@ -25,7 +25,7 @@ namespace DataUI {
             // Use this for initialization
             void Start() {
                 questsUI = FindObjectOfType<QuestsUI>();
-                options = transform.FindChild("PartOptions").gameObject;
+                options = transform.Find("PartOptions").gameObject;
             }
 
             void OnMouseUpAsButton() {

@@ -21,8 +21,8 @@ namespace GameUI {
 
         void Awake() {
             equippedDict = new Dictionary<WorldItems.WorldItemTypes, WorldItem>();
-            panel = transform.FindChild("Panel").gameObject;
-            items = panel.transform.FindChild("ItemSlots").gameObject;
+            panel = transform.Find("Panel").gameObject;
+            items = panel.transform.Find("ItemSlots").gameObject;
         }
         void Start() {
             ui = GameObject.Find("UI");

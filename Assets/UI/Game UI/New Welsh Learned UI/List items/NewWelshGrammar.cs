@@ -12,7 +12,7 @@ public class NewWelshGrammar : MonoBehaviour {
 
 
     public void InitialiseMe(string grammarIDstr, string grammarSummaryStr, string grammarDetailsStr) {
-        transform.FindChild("GrammarSummary").GetComponent<Text>().text = grammarSummaryStr;
+        transform.Find("GrammarSummary").GetComponent<Text>().text = grammarSummaryStr;
         grammarID = grammarIDstr;
         grammarDetails = grammarDetailsStr;
     }

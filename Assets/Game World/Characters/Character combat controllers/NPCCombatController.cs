@@ -60,7 +60,7 @@ public class NPCCloseCombatController : CharCombatController {
             SetCombatSlot();
         }
         if (character.GetMyPosition() != combatSlotPosition) {
-            npcMovementController.ProcessMovement();
+            //npcMovementController.ProcessMovement();
         }
     }
 

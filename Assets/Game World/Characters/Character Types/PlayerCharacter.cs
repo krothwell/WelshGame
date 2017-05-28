@@ -21,14 +21,13 @@ public class PlayerCharacter : Character {
     public PlayerStatus playerStatus;
     public GameObject currentObjectInteractingWith;
     private GameObject objectClickedByPlayer;
-    private GameWorldSelector currentSelectionCircle;
+    private GameWorldSelector currentSelection;
 
     void Awake() {
         combatController = GetComponent<CharCombatController>();
         InitialiseMe();
         playerStatus = PlayerStatus.passive;
         dialogueUI = FindObjectOfType<DialogueUI>();
-        ((PlayerMovementController)movementController).SetCharacter(this);
         ((PlayerCombatController)combatController).SetCombatStateAction();
     }
 
@@ -54,7 +53,7 @@ public class PlayerCharacter : Character {
     public void DestroySelectionCircleOfInteractiveObject() {
         if (currentObjectInteractingWith != null) {
             if (currentObjectInteractingWith.GetComponent<GameWorldSelector>() != null) {
-                currentObjectInteractingWith.GetComponent<GameWorldSelector>().DestroyMe();
+                currentObjectInteractingWith.GetComponent<GameWorldSelector>().EndCurrentSelection();
             }
             currentObjectInteractingWith = null;
         }
@@ -64,17 +63,17 @@ public class PlayerCharacter : Character {
         return objectClickedByPlayer;
     }
 
-    public void SetCurrentSelection(GameWorldSelector selectionCircle) {
-        currentSelectionCircle = selectionCircle;
+    public void SetCurrentSelection(GameWorldSelector selection) {
+        currentSelection = selection;
     }
 
-    public GameWorldSelector GetCurrentSelectionCircle() {
-        return currentSelectionCircle;
+    public GameWorldSelector GetCurrentSelection() {
+        return currentSelection;
     }
 
     public override void EndSelection() {
-        if (currentSelectionCircle != null) {
-            currentSelectionCircle.DestroyMe();
+        if (currentSelection != null) {
+            currentSelection.EndCurrentSelection();
         }
         currentObjectInteractingWith = null;
         GetCombatController().SetCurrentEnemyTarget(null);

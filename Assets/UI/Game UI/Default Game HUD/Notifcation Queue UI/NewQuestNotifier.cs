@@ -8,7 +8,7 @@ namespace GameUI {
         // Use this for initialization
         void Awake() {
             questsUI = FindObjectOfType<QuestsUI>();
-            triskelion = transform.FindChild("Triskelion");
+            triskelion = transform.Find("Triskelion");
         }
 
         void Update() {

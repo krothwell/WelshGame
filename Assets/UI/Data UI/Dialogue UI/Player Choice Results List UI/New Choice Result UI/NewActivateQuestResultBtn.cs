@@ -15,8 +15,8 @@ namespace DataUI.ListItems {
         }
 
         public void InitialiseMe(string questName, string questDesc) {
-            transform.FindChild("QuestDescription").GetComponent<Text>().text = questDesc;
-            transform.FindChild("QuestName").GetComponent<Text>().text = questName;
+            transform.Find("QuestDescription").GetComponent<Text>().text = questDesc;
+            transform.Find("QuestName").GetComponent<Text>().text = questName;
             GetComponent<NewActivateQuestResultBtn>().MyName = questName;
         }
 

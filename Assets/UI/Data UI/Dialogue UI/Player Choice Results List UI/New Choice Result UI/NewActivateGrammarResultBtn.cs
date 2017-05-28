@@ -10,9 +10,9 @@ namespace DataUI.ListItems {
         }
 
         public void InitialiseMe(string grammarID, string grammarSummary, string grammarDesc, string playerChoiceIDStr) {
-            transform.FindChild("GrammarID").GetComponent<Text>().text = ruleID;
-            transform.FindChild("GrammarSummary").GetComponent<Text>().text = grammarSummary;
-            transform.FindChild("GrammarDescription").GetComponent<Text>().text = grammarDesc;
+            transform.Find("GrammarID").GetComponent<Text>().text = ruleID;
+            transform.Find("GrammarSummary").GetComponent<Text>().text = grammarSummary;
+            transform.Find("GrammarDescription").GetComponent<Text>().text = grammarDesc;
             ruleID = grammarID;
             PlayerChoiceID = playerChoiceIDStr;
         }

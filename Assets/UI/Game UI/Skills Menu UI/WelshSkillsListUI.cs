@@ -17,9 +17,9 @@ public class WelshSkillsListUI : UIController {
 	// Use this for initialization
 	void Awake () {
         listDisplay = ListDisplay.vocabulary;
-        toggleListBtn = GetPanel().transform.FindChild("ToggleListBtn").gameObject;
-        listToggledToLbl = GetPanel().transform.FindChild("ListToggledToLbl").gameObject;
-        welshSkillsList = GetPanel().transform.FindChild("ScrollWindow").FindChild("WelshSkillsList");
+        toggleListBtn = GetPanel().transform.Find("ToggleListBtn").gameObject;
+        listToggledToLbl = GetPanel().transform.Find("ListToggledToLbl").gameObject;
+        welshSkillsList = GetPanel().transform.Find("ScrollWindow").Find("WelshSkillsList");
         
     }
 	

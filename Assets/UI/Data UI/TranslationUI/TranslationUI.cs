@@ -54,42 +54,42 @@ namespace DataUI {
         void Start() {
 
             //GRAMMAR UI
-            grammarListUI = GetPanel().transform.FindChild("GrammarListUI").gameObject;
-            grammarRulesBtn = grammarListUI.transform.FindChild("GrammarRulesBtn").gameObject.GetComponent<Button>();
-            grammarListUIpanel = grammarListUI.transform.FindChild("Panel").gameObject;
+            grammarListUI = GetPanel().transform.Find("GrammarListUI").gameObject;
+            grammarRulesBtn = grammarListUI.transform.Find("GrammarRulesBtn").gameObject.GetComponent<Button>();
+            grammarListUIpanel = grammarListUI.transform.Find("Panel").gameObject;
             grammarList = grammarListUIpanel.GetComponentInChildren<GridLayoutGroup>().gameObject;
             //adding and editing
-            submitNewGrammarRule = grammarListUIpanel.transform.FindChild("SubmitNewRule").gameObject;
-            activateGrammarDetailsBtn = submitNewGrammarRule.transform.FindChild("ActivateNewRuleBtn").gameObject;
-            newGrammarRulePanel = submitNewGrammarRule.transform.FindChild("NewRulePanel").gameObject;
+            submitNewGrammarRule = grammarListUIpanel.transform.Find("SubmitNewRule").gameObject;
+            activateGrammarDetailsBtn = submitNewGrammarRule.transform.Find("ActivateNewRuleBtn").gameObject;
+            newGrammarRulePanel = submitNewGrammarRule.transform.Find("NewRulePanel").gameObject;
             inputRuleSdescTxt = newGrammarRulePanel.transform.Find("InputShortDescriptionText").GetComponent<InputField>();
             inputRuleLdescTxt = newGrammarRulePanel.transform.Find("InputLongDescriptionText").GetComponent<InputField>();
             viewGrammarDetailsBtnText = activateGrammarDetailsBtn.GetComponent<Text>();
 
             //PROFICIENCIES UI
-            proficienciesListUI = GetPanel().transform.FindChild("ProficienciesListUI").gameObject;
-            proficienciesBtn = proficienciesListUI.transform.FindChild("ProficienciesBtn").gameObject.GetComponent<Button>();
-            proficienciesListUIpanel = proficienciesListUI.transform.FindChild("Panel").gameObject;
+            proficienciesListUI = GetPanel().transform.Find("ProficienciesListUI").gameObject;
+            proficienciesBtn = proficienciesListUI.transform.Find("ProficienciesBtn").gameObject.GetComponent<Button>();
+            proficienciesListUIpanel = proficienciesListUI.transform.Find("Panel").gameObject;
             proficienciesList = proficienciesListUIpanel.GetComponentInChildren<GridLayoutGroup>().gameObject;
             //adding
-            submitNewProficiency = proficienciesListUIpanel.transform.FindChild("SubmitNewProficiency").gameObject;
+            submitNewProficiency = proficienciesListUIpanel.transform.Find("SubmitNewProficiency").gameObject;
             newProficiencyPanel = submitNewProficiency.transform.Find("NewProficiencyPanel").gameObject;
-            activateNewProficiencyBtn = submitNewProficiency.transform.FindChild("ActivateNewProficiencyBtn").gameObject;
+            activateNewProficiencyBtn = submitNewProficiency.transform.Find("ActivateNewProficiencyBtn").gameObject;
             inputProficiencyTxt = newProficiencyPanel.transform.Find("InputProficiency").GetComponent<InputField>();
             inputThresholdTxt = newProficiencyPanel.transform.Find("ThresholdInput").GetComponent<InputField>();
 
             //TRANSLATIONS UI
-            translationListsUI = GetPanel().transform.FindChild("TranslationListsUI").gameObject;
-            translationListsUIpanel = translationListsUI.transform.FindChild("Panel").gameObject;
+            translationListsUI = GetPanel().transform.Find("TranslationListsUI").gameObject;
+            translationListsUIpanel = translationListsUI.transform.Find("Panel").gameObject;
             vocabTranslationList = translationListsUIpanel.GetComponentInChildren<VerticalLayoutGroup>().gameObject;
             //adding
-            submitNewTranslation = translationListsUIpanel.transform.FindChild("SubmitNewTranslation").gameObject;
+            submitNewTranslation = translationListsUIpanel.transform.Find("SubmitNewTranslation").gameObject;
             activateNewTranslationBtn = submitNewTranslation.transform.Find("ActivateNewTranslationBtn").gameObject;
             newTranslationPanel = submitNewTranslation.transform.Find("NewTranslationPanel").gameObject;
             inputTranslationEnTxt = newTranslationPanel.transform.Find("EnglishVocab").GetComponent<InputField>();
             inputTranslationCyTxt = newTranslationPanel.transform.Find("WelshVocab").GetComponent<InputField>();
             //searching
-            searchTranslations = translationListsUIpanel.transform.FindChild("SearchTranslations").GetComponent<InputField>();
+            searchTranslations = translationListsUIpanel.transform.Find("SearchTranslations").GetComponent<InputField>();
 
             auxiliaryDataMenusGroup = "AuxiliaryDataMenus";
             CreateNewMenuToggleGroup(auxiliaryDataMenusGroup);

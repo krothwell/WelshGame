@@ -94,7 +94,7 @@ namespace GameUI {
                 ToggleCombatUI();
                 currentAbility.UseAbility();
                 DeselectAbility();
-                playerCharacter.GetCurrentSelectionCircle().DestroyMe();
+                playerCharacter.GetCurrentSelection().EndCurrentSelection();
             }
         }
 
