@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityUtilities;
 using GameUI;
-using GameUtilities.Display;
+using GameUtilities;
 
 public abstract class GameWorldSelector : MonoBehaviour {
     /// <summary>
@@ -44,12 +44,16 @@ public abstract class GameWorldSelector : MonoBehaviour {
         if (countingDown) {
             countdown -= Time.deltaTime;
             if (countdown <= 0) {
-                countingDown = false;
-                countdown = 0.2f;
                 SetSelected();
-                doubleClicks = false;
+                ResetCountdown();
             }
         }
+    }
+
+    public void ResetCountdown() {
+        countingDown = false;
+        countdown = 0.2f;
+        doubleClicks = false;
     }
 
     public void EndCurrentSelection() {
@@ -102,10 +106,14 @@ public abstract class GameWorldSelector : MonoBehaviour {
     }
 
     void OnMouseUpAsButton() {
-        if (!countingDown) {
+        if (World.IsGamePaused()) {
+            SetSelected();
+            ResetCountdown();
+        }
+        else if (!countingDown) {
             CountDownToDecision();
         }
-
+        Select();
         SetMouseClicks();
     }
 
@@ -142,6 +150,7 @@ public abstract class GameWorldSelector : MonoBehaviour {
             decision.GetComponent<CharacterDecision>().InitialiseMe(playerCharacter);
             decision.transform.SetParent(playerCharacter.transform, false);
             myDecision = decision.GetComponent<CharacterDecision>();
+            playerCharacter.MyDecision = myDecision;
         }
     }
 

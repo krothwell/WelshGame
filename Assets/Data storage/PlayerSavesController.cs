@@ -58,8 +58,8 @@ public class PlayerSavesController : MonoBehaviour {
                                                 { "PortraitImages", portraitPath },
                                                 { "Dates", DateTime.Now.ToString() },
                                                 { "LocationName", "Start" },
-                                                { "LocationX", "-30.0" },
-                                                { "LocationY", "-8.0" },
+                                                { "LocationX", "-2" },
+                                                { "LocationY", "0" },
                                                 { "SkillPointsSpent", "0" }
                                             };
         DbCommands.UpdateTableTuple("PlayerGames", "SaveIDs = 0", pgFields);

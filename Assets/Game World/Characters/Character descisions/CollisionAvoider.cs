@@ -34,7 +34,6 @@ public class CollisionAvoider : MonoBehaviour {
     GameObject myPerimeter, selected, objCurrentlyAvoiding;
     EdgeCollider2D collisionDetector;
     Vector2 myPerimeterSize;
-    PlayerCharacter mainChar;
 
     void Update () {
         //Time.timeScale = 0.5f;
@@ -60,8 +59,7 @@ public class CollisionAvoider : MonoBehaviour {
         //print(trigger.gameObject);
         if (obstacle.name == "Perimeter") {
             if (obstacle != myPerimeter) {
-                if (mainChar.playerStatus == PlayerCharacter.PlayerStatus.movingToObject 
-                || mainChar.playerStatus == PlayerCharacter.PlayerStatus.speakingToCharacter) {
+                if (character.MyDecision.GetType() == typeof(MoveToCharacterDecision)) {
                     if (obstacle.transform.parent.gameObject != selected) {
                         print(selected);
                         print(obstacle.transform.parent.gameObject);

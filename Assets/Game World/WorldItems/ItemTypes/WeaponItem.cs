@@ -10,6 +10,7 @@ public class WeaponItem : EquipableWorldItemWithSingleSprite {
     }
 
     void Awake() {
-        equipToPlayerPart = FindObjectOfType<RightHandWearable>().gameObject;
+        PlayerCharacter pc = FindObjectOfType<PlayerCharacter>();
+        equipToPlayerPart = pc.GetComponentInChildren<RightHandWearable>().gameObject;
     }
 }

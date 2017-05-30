@@ -1,12 +1,12 @@
 ﻿
 public class BodyItem : EquipableWorldItemWithMultiSprites {
     new void Start() {
-        
-        equipToPlayerParts[0] = FindObjectOfType<UpperTorsoWearable>().gameObject;
-        equipToPlayerParts[1] = FindObjectOfType<UpperRightArmWearable>().gameObject;
-        equipToPlayerParts[2] = FindObjectOfType<UpperLeftArmWearable>().gameObject;
-        equipToPlayerParts[3] = FindObjectOfType<LowerRightArmWearable>().gameObject;
-        equipToPlayerParts[4] = FindObjectOfType<LowerLeftArmWearable>().gameObject;
+        PlayerCharacter pc = FindObjectOfType<PlayerCharacter>();
+        equipToPlayerParts[0] = pc.GetComponentInChildren<UpperTorsoWearable>().gameObject;
+        equipToPlayerParts[1] = pc.GetComponentInChildren<UpperRightArmWearable>().gameObject; 
+        equipToPlayerParts[2] = pc.GetComponentInChildren<UpperLeftArmWearable>().gameObject; 
+        equipToPlayerParts[3] = pc.GetComponentInChildren<LowerRightArmWearable>().gameObject; 
+        equipToPlayerParts[4] = pc.GetComponentInChildren<LowerLeftArmWearable>().gameObject; 
         base.Start();
         //EquipToPlayerModel();
 

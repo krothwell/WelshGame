@@ -16,7 +16,8 @@ public class GameWorldItemSelector : GameWorldSelector{
         if (abilitySelected == null) {
             Select();
             BuildSelectionPlayerDecision(DefaultSelectionDecisionPrefab);
-            (myDecision as MoveToWorldItemDecision).SetItemToMoveTo(GetComponent<WorldItem>());
+            CharacterMovementDecision movementDecision = (CharacterMovementDecision)myDecision;
+            movementDecision.InitialiseMe(selectionCircle.transform, doubleClicks);
             QueueDecisionToRun();
         }
     }

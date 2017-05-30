@@ -13,8 +13,10 @@ public class MoveToLocationDecision : CharacterMovementDecision {
     }
 
 
-    public void SetTargetPosition(Vector2 target) {
-        targetPosition = target;
+    public override void SetTarget(Transform targetTransform) {
+        targetPosition = targetTransform.position;
         movementController.SetTargetPosition(targetPosition);
     }
+
+
 }

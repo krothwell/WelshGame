@@ -20,7 +20,6 @@ public class PlayerCharacter : Character {
     }
     public PlayerStatus playerStatus;
     public GameObject currentObjectInteractingWith;
-    private GameObject objectClickedByPlayer;
     private GameWorldSelector currentSelection;
 
     void Awake() {
@@ -57,10 +56,6 @@ public class PlayerCharacter : Character {
             }
             currentObjectInteractingWith = null;
         }
-    }
-
-    public GameObject GetObjSelectedByPlayer() {
-        return objectClickedByPlayer;
     }
 
     public void SetCurrentSelection(GameWorldSelector selection) {

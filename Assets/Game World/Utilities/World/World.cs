@@ -14,6 +14,14 @@ namespace GameUtilities {
             Time.timeScale = 1;
         }
 
+        public static bool IsGamePaused() {
+            if (Time.timeScale<0.1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         public static float GetDistanceFromPositions2D(Vector2 pos1, Vector2 pos2) {
             return (float)Math.Sqrt((Math.Pow((pos1.x - pos2.x), 2)
                                   + (Math.Pow((pos1.y - pos2.y), 2))));

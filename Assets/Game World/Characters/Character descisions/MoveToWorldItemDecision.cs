@@ -13,10 +13,12 @@ public class MoveToWorldItemDecision : CharacterMovementDecision {
 
 
 
-    public void SetItemToMoveTo(WorldItem item) {
-        print(item + " " + item.transform + " " + item.transform.position);
-        itemSelected = item;
-        targetPosition = item.transform.position;
-        myCharacter.MovementController.SetTargetPosition(targetPosition);
+    public override void SetTarget(Transform targetTransform) {
+        //print(item + " " + item.transform + " " + item.transform.position);
+        itemSelected = targetTransform.GetComponentInParent<WorldItem>();
+        print(itemSelected);
+        targetPosition = itemSelected.transform.position;
+        print(targetPosition);
+        movementController.SetTargetPosition(targetPosition);
     }
 }

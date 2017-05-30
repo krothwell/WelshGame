@@ -20,6 +20,7 @@ public class GameWorldCharacterSelector : GameWorldSelector {
     }
 
     public override void SetSelected() {
+        //EndCurrentSelection();
         if (abilitySelected) {
             if (abilityConfirm) {
                 ChangeColourToAbilityConfirmed();
@@ -29,24 +30,26 @@ public class GameWorldCharacterSelector : GameWorldSelector {
                 abilityConfirm = false;
             }
             else if (abilityInRange) {
-                Select();
                 abilityConfirm = true;
             }
         } else {
-            Select();
             if (GetComponent<Character>().GetCombatController() != null) {
                 if (GetComponent<Character>().GetCombatController().GetCurrentEnemyTarget() == playerCharacter) {
                     playerCharacter.GetCombatController().SetCurrentEnemyTarget(GetComponent<Character>());
                     BuildSelectionPlayerDecision(moveToEnemyDecisionPrefab);
-                    (myDecision as MoveToEnemyDecision).SetCharacterToMoveTo(GetComponent<Character>());
+                    CharacterMovementDecision movementDecision = (CharacterMovementDecision)myDecision;
+                    movementDecision.InitialiseMe(selectionCircle.transform, doubleClicks);
                 } else {
                     BuildSelectionPlayerDecision(DefaultSelectionDecisionPrefab);
-                    (myDecision as MoveToCharacterDecision).SetCharacterToMoveTo(GetComponent<Character>());
+                    CharacterMovementDecision movementDecision = (CharacterMovementDecision)myDecision;
+                    movementDecision.InitialiseMe(selectionCircle.transform, doubleClicks);
                 }
             }
             else {
                 BuildSelectionPlayerDecision(DefaultSelectionDecisionPrefab);
-                (myDecision as MoveToCharacterDecision).SetCharacterToMoveTo(GetComponent<Character>());
+                CharacterMovementDecision movementDecision = (CharacterMovementDecision)myDecision;
+                print(selectionCircle);
+                movementDecision.InitialiseMe(selectionCircle.transform, doubleClicks);
             }
             QueueDecisionToRun();
         }

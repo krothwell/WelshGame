@@ -57,7 +57,6 @@ public class CameraController : MonoBehaviour {
                 }
             }
         } else if (camPosition != playerCharacter.GetMyPosition()) {
-            print(playerCharacter.GetMyPosition());
             CentreOnPlayer();
         }
         FollowPlayer();
@@ -88,7 +87,6 @@ public class CameraController : MonoBehaviour {
             CharacterMovement movement = playerMovementController.GetMyMovement();
             if (movement != null) {
                 speed = movement.GetMovementSpeed();
-                print(speed);
             }
         }
 

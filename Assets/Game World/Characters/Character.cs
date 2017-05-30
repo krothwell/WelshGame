@@ -2,6 +2,7 @@
 using UnityEditor;
 using System;
 using GameUI;
+using GameUtilities.Display;
 
 /// <summary>
 /// Abstract class which provides default controls of all derived character
@@ -48,6 +49,11 @@ public abstract class Character : MonoBehaviour {
         myAnimator = gameObject.GetComponent<Animator>();
         SetCombatController();
         interactionDistance = 1f;
+    }
+
+    void Start() {
+        ImageLayerOrder.SetOrderOnGameObjectArray(CharacterParts, ImageLayerOrder.GetOrderInt(gameObject) - 1);
+        ImageLayerOrder.SetZ(gameObject);
     }
 
     public void SetHovered() {

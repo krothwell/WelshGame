@@ -326,15 +326,17 @@ namespace DbUtilities {
         }
 
         public static string GetAllTaskResultsQry(string taskID) {
-            return "SELECT "
+            return "SELECT DISTINCT "
                     + "QuestTaskEndCombatWithCharResults.CharacterNames, "
                     + "QuestTaskStartDialogueResults.DialogueIDs "
                 + "FROM "
-                    + "QuestTaskEndCombatWithCharResults "
-                    + "INNER JOIN QuestTaskStartDialogueResults ON "
-                        + "QuestTaskEndCombatWithCharResults.TaskIDs = QuestTaskStartDialogueResults.TaskIDs "
+                    + "QuestTasks "
+                    + "LEFT JOIN QuestTaskStartDialogueResults ON "
+                        + "QuestTasks.TaskIDs = QuestTaskStartDialogueResults.TaskIDs "
+                    + "LEFT JOIN QuestTaskEndCombatWithCharResults ON "
+                        + "QuestTasks.TaskIDs = QuestTaskEndCombatWithCharResults.TaskIDs "
                 + "WHERE "
-                    + "QuestTaskEndCombatWithCharResults.TaskIDs = " + taskID;
+                    + "QuestTasks.TaskIDs = " + taskID;
         }
 
         public static string GetSearchQry(string tableName, params string[] fieldNames) {

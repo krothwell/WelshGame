@@ -157,7 +157,6 @@ public class CharMovementController : MonoBehaviour {
     }
     
     public void ToggleIsMoving(bool moving) {
-        print("moving? : " + moving);
         isMoving = moving;
     }
 

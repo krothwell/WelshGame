@@ -52,4 +52,14 @@ public abstract class CharacterMovementDecision : CharacterDecision {
     /// </summary>
     public abstract void CheckToEndMovement();
 
+    public abstract void SetTarget(Transform targetTransform);
+
+    public void InitialiseMe(Transform targetTransform, bool doubleClicked) {
+        print(targetTransform);
+        SetTarget(targetTransform);
+        MovementController.Character = myCharacter;
+        MovementController.InitialiseMe();
+        SetMovementType(doubleClicked);
+    }
+
 }

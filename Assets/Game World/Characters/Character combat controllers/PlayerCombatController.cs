@@ -54,21 +54,20 @@ public class PlayerCombatController : CharCombatController {
     }
 
     public override void ProcessAction() {
-        GameObject objSelected = character.GetObjSelectedByPlayer();
-        if (objSelected.GetComponent<Character>() != null) {
-            Character characterSelected = objSelected.GetComponent<Character>();
-            if (characterSelected.GetCombatController() != null) {
-                CurrentEnemyTarget = characterSelected;
-                if (IsCurrentTargetInWeaponRange()) {
-                    combatui.ToggleCombatUI();
-                } else { 
-                    character.playerStatus = PlayerCharacter.PlayerStatus.movingToWeaponRange;
-                    //character.MovementController.ProcessMovement();
-                }
-            }
-        } else {
-            //character.MakeMovementDecision();
-        }
+        //if (objSelected.GetComponent<Character>() != null) {
+        //    Character characterSelected = objSelected.GetComponent<Character>();
+        //    if (characterSelected.GetCombatController() != null) {
+        //        CurrentEnemyTarget = characterSelected;
+        //        if (IsCurrentTargetInWeaponRange()) {
+        //            combatui.ToggleCombatUI();
+        //        } else { 
+        //            character.playerStatus = PlayerCharacter.PlayerStatus.movingToWeaponRange;
+        //            //character.MovementController.ProcessMovement();
+        //        }
+        //    }
+        //} else {
+        //    //character.MakeMovementDecision();
+        //}
     }
 
     public override Vector2 GetWeaponReachXY() {

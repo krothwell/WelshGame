@@ -1,7 +1,8 @@
 ﻿public class FeetItem : EquipableWorldItemWithMultiSprites {
     new void Start() {
-        equipToPlayerParts[0] = FindObjectOfType<RightFootWearable>().gameObject;
-        equipToPlayerParts[1] = FindObjectOfType<LeftFootWearable>().gameObject;
+        PlayerCharacter pc = FindObjectOfType<PlayerCharacter>();
+        equipToPlayerParts[0] = pc.GetComponentInChildren<RightFootWearable>().gameObject;
+        equipToPlayerParts[1] = pc.GetComponentInChildren<LeftFootWearable>().gameObject; 
         base.Start();
     }
 }

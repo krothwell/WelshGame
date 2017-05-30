@@ -16,10 +16,10 @@ public class MoveToEnemyDecision : CharacterMovementDecision {
         }
     }
 
-    public void SetCharacterToMoveTo(Character character) {
-        characterSelected = character;
-        myCharacter.GetCombatController().SetCurrentEnemyTarget(character);
-        myCharacter.MovementController.SetTargetPosition(characterSelected.GetMyPosition());
+    public override void SetTarget(Transform targetTransform) {
+        characterSelected = targetTransform.GetComponent<Character>();
+        myCharacter.GetCombatController().SetCurrentEnemyTarget(characterSelected);
+        movementController.SetTargetPosition(characterSelected.GetMyPosition());
         
     }
 }
