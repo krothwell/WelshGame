@@ -355,7 +355,7 @@ namespace GameUI {
         public void SetNotInUse() {
             DisableSubmitBtn();
             animator.SetBool("InUse", false);
-            playerCharacter.DestroySelectionCircleOfInteractiveObject();
+            playerCharacter.EndSelection();
             playerCharacter.playerStatus = PlayerCharacter.PlayerStatus.passive;
             if (dialogueQueue.Count > 0) {
                 Invoke("StartNewDialogueFromQueue", 1f);

@@ -2,6 +2,7 @@
 using UnityEditor;
 using System;
 using GameUI;
+using GameUtilities;
 using GameUtilities.Display;
 
 /// <summary>
@@ -27,6 +28,7 @@ public abstract class Character : MonoBehaviour {
     public GameObject[] CharacterParts;
     protected DialogueUI dialogueUI;
     protected CharacterDecision myDecision;
+    public string DefaultAnimationOverride;
     public CharacterDecision MyDecision {
         get { return myDecision; }
         set { myDecision = value; }
@@ -49,11 +51,20 @@ public abstract class Character : MonoBehaviour {
         myAnimator = gameObject.GetComponent<Animator>();
         SetCombatController();
         interactionDistance = 1f;
+        SetDefaultAnimation();
     }
 
-    void Start() {
+    protected void Start() {
         ImageLayerOrder.SetOrderOnGameObjectArray(CharacterParts, ImageLayerOrder.GetOrderInt(gameObject) - 1);
         ImageLayerOrder.SetZ(gameObject);
+    }
+
+    public void SetDefaultAnimation() {
+        if (DefaultAnimationOverride != "") {
+            if (AnimationUtilities.HasParameter(DefaultAnimationOverride, myAnimator)) {
+                myAnimator.SetBool(DefaultAnimationOverride, true);
+            }
+        }
     }
 
     public void SetHovered() {

@@ -8,6 +8,7 @@ public class MoveToLocationDecision : CharacterMovementDecision {
 
     public override void CheckToEndMovement() {
         if (myCharacter.GetMyPosition() == movementController.GetTargetPosition()) {
+            print("ending decision because I think I'm at the target position!");
             EndDecision();
         }
     }

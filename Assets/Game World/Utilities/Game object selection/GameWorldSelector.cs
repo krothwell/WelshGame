@@ -57,16 +57,14 @@ public abstract class GameWorldSelector : MonoBehaviour {
     }
 
     public void EndCurrentSelection() {
-        if (selectionCircle != null) {
-            Destroy(selectionCircle);
-            selectionCircle = null;
-            clicked = false;
-            //doubleClicks = false;
-            if (myDecision != null) {
+        DestroySelectionCircle();
+        if (myDecision != null) {
+            if (!myDecision.IsEnding) {
                 myDecision.EndDecision();
                 myDecision = null;
             }
         }
+        clicked = false;
     }
 
     void OnMouseOver() {
@@ -92,6 +90,7 @@ public abstract class GameWorldSelector : MonoBehaviour {
 
     public void BuildCircle(Vector2 atCoordinates) {
         EndCurrentSelection();
+        print("creating selection circle");
         selectionCircle = Instantiate(selectionCirclePrefab, new Vector3(atCoordinates.x, atCoordinates.y, -0.0001f), Quaternion.identity) as GameObject;
         selectionCircle.GetComponent<Transform>().localScale = new Vector2(Scale, Scale);
         selectionCircle.transform.SetParent(transform, false);
@@ -99,9 +98,19 @@ public abstract class GameWorldSelector : MonoBehaviour {
 
     }
 
+    public void DestroySelectionCircle() {
+        if (selectionCircle != null) {
+            print("destroying seleciton circle");
+            Destroy(selectionCircle);
+            selectionCircle = null;
+            //doubleClicks = false;
+        }
+    }
+
     void OnMouseExit() {
         if (!clicked) {
-            EndCurrentSelection();
+            clicked = false;
+            DestroySelectionCircle();
         }
     }
 
@@ -131,9 +140,11 @@ public abstract class GameWorldSelector : MonoBehaviour {
         clicked = true;
         ChangeColourToSelected();
         if (playerCharacter.GetCurrentSelection() != this) {
-            playerCharacter.EndSelection();
-            playerCharacter.SetCurrentSelection(this);
+            
+            
         }
+        playerCharacter.EndSelection();
+        playerCharacter.SetCurrentSelection(this);
     }
 
     public abstract void SetSelected();

@@ -47,17 +47,6 @@ public class PlayerCharacter : Character {
         }
     }
 
-
-
-    public void DestroySelectionCircleOfInteractiveObject() {
-        if (currentObjectInteractingWith != null) {
-            if (currentObjectInteractingWith.GetComponent<GameWorldSelector>() != null) {
-                currentObjectInteractingWith.GetComponent<GameWorldSelector>().EndCurrentSelection();
-            }
-            currentObjectInteractingWith = null;
-        }
-    }
-
     public void SetCurrentSelection(GameWorldSelector selection) {
         currentSelection = selection;
     }
@@ -69,6 +58,7 @@ public class PlayerCharacter : Character {
     public override void EndSelection() {
         if (currentSelection != null) {
             currentSelection.EndCurrentSelection();
+            currentSelection = null;
         }
         currentObjectInteractingWith = null;
         GetCombatController().SetCurrentEnemyTarget(null);

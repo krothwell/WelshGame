@@ -108,6 +108,7 @@
     <Compile Include="Assets\Data storage\Utilities\DbQueries.cs" />
     <Compile Include="Assets\Game World\Camera\CameraController.cs" />
     <Compile Include="Assets\Game World\Characters\Anim toggles\HumanCharAnimToggles.cs" />
+    <Compile Include="Assets\Game World\Characters\Animations\CustomDefaultAnimationInspector.cs" />
     <Compile Include="Assets\Game World\Characters\CharAction.cs" />
     <Compile Include="Assets\Game World\Characters\CharActionContinuous.cs" />
     <Compile Include="Assets\Game World\Characters\CharCombatController.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="Assets\Game World\QuestController\QuestsController.cs" />
     <Compile Include="Assets\Game World\QuestController\Utilities\QuestActivators.cs" />
     <Compile Include="Assets\Game World\Scenery\level1\Scenery1.cs" />
+    <Compile Include="Assets\Game World\Utilities\Animation\AnimationUtilities.cs" />
     <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldCharacterSelector.cs" />
     <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldItemSelector.cs" />
     <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldLocationSelector.cs" />

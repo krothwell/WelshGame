@@ -30,6 +30,8 @@ public abstract class CharacterMovementDecision : CharacterDecision {
     }
 
     public override void EndDecision() {
+        isEnding = true;
+        print("ending decision");
         movementController.StopMoving();
         movementType.StopAction();
         myCharacter.EndSelection();
