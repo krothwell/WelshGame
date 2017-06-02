@@ -7,11 +7,11 @@ public abstract class CharacterEffectAbility : CharAbility {
 
     public void SetTargetCharacter(Character characterTarget) {
         targetCharacter = characterTarget;
-        myCharacter.MovementController.SetMyDirection(targetCharacter.GetMyPosition(), myCharacter.GetMyPosition());
+        //myCharacter.MovementController.SetMyDirection(targetCharacter.GetMyPosition(), myCharacter.GetMyPosition());
     }
 
-    public override void InitialiseMe(Character mCharacter, string nameStr, Sprite iconSprite) {
-        base.InitialiseMe(mCharacter, nameStr, iconSprite);
+    public override void InitialiseMe(Character mCharacter) {
+        base.InitialiseMe(mCharacter);
         SetCharAction(new StrikeAbilityAction(myCharacter.GetMyAnimator()));
         SetMyRange();
     }

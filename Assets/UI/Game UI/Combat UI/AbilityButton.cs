@@ -19,7 +19,7 @@ namespace GameUI.ListItems {
 
         public void SelectSelf() {
             GetComponent<Image>().color = Colours.selectedAbility;
-            combatUI.SetAbility(AbilityPrefab, AbilityName, icon);
+            combatUI.SetAbility(AbilityPrefab);
             combatUI.EndCurrentSelection();
         }
 

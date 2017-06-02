@@ -24,7 +24,7 @@ namespace UnityUtilities {
         private void CountDownFromMouseClick() {
             if (countingDownFromMouseClicked) {
                 if (timeDelayToDetectDblClick >= 0f) {
-                    timeDelayToDetectDblClick -= Time.deltaTime; }
+                    timeDelayToDetectDblClick -= Time.unscaledDeltaTime; }
                 else {
                     ResetTimeDelayToDetectDblClick();
                     countingDownFromMouseClicked = false;
@@ -36,18 +36,22 @@ namespace UnityUtilities {
             timeDelayToDetectDblClick = 0.2f;
         }
 
-        public bool GetIsDoubleClick() {
+        public void GetIsDoubleClick(out bool dblClick) {
+            bool dc;
             if (countingDownFromMouseClicked) {
                 countingDownFromMouseClicked = false;
                 ResetTimeDelayToDetectDblClick();
-                return true;
+                dc = true;
             }
             else {
                 countingDownFromMouseClicked = true;
-                return false;
-                
+                dc = false;
             }
-            
+            print(dc);
+            print(delayTime);
+            dblClick = dc;
+
+
         }
 
 

@@ -35,7 +35,7 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
     }
 
     public bool IsCurrentTargetInWeaponRange() {
-        print(myCharacter);
+        //print(myCharacter);
 
         Vector2 distanceXYfromCharacter = World.GetVector2DistanceFromPositions2D(myCharacter.GetMyPosition(), CurrentEnemyTarget.transform.position);
         //print(distanceXYfromCharacter);
@@ -56,13 +56,9 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
 
     public abstract void TriggerCombat(Character charIn);
 
-    public abstract void TriggerStrategyMode();
-
     public abstract void EndCombat(Character charIn);
 
     public abstract void GetHit();
-
-    public abstract void ProcessAction();
 
     protected void AddToEnemyList(Character charIn) {
         CharacterEnemyList.Add(charIn);
@@ -74,7 +70,7 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
 
     public void SetSelectedAbility (GameObject ability) {
         selectedAbility = ability;
-        ability.transform.SetParent(transform, false);
+        //ability.transform.SetParent(transform, false);
     }
 }
 

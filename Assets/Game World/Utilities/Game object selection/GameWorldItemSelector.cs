@@ -14,8 +14,9 @@ public class GameWorldItemSelector : GameWorldSelector{
 
     public override void SetSelected() {
         if (abilitySelected == null) {
-            Select();
+            BuildCircle();
             BuildSelectionPlayerDecision(DefaultSelectionDecisionPrefab);
+            //clicked = true;
             CharacterMovementDecision movementDecision = (CharacterMovementDecision)myDecision;
             movementDecision.InitialiseMe(selectionCircle.transform, doubleClicks);
             QueueDecisionToRun();

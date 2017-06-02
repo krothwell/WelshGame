@@ -29,12 +29,12 @@ public class PlayerCombatController : CharCombatController {
         TriggerStrategyMode();
     }
 
-    public override void TriggerStrategyMode() {
+    public void TriggerStrategyMode() {
         combatui.ToggleCombatUI();
     }
 
     public override void GetHit() {
-        //throw new NotImplementedException();
+        print("Player hit!");
     }
 
     public override void EndCombat(Character charIn) {
@@ -51,23 +51,6 @@ public class PlayerCombatController : CharCombatController {
 
     public void SetCombatStateAction() {
         combatStateAction = new CombatStateAction(myAnimator);
-    }
-
-    public override void ProcessAction() {
-        //if (objSelected.GetComponent<Character>() != null) {
-        //    Character characterSelected = objSelected.GetComponent<Character>();
-        //    if (characterSelected.GetCombatController() != null) {
-        //        CurrentEnemyTarget = characterSelected;
-        //        if (IsCurrentTargetInWeaponRange()) {
-        //            combatui.ToggleCombatUI();
-        //        } else { 
-        //            character.playerStatus = PlayerCharacter.PlayerStatus.movingToWeaponRange;
-        //            //character.MovementController.ProcessMovement();
-        //        }
-        //    }
-        //} else {
-        //    //character.MakeMovementDecision();
-        //}
     }
 
     public override Vector2 GetWeaponReachXY() {

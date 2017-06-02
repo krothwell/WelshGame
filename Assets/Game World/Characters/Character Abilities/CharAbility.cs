@@ -7,38 +7,47 @@ public abstract class CharAbility : MonoBehaviour {
     protected CharAbilityAction myAction;
     protected Character myCharacter;
     protected Vector2 myRange;
-    protected float countDownToFollowThrough;
-    public float TimeToComplete, InterruptDelay;
+    protected float countDownToFollowThrough, countDownToComplete;
+    public float TimeToComplete, InterruptDelay, FollowThroughDelay;
     protected bool isInUse, followingThrough;
-    protected Sprite myIcon;
-    protected string myName;
+    public Sprite myIcon;
+    public string myName;
 	
 	void Update () {
 		if(isInUse) {
             StartUsingAbility();
+            CheckToStopUsingAbility();
         }
 	}
 
-    public virtual void InitialiseMe(Character character, string nameStr, Sprite spriteIcon) {
+    public virtual void InitialiseMe(Character character) {
         SetMyCharacter(character);
-        SetMyName(nameStr);
-        SetMyIcon(spriteIcon);
     }
 
     public void UseAbility() {
-        countDownToFollowThrough = TimeToComplete;
+        countDownToComplete = TimeToComplete;
+        countDownToFollowThrough = FollowThroughDelay;
         isInUse = true; //Update will detect this is true and run the StartUsingAbility function
         myAction.MakeAction(); //The animation will begin
     }
 
     protected void StartUsingAbility() {
-        if (countDownToFollowThrough <= 0) {
-            FollowThroughAbility();
-            followingThrough = true;
-            StopAbility();
+        if (followingThrough != true) {
+            if (countDownToFollowThrough <= 0) {
+                FollowThroughAbility();
+                followingThrough = true;
+            }
+            else {
+                countDownToFollowThrough -= Time.deltaTime;
+            }
         }
-        else {
-            countDownToFollowThrough -= Time.deltaTime;
+    }
+
+    protected void CheckToStopUsingAbility() {
+        if(countDownToComplete <= 0) {
+            StopAbility();
+        } else {
+            countDownToComplete -= Time.deltaTime;
         }
     }
 
@@ -50,14 +59,14 @@ public abstract class CharAbility : MonoBehaviour {
 
     protected void StopAbility() {
         isInUse = false;
-        countDownToFollowThrough = TimeToComplete;
+        countDownToFollowThrough = FollowThroughDelay;
         Destroy(gameObject); 
     }
 
     protected void InterruptAbility() {
         if (!followingThrough) {
             myAction.InterruptAction();
-            countDownToFollowThrough = TimeToComplete;
+            countDownToFollowThrough = FollowThroughDelay;
         }
         
     }
@@ -67,14 +76,6 @@ public abstract class CharAbility : MonoBehaviour {
     }
 
     public abstract void SetMyRange();
-
-    public void SetMyName (string nameStr) {
-        myName = nameStr;
-    }
-
-    public void SetMyIcon (Sprite icon) {
-        myIcon = icon;
-    }
 
     public string GetMyName() {
         return myName;

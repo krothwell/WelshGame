@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using GameUtilities;
 
 public class CombatStateAction : CharActionContinuous {
 
@@ -6,10 +7,10 @@ public class CombatStateAction : CharActionContinuous {
     }
 
     public override void MakeAction() {
-        animator.SetBool("isFighting", true);
+        AnimationUtilities.SetParameterIfExists("isFighting", animator, true);
     }
 
     public override void StopAction() {
-        animator.SetBool("isFighting", false);
+        AnimationUtilities.SetParameterIfExists("isFighting", animator, false);
     }
 }

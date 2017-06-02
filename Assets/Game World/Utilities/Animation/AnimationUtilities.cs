@@ -10,5 +10,11 @@ namespace GameUtilities {
             }
             return false;
         }
+
+        public static void SetParameterIfExists(string paramName, Animator animator, bool switchBool) {
+            if (HasParameter(paramName, animator)) {
+                animator.SetBool(paramName, switchBool);
+            }
+        }
     }
 }

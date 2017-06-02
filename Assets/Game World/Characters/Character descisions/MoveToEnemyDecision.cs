@@ -10,15 +10,19 @@ public class MoveToEnemyDecision : CharacterMovementDecision {
             EndDecision();
         }
         else if (myCharacter.GetCombatController().IsCurrentTargetInWeaponRange()) {
-            print("in weapon range");
-            myCharacter.GetCombatController().TriggerStrategyMode();
+            //print("in weapon range");
+            //myCharacter.GetCombatController().TriggerStrategyMode();
             EndDecision();
         }
     }
 
     public override void SetTarget(Transform targetTransform) {
-        characterSelected = targetTransform.GetComponent<Character>();
+        print(targetTransform);
+        characterSelected = targetTransform.GetComponentInParent<Character>();
         myCharacter.GetCombatController().SetCurrentEnemyTarget(characterSelected);
+        print(myCharacter);
+        print(movementController);
+        print(characterSelected);
         movementController.SetTargetPosition(characterSelected.GetMyPosition());
         
     }

@@ -51,6 +51,7 @@ public class GameWorldCharacterSelector : GameWorldSelector {
                 print(selectionCircle);
                 movementDecision.InitialiseMe(selectionCircle.transform, doubleClicks);
             }
+            //clicked = true;
             QueueDecisionToRun();
         }
         

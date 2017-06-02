@@ -7,10 +7,11 @@ using UnityEditor;
 public class NPCCharacter : Character {
 
     public override void EndSelection() {
-        throw new NotImplementedException();
+        MyDecision = null;
     }
 
     void Awake() {
+        combatController = GetComponentInChildren<NPCCombatController>();
         InitialiseMe();
     }
 

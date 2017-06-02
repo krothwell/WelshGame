@@ -132,18 +132,14 @@ public abstract class GameWorldSelector : MonoBehaviour {
 
     public void SetMouseClicks() {
         if (Input.GetMouseButtonUp(0)) {
-            doubleClicks = mouseSelection.GetIsDoubleClick();
+            mouseSelection.GetIsDoubleClick(out doubleClicks);
         }
     }
 
     protected void Select() {
+        playerCharacter.EndSelection();
         clicked = true;
         ChangeColourToSelected();
-        if (playerCharacter.GetCurrentSelection() != this) {
-            
-            
-        }
-        playerCharacter.EndSelection();
         playerCharacter.SetCurrentSelection(this);
     }
 

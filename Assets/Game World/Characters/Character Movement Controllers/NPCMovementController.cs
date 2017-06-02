@@ -6,7 +6,7 @@ using UnityEngine;
 public class NPCMovementController : CharMovementController {
     public float WalkSpeed;
     public float RunSpeed;
-    NPCCloseCombatController combatController;
+    NPCCloseCombatController2 combatController;
     PlayerCharacter playerCharacter;
 	// Use this for initialization
 	void Awake () {
@@ -15,7 +15,7 @@ public class NPCMovementController : CharMovementController {
 
 
 
-    public void SetMyCombatController (NPCCloseCombatController cc) {
+    public void SetMyCombatController (NPCCloseCombatController2 cc) {
         combatController = cc;
     }
 
