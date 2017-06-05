@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GameUtilities;
 
-public class StrikeAbilityAction : CharAbilityAction {
+public class IdleAction : CharAction {
+
 
     public override void MakeAction() {
-        MyAnimator.SetTrigger("Strike");
+        AnimationUtilities.SetTriggerIfExists("Idle", MyAnimator);
         Destroy(gameObject);
     }
 }

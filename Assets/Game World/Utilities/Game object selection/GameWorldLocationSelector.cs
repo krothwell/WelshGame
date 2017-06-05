@@ -12,12 +12,14 @@ public class GameWorldLocationSelector : GameWorldSelector {
         }
     }
 
+    void OnMouseExit() {
+
+    }
+
 
     public override void SetSelected() {
         if (abilitySelected == null) {
-            //EndCurrentSelection();
             BuildCircle(MouseSelection.GetMouseCoords2D());
-            //clicked = true;
             BuildSelectionPlayerDecision(DefaultSelectionDecisionPrefab);
             CharacterMovementDecision movementDecision = (CharacterMovementDecision)myDecision;
             movementDecision.InitialiseMe(selectionCircle.transform, doubleClicks);

@@ -4,7 +4,6 @@ using GameUI;
 using GameUtilities.Display;
 public class Scenery1 : MonoBehaviour {
 
-    PlayerInventoryUI inventory;
     SpriteRenderer[] mySprites;
     // Use this for initialization
     void Start () {
@@ -14,7 +13,7 @@ public class Scenery1 : MonoBehaviour {
 
     public void SetMyLayer() {
         int layerOrder = ImageLayerOrder.GetOrderInt(gameObject);
-        print(mySprites);
+        //print(mySprites);
         ImageLayerOrder.SetOrderOnSpriteObjectArray(mySprites, layerOrder);
         ImageLayerOrder.SetZ(gameObject);
     }

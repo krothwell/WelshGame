@@ -108,9 +108,6 @@
     <Compile Include="Assets\Data storage\Utilities\DbQueries.cs" />
     <Compile Include="Assets\Game World\Camera\CameraController.cs" />
     <Compile Include="Assets\Game World\Characters\Anim toggles\HumanCharAnimToggles.cs" />
-    <Compile Include="Assets\Game World\Characters\Animations\CustomDefaultAnimationInspector.cs" />
-    <Compile Include="Assets\Game World\Characters\CharAction.cs" />
-    <Compile Include="Assets\Game World\Characters\CharActionContinuous.cs" />
     <Compile Include="Assets\Game World\Characters\CharCombatController.cs" />
     <Compile Include="Assets\Game World\Characters\Character Abilities\CharAbility.cs" />
     <Compile Include="Assets\Game World\Characters\Character Abilities\CharacterEffectAbility.cs" />
@@ -123,8 +120,15 @@
     <Compile Include="Assets\Game World\Characters\Character Types\PlayerCharacter.cs" />
     <Compile Include="Assets\Game World\Characters\Character Types\StaticCharacter.cs" />
     <Compile Include="Assets\Game World\Characters\Character animation actions\CharAbilityAction.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\CharAction.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\CharActionContinuous.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\CharacterMovement.cs" />
     <Compile Include="Assets\Game World\Characters\Character animation actions\CombatStateAction.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\IdleAction.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\RunMovement.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\SitAction.cs" />
     <Compile Include="Assets\Game World\Characters\Character animation actions\StrikeAbilityAction.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\WalkMovement.cs" />
     <Compile Include="Assets\Game World\Characters\Character combat controllers\NPCCombatController.cs" />
     <Compile Include="Assets\Game World\Characters\Character combat controllers\NPCCombatController2.cs" />
     <Compile Include="Assets\Game World\Characters\Character combat controllers\PlayerCombatController.cs" />
@@ -136,10 +140,7 @@
     <Compile Include="Assets\Game World\Characters\Character descisions\MoveToEnemyDecision.cs" />
     <Compile Include="Assets\Game World\Characters\Character descisions\MoveToLocationDecision.cs" />
     <Compile Include="Assets\Game World\Characters\Character descisions\MoveToWorldItemDecision.cs" />
-    <Compile Include="Assets\Game World\Characters\Character movements\RunMovement.cs" />
-    <Compile Include="Assets\Game World\Characters\Character movements\WalkMovement.cs" />
     <Compile Include="Assets\Game World\Characters\Character.cs" />
-    <Compile Include="Assets\Game World\Characters\CharacterMovement.cs" />
     <Compile Include="Assets\Game World\Characters\NPC combat strategies\Actions\CombatStrategy.cs" />
     <Compile Include="Assets\Game World\Characters\NPC combat strategies\Actions\CombatStrategyAbilityAction.cs" />
     <Compile Include="Assets\Game World\Characters\NPC combat strategies\Actions\CombatStrategyAction.cs" />

@@ -94,7 +94,8 @@ namespace GameUI {
                 ToggleCombatUI();
                 currentAbility.UseAbility();
                 DeselectAbility();
-                playerCharacter.GetCurrentSelection().EndCurrentSelection();
+                //print(playerCharacter.GetCurrentSelection());
+                //playerCharacter.GetCurrentSelection().EndCurrentSelection();
             }
         }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 using GameUtilities;
 
 public abstract class CharAbility : MonoBehaviour {
-    protected CharAbilityAction myAction;
+    public CharAbilityAction MyActionPrefab;
     protected Character myCharacter;
     protected Vector2 myRange;
     protected float countDownToFollowThrough, countDownToComplete;
@@ -28,6 +28,10 @@ public abstract class CharAbility : MonoBehaviour {
         countDownToComplete = TimeToComplete;
         countDownToFollowThrough = FollowThroughDelay;
         isInUse = true; //Update will detect this is true and run the StartUsingAbility function
+        CharAbilityAction myAction = Instantiate(MyActionPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as CharAbilityAction;
+        myAction.transform.SetParent(myCharacter.transform, false);
+        myAction.MyAnimator = myCharacter.GetMyAnimator();
+        print(myAction.MyAnimator);
         myAction.MakeAction(); //The animation will begin
     }
 
@@ -52,7 +56,7 @@ public abstract class CharAbility : MonoBehaviour {
     }
 
     public void SetCharAction(CharAbilityAction action) {
-        myAction = action;
+        MyActionPrefab = action;
     }
 
     public abstract void FollowThroughAbility();
@@ -65,7 +69,7 @@ public abstract class CharAbility : MonoBehaviour {
 
     protected void InterruptAbility() {
         if (!followingThrough) {
-            myAction.InterruptAction();
+            MyActionPrefab.InterruptAction();
             countDownToFollowThrough = FollowThroughDelay;
         }
         

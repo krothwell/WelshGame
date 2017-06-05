@@ -10,12 +10,15 @@ public class PlayerCombatController : CharCombatController {
     public GameObject selectedEnemy;
     CombatUI combatui;
     PlayerCharacter character;
-    CombatStateAction combatStateAction;
+    public CombatStateAction CombatStateActionPrefab;
+    private CombatStateAction combatStateAction;
 
     void Awake() {
         combatui = FindObjectOfType<CombatUI>();
         character = FindObjectOfType<PlayerCharacter>();
         inventory = FindObjectOfType<PlayerInventoryUI>();
+        
+        
     }
 
     public void setSelectedEnemy(GameObject enemy) {
@@ -23,6 +26,9 @@ public class PlayerCombatController : CharCombatController {
     }
 
     public override void TriggerCombat(Character charIn) {
+        combatStateAction = Instantiate(CombatStateActionPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as CombatStateAction;
+        combatStateAction.transform.SetParent(myCharacter.transform, false);
+        combatStateAction.MyAnimator = GetComponent<Animator>();
         AddToEnemyList(charIn);
         ToggleInCombat(true);
         combatStateAction.MakeAction();
@@ -46,11 +52,6 @@ public class PlayerCombatController : CharCombatController {
                 combatStateAction.StopAction();
             }
         }
-    }
-
-
-    public void SetCombatStateAction() {
-        combatStateAction = new CombatStateAction(myAnimator);
     }
 
     public override Vector2 GetWeaponReachXY() {

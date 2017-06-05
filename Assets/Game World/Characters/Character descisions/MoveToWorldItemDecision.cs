@@ -17,7 +17,7 @@ public class MoveToWorldItemDecision : CharacterMovementDecision {
         //print(item + " " + item.transform + " " + item.transform.position);
         itemSelected = targetTransform.GetComponentInParent<WorldItem>();
         print(itemSelected);
-        targetPosition = itemSelected.transform.position;
+        targetPosition = itemSelected.transform.localPosition;
         print(targetPosition);
         movementController.SetTargetPosition(targetPosition);
     }

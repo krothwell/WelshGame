@@ -45,6 +45,7 @@ public abstract class GameWorldSelector : MonoBehaviour {
             countdown -= Time.deltaTime;
             if (countdown <= 0) {
                 SetSelected();
+                Select();
                 ResetCountdown();
             }
         }
@@ -100,7 +101,6 @@ public abstract class GameWorldSelector : MonoBehaviour {
 
     public void DestroySelectionCircle() {
         if (selectionCircle != null) {
-            print("destroying seleciton circle");
             Destroy(selectionCircle);
             selectionCircle = null;
             //doubleClicks = false;
@@ -122,7 +122,6 @@ public abstract class GameWorldSelector : MonoBehaviour {
         else if (!countingDown) {
             CountDownToDecision();
         }
-        Select();
         SetMouseClicks();
     }
 

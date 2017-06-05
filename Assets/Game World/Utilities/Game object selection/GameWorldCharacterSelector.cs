@@ -28,9 +28,11 @@ public class GameWorldCharacterSelector : GameWorldSelector {
                 playerCharacter.GetCombatController().SetCurrentEnemyTarget(GetComponent<Character>());
                 combatUI.ConfirmAbility();
                 abilityConfirm = false;
+                print("enemy selected");
             }
             else if (abilityInRange) {
                 abilityConfirm = true;
+                Select();
             }
         } else {
             if (GetComponent<Character>().GetCombatController() != null) {

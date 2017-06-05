@@ -8,6 +8,11 @@ using System.Collections;
 public class HumanCharAnimToggles : MonoBehaviour {
     Animator myAnimator;
     Character character;
+    private CharacterMovement myMovement;
+    public CharacterMovement MyMovement {
+        get { return myMovement; }
+        set { myMovement = value; }
+    }
 
     void Start() {
         character = GetComponent<Character>();
@@ -31,16 +36,21 @@ public class HumanCharAnimToggles : MonoBehaviour {
     //}
 
     public void Idle1() {
-        if (!isMoving()) {
-            GetMovement().StopAction();
-            myAnimator.SetBool("idle1", true);
-        }
+        //if (!isMoving()) {
+        //    if (GetMovement().gameObject) {
+        //        GetMovement().StopAction();
+        //        print(myAnimator.transform);
+                myAnimator.SetBool("idle1", true);
+        //    }
+        
     }
     public void Idle2() {
-        if (!isMoving()) {
-            GetMovement().StopAction();
-            myAnimator.SetBool("idle1", false);
-        }
+        //if (!isMoving()) {
+        //    if (GetMovement().gameObject) {
+        //        GetMovement().StopAction();
+                myAnimator.SetBool("idle1", false);
+        //    }
+        //}
     }
 
     private bool isMoving() {
@@ -60,6 +70,8 @@ public class HumanCharAnimToggles : MonoBehaviour {
     }
 
     public CharacterMovement GetMovement() {
+        print(character.MovementController);
+        print(character.MovementController.GetMyMovement());
         return character.MovementController.GetMyMovement();
     }
 }

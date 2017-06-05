@@ -133,6 +133,7 @@ public class CharMovementController : MonoBehaviour {
     }
 
     public void SetMyDirection(Vector2 targettedPosition, Vector2 myPosition) {
+
         //depending on which direction the player is going, changes the modifier to decrease or increase on that axis
         int xModifier = myPosition.x >= targettedPosition.x ? -1 : 1;
         Vector3 spriteDirection = new Vector3(xModifier,
@@ -182,7 +183,8 @@ public class CharMovementController : MonoBehaviour {
 
     public void ProcessMovement(CharacterMovement movementType) {
         movement = movementType;
-        SetMyDirection(targetPosition, myPosition);
+        SetMyDirection(targetPosition, character.GetMyPosition());
+        //print("target:" + targetPosition + ", my position: " + myPosition);
         print(character);
         CharacterDecision decision = character.MyDecision;
         print(decision);

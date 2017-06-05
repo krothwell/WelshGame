@@ -7,6 +7,8 @@ public class StrikeAbility : CharacterEffectAbility {
             print(myCharacter + " hit connected");
             //print(targetCharacter);
             targetCharacter.GetCombatController().GetHit();
+        } else {
+            print("missed");
         }
     }
 

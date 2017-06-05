@@ -20,9 +20,6 @@ public class MoveToEnemyDecision : CharacterMovementDecision {
         print(targetTransform);
         characterSelected = targetTransform.GetComponentInParent<Character>();
         myCharacter.GetCombatController().SetCurrentEnemyTarget(characterSelected);
-        print(myCharacter);
-        print(movementController);
-        print(characterSelected);
         movementController.SetTargetPosition(characterSelected.GetMyPosition());
         
     }

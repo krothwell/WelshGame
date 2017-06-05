@@ -13,10 +13,14 @@ public abstract class CharacterMovementDecision : CharacterDecision {
     public CharacterMovement MovementType {
         get { return movementType; }
     }
+
+    public RunMovement RunMovementPrefab;
+    public WalkMovement WalkMovementPrefab;
 	// Update is called once per frame
 	void Update () {
-        movementController.CheckToMakeMovement();
         CheckToEndMovement();
+        movementController.CheckToMakeMovement();
+        
     }
 
     void Awake() {
@@ -30,10 +34,12 @@ public abstract class CharacterMovementDecision : CharacterDecision {
     }
 
     public override void EndDecision() {
+        
+        movementType.StopAction();
         isEnding = true;
         print("ending decision");
         movementController.StopMoving();
-        movementType.StopAction();
+        
         myCharacter.EndSelection();
         if (gameObject != null) {
             Destroy(gameObject);
@@ -42,10 +48,17 @@ public abstract class CharacterMovementDecision : CharacterDecision {
 
     public void SetMovementType(bool dblClick) {
         if(dblClick) {
-            movementType = new RunMovement(myCharacter.GetMyAnimator(), 3f);
+            RunMovement runMovement = Instantiate(RunMovementPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as RunMovement;
+            runMovement.transform.SetParent(myCharacter.transform, false);
+            movementType = runMovement;
+            movementType.SetMovementSpeed(3f);
         } else {
-            movementType = new WalkMovement(myCharacter.GetMyAnimator(), 1f);
+            WalkMovement walkMovement = Instantiate(WalkMovementPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as WalkMovement;
+            walkMovement.transform.SetParent(myCharacter.transform, false);
+            movementType = walkMovement;
+            movementType.SetMovementSpeed(1f);
         }
+        movementType.MyAnimator = myCharacter.GetMyAnimator();
     }
 
     /// <summary>

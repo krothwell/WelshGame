@@ -16,5 +16,11 @@ namespace GameUtilities {
                 animator.SetBool(paramName, switchBool);
             }
         }
+
+        public static void SetTriggerIfExists(string paramName, Animator animator) {
+            if (HasParameter(paramName, animator)) {
+                animator.SetTrigger(paramName);
+            }
+        }
     }
 }

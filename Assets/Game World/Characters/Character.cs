@@ -28,7 +28,8 @@ public abstract class Character : MonoBehaviour {
     public GameObject[] CharacterParts;
     protected DialogueUI dialogueUI;
     protected CharacterDecision myDecision;
-    public string DefaultAnimationOverride;
+    public CharAction DefaultAnimationActionPrefab;
+    private CharAction defaultAnimationAction;
     public CharacterDecision MyDecision {
         get { return myDecision; }
         set { myDecision = value; }
@@ -60,9 +61,15 @@ public abstract class Character : MonoBehaviour {
     }
 
     public void SetDefaultAnimation() {
-        if (DefaultAnimationOverride != "") {
-            if (AnimationUtilities.HasParameter(DefaultAnimationOverride, myAnimator)) {
-                myAnimator.SetBool(DefaultAnimationOverride, true);
+        if (myAnimator != null) {
+            if (DefaultAnimationActionPrefab != null) {
+                CharAction defaultAnimationAction = Instantiate(DefaultAnimationActionPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as CharAction;
+                defaultAnimationAction.transform.SetParent(transform, false);
+                defaultAnimationAction.MyAnimator = myAnimator;
+                defaultAnimationAction.MakeAction();
+            }
+            else {
+                AnimationUtilities.SetTriggerIfExists("Idle", myAnimator);
             }
         }
     }
@@ -93,8 +100,8 @@ public abstract class Character : MonoBehaviour {
 
     public Vector2 GetMyPosition() {
         return new Vector2(
-                    (float)Math.Round(gameObject.GetComponent<Transform>().position.x, 1),
-                    (float)Math.Round(gameObject.GetComponent<Transform>().position.y, 1));
+                    (float)Math.Round(gameObject.GetComponent<Transform>().localPosition.x, 1),
+                    (float)Math.Round(gameObject.GetComponent<Transform>().localPosition.y, 1));
     }
 
     public Animator GetMyAnimator() {

@@ -27,7 +27,6 @@ public class PlayerCharacter : Character {
         InitialiseMe();
         playerStatus = PlayerStatus.passive;
         dialogueUI = FindObjectOfType<DialogueUI>();
-        ((PlayerCombatController)combatController).SetCombatStateAction();
     }
 
     public void SetMyName(string name) {
@@ -56,6 +55,7 @@ public class PlayerCharacter : Character {
     }
 
     public override void EndSelection() {
+        print("ending selection");
         if (currentSelection != null) {
             currentSelection.EndCurrentSelection();
             currentSelection = null;

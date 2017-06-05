@@ -6,6 +6,7 @@ using UnityEngine;
 public class NPCCombatController : CharCombatController {
     public GameObject MyCombatStrategyPrefab;
     private CombatStrategy myCombatStrategy;
+
     void OnTriggerEnter2D(Collider2D incursionCollider) {
         if (incursionCollider.transform.name == "Perimeter") {
             PlayerCharacter playerCharacter = incursionCollider.transform.parent.GetComponent<PlayerCharacter>();
@@ -21,9 +22,6 @@ public class NPCCombatController : CharCombatController {
             PlayerCharacter playerCharacter = incursionCollider.transform.parent.GetComponent<PlayerCharacter>();
             if (playerCharacter != null) {
                 EndCombat(playerCharacter);
-                if (myCombatStrategy!= null) {
-                    myCombatStrategy.DestroyMe();
-                }
             }
         }
     }
@@ -54,5 +52,9 @@ public class NPCCombatController : CharCombatController {
 
     public override void EndCombat(Character charIn) {
         charIn.GetCombatController().EndCombat(myCharacter);
+        if (myCombatStrategy != null) {
+            myCombatStrategy.DestroyMe();
+        }
+        myCharacter.SetDefaultAnimation();
     }
 }

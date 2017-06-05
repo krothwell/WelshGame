@@ -4,14 +4,12 @@ using UnityEngine;
 
 public abstract class CharAbilityAction : CharActionContinuous {
 
-    public CharAbilityAction(Animator anim) : base(anim) {
-    }
-
     public override void StopAction() {
-        animator.SetTrigger("Stopped");
+        MyAnimator.SetTrigger("Stopped");
+        Destroy(gameObject);
     }
 
     public void InterruptAction() {
-        animator.SetTrigger("Interrupted");
+        MyAnimator.SetTrigger("Interrupted");
     }
 }
