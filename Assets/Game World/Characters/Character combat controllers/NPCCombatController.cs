@@ -56,5 +56,6 @@ public class NPCCombatController : CharCombatController {
             myCombatStrategy.DestroyMe();
         }
         myCharacter.SetDefaultAnimation();
+        CurrentEnemyTarget = null;
     }
 }

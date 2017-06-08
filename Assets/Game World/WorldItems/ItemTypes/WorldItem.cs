@@ -45,6 +45,7 @@ public abstract class WorldItem : MonoBehaviour {
     }
 
     protected void SetInventoryDisplay() {
+        rectTransform.sizeDelta = new Vector2(20f, 20f);
         rectTransform.localPosition = new Vector3(0f, 0f, 0f);
         rectTransform.localScale = inventoryScale;
         SetChildrenActive(false);

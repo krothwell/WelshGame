@@ -59,6 +59,7 @@ public class CombatStrategy : MonoBehaviour {
     public void DestroyMe() {
         if (currentCombatStrategyAction != null) {
             currentCombatStrategyAction.EndAction();
+            currentCombatStrategyAction = null;
         }
         Destroy(currentCombatStrategyAction);
         Destroy(gameObject);

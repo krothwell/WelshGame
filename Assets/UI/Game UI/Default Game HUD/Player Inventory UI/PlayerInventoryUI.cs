@@ -10,7 +10,7 @@ namespace GameUI {
     /// Responsible for displaying inventory items and how they should be moved
     /// to and from UI slots, and the game world. 
     /// </summary>
-    public class PlayerInventoryUI : MonoBehaviour {
+    public class PlayerInventoryUI : UIController {
         GameObject items;
         GameObject panel;
         GameObject selectedItem;
@@ -40,14 +40,7 @@ namespace GameUI {
         }
 
         public void CloseInventory() {
-            //TODO: Check if delay click select from MouseSelection.cs can be used to delay selecting world isntead.
-            Invoke("CloseInventoryNow", 0.1f);//delayed so that character doesn't begin walking to button press
-        }
-
-        public void CloseInventoryNow() {
- 
-            panel.SetActive(false);
-
+            HideComponents();
         }
 
         public void RecieveItem(WorldItem worldItem) {

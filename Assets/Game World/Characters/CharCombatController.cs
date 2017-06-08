@@ -36,11 +36,15 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
 
     public bool IsCurrentTargetInWeaponRange() {
         //print(myCharacter);
-        print(CurrentEnemyTarget);
-        Vector2 distanceXYfromCharacter = World.GetVector2DistanceFromPositions2D(myCharacter.GetMyPosition(), CurrentEnemyTarget.transform.position);
-        //print(distanceXYfromCharacter);
-        Vector2 weaponReachXY = GetWeaponReachXY();
-        return (distanceXYfromCharacter.x < weaponReachXY.x && distanceXYfromCharacter.y < weaponReachXY.y);
+        //print(CurrentEnemyTarget);
+        if (CurrentEnemyTarget) {
+            Vector2 distanceXYfromCharacter = World.GetVector2DistanceFromPositions2D(myCharacter.GetMyPosition(), CurrentEnemyTarget.transform.position);
+            //print(distanceXYfromCharacter);
+            Vector2 weaponReachXY = GetWeaponReachXY();
+            return (distanceXYfromCharacter.x < weaponReachXY.x && distanceXYfromCharacter.y < weaponReachXY.y);
+        } else {
+            return false;
+        }
     }
 
     public abstract Vector2 GetWeaponReachXY();

@@ -5,7 +5,11 @@ using UnityEngine;
 using UnityEditor;
 
 public class NPCCharacter : Character {
-
+    private GameWorldSelector mySelector;
+    public GameWorldSelector MySelector {
+        get { return mySelector; }
+        set { mySelector = value; }
+    }
     private Vector2 startingPosition;
     public Vector2 StartingPosition {
         get { return startingPosition; }
@@ -19,6 +23,7 @@ public class NPCCharacter : Character {
     new void Start() {
         base.Start();
         startingPosition = transform.localPosition;
+        mySelector = GetComponent<GameWorldSelector>();
 
     }
 

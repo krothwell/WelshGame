@@ -12,7 +12,7 @@ public class GameWorldLocationSelector : GameWorldSelector {
         }
     }
 
-    void OnMouseExit() {
+    new void OnMouseExit() {
 
     }
 

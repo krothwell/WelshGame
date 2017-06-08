@@ -61,7 +61,7 @@ public abstract class CharAbility : MonoBehaviour {
 
     public abstract void FollowThroughAbility();
 
-    protected void StopAbility() {
+    public void StopAbility() {
         isInUse = false;
         countDownToFollowThrough = FollowThroughDelay;
         Destroy(gameObject); 

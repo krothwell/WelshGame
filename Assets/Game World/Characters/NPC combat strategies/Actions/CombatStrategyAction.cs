@@ -21,6 +21,7 @@ public abstract class CombatStrategyAction : MonoBehaviour {
     }
 
     public abstract void DoAction();
+
     public bool IsActionOver() {
         if (myAction.gameObject == null) {
             return true;

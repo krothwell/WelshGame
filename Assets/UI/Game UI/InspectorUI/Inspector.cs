@@ -5,18 +5,20 @@ using UnityEngine;
 public abstract class Inspector : MonoBehaviour {
 
 	protected InspectorUI inspectorUI;
-	void Start () {
+    public float yOffset = -0.5f;
+	void Awake () {
         inspectorUI = FindObjectOfType<InspectorUI>();
 	}
 
-    void OnMouseEnter() {
+    public void Inspect() {
         SetInspectorText();
-        inspectorUI.SetInspecting(true);
+        inspectorUI.SetInspectorPosition(transform, yOffset);
+        inspectorUI.DisplayComponents();
     }
 
     public abstract void SetInspectorText();
 
-    void OnMouseExit() {
-        inspectorUI.SetInspecting(false);
+    public void EndInspection() {
+        inspectorUI.HideComponents();
     }
 }

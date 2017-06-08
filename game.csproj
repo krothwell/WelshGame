@@ -99,6 +99,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\AbilitiesUI.cs" />
     <Compile Include="Assets\CreatePlaneMesh.cs" />
     <Compile Include="Assets\Data storage\DbSetup.cs" />
     <Compile Include="Assets\Data storage\PlayerPrefsManager.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Assets\Data storage\SceneLoader.cs" />
     <Compile Include="Assets\Data storage\Utilities\DbCommands.cs" />
     <Compile Include="Assets\Data storage\Utilities\DbQueries.cs" />
+    <Compile Include="Assets\EnemySelectorBtn.cs" />
     <Compile Include="Assets\Game World\Camera\CameraController.cs" />
     <Compile Include="Assets\Game World\Characters\Anim toggles\HumanCharAnimToggles.cs" />
     <Compile Include="Assets\Game World\Characters\CharCombatController.cs" />
@@ -235,8 +237,9 @@
     <Compile Include="Assets\UI\Data UI\TranslationUI\TranslationUI.cs" />
     <Compile Include="Assets\UI\Data UI\Utilities\Colours.cs" />
     <Compile Include="Assets\UI\ExistingSaveGame.cs" />
-    <Compile Include="Assets\UI\Game UI\Combat UI\AbilityButton.cs" />
+    <Compile Include="Assets\UI\Game UI\Combat UI\Abilities\AbilityButton.cs" />
     <Compile Include="Assets\UI\Game UI\Combat UI\CombatUI.cs" />
+    <Compile Include="Assets\UI\Game UI\Combat UI\Under attack UI\UnderAttackUI.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\DefaultGameHUD.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Notifcation Queue UI\GameNotifier.cs" />
     <Compile Include="Assets\UI\Game UI\Default Game HUD\Notifcation Queue UI\NewQuestNotifier.cs" />

@@ -20,8 +20,12 @@ namespace GameUI {
         PlayerCharacter playerCharacter;
         DialogueUI dialogueUI;
         NPCs npcController;
+        AbilitiesUI abilitiesUI;
+        UnderAttackUI underAttackUI;
         // Use this for initialization
         void Start() {
+            abilitiesUI = FindObjectOfType<AbilitiesUI>();
+            underAttackUI = FindObjectOfType<UnderAttackUI>();
             dialogueUI = FindObjectOfType<DialogueUI>();
             npcController = FindObjectOfType<NPCs>();
             //currentAbility = CombatAbilities.passive;
@@ -34,14 +38,14 @@ namespace GameUI {
         void Update() {
             if (playerCharacter.GetCombatController().IsInCombat()) {
                 if (Input.GetKeyUp(KeyCode.Space)) {
-                    ToggleCombatUI();
+                    ToggleCombatMode();
                 }
             }
         }
 
-        public void ToggleCombatUI() {
+        public void ToggleCombatMode() {
             if (combatUIactive) {
-                HideComponents();
+                abilitiesUI.HideComponents();
                 World.UnpauseGame();
                 combatUIactive = false;
                 if (pendingDecision != null) {
@@ -50,10 +54,23 @@ namespace GameUI {
                 SetCursorDefault();
             } else {
                 World.PauseGame();
-                DisplayComponents();
+                abilitiesUI.DisplayComponents();
+                underAttackUI.DisplayComponents();
                 combatUIactive = true;
                 pendingDecision = null;
             }
+        }
+
+        public void HideUnderAttack() {
+            underAttackUI.HideComponents();
+        }
+
+        public void AddToUnderAttack(Character charIn) {
+            underAttackUI.InsertAttacker(charIn);
+        }
+
+        public void RemoveFromUnderAttack(Character charIn) {
+            underAttackUI.RemoveAttacker(charIn);
         }
 
         public void EndCurrentSelection() {
@@ -91,7 +108,7 @@ namespace GameUI {
 
         public void UseSelectedAbility() {
             if (currentAbility != null) {
-                ToggleCombatUI();
+                ToggleCombatMode();
                 currentAbility.UseAbility();
                 DeselectAbility();
                 //print(playerCharacter.GetCurrentSelection());
@@ -124,4 +141,5 @@ namespace GameUI {
             playerCharacter.GetCombatController().EndCombat(characterNPC);
         }
     }
+
 }

@@ -30,13 +30,14 @@ public class PlayerCombatController : CharCombatController {
         combatStateAction.transform.SetParent(myCharacter.transform, false);
         combatStateAction.MyAnimator = GetComponent<Animator>();
         AddToEnemyList(charIn);
+        combatui.AddToUnderAttack(charIn);
         ToggleInCombat(true);
         combatStateAction.MakeAction();
         TriggerStrategyMode();
     }
 
     public void TriggerStrategyMode() {
-        combatui.ToggleCombatUI();
+        combatui.ToggleCombatMode();
     }
 
     public override void GetHit() {
@@ -47,9 +48,11 @@ public class PlayerCombatController : CharCombatController {
         print("ending combat...");
         if (CharacterEnemyList.Contains(charIn)) {
             RemoveFromEnemyList(charIn);
+            combatui.RemoveFromUnderAttack(charIn);
             if (CharacterEnemyList.Count < 1) {
                 ToggleInCombat(false);
                 combatStateAction.StopAction();
+                combatui.HideUnderAttack();
             }
         }
     }

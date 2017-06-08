@@ -10,4 +10,9 @@ public abstract class CombatStrategyDecisionAction : CombatStrategyAction {
         myCharacter.MyDecision = myDecision;
         myDecision.GetComponent<CharacterDecision>().ProcessDecision();
     }
+
+    public new void EndAction() {
+        myDecision.EndDecision();
+        base.EndAction();
+    }
 }

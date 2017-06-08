@@ -12,4 +12,9 @@ public abstract class CombatStrategyAbilityAction : CombatStrategyAction {
         myCharacter.GetCombatController().SetSelectedAbility(myAbility.gameObject);
         myAbility.GetComponent<CharAbility>().UseAbility();
     }
+
+    public new void EndAction() { 
+        myAbility.StopAbility();
+        base.EndAction();
+    }
 }

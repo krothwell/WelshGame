@@ -27,6 +27,8 @@ public abstract class GameWorldSelector : MonoBehaviour {
     protected float countdown;
     protected CharacterMovement movementType;
     protected bool doubleClicks;
+    protected Inspector inspector;
+    protected Vector2 lastMouseClickPosition, currentMouseClickPosition;
     public bool DoubleClicks {
         get { return doubleClicks; }
     }
@@ -34,6 +36,7 @@ public abstract class GameWorldSelector : MonoBehaviour {
     protected MouseSelection mouseSelection;
 
     void Start () {
+        inspector = GetComponent<Inspector>();
         countdown = 0.2f;
         playerCharacter = FindObjectOfType<PlayerCharacter>();
         selectedColour = new Color(0.27f, 0.53f, 0.94f);
@@ -68,13 +71,26 @@ public abstract class GameWorldSelector : MonoBehaviour {
         clicked = false;
     }
 
-    void OnMouseOver() {
+    public void OnMouseOver() {
+        Inspect();
         if (!clicked) {
             if (selectionCircle == null) {
                 combatUI = FindObjectOfType<CombatUI>();
                 abilitySelected = combatUI.GetCurrentAbility();
                 DisplayCircle();
             }
+        }
+    }
+
+    public void Inspect() {
+        if (inspector) {
+            inspector.Inspect();
+        }
+    }
+
+    public void EndInspection() {
+        if (inspector) {
+            inspector.EndInspection();
         }
     }
 
@@ -107,22 +123,26 @@ public abstract class GameWorldSelector : MonoBehaviour {
         }
     }
 
-    void OnMouseExit() {
+    public void OnMouseExit() {
+        EndInspection();
         if (!clicked) {
             clicked = false;
             DestroySelectionCircle();
         }
     }
 
-    void OnMouseUpAsButton() {
+    public void OnMouseUpAsButton() {
+        SetMouseClicks();
         if (World.IsGamePaused()) {
             SetSelected();
-            ResetCountdown();
+            Select();
+            //CountDownToDecision();
+            //ResetCountdown();
         }
         else if (!countingDown) {
             CountDownToDecision();
         }
-        SetMouseClicks();
+        
     }
 
     public void CountDownToDecision() {
@@ -130,9 +150,27 @@ public abstract class GameWorldSelector : MonoBehaviour {
     }
 
     public void SetMouseClicks() {
-        if (Input.GetMouseButtonUp(0)) {
-            mouseSelection.GetIsDoubleClick(out doubleClicks);
-        }
+        ////if (World.IsGamePaused()) {
+        //    lastMouseClickPosition = currentMouseClickPosition;
+        //    currentMouseClickPosition = MouseSelection.GetMouseCoords2D();
+        //    if (clicked) {
+        //        if (World.GetDistanceFromPositions2D(lastMouseClickPosition, currentMouseClickPosition) < 1f) {
+        //            doubleClicks = true;
+        //            print("double click baby");
+        //        } else {
+        //            print("clicks too far apart");
+        //        }
+        //    }
+        //    else {
+        //        doubleClicks = false;
+        //    }
+        //}
+        //else {
+            if (Input.GetMouseButtonUp(0)) {
+                mouseSelection.GetIsDoubleClick(out doubleClicks);
+            }
+        //}
+        //print(doubleClicks);
     }
 
     protected void Select() {
