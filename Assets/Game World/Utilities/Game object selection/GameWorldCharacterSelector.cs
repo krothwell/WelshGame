@@ -31,10 +31,12 @@ public class GameWorldCharacterSelector : GameWorldSelector {
                 print("enemy selected");
             }
             else if (abilityInRange) {
+                print("abilityConfirm");
                 abilityConfirm = true;
                 Select();
             }
         } else {
+            print("ability not selected");
             if (GetComponent<Character>().GetCombatController() != null) {
                 if (GetComponent<Character>().GetCombatController().GetCurrentEnemyTarget() == playerCharacter) {
                     playerCharacter.GetCombatController().SetCurrentEnemyTarget(GetComponent<Character>());
@@ -56,7 +58,7 @@ public class GameWorldCharacterSelector : GameWorldSelector {
             //clicked = true;
             QueueDecisionToRun();
         }
-        
+        print("end of set selected");
     }
 
     public void DisplayOutOfRange() {

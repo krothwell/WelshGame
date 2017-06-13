@@ -13,6 +13,7 @@ public abstract class Character : MonoBehaviour {
 
     //named in editor, this easily allows setting a new portrait and name to new npcs. It also allows
     //an easy way of checking the characters name and portrait have been loaded from db correctly.
+    public float maxSpeed;
     public Sprite CharacterPortrait;
     public string CharacterName;
     protected Character currentlySpeakingTo;

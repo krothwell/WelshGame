@@ -4,6 +4,11 @@ using UnityEngine.UI;
 using UnityEngine;
 
 public class InspectorUI : UIController {
+    private GameObject healthSlider;
+
+    void Start() {
+        healthSlider = GetPanel().GetComponentInChildren<Slider>().gameObject;
+    }
     //private bool isInspecting = false;
     //// Use this for initialization
     //bool isOnDisplay = true;
@@ -37,6 +42,20 @@ public class InspectorUI : UIController {
 
     public void SetInspectorPosition(Transform tf, float offset) {
         transform.position = new Vector2(tf.position.x, tf.position.y + offset);
+    }
+
+    public void SetInspectorHealth(Transform tf) {
+        print(tf);
+        CharCombatController combatController = tf.GetComponentInChildren<CharCombatController>();
+        if(combatController == null) {
+            healthSlider.SetActive(false);
+        }
+        else {
+            healthSlider.SetActive(true);
+            Slider mySlider = healthSlider.GetComponent<Slider>();
+            mySlider.maxValue = combatController.BaseHealth;
+            mySlider.value = combatController.Health;
+        }
     }
 
 }

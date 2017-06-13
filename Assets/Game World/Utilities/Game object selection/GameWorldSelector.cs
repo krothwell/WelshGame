@@ -68,6 +68,7 @@ public abstract class GameWorldSelector : MonoBehaviour {
                 myDecision = null;
             }
         }
+        EndInspection();
         clicked = false;
     }
 
@@ -134,8 +135,13 @@ public abstract class GameWorldSelector : MonoBehaviour {
     public void OnMouseUpAsButton() {
         SetMouseClicks();
         if (World.IsGamePaused()) {
-            SetSelected();
-            Select();
+            if (abilitySelected) {
+                SetSelected();
+            }
+            else {
+                SetSelected();
+                Select();
+            }
             //CountDownToDecision();
             //ResetCountdown();
         }

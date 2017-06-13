@@ -4,15 +4,26 @@ using UnityEngine;
 using GameUtilities;
 
 public abstract class CharCombatController : MonoBehaviour, IAttackable {
+    protected float health;
+    public float Health {
+        get { return health; }
+        set { health = value; }
+    }
+    public float BaseHealth;
     protected bool isInCombat;
     protected Animator myAnimator;
     public Character CurrentEnemyTarget;
     protected Character myCharacter;
     public List<Character> CharacterEnemyList;
-    public float BaseWeaponReach = 0.1f;
     private GameObject selectedAbility;
 
     // Use this for initialization
+
+    protected void Awake() {
+        if (health == 0) {
+            health = BaseHealth;
+        }
+    }
 
     public bool IsAttacking(Character characterIn) {
         return (CurrentEnemyTarget == characterIn) ? true : false;
@@ -62,8 +73,10 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
 
     public abstract void EndCombat(Character charIn);
 
-    public abstract void GetHit();
-
+    public abstract void GetHit(WorldDamage damage);
+    public void DeductHealth(WorldDamage damage) {
+        Health -= damage.CalculateDamage();
+    }
     protected void AddToEnemyList(Character charIn) {
         CharacterEnemyList.Add(charIn);
     }
@@ -76,5 +89,7 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
         selectedAbility = ability;
         //ability.transform.SetParent(transform, false);
     }
+
+    public abstract WorldDamage GetWeaponDamage();
 }
 

@@ -6,6 +6,11 @@ using UnityEngine;
 public class NPCCombatController : CharCombatController {
     public GameObject MyCombatStrategyPrefab;
     private CombatStrategy myCombatStrategy;
+    protected NPCWeaponItem myWeapon;
+
+    void Start() {
+        myWeapon = GetComponent<NPCWeaponItem>();
+    }
 
     void OnTriggerEnter2D(Collider2D incursionCollider) {
         if (incursionCollider.transform.name == "Perimeter") {
@@ -39,15 +44,19 @@ public class NPCCombatController : CharCombatController {
         }
     }
 
-    public override void GetHit() {
-        print(transform.parent + ": I got hit!");
+    public override void GetHit(WorldDamage damage) {
+        DeductHealth(damage);
+    }
 
+
+    public override WorldDamage GetWeaponDamage() {
+        WorldDamage wd = new WorldDamage();
+        wd.BaseWeaponDamage = myWeapon.BaseDamage;
+        return wd;
     }
 
     public override Vector2 GetWeaponReachXY() {
-        float xRange = BaseWeaponReach, yRange = BaseWeaponReach / 2.5f;
-        Vector2 weaponReach = new Vector2(xRange, yRange);
-        return  weaponReach;
+        return myWeapon.GetWeaponRange();
     }
 
     public override void EndCombat(Character charIn) {

@@ -7,7 +7,6 @@ public abstract class CharacterEffectAbility : CharAbility {
 
     public void SetTargetCharacter(Character characterTarget) {
         targetCharacter = characterTarget;
-        print(characterTarget);
         //myCharacter.GetCombatController().SetCurrentEnemyTarget(characterTarget);
         //myCharacter.MovementController.SetMyDirection(targetCharacter.GetMyPosition(), myCharacter.GetMyPosition());
     }

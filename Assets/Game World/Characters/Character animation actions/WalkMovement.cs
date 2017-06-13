@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
 public class WalkMovement : CharacterMovement {
-    private float walkSpeed;
 
     public override void MakeAction() {
         MyAnimator.SetBool("isWalking", true);

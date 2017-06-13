@@ -143,6 +143,7 @@
     <Compile Include="Assets\Game World\Characters\Character descisions\MoveToLocationDecision.cs" />
     <Compile Include="Assets\Game World\Characters\Character descisions\MoveToWorldItemDecision.cs" />
     <Compile Include="Assets\Game World\Characters\Character.cs" />
+    <Compile Include="Assets\Game World\Characters\IAttackable.cs" />
     <Compile Include="Assets\Game World\Characters\NPC combat strategies\Actions\CombatStrategy.cs" />
     <Compile Include="Assets\Game World\Characters\NPC combat strategies\Actions\CombatStrategyAbilityAction.cs" />
     <Compile Include="Assets\Game World\Characters\NPC combat strategies\Actions\CombatStrategyAction.cs" />
@@ -164,7 +165,8 @@
     <Compile Include="Assets\Game World\Characters\Player\UpperRightArmWearable.cs" />
     <Compile Include="Assets\Game World\Characters\Player\UpperRightLegWearable.cs" />
     <Compile Include="Assets\Game World\Characters\Player\UpperTorsoWearable.cs" />
-    <Compile Include="Assets\Game World\IAttackable.cs" />
+    <Compile Include="Assets\Game World\Damage\DamageModifier.cs" />
+    <Compile Include="Assets\Game World\Damage\WorldDamage.cs" />
     <Compile Include="Assets\Game World\QuestController\Quests\Quest activators\StartDialogue.cs" />
     <Compile Include="Assets\Game World\QuestController\Quests\Quest parts\QuestTaskPart.cs" />
     <Compile Include="Assets\Game World\QuestController\Quests\Quest parts\TaskPartGetSkillPoint.cs" />
@@ -186,6 +188,7 @@
     <Compile Include="Assets\Game World\WorldItems\ItemTypes\FeetItem.cs" />
     <Compile Include="Assets\Game World\WorldItems\ItemTypes\HeadItem.cs" />
     <Compile Include="Assets\Game World\WorldItems\ItemTypes\LeggingsItem.cs" />
+    <Compile Include="Assets\Game World\WorldItems\ItemTypes\NPCWeaponItem.cs" />
     <Compile Include="Assets\Game World\WorldItems\ItemTypes\ShieldItem.cs" />
     <Compile Include="Assets\Game World\WorldItems\ItemTypes\WeaponItem.cs" />
     <Compile Include="Assets\Game World\WorldItems\ItemTypes\WorldItem.cs" />
@@ -193,6 +196,7 @@
     <Compile Include="Assets\GameInitialiser.cs" />
     <Compile Include="Assets\NightLight.cs" />
     <Compile Include="Assets\NotificationQueue.cs" />
+    <Compile Include="Assets\PlayerVitalsUI.cs" />
     <Compile Include="Assets\TimeOfDayController.cs" />
     <Compile Include="Assets\UI\Data UI\DataUIController.cs" />
     <Compile Include="Assets\UI\Data UI\Dialogue UI\Char Dialogues List UI\Add Char Dialogues UI\AddCharDialogueBtn.cs" />

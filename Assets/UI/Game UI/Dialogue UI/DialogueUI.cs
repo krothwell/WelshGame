@@ -36,12 +36,12 @@ namespace GameUI {
         List<Character> dialogueQueue;
         CharAbility queuedAbility;
     	Text percentageTxt, btnTxt;
-        GameObject submitBtn;
+        GameObject submitBtn, dialogueReason;
         CombatUI combatUI;
         Animator animator;
         QuestsUI questsUI;
         NewWelshLearnedUI newWelshLearnedUI;
-        Image objPortrait;
+        Image objPortrait, reasonImg;
         protected RectTransform contentPanel;
 
         public GameObject 
@@ -77,7 +77,9 @@ namespace GameUI {
             playerCharacter = FindObjectOfType<PlayerCharacter>();
             panel = transform.Find("Panel").gameObject;
             submitBtn = panel.transform.Find("SubmitBtn").gameObject;
-            percentageTxt = panel.transform.Find("TestResultsBtn").GetComponent<Text>();
+            dialogueReason = panel.transform.Find("DialogueReason").gameObject;
+            percentageTxt = dialogueReason.transform.Find("TestResult").GetComponent<Text>();
+            reasonImg = dialogueReason.transform.Find("Symbol").GetComponent<Image>();
             combatUI = FindObjectOfType<CombatUI>();
             btnTxt = submitBtn.transform.Find("Text").gameObject.GetComponent<Text>();
             playerCharacter = FindObjectOfType<PlayerCharacter>();
@@ -212,6 +214,10 @@ namespace GameUI {
 
         public void SetCurrentPortrait() {
             SetObjectPortrait(currentPortrait);
+        }
+
+        public void SetObjectPortrait(Sprite portrait) {
+            objPortrait.sprite = portrait;
         }
 
         private void DisplayNodeChoices(string nodeID) {
@@ -349,6 +355,9 @@ namespace GameUI {
 
         public void SetInUse() {
             animator.SetBool("InUse", true);
+            percentageTxt.text = "";
+            combatUI.HideAbilities();
+            combatUI.HideUnderAttack();
         }
 
 
@@ -380,6 +389,7 @@ namespace GameUI {
                 if (currentInputField.Submitted) {
                     SetNotInUse();
                     combatUI.UseSelectedAbility();
+                    combatUI.DisplayUnderAttack();
                     
                 }
                 else {
@@ -392,9 +402,7 @@ namespace GameUI {
             } 
         }
     
-        public void SetObjectPortrait(Sprite portrait) {
-            objPortrait.sprite = portrait;
-        }
+
 
         public void MarkDialogueComplete(string choiceID) {
             bool isDialogueComplete = Convert.ToBoolean(DbCommands.GetCountFromTable("PlayerChoices", "ChoiceIDs = " + choiceID + " AND MarkDialogueCompleted = 1"));
@@ -475,6 +483,10 @@ namespace GameUI {
             }
         }
 
+        public void SetDialogueReasonSymbol(Sprite symbol) {
+            reasonImg.sprite = symbol;
+        }
+
         public int GetChoiceResultsCount(string choiceID) {
             int countChoiceResults = DbCommands.GetCountFromTable("PlayerChoiceResults", "ChoiceIDs = " + choiceID);
             return countChoiceResults;
@@ -484,6 +496,8 @@ namespace GameUI {
             queuedAbility = ability;
             EnableSubmitBtn();
             SetSubmitBtnText("Submit answer");
+            SetObjectPortrait(playerCharacter.GetCombatController().GetCurrentEnemyTarget().CharacterPortrait);
+            SetDialogueReasonSymbol(ability.myIcon);
             SetNewDialogueHolder();
             InsertSpacer();
             TestTrigger testTrigger = new TestTrigger(ability.GetMyName(), ability.GetMyIcon(), TestTrigger.TriggerType.Ability);
@@ -500,6 +514,7 @@ namespace GameUI {
         }
 
         public void DisplayTestResult() {
+            print("display test result???");
             SkillsResultsUI skillsResultsUI = FindObjectOfType<SkillsResultsUI>();
             if (currentDialogueTestData != null) {
                 skillsResultsUI.DisplayResults(currentDialogueTestData);

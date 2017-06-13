@@ -13,6 +13,7 @@ public abstract class Inspector : MonoBehaviour {
     public void Inspect() {
         SetInspectorText();
         inspectorUI.SetInspectorPosition(transform, yOffset);
+        inspectorUI.SetInspectorHealth(transform);
         inspectorUI.DisplayComponents();
     }
 

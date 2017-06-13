@@ -31,7 +31,6 @@ public abstract class CharAbility : MonoBehaviour {
         CharAbilityAction myAction = Instantiate(MyActionPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as CharAbilityAction;
         myAction.transform.SetParent(myCharacter.transform, false);
         myAction.MyAnimator = myCharacter.GetMyAnimator();
-        print(myAction.MyAnimator);
         myAction.MakeAction(); //The animation will begin
     }
 

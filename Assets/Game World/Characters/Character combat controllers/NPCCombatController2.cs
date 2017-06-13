@@ -57,8 +57,12 @@ public class NPCCloseCombatController2 : CharCombatController {
        
     }
 
-    public override void GetHit() {
+    public override void GetHit(WorldDamage damage) {
+        throw new NotImplementedException();
+    }
 
+    public override WorldDamage GetWeaponDamage() {
+        throw new NotImplementedException();
     }
 
     public override void EndCombat(Character charIn) {

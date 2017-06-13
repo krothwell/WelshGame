@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class WeaponItem : EquipableWorldItemWithSingleSprite {
     public float WeaponRangeX = 0.1f;
+    public float BaseDamage;
+    public DamageModifier[] DamageModifiers;
 
     public Vector2 GetWeaponRange () {
-        return new Vector2(WeaponRangeX, WeaponRangeX/2.5f);
+        return new Vector2(WeaponRangeX, WeaponRangeX * 0.8f);
     }
 
     void Awake() {

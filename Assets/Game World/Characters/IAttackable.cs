@@ -1,6 +1,6 @@
 ﻿interface IAttackable {
 
-    void GetHit();
+    void GetHit(WorldDamage damage);
 
     void TriggerCombat(Character charIn);
 

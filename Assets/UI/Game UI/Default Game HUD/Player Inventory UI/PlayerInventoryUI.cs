@@ -12,7 +12,6 @@ namespace GameUI {
     /// </summary>
     public class PlayerInventoryUI : UIController {
         GameObject items;
-        GameObject panel;
         GameObject selectedItem;
         private PlayerEquipmentSlot[] equipmentSlots;
         private Dictionary<WorldItems.WorldItemTypes, WorldItem> equippedDict;
@@ -21,8 +20,7 @@ namespace GameUI {
 
         void Awake() {
             equippedDict = new Dictionary<WorldItems.WorldItemTypes, WorldItem>();
-            panel = transform.Find("Panel").gameObject;
-            items = panel.transform.Find("ItemSlots").gameObject;
+            items = GetPanel().transform.Find("ItemSlots").gameObject;
         }
         void Start() {
             ui = GameObject.Find("UI");
@@ -36,7 +34,7 @@ namespace GameUI {
         }
 
         public void OpenInventory() {
-            panel.SetActive(true);
+            GetPanel().SetActive(true);
         }
 
         public void CloseInventory() {

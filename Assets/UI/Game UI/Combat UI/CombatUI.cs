@@ -22,16 +22,19 @@ namespace GameUI {
         NPCs npcController;
         AbilitiesUI abilitiesUI;
         UnderAttackUI underAttackUI;
+        PlayerVitalsUI playerVitalsUI;
         // Use this for initialization
         void Start() {
             abilitiesUI = FindObjectOfType<AbilitiesUI>();
             underAttackUI = FindObjectOfType<UnderAttackUI>();
+            playerVitalsUI = FindObjectOfType<PlayerVitalsUI>();
             dialogueUI = FindObjectOfType<DialogueUI>();
             npcController = FindObjectOfType<NPCs>();
             //currentAbility = CombatAbilities.passive;
             playerCharacter = FindObjectOfType<PlayerCharacter>();
             SelectedAbilityOption = "selectedAbilityOption";
             CreateSelectionToggleGroup(SelectedAbilityOption);
+
         }
 
         // Update is called once per frame
@@ -45,6 +48,7 @@ namespace GameUI {
 
         public void ToggleCombatMode() {
             if (combatUIactive) {
+                DeselectAbility();
                 abilitiesUI.HideComponents();
                 World.UnpauseGame();
                 combatUIactive = false;
@@ -56,6 +60,7 @@ namespace GameUI {
                 World.PauseGame();
                 abilitiesUI.DisplayComponents();
                 underAttackUI.DisplayComponents();
+                playerVitalsUI.DisplayComponents();
                 combatUIactive = true;
                 pendingDecision = null;
             }
@@ -64,6 +69,23 @@ namespace GameUI {
         public void HideUnderAttack() {
             underAttackUI.HideComponents();
         }
+
+        public void HidePlayerVitals() {
+            playerVitalsUI.HideComponents();
+        }
+
+        public void DisplayUnderAttack() {
+            underAttackUI.DisplayComponents();
+        }
+
+        public void DisplayAbilities() {
+            abilitiesUI.DisplayComponents();
+        }
+
+        public void HideAbilities() {
+            abilitiesUI.HideComponents();
+        }
+
 
         public void AddToUnderAttack(Character charIn) {
             underAttackUI.InsertAttacker(charIn);
@@ -107,10 +129,13 @@ namespace GameUI {
         }
 
         public void UseSelectedAbility() {
+            print("using selected ability: " + currentAbility);
             if (currentAbility != null) {
-                ToggleCombatMode();
+                
+                
                 currentAbility.UseAbility();
-                DeselectAbility();
+                ToggleCombatMode();
+                //DeselectAbility();
                 //print(playerCharacter.GetCurrentSelection());
                 //playerCharacter.GetCurrentSelection().EndCurrentSelection();
             }
@@ -123,6 +148,10 @@ namespace GameUI {
 
         public CharAbility GetCurrentAbility() {
             return currentAbility;
+        }
+
+        public void SetPlayerHealthDisplay(float value) {
+            playerVitalsUI.SetHealth(value);
         }
 
         public void SetAttackCursor() {

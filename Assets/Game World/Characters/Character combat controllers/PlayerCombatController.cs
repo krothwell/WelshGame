@@ -12,13 +12,19 @@ public class PlayerCombatController : CharCombatController {
     PlayerCharacter character;
     public CombatStateAction CombatStateActionPrefab;
     private CombatStateAction combatStateAction;
+    protected WeaponItem myWeapon;
 
-    void Awake() {
+    new void Awake() {
         combatui = FindObjectOfType<CombatUI>();
         character = FindObjectOfType<PlayerCharacter>();
         inventory = FindObjectOfType<PlayerInventoryUI>();
-        
-        
+        base.Awake();
+    }
+    public override WorldDamage GetWeaponDamage() {
+        WeaponItem weapon = (inventory.GetItemFromEquippedDict(WorldItems.WorldItemTypes.WeaponWearable) as WeaponItem);
+        WorldDamage wd = new WorldDamage();
+        wd.BaseWeaponDamage = weapon.BaseDamage;
+        return wd;
     }
 
     public void setSelectedEnemy(GameObject enemy) {
@@ -40,8 +46,10 @@ public class PlayerCombatController : CharCombatController {
         combatui.ToggleCombatMode();
     }
 
-    public override void GetHit() {
-        print("Player hit!");
+    public override void GetHit(WorldDamage damage) {
+        DeductHealth(damage);
+        print(health);
+        combatui.SetPlayerHealthDisplay(health);
     }
 
     public override void EndCombat(Character charIn) {
@@ -53,22 +61,18 @@ public class PlayerCombatController : CharCombatController {
                 ToggleInCombat(false);
                 combatStateAction.StopAction();
                 combatui.HideUnderAttack();
+                combatui.HidePlayerVitals();
             }
         }
     }
 
     public override Vector2 GetWeaponReachXY() {
-        WeaponItem weapon = (inventory.GetItemFromEquippedDict(WorldItems.WorldItemTypes.WeaponWearable) as WeaponItem);
-        float xRange = BaseWeaponReach, yRange = BaseWeaponReach/2.5f;
-        if (weapon != null) {
-            Vector2 weaponRange = (weapon.GetWeaponRange());
-            xRange += weaponRange.x;
-            yRange += weaponRange.y;
+        myWeapon = (inventory.GetItemFromEquippedDict(WorldItems.WorldItemTypes.WeaponWearable) as WeaponItem);
+        if (myWeapon == null) {
+            return new Vector2(0f, 0f);
+        } else { 
+            return myWeapon.GetWeaponRange();
         }
-        Vector2 reach = new Vector2(xRange, yRange);
-        //print(reach);
-        return reach;
-        //return weaponRange + BaseWeaponReach;
     }
 
     public bool IsCharacterEnemy(Character characterIn) {
