@@ -4,6 +4,7 @@ using DataUI.ListItems;
 using DbUtilities;
 using DataUI.Utilities;
 
+
 namespace DataUI {
     /// <summary>
     /// Responsible for menus to add new translations and related data (grammar 
@@ -16,338 +17,39 @@ namespace DataUI {
     /// this class or children of this class.
     /// </summary>
     public class TranslationUI : UIController {
-        //high level cross cutting objects and holders
-
-        //Grammar rules
-        GameObject grammarListUI, grammarListUIpanel, grammarList,
-                   submitNewGrammarRule, activateGrammarDetailsBtn,
-                   grammarRule, activeRule;
-        public GameObject newGrammarRulePanel,
-                          grammarRulePrefab;
-        InputField inputRuleSdescTxt, inputRuleLdescTxt;
-        Button grammarRulesBtn;
-        Text viewGrammarDetailsBtnText;
-        public bool editingRule = false;
-
-        //proficienies
-        GameObject proficienciesListUI, proficienciesListUIpanel, proficienciesList,
-                   submitNewProficiency, newProficiencyPanel, activateNewProficiencyBtn,
-                   proficiency;
-        public GameObject proficiencyPrefab;
-        InputField inputProficiencyTxt, inputThresholdTxt;
-        Button proficienciesBtn;
-
-        //translations
-        GameObject translationListsUI, translationListsUIpanel, vocabTranslationList,
-                   submitNewTranslation, newTranslationPanel, activateNewTranslationBtn,
-                   translation;
-        public GameObject translationPrefab;
-        InputField inputTranslationEnTxt, inputTranslationCyTxt;
-        InputField searchTranslations;
-        string selectedEnglishText;
-        string selectedWelshText;
-        float searchWait = 0f;
-        bool searchCountDown = false;
-        int translationSelectInt = 0;
-        string auxiliaryDataMenusGroup;
-
+        Button grammarRulesBtn, proficienciesBtn;
+        GrammarListUI grammarListUI;
+        ProficienciesListUI proficienciesListUI;
+        public string SideMenuGroup;
         void Start() {
-
-            //GRAMMAR UI
-            grammarListUI = GetPanel().transform.Find("GrammarListUI").gameObject;
-            grammarRulesBtn = grammarListUI.transform.Find("GrammarRulesBtn").gameObject.GetComponent<Button>();
-            grammarListUIpanel = grammarListUI.transform.Find("Panel").gameObject;
-            grammarList = grammarListUIpanel.GetComponentInChildren<GridLayoutGroup>().gameObject;
-            //adding and editing
-            submitNewGrammarRule = grammarListUIpanel.transform.Find("SubmitNewRule").gameObject;
-            activateGrammarDetailsBtn = submitNewGrammarRule.transform.Find("ActivateNewRuleBtn").gameObject;
-            newGrammarRulePanel = submitNewGrammarRule.transform.Find("NewRulePanel").gameObject;
-            inputRuleSdescTxt = newGrammarRulePanel.transform.Find("InputShortDescriptionText").GetComponent<InputField>();
-            inputRuleLdescTxt = newGrammarRulePanel.transform.Find("InputLongDescriptionText").GetComponent<InputField>();
-            viewGrammarDetailsBtnText = activateGrammarDetailsBtn.GetComponent<Text>();
-
-            //PROFICIENCIES UI
-            proficienciesListUI = GetPanel().transform.Find("ProficienciesListUI").gameObject;
+            grammarListUI = GetPanel().GetComponentInChildren<GrammarListUI>();
+            proficienciesListUI = GetPanel().GetComponentInChildren<ProficienciesListUI>();
+            SideMenuGroup = "SideMenuGroup";
+            CreateNewMenuToggleGroup(SideMenuGroup);
             proficienciesBtn = proficienciesListUI.transform.Find("ProficienciesBtn").gameObject.GetComponent<Button>();
-            proficienciesListUIpanel = proficienciesListUI.transform.Find("Panel").gameObject;
-            proficienciesList = proficienciesListUIpanel.GetComponentInChildren<GridLayoutGroup>().gameObject;
-            //adding
-            submitNewProficiency = proficienciesListUIpanel.transform.Find("SubmitNewProficiency").gameObject;
-            newProficiencyPanel = submitNewProficiency.transform.Find("NewProficiencyPanel").gameObject;
-            activateNewProficiencyBtn = submitNewProficiency.transform.Find("ActivateNewProficiencyBtn").gameObject;
-            inputProficiencyTxt = newProficiencyPanel.transform.Find("InputProficiency").GetComponent<InputField>();
-            inputThresholdTxt = newProficiencyPanel.transform.Find("ThresholdInput").GetComponent<InputField>();
-
-            //TRANSLATIONS UI
-            translationListsUI = GetPanel().transform.Find("TranslationListsUI").gameObject;
-            translationListsUIpanel = translationListsUI.transform.Find("Panel").gameObject;
-            vocabTranslationList = translationListsUIpanel.GetComponentInChildren<VerticalLayoutGroup>().gameObject;
-            //adding
-            submitNewTranslation = translationListsUIpanel.transform.Find("SubmitNewTranslation").gameObject;
-            activateNewTranslationBtn = submitNewTranslation.transform.Find("ActivateNewTranslationBtn").gameObject;
-            newTranslationPanel = submitNewTranslation.transform.Find("NewTranslationPanel").gameObject;
-            inputTranslationEnTxt = newTranslationPanel.transform.Find("EnglishVocab").GetComponent<InputField>();
-            inputTranslationCyTxt = newTranslationPanel.transform.Find("WelshVocab").GetComponent<InputField>();
-            //searching
-            searchTranslations = translationListsUIpanel.transform.Find("SearchTranslations").GetComponent<InputField>();
-
-            auxiliaryDataMenusGroup = "AuxiliaryDataMenus";
-            CreateNewMenuToggleGroup(auxiliaryDataMenusGroup);
-
-            CreateNewMenuToggleGroup(auxiliaryDataMenusGroup);
-
-            FillDisplayFromDb(DbCommands.GetTranslationsDisplayQry(), vocabTranslationList.transform, BuildVocabTranslation);
+            grammarRulesBtn = grammarListUI.transform.Find("GrammarRulesBtn").gameObject.GetComponent<Button>();
         }
 
-        void Update() {
-            if (searchCountDown) {
-                searchWait -= Time.deltaTime;
-                if (searchWait <= 0) {
-                    SearchTranslationNow();
-                    searchCountDown = false;
-                }
-            }
-        }
-
-        public void ActivateGrammarRulesMenu(string englishTxt = null, string welshTxt = null) {
-            if (!grammarListUIpanel.activeSelf) {
-                ToggleMenuTo(grammarListUI.GetComponent<UIController>(), auxiliaryDataMenusGroup);
+        public void ToggleSideMenu() {
+            if (grammarListUI.GetPanel().activeSelf) {
+                ToggleMenuTo(proficienciesListUI.GetComponent<UIController>(), SideMenuGroup);
+                Proficiency proficiency = (Proficiency)(proficienciesListUI.GetSelectedItemFromGroup(proficienciesListUI.SelectedProficiency));
                 proficienciesBtn.colors.normalColor.Equals(Colours.colorDataUItxt);
                 grammarRulesBtn.colors.normalColor.Equals(Colours.colorDataUIbtn);
-                FillDisplayFromDb(DbQueries.GetGrammarRuleDisplayQry(englishTxt,welshTxt),
-                            grammarList.transform,
-                            BuildRule,
-                            englishTxt,
-                            welshTxt);
+                FillDisplayFromDb(DbCommands.GetProficienciesDisplayQry(), proficienciesListUI.ProficienciesList.transform, proficienciesListUI.BuildProficiency);
             }
             else {
-                print("Activate grammar rules");
-                FillDisplayFromDb(DbQueries.GetGrammarRuleDisplayQry(englishTxt, welshTxt),
-                            grammarList.transform,
-                            BuildRule,
-                            englishTxt,
-                            welshTxt);
-            }
-        }
-
-        public void ActivateGrammarRulesBtnClick() {
-            ActivateGrammarRulesMenu();
-        }
-
-        public void SetActiveRule(GameObject rule) {
-            activeRule = rule;
-        }
-
-        public void SetActiveRuleEdit() {
-            viewGrammarDetailsBtnText.text = "Edit rule";
-            editingRule = true;
-            ActivateNewRule();
-        }
-
-
-        public void ActivateProficiencyMenu() {
-            if (!proficienciesListUIpanel.activeSelf) {
-                ToggleMenuTo(proficienciesListUI.GetComponent<UIController>(), auxiliaryDataMenusGroup);
-                grammarRulesBtn.colors.normalColor.Equals(Colours.colorDataUItxt);
+                ToggleMenuTo(grammarListUI.GetComponent<UIController>(), SideMenuGroup);
+                Translation translation = (Translation)(grammarListUI.GetSelectedItemFromGroup(grammarListUI.TranslationSelected));
                 proficienciesBtn.colors.normalColor.Equals(Colours.colorDataUIbtn);
-                FillDisplayFromDb(DbCommands.GetProficienciesDisplayQry(), proficienciesList.transform, BuildProficiency);
+                grammarRulesBtn.colors.normalColor.Equals(Colours.colorDataUItxt);
+                FillDisplayFromDb(DbQueries.GetGrammarRuleDisplayQry(translation.CurrentEnglish, translation.CurrentWelsh),
+                    grammarListUI.GrammarList.transform,
+                    grammarListUI.BuildRule,
+                    translation.CurrentEnglish,
+                    translation.CurrentWelsh
+                );
             }
         }
-
-        //Display a panel to add or edit a new grammar rule 
-        public void ActivateNewRule() {
-            newGrammarRulePanel.SetActive(true);
-            activateGrammarDetailsBtn.GetComponent<Button>().colors.normalColor.Equals(Colours.colorDataUItxt); //indicate to user that button no longer functions.
-            if (editingRule) {
-                string[] ruleDesc = DbCommands.GetTupleFromTable("VocabGrammar",
-                    "RuleIDs = " + activeRule.GetComponent<GrammarRule>().RuleNumber + ";");
-                inputRuleSdescTxt.text = ruleDesc[1];
-                inputRuleLdescTxt.text = ruleDesc[2];
-            }
-        }
-
-        //Display a panel to add a new translation 
-        public void ActivateNewTranslation() {
-            newTranslationPanel.SetActive(true);
-            activateNewTranslationBtn.GetComponent<Button>().colors.normalColor.Equals(Colours.colorDataUItxt); //indicate to user that button no longer functions.
-        }
-
-        //Display a panel to add a new proficiency 
-        public void ActivateNewProficiency() {
-            newProficiencyPanel.SetActive(true);
-            activateNewProficiencyBtn.GetComponent<Button>().colors.normalColor.Equals(Colours.colorDataUItxt); //indicate to user that button no longer functions.
-        }
-
-        public void DeactivateNewTranslation() {
-            newTranslationPanel.SetActive(false);
-            activateNewTranslationBtn.GetComponent<Button>().colors.normalColor.Equals(Colours.colorDataUIbtn); //indicate to user that button is functioning.
-        }
-
-        public void DeactivateNewGrammarRule() {
-            inputRuleSdescTxt.text = inputRuleLdescTxt.text = "";
-            viewGrammarDetailsBtnText.text = "New rule";
-            editingRule = false;
-            newGrammarRulePanel.SetActive(false);
-            activateGrammarDetailsBtn.GetComponent<Button>().colors.normalColor.Equals(Colours.colorDataUIbtn); //indicate to user that button is functioning.
-
-        }
-
-        public void DeactivateNewProficiency() {
-            newProficiencyPanel.SetActive(false);
-            activateNewProficiencyBtn.GetComponent<Button>().colors.normalColor.Equals(Colours.colorDataUIbtn); //indicate to user that button is functioning.
-        }
-
-        public void InsertTranslation() {
-            DbCommands.InsertTupleToTable("EnglishVocab", inputTranslationEnTxt.text);
-            DbCommands.InsertTupleToTable("WelshVocab", inputTranslationCyTxt.text);
-            DbCommands.InsertTupleToTable("VocabTranslations", inputTranslationEnTxt.text, inputTranslationCyTxt.text);
-            FillDisplayFromDb(DbCommands.GetTranslationsDisplayQry(), vocabTranslationList.transform, BuildVocabTranslation);
-            searchTranslations.text = inputTranslationEnTxt.text;
-            SearchTranslationNow();
-            inputTranslationEnTxt.text = "";
-            inputTranslationCyTxt.text = "";
-            
-        }
-
-        public void UpdateInsertRule() {
-            if ((inputRuleSdescTxt.text != null) && (inputRuleSdescTxt.text != "")) {
-                if (editingRule) {
-                    string[,] fieldVals = new string[,] {
-                                                { "ShortDescriptions", inputRuleSdescTxt.text },
-                                                { "LongDescriptions", inputRuleLdescTxt.text },
-                                            };
-                    print(activeRule);
-                    print(editingRule);
-                    DbCommands.UpdateTableTuple("VocabGrammar", "RuleIDs = " + activeRule.GetComponent<GrammarRule>().RuleNumber, fieldVals);
-                    activeRule.GetComponent<GrammarRule>().UpdateRuleDisplay(inputRuleSdescTxt.text);
-                }
-                else {
-                    string ruleID = DbCommands.GenerateUniqueID("VocabGrammar", "RuleIDs", "RuleID");
-                    DbCommands.InsertTupleToTable("VocabGrammar", ruleID, inputRuleSdescTxt.text, inputRuleLdescTxt.text);
-                    FillDisplayFromDb(DbQueries.GetGrammarRuleDisplayQry(), grammarList.transform, BuildRule);
-                }
-            }
-
-        }
-
-        public void InsertProficiency() {
-            if ((inputProficiencyTxt.text != null) && (inputProficiencyTxt.text != "")) {
-                DbCommands.InsertTupleToTable("Proficiencies", inputProficiencyTxt.text, inputThresholdTxt.text);
-                FillDisplayFromDb(DbCommands.GetProficienciesDisplayQry(), proficienciesList.transform, BuildProficiency);
-                inputProficiencyTxt.text = "";
-                inputThresholdTxt.text = "";
-            }
-        }
-
-        public void FillRulesNotSelected() {
-            FillDisplayFromDb(DbQueries.GetGrammarRuleDisplayQry(), grammarList.transform, BuildRule);
-        }
-
-        private Transform BuildVocabTranslation(string[] strArray) {
-            string EnStr = strArray[0];
-            string CyStr = strArray[1];
-            translation = Instantiate(translationPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
-            translation.transform.Find("EnglishVocab").GetComponent<InputField>().text = EnStr;
-            translation.transform.Find("WelshVocab").GetComponent<InputField>().text = CyStr;
-            translation.GetComponent<Translation>().CurrentEnglish = EnStr;
-            translation.GetComponent<Translation>().CurrentWelsh = CyStr;
-            //translation.transform.SetParent(translations.transform, false);
-            return translation.transform;
-        }
-
-        public Transform BuildRule(string[] strArray) {
-            string ruleID = strArray[0];
-            string descriptionStr = strArray[1];
-            int translationRule = int.Parse(strArray[2]);
-            grammarRule = Instantiate(grammarRulePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
-            grammarRule.transform.Find("DescriptionInput").GetComponent<InputField>().text = descriptionStr;
-            if (TranslationSelected()) {
-                if (translationRule == 1) {
-                    grammarRule.GetComponent<GrammarRule>().ActivateAddRule(true);
-                }
-                else {
-                    grammarRule.GetComponent<GrammarRule>().ActivateAddRule(false);
-                }
-            }
-            grammarRule.transform.Find("RuleNumber").GetComponent<Text>().text = ruleID;
-            grammarRule.GetComponent<GrammarRule>().CurrentDescription = descriptionStr;
-            grammarRule.GetComponent<GrammarRule>().RuleNumber = ruleID;
-            //grammarRule.transform.SetParent(ruleList.transform, false);
-            return grammarRule.transform;
-        }
-
-        private Transform BuildProficiency(string[] strArray) {
-            string proficiencyStr = (strArray[0]);
-            string thresholdStr = (strArray[1]);
-            proficiency = Instantiate(proficiencyPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
-            proficiency.transform.Find("ProficiencyText").GetComponent<InputField>().text = proficiencyStr;
-            proficiency.transform.Find("ThresholdInput").GetComponent<InputField>().text = thresholdStr;
-            proficiency.GetComponent<Proficiency>().CurrentProficiencyName = proficiencyStr;
-            proficiency.GetComponent<Proficiency>().CurrentThreshold = int.Parse(thresholdStr);
-            //proficiency.transform.SetParent(proficiencyThresholds.transform, false);
-            return proficiency.transform;
-        }
-
-        private int GetDefaultProficiencyThreshold() {
-            int defaultProficiencyThreshold = (GameObject.FindObjectsOfType<Proficiency>().Length - 1) * 10;
-            return defaultProficiencyThreshold;
-
-        }
-
-        public void EmptyRulesDisplayExcept(int exception) {
-            foreach (Transform item in grammarList.transform) {
-                if (int.Parse(item.gameObject.GetComponent<GrammarRule>().RuleNumber) != exception) {
-                    Destroy(item.gameObject);
-                }
-            }
-        }
-
-        public void SearchTranslations() {
-            searchWait = 0.5f;
-            searchCountDown = true;
-        }
-
-        private void SearchTranslationNow() {
-            if (searchTranslations.text == "") {
-                FillDisplayFromDb(DbCommands.GetTranslationsDisplayQry(), vocabTranslationList.transform, BuildVocabTranslation);
-            } else { 
-                string searchText = "%" + searchTranslations.text + "%";
-                string sqlqry = DbQueries.GetTranslationSearchQry(searchText);
-                FillDisplayFromDb(sqlqry, vocabTranslationList.transform, BuildVocabTranslation, searchText);
-            }
-        }
-
-        public void SetTranslationSelectedProperties(int selectionInt, string englishTxt = null, string welshTxt = null) {
-            translationSelectInt += selectionInt;
-            if (englishTxt != null) {
-                selectedEnglishText = englishTxt;
-            }
-            if (welshTxt != null) {
-                selectedWelshText = welshTxt;
-            }
-        }
-
-        public bool TranslationSelected() {
-            return translationSelectInt > 0 ? true : false;
-        }
-
-        public string GetSelectedWelshText() {
-            if (TranslationSelected()) {
-                return selectedWelshText;
-            }
-            else {
-                return null;
-            }
-        }
-
-        public string GetSelectedEnglishText() {
-            if (TranslationSelected()) {
-                return selectedEnglishText;
-            }
-            else {
-                return null;
-            }
-        }
-
     }
 }

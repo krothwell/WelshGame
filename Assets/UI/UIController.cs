@@ -9,7 +9,7 @@ using UnityUtilities;
 /// by retrieving data from the database and default methods to display menus
 /// and other UI related components.
 /// </summary>
-public class UIController : MonoBehaviour {
+public abstract class UIController : MonoBehaviour {
     protected GameObject panel;
     /// <summary>
     /// The menu toggle groups dictionary provides a consistent approach when displaying a UI menu where only one
@@ -72,7 +72,7 @@ public class UIController : MonoBehaviour {
     }
 
     public void EmptyDisplay(Transform display) {
-        print(display);
+        //print(display);
         foreach (Transform item in display) {
             //print("Should destroy " + item);
             Destroy(item.gameObject);
@@ -156,6 +156,7 @@ public class UIController : MonoBehaviour {
     }
 
     public ISelectableUI GetSelectedItemFromGroup(string groupName) {
+        print(groupName);
         return selectionToggleGroups[groupName];
     }
 
@@ -168,7 +169,7 @@ public class UIController : MonoBehaviour {
     }
 
     public void ToggleSelectionTo(ISelectableUI selection, string inGroup) {
-        Debugging.PrintDictionary(selectionToggleGroups);
+        //Debugging.PrintDictionary(selectionToggleGroups);
         if (GetSelectedItemFromGroup(inGroup) != null) {
             if (!GetSelectedItemFromGroup(inGroup).Equals(null)) {
                 if (GetSelectedItemFromGroup(inGroup) != selection) {

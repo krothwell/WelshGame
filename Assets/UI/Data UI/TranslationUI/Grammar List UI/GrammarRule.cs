@@ -8,7 +8,8 @@ using UnityUtilities;
 namespace DataUI {
     namespace ListItems {
         public class GrammarRule : MonoBehaviour {
-            TranslationUI translationUI;
+            VocabTranslationListUI vocabTranslationListUI;
+            GrammarListUI grammarListUI;
             private string currentDescription;
             public string CurrentDescription {
                 get { return currentDescription; }
@@ -34,27 +35,11 @@ namespace DataUI {
 
             // Use this for initialization
             void Start() {
-                translationUI = GameObject.FindObjectOfType<TranslationUI>().GetComponent<TranslationUI>();
+                grammarListUI = FindObjectOfType<GrammarListUI>();
+                vocabTranslationListUI = FindObjectOfType<VocabTranslationListUI>();
                 ruleOptions = gameObject.transform.Find("RuleOptions").gameObject;
                 descriptionInput = gameObject.transform.Find("DescriptionInput").gameObject;
-            }
-
-            void Update() {
-                SetSelectionOfTranslationOnClick();
-            }
-
-            public void SetSelectionOfTranslationOnClick() {
-                if (Input.GetMouseButtonUp(0)) {
-                    if (MouseSelection.IsClickedDifferentGameObjectTo(this.gameObject)) {
-                        //if a rule is not being edited then the rule list is refreshed.
-                        if (!translationUI.editingRule) {
-                            if (ruleOptions.activeSelf) {
-                                DeactivateRuleOptions();
-                                translationUI.ActivateGrammarRulesMenu();
-                            }
-                        }
-                    }
-                }
+                
             }
 
             public void ToggleInsertRemoveToRuleList() {
@@ -65,19 +50,20 @@ namespace DataUI {
                     InsertToRuleList();
                 }
             }
+
             public void InsertToRuleList() {
-                string welsh = translationUI.GetSelectedWelshText();
-                string english = translationUI.GetSelectedEnglishText();
-                Debug.Log(welsh);
-                DbCommands.InsertTupleToTable("VocabRuleList", english, welsh, RuleNumber);
+                string welsh = vocabTranslationListUI.CurrentTranslation.CurrentEnglish;
+                string english = vocabTranslationListUI.CurrentTranslation.CurrentWelsh; ;
+                DbCommands.InsertTupleToTable("VocabRuleList", english, welsh, ruleNumber);
                 addRuleBtn.GetComponent<Text>().text = "Remove";
                 Image btnImg = gameObject.transform.Find("DescriptionInput").GetComponent<Image>();
                 btnImg.color = Color.green;
                 IsAssignedToSelectedTranslation = true;
             }
 
+
             public void DeleteFromRuleList() {
-                string[,] ruleFields = new string[,] { { "WelshText", translationUI.GetSelectedWelshText() }, { "RuleIDs", RuleNumber } };
+                string[,] ruleFields = new string[,] { { "WelshText", vocabTranslationListUI.CurrentTranslation.CurrentWelsh }, { "RuleIDs", RuleNumber } };
                 DbCommands.DeleteTupleInTable("VocabRuleList", ruleFields);
                 addRuleBtn.GetComponent<Text>().text = "Add rule";
                 Image btnImg = gameObject.transform.Find("DescriptionInput").GetComponent<Image>();
@@ -98,7 +84,7 @@ namespace DataUI {
             }
 
             public void ActivateRule(GameObject go) {
-                translationUI.SetActiveRule(go);
+                grammarListUI.SetActiveRule(go);
                 print("test activaterule " + go);
             }
 
@@ -109,7 +95,7 @@ namespace DataUI {
             }
 
             public void EditRule() {
-                translationUI.SetActiveRuleEdit();
+                grammarListUI.SetActiveRuleEdit();
             }
 
             public void UpdateRuleDisplay(string newText) {
@@ -137,6 +123,7 @@ namespace DataUI {
                 ActivateRule(gameObject);
                 ActivateRuleOptions();
             }
+
         }
     }
 }

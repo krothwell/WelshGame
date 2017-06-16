@@ -198,9 +198,9 @@ namespace DataUI {
         }
 
         public void ActivateNewCharacterOverride() {
-            selectNodeSpeakersUI.SetActive(true);
+            selectNodeSpeakersUI.transform.Find("Panel").gameObject.SetActive(true);
             nodeSpeakerBtn.GetComponent<Button>().interactable = false;
-            string dialogueID = ((GetSelectedItemFromGroup(selectedNode)) as DialogueNode).MyID;
+            string dialogueID = ((GetSelectedItemFromGroup(selectedDialogue)) as Dialogue).MyID;
             /*We only want to pick characters from scenes which are the same as those of the characters related to the dialogue
              * as a whole */
             string qry = "SELECT * FROM Characters "
@@ -208,6 +208,8 @@ namespace DataUI {
                     + "WHERE DialogueIDs = " + dialogueID + ")) "
                 + "OR (Characters.CharacterNames = '!Player') "
                 + "ORDER BY CharacterNames ASC;";
+            Debugging.PrintDbTable("CharacterDialogues");
+            print(dialogueID);
             FillDisplayFromDb(qry, charOverrideList.transform, BuildDialogueNodeSpeaker);
         }
 
@@ -245,7 +247,7 @@ namespace DataUI {
         }
 
         public void DeactivateNewCharacterOverride() {
-            selectNodeSpeakersUI.SetActive(false);
+            selectNodeSpeakersUI.transform.Find("Panel").gameObject.SetActive(false);
             nodeSpeakerBtn.GetComponent<Button>().interactable = true;
         }
 

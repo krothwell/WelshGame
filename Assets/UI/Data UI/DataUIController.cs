@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DataUI;
+using GameUtilities;
 
 /// <summary>
 /// Controls activation and display of panels belonging to the UI controllers 
@@ -31,5 +32,11 @@ public class DataUIController : UIController {
     public void ActivateQuestsUI() {
         ToggleMenuTo(questsUI, dataUImenusToggleGroupName);
     }
+
+    public new void DisplayComponents() {
+        base.DisplayComponents();
+        World.PauseGame();
+    }
+
 }
 

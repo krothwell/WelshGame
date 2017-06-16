@@ -51,12 +51,12 @@ public abstract class CharacterMovementDecision : CharacterDecision {
             RunMovement runMovement = Instantiate(RunMovementPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as RunMovement;
             runMovement.transform.SetParent(myCharacter.transform, false);
             movementType = runMovement;
-            movementType.SetMovementSpeed(3f);
+            movementType.SetMovementSpeed(myCharacter.maxSpeed);
         } else {
             WalkMovement walkMovement = Instantiate(WalkMovementPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as WalkMovement;
             walkMovement.transform.SetParent(myCharacter.transform, false);
             movementType = walkMovement;
-            movementType.SetMovementSpeed(1f);
+            movementType.SetMovementSpeed(myCharacter.maxSpeed * 0.33f);
         }
         movementType.MyAnimator = myCharacter.GetMyAnimator();
     }

@@ -102,6 +102,7 @@ namespace UnityUtilities {
             return TypeComparisons.IsGameObjectTag(selected, gameObjectTag);
         }
 
+
         public static Vector2 GetMouseCoords2D() {
             Vector2 rayPos = new Vector2(
                         (float)Math.Round(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, 1),

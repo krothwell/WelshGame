@@ -7,8 +7,9 @@ using UnityUtilities;
 namespace DataUI {
     namespace ListItems {
 
-        public class Translation : UIInputListItem {
-
+        public class Translation : UIInputListItem, ISelectableUI {
+            VocabTranslationListUI vocabTranslationListUI;
+            GrammarListUI grammarListUI;
             private string currentEnglish;
             public string CurrentEnglish {
                 get { return currentEnglish; }
@@ -23,62 +24,44 @@ namespace DataUI {
             GameObject translationOptions;
             GameObject englishText, welshText;
             GameObject saveBtn;
-            GameObject panel;
+            bool editing;
 
             // Use this for initialization
             void Start() {
+                vocabTranslationListUI = FindObjectOfType<VocabTranslationListUI>();
                 translationOptions = gameObject.transform.Find("TranslationOptions").gameObject;
                 englishText = gameObject.transform.Find("EnglishVocab").gameObject;
                 welshText = gameObject.transform.Find("WelshVocab").gameObject;
-                panel = gameObject.transform.Find("Panel").gameObject;
+                //panel = gameObject.transform.Find("Panel").gameObject;
                 saveBtn = gameObject.transform.Find("Save").gameObject;
                 translationUI = FindObjectOfType<TranslationUI>();
             }
 
-            void Update() {
-                SetSelectionOfTranslationOnClick();
-            }
-
-
-            public void SetSelectionOfTranslationOnClick() {
-                if (Input.GetMouseButtonUp(0)) {
-                    if (MouseSelection.IsClickedDifferentGameObjectTo(this.gameObject)
-                        && !MouseSelection.IsClickedGameObjectName("AddRemoveRule")) {
-                        if (translationOptions.activeSelf || panel.activeSelf) {
-                            DeactivateTranslationOptions();
-                            DisableEdits();
-                            englishText.GetComponent<InputField>().text = CurrentEnglish;
-                            welshText.GetComponent<InputField>().text = CurrentWelsh;
-                            translationUI.SetTranslationSelectedProperties(-1);
-                            if (!translationUI.TranslationSelected()) {
-                                translationUI.FillRulesNotSelected();
-                            }
-                        }
-                    }
-                }
-            }
-
             public void ActivateTranslationOptions() {
-                //proficiencyText.GetComponent<Image>().color = new Color(0.7f,0.85f,1f);
+                print("activating translation options for: " + currentEnglish);
+                print(translationOptions);
                 translationOptions.SetActive(true);
-                panel.SetActive(true);
             }
 
             public void DeactivateTranslationOptions() {
+                DisableEdits();
+                print("DEACTIVATING translation options for " + currentEnglish);
                 translationOptions.SetActive(false);
+                
             }
 
             public void EnableEdits() {
+                editing = true;
                 englishText.GetComponent<InputField>().readOnly = false;
                 welshText.GetComponent<InputField>().readOnly = false;
                 saveBtn.SetActive(true);
             }
 
             public void DisableEdits() {
+                editing = false;
                 englishText.GetComponent<InputField>().readOnly = true;
                 welshText.GetComponent<InputField>().readOnly = true;
                 saveBtn.SetActive(false);
-                panel.SetActive(false);
             }
 
             public void UpdateTranslation() {
@@ -131,8 +114,7 @@ namespace DataUI {
                 }
                 CurrentEnglish = newEn;
                 CurrentWelsh = newCy;
-                translationUI.SetTranslationSelectedProperties(-1);
-                translationUI.FillRulesNotSelected();
+                grammarListUI.FillRulesNotSelected();
             }
 
             /* */
@@ -163,19 +145,28 @@ namespace DataUI {
                     DbCommands.DeleteTupleInTable("VocabTranslations", translationFields);
                 }
                 Destroy(gameObject);
-                translationUI.SetTranslationSelectedProperties(-1);
-                translationUI.FillRulesNotSelected();
+                grammarListUI.FillRulesNotSelected();
             }
 
-            void OnMouseUp() {
-                print("selected");
-                if (!translationOptions.activeSelf && !panel.activeSelf) {
-                    print("selected");
+            public void SelectSelf() {
+                if (!translationOptions.activeSelf && !editing) {
+                    print("mouse up");
                     ActivateTranslationOptions();
+                    vocabTranslationListUI.CurrentTranslation = this;
+                    translationUI.ToggleSideMenu();
+                }
+            }
 
-                    translationUI.SetTranslationSelectedProperties(1, CurrentEnglish, CurrentWelsh);
+            public void DeselectSelf() {
+                DeactivateTranslationOptions();
+                DisableEdits();
+            }
 
-                    translationUI.ActivateGrammarRulesMenu(CurrentEnglish, CurrentWelsh);
+            void OnMouseUpAsButton() {
+                if (!editing) {
+                    print(vocabTranslationListUI);
+                    print(vocabTranslationListUI.VocabTranslationSelected);
+                    vocabTranslationListUI.ToggleSelectionTo(this, vocabTranslationListUI.VocabTranslationSelected);
                 }
             }
 
