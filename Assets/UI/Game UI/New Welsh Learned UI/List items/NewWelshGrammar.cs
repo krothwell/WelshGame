@@ -7,13 +7,13 @@ public class NewWelshGrammar : MonoBehaviour {
 
     public GameObject grammarBodyPrefab, grammarListPrefab;
     private GameObject myGrammarList;
-    private string grammarID;
+    //private string grammarID;
     private string grammarDetails;
 
 
     public void InitialiseMe(string grammarIDstr, string grammarSummaryStr, string grammarDetailsStr) {
         transform.Find("GrammarSummary").GetComponent<Text>().text = grammarSummaryStr;
-        grammarID = grammarIDstr;
+        //grammarID = grammarIDstr;
         grammarDetails = grammarDetailsStr;
     }
 

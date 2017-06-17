@@ -9,11 +9,11 @@ public class WelshVocab : NewWelshVocab {
     Text readProgressLbl;
     Text writeProgressLbl;
     Transform extraInfo;
-    WelshSkillsListUI welshSkillListUI;
+    //WelshSkillsListUI welshSkillListUI;
     public void InitialiseMe(string engVocab, string cymVocab, string readTally, string writeTally) {
         base.InitialiseMe(engVocab, cymVocab);
         extraInfo = transform.Find("ExtraInformation");
-        welshSkillListUI = FindObjectOfType<WelshSkillsListUI>();
+        //welshSkillListUI = FindObjectOfType<WelshSkillsListUI>();
         readProgressSlider = extraInfo.Find("ReadProgressSlider").GetComponent<Slider>();
         writeProgressSlider = extraInfo.Find("WriteProgressSlider").GetComponent<Slider>();
         readProgressLbl = extraInfo.Find("ReadProgressLbl").GetComponent<Text>();

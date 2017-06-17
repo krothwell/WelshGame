@@ -17,39 +17,15 @@ namespace DataUI {
     /// this class or children of this class.
     /// </summary>
     public class TranslationUI : UIController {
-        Button grammarRulesBtn, proficienciesBtn;
-        GrammarListUI grammarListUI;
-        ProficienciesListUI proficienciesListUI;
+
+        //GrammarListUI grammarListUI;
+        //ProficienciesListUI proficienciesListUI;
         public string SideMenuGroup;
         void Start() {
-            grammarListUI = GetPanel().GetComponentInChildren<GrammarListUI>();
-            proficienciesListUI = GetPanel().GetComponentInChildren<ProficienciesListUI>();
+            //grammarListUI = GetPanel().GetComponentInChildren<GrammarListUI>();
+            //proficienciesListUI = GetPanel().GetComponentInChildren<ProficienciesListUI>();
             SideMenuGroup = "SideMenuGroup";
             CreateNewMenuToggleGroup(SideMenuGroup);
-            proficienciesBtn = proficienciesListUI.transform.Find("ProficienciesBtn").gameObject.GetComponent<Button>();
-            grammarRulesBtn = grammarListUI.transform.Find("GrammarRulesBtn").gameObject.GetComponent<Button>();
-        }
-
-        public void ToggleSideMenu() {
-            if (grammarListUI.GetPanel().activeSelf) {
-                ToggleMenuTo(proficienciesListUI.GetComponent<UIController>(), SideMenuGroup);
-                Proficiency proficiency = (Proficiency)(proficienciesListUI.GetSelectedItemFromGroup(proficienciesListUI.SelectedProficiency));
-                proficienciesBtn.colors.normalColor.Equals(Colours.colorDataUItxt);
-                grammarRulesBtn.colors.normalColor.Equals(Colours.colorDataUIbtn);
-                FillDisplayFromDb(DbCommands.GetProficienciesDisplayQry(), proficienciesListUI.ProficienciesList.transform, proficienciesListUI.BuildProficiency);
-            }
-            else {
-                ToggleMenuTo(grammarListUI.GetComponent<UIController>(), SideMenuGroup);
-                Translation translation = (Translation)(grammarListUI.GetSelectedItemFromGroup(grammarListUI.TranslationSelected));
-                proficienciesBtn.colors.normalColor.Equals(Colours.colorDataUIbtn);
-                grammarRulesBtn.colors.normalColor.Equals(Colours.colorDataUItxt);
-                FillDisplayFromDb(DbQueries.GetGrammarRuleDisplayQry(translation.CurrentEnglish, translation.CurrentWelsh),
-                    grammarListUI.GrammarList.transform,
-                    grammarListUI.BuildRule,
-                    translation.CurrentEnglish,
-                    translation.CurrentWelsh
-                );
-            }
         }
     }
 }

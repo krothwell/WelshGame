@@ -10,10 +10,10 @@ namespace GameUI.ListItems {
         Slider progressSlider;
         Text progressLbl, tallyModifier, skillsIncrementer;
         Transform extraInfo;
-        WelshSkillsListUI welshSkillListUI;
+        //WelshSkillsListUI welshSkillListUI;
         public void InitialiseMe(string grammarID, string grammarSummaryStr, string grammarDetailsStr, string tally, string tallyMod, string skillInc) {
             base.InitialiseMe(grammarID, grammarSummaryStr, grammarDetailsStr);
-            welshSkillListUI = FindObjectOfType<WelshSkillsListUI>();
+            //welshSkillListUI = FindObjectOfType<WelshSkillsListUI>();
             extraInfo = transform.Find("ExtraInformation");
             progressSlider = extraInfo.Find("ProgressSlider").GetComponent<Slider>();
             progressLbl = extraInfo.Find("ProgressLbl").GetComponent<Text>();

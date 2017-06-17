@@ -6,6 +6,12 @@ using DataUI.Utilities;
 
 namespace DataUI {
     public class ProficienciesListUI : UIController {
+        private GrammarListUI grammarListUI;
+        private Button proficienciesBtn;
+        public Button ProficienciesBtn {
+            get { return proficienciesBtn; }
+            set { proficienciesBtn = value; }
+        }
         //high level cross cutting objects and holders
         TranslationUI translationUI;
         private string selectedProficiency;
@@ -25,6 +31,8 @@ namespace DataUI {
         InputField inputProficiencyTxt, inputThresholdTxt;
 
         void Start() {
+            proficienciesBtn = transform.Find("ProficienciesBtn").GetComponent<Button>();
+            grammarListUI = FindObjectOfType<GrammarListUI>();
             translationUI = FindObjectOfType<TranslationUI>();
             //PROFICIENCIES UI
             proficienciesList = GetPanel().GetComponentInChildren<GridLayoutGroup>().gameObject;
@@ -36,6 +44,13 @@ namespace DataUI {
             inputThresholdTxt = newProficiencyPanel.transform.Find("ThresholdInput").GetComponent<InputField>();
             selectedProficiency = "SelectedProficiency";
             CreateSelectionToggleGroup(selectedProficiency);
+        }
+
+        public void ToggleSideMenuToProficienciesList() {
+            ToggleMenuTo(GetComponent<UIController>(), translationUI.SideMenuGroup);
+            proficienciesBtn.colors.normalColor.Equals(Colours.colorDataUItxt);
+            grammarListUI.GrammarRulesBtn.colors.normalColor.Equals(Colours.colorDataUIbtn);
+            FillDisplayFromDb(DbCommands.GetProficienciesDisplayQry(), ProficienciesList.transform, BuildProficiency);
         }
 
         //Display a panel to add a new proficiency 

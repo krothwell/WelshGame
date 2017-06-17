@@ -3,11 +3,11 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DbUtilities;
-using UnityUtilities;
+using DataUI.Utilities;
 
 namespace DataUI {
     namespace ListItems {
-        public class GrammarRule : MonoBehaviour {
+        public class GrammarRule : MonoBehaviour, ISelectableUI {
             VocabTranslationListUI vocabTranslationListUI;
             GrammarListUI grammarListUI;
             private string currentDescription;
@@ -31,7 +31,6 @@ namespace DataUI {
             GameObject ruleOptions;
             GameObject descriptionInput;
             GameObject addRuleBtn;
-            GameObject ruleSaveBtn;
 
             // Use this for initialization
             void Start() {
@@ -83,9 +82,12 @@ namespace DataUI {
                 addRuleBtn.SetActive(true);
             }
 
-            public void ActivateRule(GameObject go) {
-                grammarListUI.SetActiveRule(go);
-                print("test activaterule " + go);
+            public void DeactivateTag() {
+                addRuleBtn = gameObject.transform.Find("AddRemoveRule").gameObject;
+                Image btnImg = gameObject.transform.Find("DescriptionInput").GetComponent<Image>();
+                btnImg.color = Colours.colorDataUIPanelInactive;
+                IsAssignedToSelectedTranslation = false;
+                addRuleBtn.SetActive(false);
             }
 
             public void ActivateRuleOptions() {
@@ -119,9 +121,18 @@ namespace DataUI {
                 Destroy(gameObject);
             }
 
-            void OnMouseUpAsButton() {
-                ActivateRule(gameObject);
+            public void SelectSelf() {
+                vocabTranslationListUI.DeactivateSelectedTranslation();
+                grammarListUI.ClearTagging();
                 ActivateRuleOptions();
+            }
+
+            public void DeselectSelf() {
+                DeactivateRuleOptions();
+            }
+
+            void OnMouseUpAsButton() {
+                grammarListUI.ToggleSelectionTo(this, grammarListUI.SelectedGrammarRule);
             }
 
         }

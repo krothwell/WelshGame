@@ -7,8 +7,9 @@ using DataUI.Utilities;
 
 namespace DataUI {
     public class VocabTranslationListUI : UIController {
+        
         //translations
-        GameObject translationUI, translationUIpanel, vocabTranslationList,
+        GameObject vocabTranslationList,
                    submitNewTranslation, newTranslationPanel, activateNewTranslationBtn,
                    translation;
 
@@ -25,11 +26,9 @@ namespace DataUI {
         }
         InputField inputTranslationEnTxt, inputTranslationCyTxt;
         InputField searchTranslations;
-        string selectedEnglishText;
-        string selectedWelshText;
         float searchWait = 0f;
         bool searchCountDown = false;
-        int translationSelectInt = 0;
+        //int translationSelectInt = 0;
 
         void Update() {
             if (searchCountDown) {
@@ -43,8 +42,8 @@ namespace DataUI {
 
         void Start() {
             //TRANSLATIONS UI
-            translationUI = FindObjectOfType<TranslationUI>().gameObject;
-            translationUIpanel = translationUI.transform.Find("Panel").gameObject;
+            //translationUI = FindObjectOfType<TranslationUI>().gameObject;
+            //translationUIpanel = translationUI.transform.Find("Panel").gameObject;
             //adding
             submitNewTranslation = GetPanel().transform.Find("SubmitNewTranslation").gameObject;
             activateNewTranslationBtn = submitNewTranslation.transform.Find("ActivateNewTranslationBtn").gameObject;
@@ -64,6 +63,11 @@ namespace DataUI {
         public void ActivateNewTranslation() {
             newTranslationPanel.SetActive(true);
             activateNewTranslationBtn.GetComponent<Button>().colors.normalColor.Equals(Colours.colorDataUItxt); //indicate to user that button no longer functions.
+        }
+
+        public void DeactivateSelectedTranslation() {
+            Translation selectedTranslation = (Translation)GetSelectedItemFromGroup(vocabTranslationSelected);
+            selectedTranslation.DeselectSelf();
         }
 
         public void DeactivateNewTranslation() {

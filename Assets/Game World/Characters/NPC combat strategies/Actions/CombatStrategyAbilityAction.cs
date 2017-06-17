@@ -9,7 +9,7 @@ public abstract class CombatStrategyAbilityAction : CombatStrategyAction {
 
     public override void DoAction() {
         print(myCharacter);
-        myCharacter.GetCombatController().SetSelectedAbility(myAbility.gameObject);
+        //myCharacter.GetCombatController().SetSelectedAbility(myAbility.gameObject);
         myAbility.GetComponent<CharAbility>().UseAbility();
     }
 

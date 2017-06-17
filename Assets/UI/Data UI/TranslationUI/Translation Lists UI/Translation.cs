@@ -8,8 +8,8 @@ namespace DataUI {
     namespace ListItems {
 
         public class Translation : UIInputListItem, ISelectableUI {
-            VocabTranslationListUI vocabTranslationListUI;
-            GrammarListUI grammarListUI;
+            private VocabTranslationListUI vocabTranslationListUI;
+            private GrammarListUI grammarListUI;
             private string currentEnglish;
             public string CurrentEnglish {
                 get { return currentEnglish; }
@@ -20,7 +20,7 @@ namespace DataUI {
                 get { return currentWelsh; }
                 set { currentWelsh = value; }
             }
-            TranslationUI translationUI;
+            //TranslationUI translationUI;
             GameObject translationOptions;
             GameObject englishText, welshText;
             GameObject saveBtn;
@@ -28,13 +28,14 @@ namespace DataUI {
 
             // Use this for initialization
             void Start() {
+                grammarListUI = FindObjectOfType<GrammarListUI>();
                 vocabTranslationListUI = FindObjectOfType<VocabTranslationListUI>();
                 translationOptions = gameObject.transform.Find("TranslationOptions").gameObject;
                 englishText = gameObject.transform.Find("EnglishVocab").gameObject;
                 welshText = gameObject.transform.Find("WelshVocab").gameObject;
                 //panel = gameObject.transform.Find("Panel").gameObject;
                 saveBtn = gameObject.transform.Find("Save").gameObject;
-                translationUI = FindObjectOfType<TranslationUI>();
+                //translationUI = FindObjectOfType<TranslationUI>();
             }
 
             public void ActivateTranslationOptions() {
@@ -152,8 +153,9 @@ namespace DataUI {
                 if (!translationOptions.activeSelf && !editing) {
                     print("mouse up");
                     ActivateTranslationOptions();
-                    vocabTranslationListUI.CurrentTranslation = this;
-                    translationUI.ToggleSideMenu();
+                    //vocabTranslationListUI.CurrentTranslation = this;
+                    vocabTranslationListUI.ToggleSelectionTo(this, vocabTranslationListUI.VocabTranslationSelected);
+                    grammarListUI.ToggleSideMenuToGrammarList();
                 }
             }
 

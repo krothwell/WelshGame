@@ -9,12 +9,12 @@ namespace GameUI.ListItems {
         public string AbilityName;
         public GameObject AbilityPrefab;
         CombatUI combatUI;
-        Sprite icon;
+        //Sprite icon;
         // Use this for initialization
         void Start() {
             combatUI = FindObjectOfType<CombatUI>();
             DeselectSelf();
-            icon = transform.Find("Image").GetComponent<Image>().sprite;
+            //icon = transform.Find("Image").GetComponent<Image>().sprite;
         }
 
         public void SelectSelf() {

@@ -7,11 +7,11 @@ public class WelshGrammar : NewWelshGrammar {
     Slider progressSlider;
     Text progressLbl;
     Transform extraInfo;
-    WelshSkillsListUI welshSkillListUI;
+    //WelshSkillsListUI welshSkillListUI;
     public void InitialiseMe(string grammarID, string shortDesc, string longDesc, string tally) {
         base.InitialiseMe(grammarID, shortDesc, longDesc);
         extraInfo = transform.Find("ExtraInformation");
-        welshSkillListUI = FindObjectOfType<WelshSkillsListUI>();
+        //welshSkillListUI = FindObjectOfType<WelshSkillsListUI>();
         progressSlider = extraInfo.Find("ProgressSlider").GetComponent<Slider>();
         progressLbl = extraInfo.Find("ProgressLbl").GetComponent<Text>();
         int tallyInt = int.Parse(tally);

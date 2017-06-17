@@ -6,18 +6,16 @@ using UnityEngine;
 public class NPCMovementController : CharMovementController {
     public float WalkSpeed;
     public float RunSpeed;
-    NPCCloseCombatController2 combatController;
-    PlayerCharacter playerCharacter;
-	// Use this for initialization
-	void Awake () {
-        playerCharacter = FindObjectOfType<PlayerCharacter>();
-	}
-
-
-
-    public void SetMyCombatController (NPCCloseCombatController2 cc) {
-        combatController = cc;
+    //PlayerCharacter playerCharacter;
+    private NPCCombatController npcCombatController;
+    public NPCCombatController NpcCombatController {
+        get { return npcCombatController; }
+        set { npcCombatController = value; }
     }
+    // Use this for initialization
+    void Awake () {
+        //playerCharacter = FindObjectOfType<PlayerCharacter>();
+	}
 
     //public void ProcessMovement() {
     //    if (!isMoving) {

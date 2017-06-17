@@ -15,7 +15,7 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
     public Character CurrentEnemyTarget;
     protected Character myCharacter;
     public List<Character> CharacterEnemyList;
-    private GameObject selectedAbility;
+    //private GameObject selectedAbility;
 
     // Use this for initialization
 
@@ -85,10 +85,10 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
         CharacterEnemyList.Remove(charIn);
     }
 
-    public void SetSelectedAbility (GameObject ability) {
-        selectedAbility = ability;
-        //ability.transform.SetParent(transform, false);
-    }
+    //public void SetSelectedAbility (GameObject ability) {
+    //    selectedAbility = ability;
+    //    //ability.transform.SetParent(transform, false);
+    //}
 
     public abstract WorldDamage GetWeaponDamage();
 }

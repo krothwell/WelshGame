@@ -34,7 +34,7 @@ namespace GameUI {
     	}
 
         List<Character> dialogueQueue;
-        CharAbility queuedAbility;
+        //CharAbility queuedAbility;
     	Text percentageTxt, btnTxt;
         GameObject submitBtn, dialogueReason;
         CombatUI combatUI;
@@ -493,7 +493,7 @@ namespace GameUI {
         }
 
         public void ProcessAbilityTest(CharAbility ability) {
-            queuedAbility = ability;
+            //queuedAbility = ability;
             EnableSubmitBtn();
             SetSubmitBtnText("Submit answer");
             SetObjectPortrait(playerCharacter.GetCombatController().GetCurrentEnemyTarget().CharacterPortrait);
