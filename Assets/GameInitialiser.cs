@@ -2,6 +2,7 @@
 using UnityEngine;
 using DbUtilities;
 using UnityUtilities;
+using DataUI;
 
 /// <summary> 
 /// Used in conjunction with objects that should be initialised before other
@@ -14,12 +15,18 @@ public class GameInitialiser : MonoBehaviour {
     PlayerSavesController playerSavesController;
     // Use this for initialization
     private static string DB_PATH = "/GameDb.s3db";
-    
+    DataUIController dataUI;
+    void Awake() {
+        dataUI = FindObjectOfType<DataUIController>();
+        if (dataUI != null) {
+            dataUI.HideComponents();
+        }
+    }
     void Start() {
         DbCommands.SetConnectionString("URI=file:" + Application.dataPath + DB_PATH);
         dbSetup = new DbSetup();
-        //Debugging.PrintDbTable("PlayerGames");
-        //DbCommands.UpdateTableField("PlayerGames", "SkillPointsSpent", "0");
+        //dbSetup.DropTable("VocabTagged");
+        //DbCommands.UpdateTableField("ActivatedDialogues", "Completed", "0");
         dbSetup.CreateTables();
         //print("tables created");
         //dbSetup.CopyTable("PlayerGames", "Copied");
@@ -36,6 +43,7 @@ public class GameInitialiser : MonoBehaviour {
         // ensures it doesn't try to load it before the connection string is set
         // up.
         playerSavesController.ManuallyInitialise();
+        Debugging.PrintDbTable("ActivatedDialogues");
 
     }
 	

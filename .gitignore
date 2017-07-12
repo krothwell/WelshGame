@@ -15,6 +15,8 @@
 *.tif
 *.psd
 *.txt 
+*.wav
+*.mp3
 
 Library/
 Resources/

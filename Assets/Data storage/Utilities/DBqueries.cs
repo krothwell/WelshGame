@@ -38,6 +38,30 @@ namespace DbUtilities {
             return sql;
         }
 
+        public static string GetTaggedVocabDisplayQry(string englishStr = null, string welshStr = null) {
+            string englishStrQry = "''";
+            string welshStrQry = "''";
+            if (englishStr != null) {
+                englishStrQry = DbCommands.GetParameterNameFromValue(englishStr);
+                englishStrQry = (englishStrQry == null) ? "''" : englishStrQry;
+            }
+            if (welshStr != null) {
+                welshStrQry = DbCommands.GetParameterNameFromValue(welshStr);
+                welshStrQry = (welshStrQry == null) ? "''" : welshStrQry;
+            }
+
+
+            string sql = "SELECT TranslationTags.Tags, " +
+                        "CASE WHEN TranslationTags.Tags = VocabTagged.Tags THEN 1 ELSE 0 END TranslationRules " +
+                        "FROM TranslationTags " +
+                        "LEFT JOIN VocabTagged ON TranslationTags.Tags = VocabTagged.Tags " +
+                            "AND VocabTagged.EnglishText = " + englishStrQry + " " +
+                            "AND VocabTagged.WelshText = " + welshStrQry + " " +
+                        "ORDER BY TranslationTags.Tags ASC;";
+            Debug.Log(sql);
+            return sql;
+        }
+
         public static string GetDiscoveredGrammarRelatedToVocab(string englishStr = null, string welshStr = null) {
             string englishStrQry = "''";
             string welshStrQry = "''";
@@ -144,6 +168,14 @@ namespace DbUtilities {
                 + "ORDER BY VocabGrammar.RuleIDs;";
         }
 
+        public static string GetCurrentActivateDialoguePlayerChoiceResultQry(string choiceID) {
+            return "SELECT DialoguesActivatedByDialogueChoices.ResultIDs, Dialogues.DialogueIDs, Dialogues.DialogueDescriptions "
+                + "FROM Dialogues "
+                + "INNER JOIN DialoguesActivatedByDialogueChoices ON DialoguesActivatedByDialogueChoices.DialogueIDs = Dialogues.DialogueIDs "
+                + "WHERE DialoguesActivatedByDialogueChoices.ChoiceIDs = " + choiceID + " "
+                + "ORDER BY Dialogues.DialogueIDs;";
+        }
+
         public static string GetNewActivateTaskPlayerChoiceResultQry() {
             return "SELECT QuestTasks.TaskIDs, QuestTasks.TaskDescriptions, QuestTasks.QuestNames "
                 + "FROM QuestTasks "
@@ -151,6 +183,17 @@ namespace DbUtilities {
         }
 
         public static string GetNewActivateVocabPlayerChoiceResultQry(string searchStr = "") {
+            string qryStr = "SELECT EnglishText, WelshText FROM VocabTranslations";
+            if (searchStr != "") {
+                string searchParam = DbCommands.GetParameterNameFromValue(searchStr);
+                string whereStr = " WHERE EnglishText LIKE " + searchParam + " OR WelshText LIKE " + searchParam;
+                qryStr += whereStr;
+            }
+            qryStr += ";";
+            return qryStr;
+        }
+
+        public static string GetVocabQry(string searchStr = "") {
             string qryStr = "SELECT EnglishText, WelshText FROM VocabTranslations";
             if (searchStr != "") {
                 string searchParam = DbCommands.GetParameterNameFromValue(searchStr);
@@ -170,6 +213,19 @@ namespace DbUtilities {
                 qryStr += whereStr;
             }
             qryStr += ";";
+            return qryStr;
+        }
+
+        public static string GetNewActivateDialoguePlayerChoiceResultQry(string searchStr = "") {
+            string qryStr = "SELECT Dialogues.DialogueIDs, Dialogues.DialogueDescriptions "
+                 + "FROM Dialogues";
+            if (searchStr != "") {
+                string searchParam = DbCommands.GetParameterNameFromValue(searchStr);
+                string whereStr = " WHERE Dialogues.DialogueDescriptions LIKE " + searchParam;
+                qryStr += whereStr;
+            }
+            qryStr += ";";
+            Debug.Log(qryStr);
             return qryStr;
         }
 
@@ -202,6 +258,12 @@ namespace DbUtilities {
         public static string GetGrammarActivateCountFromChoiceIDqry(string choiceID) {
             return "SELECT COUNT(*) FROM GrammarActivatedByDialogueChoices "
                 + "INNER JOIN PlayerChoiceResults ON GrammarActivatedByDialogueChoices.ResultIDs = PlayerChoiceResults.ResultIDs "
+                + "WHERE PlayerChoiceResults.ChoiceIDs = " + choiceID + ";";
+        }
+
+        public static string GetDialogueActivateCountFromChoiceIDqry(string choiceID) {
+            return "SELECT COUNT(*) FROM DialoguesActivatedByDialogueChoices "
+                + "INNER JOIN PlayerChoiceResults ON DialoguesActivatedByDialogueChoices.ResultIDs = PlayerChoiceResults.ResultIDs "
                 + "WHERE PlayerChoiceResults.ChoiceIDs = " + choiceID + ";";
         }
 
@@ -257,14 +319,44 @@ namespace DbUtilities {
                 + dialogueID + ";";
         }
 
+        public static string GetCharsRelatedToDialogue(string dialogueID) {
+            return "SELECT CharacterDialogues.CharacterNames FROM CharacterDialogues WHERE DialogueIDs = "
+                + dialogueID + ";";
+        }
+
+        public static string GetActiveDialoguesWithCharacter(string charName) {
+            string sql =  "SELECT ActivatedDialogues.DialogueIDs FROM ActivatedDialogues " +
+                   "INNER JOIN CharacterDialogues ON CharacterDialogues.DialogueIDs = ActivatedDialogues.DialogueIDs " +
+                   "WHERE CharacterDialogues.CharacterNames = " + DbCommands.GetParameterNameFromValue(charName) + ";";
+            Debug.Log(sql);
+            return sql;
+        }
+
         public static string GetDialogueNodeDisplayQry(string dialogueID) {
             return "SELECT * FROM DialogueNodes WHERE DialogueIDs = "
-               + dialogueID + ";";
+               + dialogueID + " AND DialogueNodes.NodeIDs NOT IN (SELECT DialogueNodesVocabTests.NodeIDs FROM DialogueNodesVocabTests);";
+        }
+
+        public static string GetDialogueNodeVocabDisplayQry(string dialogueID) {
+            string sqlString = "SELECT DialogueNodes.NodeIDs, " +
+                        "DialogueNodesVocabTests.EnglishText, DialogueNodesVocabTests.WelshText " +
+                    "FROM DialogueNodes INNER JOIN DialogueNodesVocabTests " +
+                        "ON DialogueNodes.NodeIDs = DialogueNodesVocabTests.NodeIDs " +
+                    "WHERE DialogueNodes.DialogueIDs = " + dialogueID + ";";
+            return sqlString;
         }
 
         public static string GetPlayerChoiceDisplayQry(string nodeID) {
             return "SELECT * FROM PlayerChoices WHERE NodeIDs = "
-               + nodeID + ";";
+               + nodeID + " AND PlayerChoices.ChoiceIDs NOT IN (SELECT PlayerChoicesVocabTests.ChoiceIDs FROM PlayerChoicesVocabTests);";
+        }
+
+        public static string GetPlayerChoiceVocabDisplayQry(string nodeID) {
+            return "SELECT PlayerChoices.ChoiceIDs, PlayerChoices.NextNodes, " +
+                        "PlayerChoicesVocabTests.EnglishText, PlayerChoicesVocabTests.WelshText " +
+                    "FROM PlayerChoices INNER JOIN PlayerChoicesVocabTests " +
+                        "ON PlayerChoices.ChoiceIDs = PlayerChoicesVocabTests.ChoiceIDs " +
+                    "WHERE PlayerChoices.NodeIDs = " + nodeID + ";";
         }
 
         public static string GetChoiceCompleteDialogueQry(string choiceID) {

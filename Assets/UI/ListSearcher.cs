@@ -2,9 +2,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DbUtilities;
+using System;
 
 public class ListSearcher : UIController {
-    float searchWait = 0f;
+    DateTime searchWait;
     bool searchCountDown = false;
     public GameObject listToSearch;
     InputField myInput;
@@ -18,8 +19,8 @@ public class ListSearcher : UIController {
 	// Update is called once per frame
 	void Update () {
         if (searchCountDown) {
-            searchWait -= Time.deltaTime;
-            if (searchWait <= 0) {
+            //print(searchWait);
+            if (DateTime.Now > searchWait) {
                 SearchNow();
                 searchCountDown = false;
             }
@@ -27,8 +28,8 @@ public class ListSearcher : UIController {
     }
 
     public void Search() {
-        if (searchInfo != null) {
-            searchWait = 0.5f;
+       if (searchInfo != null) {
+            searchWait = DateTime.Now.AddMilliseconds(500);
             searchCountDown = true;
         }
     }

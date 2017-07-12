@@ -108,7 +108,6 @@ public abstract class GameWorldSelector : MonoBehaviour {
 
     public void BuildCircle(Vector2 atCoordinates) {
         EndCurrentSelection();
-        print("creating selection circle");
         selectionCircle = Instantiate(selectionCirclePrefab, new Vector3(atCoordinates.x, atCoordinates.y, -0.0001f), Quaternion.identity) as GameObject;
         selectionCircle.GetComponent<Transform>().localScale = new Vector2(Scale, Scale);
         selectionCircle.transform.SetParent(transform, false);

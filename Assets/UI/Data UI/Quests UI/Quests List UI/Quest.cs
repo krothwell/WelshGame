@@ -42,7 +42,7 @@ namespace DataUI {
 
             public void SelectSelf() {
                 DisplayOptions();
-                SetInputColour(Colours.colorDataUIInputSelected);
+                SetColour(Colours.colorDataUIInputSelected);
                 questsUI.DisplayTasksRelatedToDialogue(myName);
                 //dialogueUI.DisplayNodesRelatedToDialogue();
                 //dialogueUI.HidePlayerChoices();
@@ -51,7 +51,7 @@ namespace DataUI {
 
             public void DeselectSelf() {
                 HideOptions();
-                SetInputColour(Color.white);
+                SetColour(Color.white);
                 GetInputField().text = myName;
                 editing = false;
             }

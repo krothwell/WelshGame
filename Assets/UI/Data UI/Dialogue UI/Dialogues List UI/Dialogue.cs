@@ -7,6 +7,8 @@ using UnityUtilities;
 namespace DataUI {
     namespace ListItems {
         public class Dialogue : UIInputListItem, ISelectableUI, IEditableUI {
+            PlayerChoicesListUI playerChoicesListUI;
+            DialogueNodesListUI dialogueNodesListUI;
             DialogueUI dialogueUI;
             
             Toggle activeToggle;
@@ -32,10 +34,12 @@ namespace DataUI {
             }
             // Use this for initialization
             void Start() {
+                playerChoicesListUI = FindObjectOfType<PlayerChoicesListUI>();
                 dialogueUI = FindObjectOfType<DialogueUI>();
                 options = transform.Find("DialogueOptions").gameObject;
                 saveDialogue = transform.Find("Save").gameObject;
                 activeToggle = transform.GetComponentInChildren<Toggle>();
+                dialogueNodesListUI = FindObjectOfType<DialogueNodesListUI>();
             }
 
             void OnMouseUpAsButton() {
@@ -46,16 +50,16 @@ namespace DataUI {
 
             public void SelectSelf() {
                 DisplayOptions();
-                SetInputColour(Colours.colorDataUIInputSelected);
+                SetColour(Colours.colorDataUIInputSelected);
                 dialogueUI.DisplayCharsRelatedToDialogue();
-                dialogueUI.DisplayNodesRelatedToDialogue();
-                dialogueUI.HidePlayerChoices();
+                dialogueNodesListUI.DisplayNodesRelatedToDialogue();
+                playerChoicesListUI.HidePlayerChoices();
                 dialogueUI.HidePlayerChoiceResults();
             }
 
             public void DeselectSelf() {
                 HideOptions();
-                SetInputColour(Color.white);
+                SetColour(Color.white);
                 GetInputField().text = myDescription;
                 StopEditing();
                 activeToggle.isOn = active;

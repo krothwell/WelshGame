@@ -60,17 +60,24 @@ namespace DataUI {
 
         public void ToggleSideMenuToGrammarList() {
             if (!GetPanel().activeSelf) {
+                print("panelactive");
                 translationUI.ToggleMenuTo(GetComponent<UIController>(), translationUI.SideMenuGroup);
                 proficienciesListUI.ProficienciesBtn.colors.normalColor.Equals(Colours.colorDataUIbtn);
                 grammarRulesBtn.colors.normalColor.Equals(Colours.colorDataUItxt);
             }
             Translation translation = (Translation)(vocabTranslationListUI.GetSelectedItemFromGroup(vocabTranslationListUI.VocabTranslationSelected));
-            FillDisplayFromDb(DbQueries.GetGrammarRuleDisplayQry(translation.CurrentEnglish, translation.CurrentWelsh),
+            string eng, cym;
+            if (translation == null) {
+                eng = cym = null;
+            } else {
+                eng = translation.CurrentEnglish; cym = translation.CurrentWelsh;
+            }
+            FillDisplayFromDb(DbQueries.GetGrammarRuleDisplayQry(eng, cym),
                 grammarList.transform,
                 BuildRule,
-                translation.CurrentEnglish,
-                translation.CurrentWelsh
-                );
+                eng,
+                cym
+            );
         }
 
         public void SetActiveRuleEdit() {
@@ -106,10 +113,9 @@ namespace DataUI {
                                                 { "ShortDescriptions", inputRuleSdescTxt.text },
                                                 { "LongDescriptions", inputRuleLdescTxt.text },
                                             };
-                    print(activeRule);
-                    print(editingRule);
-                    DbCommands.UpdateTableTuple("VocabGrammar", "RuleIDs = " + activeRule.GetComponent<GrammarRule>().RuleNumber, fieldVals);
-                    activeRule.GetComponent<GrammarRule>().UpdateRuleDisplay(inputRuleSdescTxt.text);
+                    GrammarRule selectedRule = (GrammarRule)(GetSelectedItemFromGroup(selectedGrammarRule));
+                    DbCommands.UpdateTableTuple("VocabGrammar", "RuleIDs = " + selectedRule.RuleNumber, fieldVals);
+                    selectedRule.UpdateRuleDisplay(inputRuleSdescTxt.text);
                 }
                 else {
                     string ruleID = DbCommands.GenerateUniqueID("VocabGrammar", "RuleIDs", "RuleID");
@@ -126,7 +132,6 @@ namespace DataUI {
             int translationRule = int.Parse(strArray[2]);
             grammarRule = Instantiate(grammarRulePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
             grammarRule.transform.Find("DescriptionInput").GetComponent<InputField>().text = descriptionStr;
-            print("building rule");
             if (vocabTranslationListUI.IsItemSelectedInGroup(vocabTranslationListUI.VocabTranslationSelected)) {
                 if (translationRule == 1) {
                     grammarRule.GetComponent<GrammarRule>().ActivateAddRule(true);

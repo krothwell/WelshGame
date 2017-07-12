@@ -6,6 +6,7 @@ using System;
 using GameUtilities;
 
 public class PlayerCombatController : CharCombatController {
+    public AudioClip combatTheme;
     PlayerInventoryUI inventory;
     public GameObject selectedEnemy;
     CombatUI combatui;
@@ -32,6 +33,10 @@ public class PlayerCombatController : CharCombatController {
     }
 
     public override void TriggerCombat(Character charIn) {
+        MusicPlayer mp = FindObjectOfType<MusicPlayer>();
+        mp.TransitionMusic(combatTheme, 0.005f, 0.005f);
+        print("play combat theme");
+        mp.MusicLocked = true;
         combatStateAction = Instantiate(CombatStateActionPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as CombatStateAction;
         combatStateAction.transform.SetParent(myCharacter.transform, false);
         combatStateAction.MyAnimator = GetComponent<Animator>();
@@ -62,6 +67,10 @@ public class PlayerCombatController : CharCombatController {
                 combatStateAction.StopAction();
                 combatui.HideUnderAttack();
                 combatui.HidePlayerVitals();
+                MusicPlayer mp = FindObjectOfType<MusicPlayer>();
+                print(mp);
+                mp.MusicLocked = false;
+                character.CurrentMusicZone.TransitionToZoneMusic();
             }
         }
     }

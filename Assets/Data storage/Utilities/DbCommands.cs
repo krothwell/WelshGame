@@ -42,6 +42,7 @@ namespace DbUtilities {
                     value = "@value" + i;
                     //Debug.Log(values[i]);
                     _dbcm.Parameters.Add(new SqliteParameter(value, values[i]));
+                    Debug.Log(values[i]);
                 }
                 else { value = values[i]; }
                 if (i == (values.Length - 1)) {
@@ -53,7 +54,7 @@ namespace DbUtilities {
 
             }
             string sql = sqlInsert + sqlValues;
-            //Debug.Log(sql);
+            Debug.Log(sql);
             _dbcm.CommandText = sql;
             _dbcm.ExecuteNonQuery();
             //Debug.Log("inserted");

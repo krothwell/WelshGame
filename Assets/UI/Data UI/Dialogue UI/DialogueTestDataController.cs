@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using GameUI;
 
 public class DialogueTestDataController {
     public enum TestType {
@@ -16,15 +17,32 @@ public class DialogueTestDataController {
     int answerCorrectPercent;
     int tallyModifier, readTally, writeTally, skillPointsGainedTotal, tallyShiftTotal;
     bool vocabSkillIncremented;
-    string resultString, playerAnswer;
-    TestTrigger testTrigger;
-    public DialogueTestDataController(TestTrigger trigger) {
-        tallyShiftTotal = skillPointsGainedTotal = 0;
-        answerCorrectPercent = -1; //-1 when not set
+    string resultString, playerAnswer, charName;
+    private TestTrigger myTestTrigger;
+    public TestTrigger MyTestTrigger {
+        get { return myTestTrigger; }
+        set { myTestTrigger = value; }
+    }
+    public DialogueTestDataController(TestTrigger trigger_, string charName_) {
+        SetDefaultValues();
+        charName = charName_;
         SetTestData();
         SetVocabIntro(vocab);
+        myTestTrigger = trigger_;
+    }
+
+    public DialogueTestDataController(TestTrigger trigger_, string[] vocab_, TestType testType_, string charName_) {
+        SetDefaultValues();
+        charName = charName_;
+        vocab = vocab_;
+        myTestTrigger = trigger_;
+        testType = testType_;
+    }
+
+    private void SetDefaultValues() {
+        tallyShiftTotal = skillPointsGainedTotal = 0;
+        answerCorrectPercent = -1; //-1 when not set
         grammarDetailsDict = new Dictionary<int, string[]>();
-        testTrigger = trigger;
         highestTallyPossible = DbCommands.GetMaxFromTable("Proficiencies", "Thresholds");
     }
 
@@ -45,14 +63,17 @@ public class DialogueTestDataController {
         testType = (num < 1) ? TestType.read : TestType.write;
     }
 
-    public string[] GetVocab() {
+    public string[] GetPlayerVocab() {
         string[] vocabRet = new string[2];
         if (testType == TestType.read) {
             vocabRet[0] = vocab[1];
             vocabRet[1] = vocab[0];
         } else {
-            vocabRet = vocab;
+            vocabRet[0] = vocab[0];
+            vocabRet[1] = vocab[1];
         }
+        vocabRet[0] = GetProcessedVocab(vocabRet[0]);
+        vocabRet[1] = GetProcessedVocab(vocabRet[1]);
         return vocabRet;
     }
 
@@ -70,7 +91,7 @@ public class DialogueTestDataController {
     }
 
     public string GetAnswer() {
-        return vocab[1];
+        return GetPlayerVocab()[1];
     }
 
     public void SetAnswerResults(string playerAnswerIn) {
@@ -172,7 +193,9 @@ public class DialogueTestDataController {
     }
 
     private void UpdateWriteTally() {
-        writeTally = int.Parse(DbCommands.GetFieldValueFromTable(
+        Debug.Log(vocab[0]);
+        Debug.Log(vocab[1]);
+        string tallyStr = (DbCommands.GetFieldValueFromTable(
             "DiscoveredVocab",
             "WriteCorrectTallies",
             "SaveIDs = 0 " +
@@ -181,6 +204,8 @@ public class DialogueTestDataController {
             vocab[0],
             vocab[1]
             ));
+        Debug.Log(tallyStr);
+        writeTally = int.Parse(tallyStr);
         writeTally += tallyModifier;
         tallyShiftTotal += tallyModifier;
         if (writeTally >= 0) {
@@ -202,34 +227,37 @@ public class DialogueTestDataController {
     }
 
     private void UpdateGrammarTallies() {
-        foreach (string[] grammarArray in relatedGrammarList) {
-            int grammarID = int.Parse(grammarArray[0]);
-            int currentTally = int.Parse(DbCommands.GetFieldValueFromTable(
-                "DiscoveredVocabGrammar",
-                "CorrectTallies",
-                "SaveIDs = 0 " +
-                    "AND RuleIDs = " + grammarID.ToString()
-            ));
+        if (relatedGrammarList != null) {
+            foreach (string[] grammarArray in relatedGrammarList) {
+                int grammarID = int.Parse(grammarArray[0]);
+                int currentTally = int.Parse(DbCommands.GetFieldValueFromTable(
+                    "DiscoveredVocabGrammar",
+                    "CorrectTallies",
+                    "SaveIDs = 0 " +
+                        "AND RuleIDs = " + grammarID.ToString()
+                ));
 
-            currentTally += tallyModifier;
-            tallyShiftTotal += tallyModifier;
-            if (currentTally >= 0) {
-                if (currentTally <= highestTallyPossible) {
-                    DbCommands.UpdateTableField(
-                        "DiscoveredVocabGrammar",
-                        "CorrectTallies",
-                        currentTally.ToString(),
-                        "SaveIDs = 0 " +
-                            "AND RuleIDs = " + grammarID.ToString()
-                    );
+                currentTally += tallyModifier;
+                tallyShiftTotal += tallyModifier;
+                if (currentTally >= 0) {
+                    if (currentTally <= highestTallyPossible) {
+                        DbCommands.UpdateTableField(
+                            "DiscoveredVocabGrammar",
+                            "CorrectTallies",
+                            currentTally.ToString(),
+                            "SaveIDs = 0 " +
+                                "AND RuleIDs = " + grammarID.ToString()
+                        );
+                    }
                 }
-            } else {
-                currentTally = 0;
-            }
-            if (!grammarDetailsDict.ContainsKey(grammarID)) {
-                string[] details = new string[2];
-                details[0] = currentTally.ToString();
-                grammarDetailsDict.Add(grammarID, details);
+                else {
+                    currentTally = 0;
+                }
+                if (!grammarDetailsDict.ContainsKey(grammarID)) {
+                    string[] details = new string[2];
+                    details[0] = currentTally.ToString();
+                    grammarDetailsDict.Add(grammarID, details);
+                }
             }
         }
     }
@@ -381,15 +409,22 @@ public class DialogueTestDataController {
     }
 
     public string GetTriggerName() {
-        return testTrigger.GetTriggerName();
+        return myTestTrigger.GetTriggerName();
     }
 
     public string GetTriggerLabel() {
-        return testTrigger.GetTriggerLabel();
+        return myTestTrigger.GetTriggerLabel();
     }
 
     public Sprite GetTriggerSprite() {
-        return testTrigger.GetTriggerSprite();
+        return myTestTrigger.GetTriggerSprite();
+    }
+
+    public string GetProcessedVocab(string vocab_) {
+        while(vocab_.Contains("[")) {
+            vocab_ = vocab_.Replace("[character name]", charName);
+        }
+        return vocab_;
     }
 }
 

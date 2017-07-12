@@ -108,6 +108,7 @@ namespace GameUI {
         }
 
         public void DisplayTasksRelatedToQuest(string questName) {
+            print("DISPLAYING TASKS RELATED TO QUEST");
             FillDisplayFromDb(DbQueries.GetTasksRelatedToQuest(questName), questTasksList.transform, BuildQuestTask, questName);
         }
 
@@ -129,7 +130,13 @@ namespace GameUI {
 
         public void SelectFirstQuest() {
             if (GetSelectedItemFromGroup(selectedQuest) == null) {
-                ToggleSelectionTo(questsList.transform.GetChild(0).GetComponent<Quest>(), selectedQuest);
+                if (questsList.transform.childCount > 0) {
+                    ToggleSelectionTo(questsList.transform.GetChild(0).GetComponent<Quest>(), selectedQuest);
+                }
+            }
+            else {
+                print("NEED TO SELECT SELECTED QUEST");
+                ToggleSelectionTo(GetSelectedItemFromGroup(selectedQuest),selectedQuest);
             }
         }
 
@@ -170,6 +177,7 @@ namespace GameUI {
                     combatUI.EndCombatWithCharacter(endCombatWithCharName);
                 }
                 if (startDialogueID != "") {
+                    print(startDialogueID);
                     dialogueUI.StartNewDialogue(startDialogueID);
                 }
                 int tasksCompletedCount = DbCommands.GetCountFromQry(

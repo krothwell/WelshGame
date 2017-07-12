@@ -156,7 +156,7 @@ public abstract class UIController : MonoBehaviour {
     }
 
     public ISelectableUI GetSelectedItemFromGroup(string groupName) {
-        print(groupName);
+        //print(groupName);
         return selectionToggleGroups[groupName];
     }
 
@@ -179,6 +179,8 @@ public abstract class UIController : MonoBehaviour {
                     if (selection != null) {
                         selection.SelectSelf();
                     }
+                } else {
+                    selection.SelectSelf();
                 }
             } else {
                 selectionToggleGroups[inGroup] = selection;

@@ -31,13 +31,40 @@ namespace GameUI {
                 get { return myNextNode; }
                 set { myNextNode = value; }
             }
-            public DialogueUI dialogueUI;
+
+            string[] vocabArray;
+            DialogueUI dialogueUI;
             NotificationQueue notificationQueue;
+            PlayerCharacter playerCharacter;
+            bool isVocabTest;
+            DialogueTestDataController testData;
+
+
+            public void InitialiseMe(string id_, string text_, string nextNode_) {
+                dialogueUI = FindObjectOfType<DialogueUI>();
+                playerCharacter = FindObjectOfType<PlayerCharacter>();
+                myID = id_;
+                myText = text_;
+                myNextNode = nextNode_;
+                isVocabTest = (DbCommands.GetCountFromTable("PlayerChoicesVocabTests", "ChoiceIDs = " + myID) != 0);
+                if (isVocabTest) {
+                    string[] playerChoiceTestArray = DbCommands.GetTupleFromTable("PlayerChoicesVocabTests", "ChoiceIDs = " + myID);
+                    vocabArray = new string[2];
+                    vocabArray[0] = playerChoiceTestArray[1];
+                    vocabArray[1] = playerChoiceTestArray[2];
+                    print(vocabArray[0]);
+                    print(vocabArray[1]);
+                    TestTrigger testTrigger = new TestTrigger("Translating to Welsh", dialogueUI.DialogueIcon, TestTrigger.TriggerType.DialogueChoice);
+                    testData = new DialogueTestDataController(testTrigger, vocabArray, DialogueTestDataController.TestType.write, playerCharacter.CharacterName);
+
+                }
+                transform.GetComponentInChildren<Text>().text = (isVocabTest) ? "\t" + testData.GetPlayerVocab()[0] : "\t" + myText;
+            }
 
             void DisableMe() {
                 GetComponent<Button>().interactable = false;
                 GetComponent<EventTrigger>().enabled = false;
-                GetComponent<Text>().text = myText;
+                transform.GetComponentInChildren<Text>().text = (isVocabTest) ? "\t" + testData.GetPlayerVocab()[0] : "\t" + myText;
             }
 
             public void SetDialogueUI(DialogueUI dm) {
@@ -45,22 +72,28 @@ namespace GameUI {
             }
 
             public void ProcessChoiceResults() {
+                DisplayCurrentNodeCharacterPortrait();
                 DisableMe();
                 dialogueUI.DestroyInteractiveChoices();
                 dialogueUI.InsertSpacer();
                 if (myNextNode != "") {
-                    dialogueUI.DisplayDialogueNode(GetDialogueNodeData(myNextNode));
-                    DisplayCurrentNodeCharacterPortrait();
+                    if (isVocabTest) {
+                        dialogueUI.CurrentPlayerChoice = this;
+                        dialogueUI.ProcessPlayerChoiceTest(vocabArray, testData);
+                    }
+                    else {
+                        dialogueUI.DisplayDialogueNode(GetDialogueNodeData(myNextNode));
+                    }
                 } else {
                     dialogueUI.SetNotInUse();
                 }
-                
                 if (dialogueUI.GetChoiceResultsCount(myID) > 0) {
                     dialogueUI.ActivateQuests(myID);
                     dialogueUI.ActivateQuestTasks(myID);
                     dialogueUI.ActivateNewGrammar(myID);
                     dialogueUI.ActivateNewWelsh(myID);
                     dialogueUI.MarkDialogueComplete(myID);
+                    dialogueUI.ActivateNewDialogue(myID);
 
                     notificationQueue = FindObjectOfType<NotificationQueue>();
                     notificationQueue.DisplayQueuedNotifications();
@@ -68,14 +101,14 @@ namespace GameUI {
             }
 
             public void DisplayPlayerPortrait() {
-
+                dialogueUI.SetObjectPortrait(playerCharacter.GetPlayerPortrait());
             }
 
             public void DisplayCurrentNodeCharacterPortrait() {
                 dialogueUI.SetCurrentPortrait();
             }
 
-            private string[] GetDialogueNodeData(string nodeID) {
+            public string[] GetDialogueNodeData(string nodeID) {
                 string[] nodeData = DbCommands.GetTupleFromTable("DialogueNodes", "NodeIDs = " + nodeID);
                 return nodeData;
             }

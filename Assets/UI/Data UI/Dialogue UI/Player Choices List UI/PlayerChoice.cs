@@ -1,85 +1,67 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using DataUI.Utilities;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using DbUtilities;
-using UnityUtilities;
+using DataUI.Utilities;
 
-namespace DataUI {
-    namespace ListItems {
-        public class PlayerChoice : UIInputListItem, ISelectableUI {
-            DialogueUI dialogueUI;
-            InputField input;
-            GameObject options;
+namespace DataUI.ListItems {
 
-            private string myText;
-            public string MyText {
-                get { return myText; }
-                set { myText = value; }
-            }
-            private string myID;
-            public string MyID {
-                get { return myID; }
-                set { myID = value; }
-            }
+    public class PlayerChoice : MonoBehaviour, ISelectableUI {
+        DialogueUI dialogueUI;
+        PlayerChoicesListUI playerChoicesListUI;
+        UIDisplayController displayController;
 
-            private string myNextNode;
-            public string MyNextNode {
-                get { return myNextNode; }
-                set { myNextNode = value; }
-            }
+        private string myText;
+        public string MyText {
+            get { return myText; }
+            set { myText = value; }
+        }
+        private string myID;
+        public string MyID {
+            get { return myID; }
+            set { myID = value; }
+        }
 
-            private string markDialogueComplete;
-            public string MarkDialogueComplete {
-                get { return myNextNode; }
-                set { myNextNode = value; }
-            }
-            // Use this for initialization
-            void Start() {
-                dialogueUI = FindObjectOfType<DialogueUI>();
-                input = transform.GetComponentInChildren<InputField>();
-                options = transform.Find("PlayerChoiceOptions").gameObject;
-            }
+        private string myNextNode;
+        public string MyNextNode {
+            get { return myNextNode; }
+            set { myNextNode = value; }
+        }
 
-            void OnMouseUpAsButton() {
-                dialogueUI.ToggleSelectionTo(GetComponent<PlayerChoice>(), dialogueUI.selectedChoice);
-            }
+        void Start() {
+            playerChoicesListUI = FindObjectOfType<PlayerChoicesListUI>();
+            displayController = GetComponent<UIDisplayController>();
+            dialogueUI = FindObjectOfType<DialogueUI>();
+        }
 
-            public void SelectSelf() {
-                DisplayOptions();
-                SetInputColour(Colours.colorDataUIInputSelected);
-                //dialogueUI.SetSelectedPlayerChoice(gameObject);
-                dialogueUI.DisplayResultsRelatedToChoices();
-            }
+        public void DeleteChoice() {
+            string[,] fields = { { "ChoiceIDs", myID } };
+            DbCommands.DeleteTupleInTable("PlayerChoices",
+                                         fields);
+            Destroy(gameObject);
+        }
 
-            public void DeselectSelf() {
-                HideOptions();
-                SetInputColour(Color.white);
-                input.readOnly = true;
-            }
+        public void InitialiseMe(string myText_, string myID_, string myNextNode_) {
+            myText = myText_;
+            myID = myID_;
+            myNextNode = myNextNode_;
+        }
 
-            private void DisplayOptions() {
-                options.SetActive(true);
-            }
+        public void SelectSelf() {
+            displayController.SetColour(Colours.colorDataUIInputSelected);
+            print("working1");
+            dialogueUI.DisplayResultsRelatedToChoices();
+            print("working2");
+            GetComponent<UIGameObjectToggle>().ActivateGameObject();
+        }
 
-            private void HideOptions() {
-                options.SetActive(false);
-            }
+        public void DeselectSelf() {
+            displayController.SetColour(Colours.colorDataUIPanelInactive);
+            GetComponent<UIGameObjectToggle>().DeactivateGameObject();
+        }
 
-            public void DeleteChoice() {
-                string[,] fields = { { "ChoiceIDs", myID } };
-                DbCommands.DeleteTupleInTable("PlayerChoices",
-                                             fields);
-                Destroy(gameObject);
-            }
-
-            public void EditChoice() {
-                dialogueUI.SetActivePlayerChoiceEdit();
-            }
-
-            public void UpdateChoiceDisplay(string newText) {
-                input.GetComponent<InputField>().text = newText;
-            }
+        void OnMouseUpAsButton() {
+            playerChoicesListUI.ToggleSelectionTo(this, playerChoicesListUI.SelectedChoice);
         }
     }
 }

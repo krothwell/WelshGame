@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIInputListItem : MonoBehaviour {
+public class UIInputListItem : UIDisplayController {
     private InputField inputField;
 
     public InputField GetInputField() {
@@ -11,7 +11,7 @@ public class UIInputListItem : MonoBehaviour {
         return inputField;
     }
 
-    public void SetInputColour(Color newColor) {
+    public override void SetColour(Color newColor) {
         ColorBlock cb = GetInputField().colors;
         cb.normalColor = newColor;
         inputField.colors = cb;

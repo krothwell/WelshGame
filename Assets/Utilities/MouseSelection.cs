@@ -47,8 +47,6 @@ namespace UnityUtilities {
                 countingDownFromMouseClicked = true;
                 dc = false;
             }
-            print(dc);
-            print(delayTime);
             dblClick = dc;
 
 

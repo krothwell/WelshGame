@@ -6,7 +6,6 @@ using DataUI.Utilities;
 
 namespace DataUI {
     public class ProficienciesListUI : UIController {
-        private GrammarListUI grammarListUI;
         private Button proficienciesBtn;
         public Button ProficienciesBtn {
             get { return proficienciesBtn; }
@@ -32,7 +31,6 @@ namespace DataUI {
 
         void Start() {
             proficienciesBtn = transform.Find("ProficienciesBtn").GetComponent<Button>();
-            grammarListUI = FindObjectOfType<GrammarListUI>();
             translationUI = FindObjectOfType<TranslationUI>();
             //PROFICIENCIES UI
             proficienciesList = GetPanel().GetComponentInChildren<GridLayoutGroup>().gameObject;
@@ -47,9 +45,10 @@ namespace DataUI {
         }
 
         public void ToggleSideMenuToProficienciesList() {
-            ToggleMenuTo(GetComponent<UIController>(), translationUI.SideMenuGroup);
-            proficienciesBtn.colors.normalColor.Equals(Colours.colorDataUItxt);
-            grammarListUI.GrammarRulesBtn.colors.normalColor.Equals(Colours.colorDataUIbtn);
+            if (!GetPanel().activeSelf) {
+                translationUI.ToggleMenuTo(GetComponent<UIController>(), translationUI.SideMenuGroup);
+                translationUI.ToggleSelectedSideMenuButton(proficienciesBtn);
+            }
             FillDisplayFromDb(DbCommands.GetProficienciesDisplayQry(), ProficienciesList.transform, BuildProficiency);
         }
 

@@ -36,12 +36,12 @@ namespace DataUI {
 
             public void SelectSelf() {
                 DisplayOptions();
-                SetPanelColour(Colours.colorDataUIInputSelected);
+                SetColour(Colours.colorDataUIInputSelected);
             }
 
             public void DeselectSelf() {
                 HideOptions();
-                SetPanelColour(Colours.colorDataUIPanelInactive);
+                SetColour(Colours.colorDataUIPanelInactive);
             }
 
             private void DisplayOptions() {

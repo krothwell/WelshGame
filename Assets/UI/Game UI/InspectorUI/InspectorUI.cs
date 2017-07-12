@@ -45,7 +45,6 @@ public class InspectorUI : UIController {
     }
 
     public void SetInspectorHealth(Transform tf) {
-        print(tf);
         CharCombatController combatController = tf.GetComponentInChildren<CharCombatController>();
         if(combatController == null) {
             healthSlider.SetActive(false);

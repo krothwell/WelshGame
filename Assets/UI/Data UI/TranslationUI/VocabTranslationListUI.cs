@@ -19,11 +19,6 @@ namespace DataUI {
             set { vocabTranslationSelected = value; }
         }
         public GameObject translationPrefab;
-        private Translation currentTranslation;
-        public Translation CurrentTranslation {
-            get { return currentTranslation; }
-            set { currentTranslation = value; }
-        }
         InputField inputTranslationEnTxt, inputTranslationCyTxt;
         InputField searchTranslations;
         float searchWait = 0f;
@@ -67,7 +62,9 @@ namespace DataUI {
 
         public void DeactivateSelectedTranslation() {
             Translation selectedTranslation = (Translation)GetSelectedItemFromGroup(vocabTranslationSelected);
-            selectedTranslation.DeselectSelf();
+            if (selectedTranslation != null) {
+                selectedTranslation.DeselectSelf();
+            }
         }
 
         public void DeactivateNewTranslation() {

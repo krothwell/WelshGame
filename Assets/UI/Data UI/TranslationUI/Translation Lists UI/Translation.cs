@@ -10,6 +10,7 @@ namespace DataUI {
         public class Translation : UIInputListItem, ISelectableUI {
             private VocabTranslationListUI vocabTranslationListUI;
             private GrammarListUI grammarListUI;
+            private TagsListUI tagsListUI;
             private string currentEnglish;
             public string CurrentEnglish {
                 get { return currentEnglish; }
@@ -30,6 +31,7 @@ namespace DataUI {
             void Start() {
                 grammarListUI = FindObjectOfType<GrammarListUI>();
                 vocabTranslationListUI = FindObjectOfType<VocabTranslationListUI>();
+                tagsListUI = FindObjectOfType<TagsListUI>();
                 translationOptions = gameObject.transform.Find("TranslationOptions").gameObject;
                 englishText = gameObject.transform.Find("EnglishVocab").gameObject;
                 welshText = gameObject.transform.Find("WelshVocab").gameObject;
@@ -155,7 +157,11 @@ namespace DataUI {
                     ActivateTranslationOptions();
                     //vocabTranslationListUI.CurrentTranslation = this;
                     vocabTranslationListUI.ToggleSelectionTo(this, vocabTranslationListUI.VocabTranslationSelected);
-                    grammarListUI.ToggleSideMenuToGrammarList();
+                    if (grammarListUI.GetPanel().activeSelf) {
+                        grammarListUI.ToggleSideMenuToGrammarList();
+                    } else if (tagsListUI.GetPanel().activeSelf) {
+                        tagsListUI.ToggleSideMenuToTagsList();
+                    }
                 }
             }
 

@@ -34,7 +34,6 @@ public abstract class CharacterMovementDecision : CharacterDecision {
     }
 
     public override void EndDecision() {
-        
         movementType.StopAction();
         isEnding = true;
         print("ending decision");
@@ -70,11 +69,10 @@ public abstract class CharacterMovementDecision : CharacterDecision {
     public abstract void SetTarget(Transform targetTransform);
 
     public void InitialiseMe(Transform targetTransform, bool isRunning) {
-        print(targetTransform);
         SetTarget(targetTransform);
         MovementController.Character = myCharacter;
-        MovementController.InitialiseMe();
         SetMovementType(isRunning);
+        MovementController.InitialiseMe();
     }
 
 }

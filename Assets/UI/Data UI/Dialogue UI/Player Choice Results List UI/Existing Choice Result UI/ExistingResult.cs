@@ -19,12 +19,12 @@ namespace DataUI.ListItems {
 
         public void SelectSelf() {
             DisplayOptions();
-            SetPanelColour(Colours.colorDataUIInputSelected);
+            SetColour(Colours.colorDataUIInputSelected);
         }
 
         public void DeselectSelf() {
             HideOptions();
-            SetPanelColour(Color.white);
+            SetColour(Color.white);
         }
 
         void DisplayOptions() {

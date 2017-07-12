@@ -41,7 +41,7 @@ public class HumanCharAnimToggles : MonoBehaviour {
         //        GetMovement().StopAction();
         //        print(myAnimator.transform);
                 myAnimator.SetBool("idle1", true);
-        //    }
+       //     }
         
     }
     public void Idle2() {

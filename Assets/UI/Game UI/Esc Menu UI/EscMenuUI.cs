@@ -4,19 +4,17 @@ using System;
 using UnityEngine.UI;
 using DbUtilities;
 namespace GameUI {
-    public class EscMenuUI : MonoBehaviour {
+    public class EscMenuUI : UIController {
         GameObject myPanel;
         GameObject saveGameList, loadGameList;
         GameObject submitSaveBtn;
         public GameObject[] options;
-        UIController ui;
         PlayerSavesController playerSavesController;
         GameObject saveInput;
         // Use this for initialization
         void Start() {
             myPanel = transform.Find("Panel").gameObject;
             playerSavesController = FindObjectOfType<PlayerSavesController>();
-            ui = transform.parent.parent.gameObject.GetComponent<UIController>();
             saveGameList = options[0].transform.Find("SaveGamesList").gameObject;
             loadGameList = options[1].transform.Find("LoadGamesList").gameObject;
             saveInput = options[0].transform.Find("SaveInput").gameObject;
@@ -64,11 +62,11 @@ namespace GameUI {
         }
 
         public void FillSaveGames() {
-            ui.FillDisplayFromDb(DbQueries.GetSaveGamesDisplayQry(false), saveGameList.transform, playerSavesController.BuildSaveGameRow);
+            FillDisplayFromDb(DbQueries.GetSaveGamesDisplayQry(false), saveGameList.transform, playerSavesController.BuildSaveGameRow);
         }
 
         public void FillLoadGames() {
-            ui.FillDisplayFromDb(DbQueries.GetSaveGamesDisplayQry(true), loadGameList.transform, playerSavesController.BuildSaveGameRow);
+            FillDisplayFromDb(DbQueries.GetSaveGamesDisplayQry(true), loadGameList.transform, playerSavesController.BuildSaveGameRow);
         }
 
 

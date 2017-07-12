@@ -17,7 +17,7 @@ namespace DataUI {
     /// this class or children of this class.
     /// </summary>
     public class TranslationUI : UIController {
-
+        Button selectedBtn;
         //GrammarListUI grammarListUI;
         //ProficienciesListUI proficienciesListUI;
         public string SideMenuGroup;
@@ -26,6 +26,14 @@ namespace DataUI {
             //proficienciesListUI = GetPanel().GetComponentInChildren<ProficienciesListUI>();
             SideMenuGroup = "SideMenuGroup";
             CreateNewMenuToggleGroup(SideMenuGroup);
+        }
+
+        public void ToggleSelectedSideMenuButton(Button btn) {
+            if (selectedBtn != null) {
+                selectedBtn.colors.normalColor.Equals(Colours.colorDataUItxt);
+            }
+            btn.colors.normalColor.Equals(Colours.colorDataUIbtn);
+            selectedBtn = btn;
         }
     }
 }

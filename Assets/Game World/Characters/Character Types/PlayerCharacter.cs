@@ -8,24 +8,29 @@ using UnityUtilities;
 /// to input from the player and game environment.  
 /// </summary>
 public class PlayerCharacter : Character {
+    private MusicZone currentMusicZone;
+    public MusicZone CurrentMusicZone {
+        get { return currentMusicZone; }
+        set { currentMusicZone = value; }
+    }
     public GameObject SelectionCirclePrefab;
     public Sprite backUpPlayerPortrait; //if the character portrait is null then this is used.
-    public enum PlayerStatus {
-        passive,
-        movingToLocation,
-        movingToObject,
-        movingToCharacter,
-        movingToWeaponRange,
-        speakingToCharacter
-    }
-    public PlayerStatus playerStatus;
+    //public enum PlayerStatus {
+    //    passive,
+    //    movingToLocation,
+    //    movingToObject,
+    //    movingToCharacter,
+    //    movingToWeaponRange,
+    //    speakingToCharacter
+    //}
+    //public PlayerStatus playerStatus;
     public GameObject currentObjectInteractingWith;
     private GameWorldSelector currentSelection;
 
     void Awake() {
         combatController = GetComponent<CharCombatController>();
         InitialiseMe();
-        playerStatus = PlayerStatus.passive;
+        //playerStatus = PlayerStatus.passive;
         dialogueUI = FindObjectOfType<DialogueUI>();
     }
 
@@ -55,7 +60,6 @@ public class PlayerCharacter : Character {
     }
 
     public override void EndSelection() {
-        print("ending selection");
         if (currentSelection != null) {
             currentSelection.EndCurrentSelection();
             currentSelection = null;

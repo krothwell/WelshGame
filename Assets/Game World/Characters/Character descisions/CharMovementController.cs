@@ -185,12 +185,12 @@ public class CharMovementController : MonoBehaviour {
         movement = movementType;
         SetMyDirection(targetPosition, character.GetMyPosition());
         //print("target:" + targetPosition + ", my position: " + myPosition);
-        print(character);
         CharacterDecision decision = character.MyDecision;
         print(decision);
         if (decision.GetType() == typeof(CharacterMovementDecision)) {
             collisionAvoider = character.MyDecision.GetComponent<CollisionAvoider>();
         }
+        Debug.Log("MOVEMENT IS: " + movement);
         movement.MakeAction();
         ToggleIsMoving(true);
     }

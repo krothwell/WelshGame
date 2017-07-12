@@ -3,16 +3,22 @@
 public class TestTrigger {
     public enum TriggerType {
         Ability,
-        Quest
+        Quest,
+        DialogueNode,
+        DialogueChoice
     }
     private string triggerName;
     private Sprite iconSprite;
-    private TriggerType triggerType;
+    private TriggerType trigType;
+    public TriggerType TrigType {
+        get { return trigType; }
+        set { trigType = value; }
+    }
 
     public TestTrigger(string name, Sprite sprite, TriggerType typeIn) {
         triggerName = name;
         iconSprite = sprite;
-        triggerType = typeIn;
+        trigType = typeIn;
     }
     
     public string GetTriggerName() {
@@ -25,7 +31,7 @@ public class TestTrigger {
 
     public string GetTriggerLabel() {
         string labelStr = "";
-        switch (triggerType) { 
+        switch (trigType) { 
             case TriggerType.Ability:
                 labelStr = "Ability attempted";
                 break;

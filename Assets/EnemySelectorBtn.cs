@@ -12,9 +12,6 @@ public class EnemySelectorBtn : MonoBehaviour {
 	}
 	
     public void InitialiseMe(Sprite _portrait, GameWorldSelector _selector) {
-        print(portraitImg);
-        print(_portrait);
-        print(_selector);
         portraitImg.sprite = _portrait;
         gameWorldSelector = _selector;
     }

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DbUtilities;
@@ -51,8 +50,9 @@ namespace DataUI {
             }
 
             public void InsertToRuleList() {
-                string welsh = vocabTranslationListUI.CurrentTranslation.CurrentEnglish;
-                string english = vocabTranslationListUI.CurrentTranslation.CurrentWelsh; ;
+                Translation currentTranslation = (Translation)vocabTranslationListUI.GetSelectedItemFromGroup(vocabTranslationListUI.VocabTranslationSelected);
+                string english = currentTranslation.CurrentEnglish;
+                string welsh = currentTranslation.CurrentWelsh;
                 DbCommands.InsertTupleToTable("VocabRuleList", english, welsh, ruleNumber);
                 addRuleBtn.GetComponent<Text>().text = "Remove";
                 Image btnImg = gameObject.transform.Find("DescriptionInput").GetComponent<Image>();
@@ -62,7 +62,8 @@ namespace DataUI {
 
 
             public void DeleteFromRuleList() {
-                string[,] ruleFields = new string[,] { { "WelshText", vocabTranslationListUI.CurrentTranslation.CurrentWelsh }, { "RuleIDs", RuleNumber } };
+                Translation currentTranslation = (Translation)vocabTranslationListUI.GetSelectedItemFromGroup(vocabTranslationListUI.VocabTranslationSelected);
+                string[,] ruleFields = new string[,] { { "WelshText", currentTranslation.CurrentWelsh }, { "RuleIDs", RuleNumber } };
                 DbCommands.DeleteTupleInTable("VocabRuleList", ruleFields);
                 addRuleBtn.GetComponent<Text>().text = "Add rule";
                 Image btnImg = gameObject.transform.Find("DescriptionInput").GetComponent<Image>();

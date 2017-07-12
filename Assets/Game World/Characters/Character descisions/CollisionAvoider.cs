@@ -61,7 +61,6 @@ public class CollisionAvoider : MonoBehaviour {
             if (obstacle != myPerimeter) {
                 if (character.MyDecision.GetType() == typeof(MoveToCharacterDecision)) {
                     if (obstacle.transform.parent.gameObject != selected) {
-                        print(selected);
                         print(obstacle.transform.parent.gameObject);
                         RedirectCharacter(obstacle);
                     }

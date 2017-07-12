@@ -5,7 +5,7 @@ using UnityEngine;
 namespace DataUI {
     namespace ListItems {
         public class DialogueNodeSpeaker : MonoBehaviour {
-            DialogueUI dui;
+            DialogueNodeDetailsUI dialogueNodeDetailsUI;
             private string characterName;
             public string CharacterName {
                 get { return characterName; }
@@ -18,12 +18,12 @@ namespace DataUI {
             }
 
             void Start() {
-                dui = FindObjectOfType<DialogueUI>();
+                dialogueNodeDetailsUI = FindObjectOfType<DialogueNodeDetailsUI>();
             }
 
             public void LinkDialogueToOverride() {
-                dui.SetDialogueCharacterOverride(gameObject);
-                dui.DeactivateNewCharacterOverride();
+                dialogueNodeDetailsUI.SetCharacterOverride(gameObject);
+                dialogueNodeDetailsUI.DeactivateNewCharacterOverride();
             }
 
         }

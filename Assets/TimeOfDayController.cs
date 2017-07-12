@@ -189,7 +189,6 @@ public class TimeOfDayController : MonoBehaviour {
     }
 
     void TurnOnNightLights() {
-        print("turning on night lights");
         foreach (NightLight nl in nightLights) {
             nl.TurnOn();
         }
