@@ -10,7 +10,6 @@ public class ListSearcher : UIController {
     public GameObject listToSearch;
     InputField myInput;
     ListDisplayInfo searchInfo;
-    string searchQry;
     // Use this for initialization
     void Start () {
         myInput = GetComponent<InputField>();

@@ -36,6 +36,7 @@ public class DbSetup {
                         PlayerChoiceResults,
                         QuestsActivatedByDialogueChoices,
                         TasksActivatedByDialogueChoices,
+                        TasksCompletedByDialogueChoices,
                         WelshVocabActivatedByDialogueChoices,
                         GrammarActivatedByDialogueChoices,
                         DialoguesActivatedByDialogueChoices,
@@ -45,11 +46,15 @@ public class DbSetup {
                         QuestTasksActivated,
                         QuestTaskResults,
                         QuestTaskStartDialogueResults,
+                        QuestTaskActivateDialogueResults,
                         QuestTaskEndCombatWithCharResults,
                         QuestTaskParts,
                         QuestTaskPartsPrefab,
+                        QuestTaskPartsCompleteQuest,
+                        QuestTaskPartsActivateDialogueNode,
                         CompletedQuestTaskParts,
                         QuestTaskPartsEquipItem,
+                        QuestTaskPartsDefeatCharTagged,
                         SavedWorldItems,
                         PremadeWorldItems
 						};
@@ -329,6 +334,15 @@ public class DbSetup {
                                                                                         + "FOREIGN KEY (TaskIDs) REFERENCES QuestTasks(TaskIDs) ON DELETE CASCADE ON UPDATE CASCADE, ";
         tblSqlArray[(int)tbls.TasksActivatedByDialogueChoices, (int)tblSqlStrs.pk]      = "ResultIDs, ChoiceIDs, TaskIDs";
 
+        tblSqlArray[(int)tbls.TasksCompletedByDialogueChoices, (int)tblSqlStrs.header]  = "TasksCompletedByDialogueChoices";
+        tblSqlArray[(int)tbls.TasksCompletedByDialogueChoices, (int)tblSqlStrs.body]    = "ResultIDs INT NOT NULL, "
+                                                                                        + "ChoiceIDs INT NOT NULL, "
+                                                                                        + "TaskIDs INT, "
+                                                                                        + "FOREIGN KEY (ResultIDs, ChoiceIDs) "
+                                                                                            + "REFERENCES PlayerChoiceResults(ResultIDs, ChoiceIDs) ON DELETE CASCADE ON UPDATE CASCADE, "//fk referencing composite pk must use all values of pk
+                                                                                        + "FOREIGN KEY (TaskIDs) REFERENCES QuestTasks(TaskIDs) ON DELETE CASCADE ON UPDATE CASCADE, ";
+        tblSqlArray[(int)tbls.TasksCompletedByDialogueChoices, (int)tblSqlStrs.pk]      = "ResultIDs, ChoiceIDs, TaskIDs";
+
         tblSqlArray[(int)tbls.WelshVocabActivatedByDialogueChoices, (int)tblSqlStrs.header]  = "WelshVocabActivatedByDialogueChoices";
         tblSqlArray[(int)tbls.WelshVocabActivatedByDialogueChoices, (int)tblSqlStrs.body]    = "ResultIDs INT NOT NULL, "
                                                                                              + "ChoiceIDs INT NOT NULL, "
@@ -394,6 +408,14 @@ public class DbSetup {
                                                                                             + "FOREIGN KEY (DialogueIDs) REFERENCES Dialogues(DialogueIDs) ON DELETE CASCADE ON UPDATE CASCADE, ";
         tblSqlArray[(int)tbls.QuestTaskStartDialogueResults, (int)tblSqlStrs.pk]            = "ResultIDs, TaskIDs, DialogueIDs";
 
+        tblSqlArray[(int)tbls.QuestTaskActivateDialogueResults, (int)tblSqlStrs.header] = "QuestTaskActivateDialogueResults";
+        tblSqlArray[(int)tbls.QuestTaskActivateDialogueResults, (int)tblSqlStrs.body]   = "ResultIDs INT NOT NULL, "
+                                                                                        + "TaskIDs INT, "
+                                                                                        + "DialogueIDs INT, "
+                                                                                        + "FOREIGN KEY (ResultIDs, TaskIDs) REFERENCES QuestTaskResults(ResultIDs, TaskIDs) ON DELETE CASCADE ON UPDATE CASCADE, "
+                                                                                        + "FOREIGN KEY (DialogueIDs) REFERENCES Dialogues(DialogueIDs) ON DELETE CASCADE ON UPDATE CASCADE, ";
+        tblSqlArray[(int)tbls.QuestTaskActivateDialogueResults, (int)tblSqlStrs.pk]     = "ResultIDs, TaskIDs, DialogueIDs";
+
         tblSqlArray[(int)tbls.QuestTaskEndCombatWithCharResults, (int)tblSqlStrs.header] = "QuestTaskEndCombatWithCharResults";
         tblSqlArray[(int)tbls.QuestTaskEndCombatWithCharResults, (int)tblSqlStrs.body]   = "ResultIDs INT NOT NULL, "
                                                                                             + "TaskIDs INT, "
@@ -437,6 +459,26 @@ public class DbSetup {
                                                                                 + "FOREIGN KEY (PartIDs) REFERENCES QuestTaskParts(PartIDs) ON DELETE CASCADE, ";
         tblSqlArray[(int)tbls.QuestTaskPartsPrefab, (int)tblSqlStrs.pk]         = "PrefabPath, PartIDs";
 
+        tblSqlArray[(int)tbls.QuestTaskPartsCompleteQuest, (int)tblSqlStrs.header]  = "QuestTaskPartsCompleteQuest";
+        tblSqlArray[(int)tbls.QuestTaskPartsCompleteQuest, (int)tblSqlStrs.body]    = "QuestNames VARCHAR(100) NOT NULL, "
+                                                                                    + "PartIDs INT, "
+                                                                                    + "FOREIGN KEY (PartIDs) REFERENCES QuestTaskParts(PartIDs) ON DELETE CASCADE, "
+                                                                                    + "FOREIGN KEY (QuestNames) REFERENCES Quests(QuestNames) ON DELETE CASCADE, ";
+        tblSqlArray[(int)tbls.QuestTaskPartsCompleteQuest, (int)tblSqlStrs.pk]      = "QuestNames, PartIDs";
+
+        tblSqlArray[(int)tbls.QuestTaskPartsActivateDialogueNode, (int)tblSqlStrs.header]   = "QuestTaskPartsActivateDialogueNode";
+        tblSqlArray[(int)tbls.QuestTaskPartsActivateDialogueNode, (int)tblSqlStrs.body]     = "NodeIDs INT NULL, "
+                                                                                            + "PartIDs INT, "
+                                                                                            + "FOREIGN KEY (PartIDs) REFERENCES QuestTaskParts(PartIDs) ON DELETE CASCADE, "
+                                                                                            + "FOREIGN KEY (NodeIDs) REFERENCES DialogueNodes(NodeIDs) ON DELETE CASCADE, ";
+        tblSqlArray[(int)tbls.QuestTaskPartsActivateDialogueNode, (int)tblSqlStrs.pk]       = "NodeIDs, PartIDs";
+
+        tblSqlArray[(int)tbls.QuestTaskPartsDefeatCharTagged, (int)tblSqlStrs.header]   = "QuestTaskPartsDefeatCharTagged";
+        tblSqlArray[(int)tbls.QuestTaskPartsDefeatCharTagged, (int)tblSqlStrs.body]     = "CharacterTags VARCHAR(100) NULL,"
+                                                                                        + "PartIDs INT, "
+                                                                                        + "FOREIGN KEY (PartIDs) REFERENCES QuestTaskParts(PartIDs) ON DELETE CASCADE, ";
+        tblSqlArray[(int)tbls.QuestTaskPartsDefeatCharTagged, (int)tblSqlStrs.pk]       = "CharacterTags, PartIDs";
+
         //NB: world items should never be in the same location at same time to avoid duplicate errors
         tblSqlArray[(int)tbls.SavedWorldItems, (int)tblSqlStrs.header]          = "SavedWorldItems";
         tblSqlArray[(int)tbls.SavedWorldItems, (int)tblSqlStrs.body]            = "SaveIDs, "
@@ -459,27 +501,6 @@ public class DbSetup {
                                                                                 + "StartingSceneNames VARCHAR(50), "
                                                                                 + "ItemNames VARCHAR(50), ";
         tblSqlArray[(int)tbls.PremadeWorldItems, (int)tblSqlStrs.pk]            = "StartingLocationX, StartingLocationY, StartingLocationZ, StartingParentPath, StartingSceneNames";
-
-        //tblSqlArray[(int)tbls.SavedPremadeWorldItems, (int)tblSqlStrs.header]   = "SavedPremadeWorldItems";
-        //tblSqlArray[(int)tbls.SavedPremadeWorldItems, (int)tblSqlStrs.body]     = "SaveIDs, "
-        //                                                                        + "StartingLocationX INT, "
-        //                                                                        + "StartingLocationY INT, "
-        //                                                                        + "StartingLocationZ INT, "
-        //                                                                        + "StartingParentPath VARCHAR(250), "
-        //                                                                        + "StartingSceneNames VARCHAR(50), "
-        //                                                                        + "ItemNames VARCHAR(50), "
-        //                                                                        + "CurrentLocationX INT, "
-        //                                                                        + "CurrentLocationY INT, "
-        //                                                                        + "CurrentLocationZ INT, "
-        //                                                                        + "CurrentParentPath VARCHAR(250), "
-        //                                                                        + "CurrentSceneNames VARCHAR(50), "
-        //                                                                        + "Destroyed INT, "
-        //                                                                        + "FOREIGN KEY (StartingLocationX, StartingLocationY, StartingLocationZ, StartingParentPath, StartingSceneNames, ItemNames) "
-        //                                                                            + "REFERENCES PremadeWorldItems(StartingLocationX, StartingLocationY, StartingLocationZ, StartingParentPath, StartingSceneNames, ItemNames) ON UPDATE CASCADE, "
-        //                                                                        + "FOREIGN KEY (SaveIDs) "
-        //                                                                            + "REFERENCES PlayerGames(SaveIDs) ON DELETE CASCADE, ";
-        //tblSqlArray[(int)tbls.SavedPremadeWorldItems, (int)tblSqlStrs.pk]       = "StartingLocationX, StartingLocationY, StartingLocationZ, StartingParentPath, StartingSceneNames, ItemNames, "
-        //                                                                        + "SaveIDs";
     }
 
     public void ReplaceTable(string tblName) {
@@ -584,42 +605,5 @@ public class DbSetup {
 			CreateTable(i);
 		}
 	}
-
-    //// One off methods to manage the data - kept just in case I need to do it again/something similar
-
-    //void CopyDialogueActiveStateFromDialoguesToActivatedDialogues() {
-    //    IDbConnection _dbc = new SqliteConnection(conn);
-    //    _dbc.Open(); //Open connection to the database.
-    //    IDbCommand _dbcm = _dbc.CreateCommand();
-    //    _dbcm.CommandText = "PRAGMA foreign_keys=ON;";
-    //    _dbcm.ExecuteNonQuery();
-
-    //    sql = "INSERT INTO " + tblNameTo + "(" + tblFieldTo + ")  " + " SELECT " + tblFieldFrom + " FROM " + tblNameFrom;
-    //    _dbcm.CommandText = sql;
-    //    IDataReader _dbr = _dbcm.ExecuteReader();
-    //    for (int i = 0; i < _dbr.FieldCount; i++) {
-    //        if (i == _dbr.FieldCount - 1) {
-    //            copiedFieldNames += (_dbr.GetName(i));
-    //        }
-    //        else { copiedFieldNames += (_dbr.GetName(i)) + ","; }
-    //    }
-
-    //    _dbr.Dispose();
-    //    _dbr = null;
-
-    //    sql = "INSERT INTO " + tblNameTo + "(" + tblFieldTo + ")  " + " SELECT " + tblFieldFrom + " FROM " + tblNameFrom;
-
-    //    _dbcm.CommandText = sql;
-    //    _dbcm.ExecuteNonQuery();
-
-    //    //PrintTable(tblNameTo);
-
-    //    _dbcm.Dispose();
-    //    _dbcm = null;
-    //    _dbc.Close();
-    //    _dbc = null;
-    //}
-
-
 
 }

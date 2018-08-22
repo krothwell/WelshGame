@@ -34,14 +34,19 @@ namespace GameUI {
             playerCharacter = FindObjectOfType<PlayerCharacter>();
             SelectedAbilityOption = "selectedAbilityOption";
             CreateSelectionToggleGroup(SelectedAbilityOption);
+            HideAbilities();
+            HideUnderAttack();
+            HidePlayerVitals();
 
         }
 
         // Update is called once per frame
         void Update() {
             if (playerCharacter.GetCombatController().IsInCombat()) {
-                if (Input.GetKeyUp(KeyCode.Space)) {
-                    ToggleCombatMode();
+                if (!dialogueUI.IsInUse) {
+                    if (Input.GetKeyUp(KeyCode.Space)) {
+                        ToggleCombatMode();
+                    }
                 }
             }
         }
@@ -67,7 +72,9 @@ namespace GameUI {
         }
 
         public void HideUnderAttack() {
-            underAttackUI.HideComponents();
+            if (underAttackUI) {
+                underAttackUI.HideComponents();
+            }
         }
 
         public void HidePlayerVitals() {
@@ -83,7 +90,9 @@ namespace GameUI {
         }
 
         public void HideAbilities() {
-            abilitiesUI.HideComponents();
+            if (abilitiesUI) {
+                abilitiesUI.HideComponents();
+            }
         }
 
 
@@ -128,17 +137,18 @@ namespace GameUI {
             }
         }
 
-        public void UseSelectedAbility() {
+        public void UseSelectedAbility(DialogueTestDataController testDataController) {
             print("using selected ability: " + currentAbility);
-            if (currentAbility != null) {
-                
-                
-                currentAbility.UseAbility();
-                ToggleCombatMode();
-                //DeselectAbility();
-                //print(playerCharacter.GetCurrentSelection());
-                //playerCharacter.GetCurrentSelection().EndCurrentSelection();
+            if (testDataController.GetAnswerPercentageCorrect() >= 65) {
+                if (currentAbility != null) {
+                    currentAbility.UseAbility();
+                    
+                    //DeselectAbility();
+                    //print(playerCharacter.GetCurrentSelection());
+                    //playerCharacter.GetCurrentSelection().EndCurrentSelection();
+                }
             }
+            ToggleCombatMode();
         }
 
         public void RemoveCurrentAbility() {

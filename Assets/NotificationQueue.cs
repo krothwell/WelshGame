@@ -6,12 +6,12 @@ using UnityEngine.UI;
 namespace GameUI {
     public class NotificationQueue : MonoBehaviour {
         public GameObject newQuestNotifierPrefab;
-        List<NotificationData> notificationDataList;
+        Queue<NotificationData> notificationDataList;
         private Transform notificationList;
         GameObject notificationLbl;
         // Use this for initialization
         void Start() {
-            notificationDataList = new List<NotificationData>();
+            notificationDataList = new Queue<NotificationData>();
             notificationList = GetComponentInChildren<HorizontalLayoutGroup>().transform;
             notificationLbl = transform.Find("NotificationsLbl").gameObject;
             ClearNotifications();
@@ -25,13 +25,13 @@ namespace GameUI {
 
         public void QueueNewQuestNotifier(string questName) {
             NotificationData newQuestNotifier = new NotificationData("New quest", questName, NotificationData.NotificationType.newQuest);
-            if (!notificationDataList.Contains(newQuestNotifier)) { notificationDataList.Add(newQuestNotifier); }
+            if (!notificationDataList.Contains(newQuestNotifier)) { notificationDataList.Enqueue(newQuestNotifier); }
             
         }
 
         public void QueueUpdatedQuestNotifier(string questName) {
             NotificationData newQuestNotifier = new NotificationData("Updated quest", questName, NotificationData.NotificationType.newQuest);
-            if (!notificationDataList.Contains(newQuestNotifier)) { notificationDataList.Add(newQuestNotifier); }
+            if (!notificationDataList.Contains(newQuestNotifier)) { notificationDataList.Enqueue(newQuestNotifier); }
         }
 
         public void DisplayQueuedNotifications() {
@@ -46,7 +46,7 @@ namespace GameUI {
                 //notificationDataList.Remove(notification);
             }
             ToggleLbl();
-            notificationDataList = new List<NotificationData>();
+            notificationDataList = new Queue<NotificationData>();
         }
 
         public void ToggleLbl() {

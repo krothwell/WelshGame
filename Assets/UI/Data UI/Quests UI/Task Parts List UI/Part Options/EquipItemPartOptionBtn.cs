@@ -7,7 +7,7 @@ namespace DataUI {
         /// 
         /// </summary>
         public class EquipItemPartOptionBtn : MonoBehaviour {
-            protected QuestsUI questsUI;
+            protected TaskPartsListUI taskPartsListUI;
 
             private string myName;
             public string MyName {
@@ -17,12 +17,12 @@ namespace DataUI {
 
             // Use this for initialization
             void Start() {
-                questsUI = FindObjectOfType<QuestsUI>();
+                taskPartsListUI = FindObjectOfType<TaskPartsListUI>();
             }
 
             public void InsertAsTaskPart() {
-                questsUI.InsertPartEquipItem(myName);
-                questsUI.HideNewPartPanel();
+                taskPartsListUI.InsertPartEquipItem(myName);
+                taskPartsListUI.HideNewPartPanel();
             }
 
             public void SetText(string newText) {

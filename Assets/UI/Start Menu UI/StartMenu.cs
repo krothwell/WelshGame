@@ -35,5 +35,9 @@ namespace StartMenuUI {
         public void ActivateNewGameMenu() {
             ToggleMenuTo(newGameMenuUI, mainMenus);
         }
+
+        public void ExitGame() {
+            Application.Quit();
+        }
     }
 }

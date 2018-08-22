@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+
 using UnityEditor;
+
 using System;
 using GameUI;
 using GameUtilities;
@@ -15,7 +17,7 @@ public abstract class Character : MonoBehaviour {
     //an easy way of checking the characters name and portrait have been loaded from db correctly.
     public float maxSpeed;
     public Sprite CharacterPortrait;
-    public string CharacterName;
+    public string CharacterName, CharacterTag;
     protected Character currentlySpeakingTo;
     protected CharCombatController combatController;
     protected CharMovementController movementController;
@@ -92,7 +94,9 @@ public abstract class Character : MonoBehaviour {
     //}
 
     public void SetMyPortrait(string path) {
+#if UNITY_EDITOR
         CharacterPortrait = (Sprite)AssetDatabase.LoadAssetAtPath(path, typeof(Sprite));
+#endif
     }
 
     public Sprite GetMyPortrait() {
@@ -134,4 +138,6 @@ public abstract class Character : MonoBehaviour {
     public void PickUpItem(WorldItem item) {
         item.GetPickedUp();
     }
+
+
 }

@@ -12,7 +12,7 @@ public class GameWorldItemSelector : GameWorldSelector{
     }
     
 
-    public override void SetSelected() {
+    public override void InitialiseDecision() {
         if (abilitySelected == null) {
             BuildCircle();
             BuildSelectionPlayerDecision(DefaultSelectionDecisionPrefab);

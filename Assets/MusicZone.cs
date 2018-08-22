@@ -6,20 +6,20 @@ public class MusicZone : MonoBehaviour {
 
     public AudioClip myAudioClip;
     MusicPlayer musicPlayer;
-    AudioSource audioSource;
 
     void Start() {
-        musicPlayer = FindObjectOfType<MusicPlayer>();
-        audioSource = musicPlayer.GetComponent<AudioSource>();
+        
     }
 
-    void OnTriggerEnter2D(Collider2D incursionCollider) {
-        
-        if (incursionCollider.transform.name == "Perimeter") {
-            //print("ENTERING MUSIC ZONE");
-            PlayerCharacter playerCharacter = incursionCollider.transform.parent.GetComponent<PlayerCharacter>();
+    void OnTriggerEnter2D(Collider2D inCollider) {
+        musicPlayer = FindObjectOfType<MusicPlayer>();
+        if (inCollider.transform.name == "Perimeter") {
+            
+            PlayerCharacter playerCharacter = inCollider.transform.parent.GetComponent<PlayerCharacter>();
             if (playerCharacter != null) {
+                //print("ENTERING MUSIC ZONE");
                 TransitionToZoneMusic();
+                musicPlayer = FindObjectOfType<MusicPlayer>();
                 playerCharacter.CurrentMusicZone = this;
             }
         }
@@ -28,17 +28,18 @@ public class MusicZone : MonoBehaviour {
     public void TransitionToZoneMusic() {
         musicPlayer = FindObjectOfType<MusicPlayer>();
         musicPlayer.TransitionMusic(myAudioClip);
-        audioSource = musicPlayer.GetComponent<AudioSource>();
-        audioSource.loop = true;
+        musicPlayer.StartLoop();
     }
 
 
-    void OnTriggerExit2D(Collider2D incursionCollider) {
-        if (incursionCollider.transform.name == "Perimeter") {
+    void OnTriggerExit2D(Collider2D outCollider) {
+        musicPlayer = FindObjectOfType<MusicPlayer>();
+        if (outCollider.transform.name == "Perimeter") {
             print("EXITING MUSIC ZONE");
-            PlayerCharacter playerCharacter = incursionCollider.transform.parent.GetComponent<PlayerCharacter>();
+            PlayerCharacter playerCharacter = outCollider.transform.parent.GetComponent<PlayerCharacter>();
             if (playerCharacter != null) {
-                audioSource.loop = false;
+                musicPlayer.EndLoop();
+                playerCharacter.CurrentMusicZone = null;
             }
         }
     }

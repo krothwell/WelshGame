@@ -10,15 +10,16 @@ public class MusicPlayer : MonoBehaviour {
     public AudioClip startingMusic;
     static MusicPlayer instance = null;
     AudioSource audioSource;
-	// Use this for initialization
+    // Use this for initialization
+
+
 
     void Awake () {
         
         audioSource = GetComponent<AudioSource>();
-        Debug.Log("Music player Awake" + GetInstanceID());
+        //Debug.Log("Music player Awake" + GetInstanceID());
         if (instance != null)
         {
-            print("Duplicate music player destroyed while playing clip: " + audioSource.clip);
             instance.TransitionMusic(startingMusic);
             Destroy(gameObject);
             Destroy(this);  
@@ -26,28 +27,13 @@ public class MusicPlayer : MonoBehaviour {
         else
         {
             instance = this;
-            GameObject.DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
         }
 
     }
     void Start () {
-        Debug.Log("Music player Start" + GetInstanceID());
+        //Debug.Log("Music player Start" + GetInstanceID());
 	}
-
-    //void DestroyMeIfMusicPlayerExists() {
-    //    MusicPlayer[] MPs = FindObjectsOfType<MusicPlayer>();
-    //    foreach (MusicPlayer MP in MPs) {
-    //        if (MPs.Length > 1) {
-    //            if (MP.GetComponent<AudioSource>().clip == null) {
-    //                Destroy(MP.gameObject);
-    //            }
-    //            else if (!MP.GetComponent<AudioSource>().isPlaying) {
-    //                Destroy(MP.gameObject);
-    //            }
-    //        }
-    //    }
-        
-    //}
     
     public void FadeOut(float fadeOutRate) {
         gameObject.AddComponent<MusicFadeOut>();
@@ -56,6 +42,9 @@ public class MusicPlayer : MonoBehaviour {
     }
 
     public void FadeIn(float fadeInRate, AudioClip newClip) {
+        if (GetComponent<MusicFadeIn>()) {
+            Destroy(GetComponent<MusicFadeIn>());
+        }
         gameObject.AddComponent<MusicFadeIn>();
         MusicFadeIn musicFadeIn = FindObjectOfType<MusicFadeIn>();
         musicFadeIn.SetFadeIn(audioSource, newClip, fadeInRate);
@@ -63,7 +52,7 @@ public class MusicPlayer : MonoBehaviour {
 
     public void TransitionMusic(AudioClip newClip, float fadeOutRate = 0.001f, float fadeInRate = 0.001f) {
         if (musicLocked == false) {
-            print("new clip: " + newClip);
+            //print("new clip: " + newClip);
 
             if (GetComponent<MusicFadeOut>()) {
                 print(GetComponent<MusicFadeOut>());
@@ -78,6 +67,22 @@ public class MusicPlayer : MonoBehaviour {
             else if (!audioSource.isPlaying) {
                 FadeIn(fadeInRate, newClip);
             }
+        }
+    }
+
+    public void EndLoop() {
+        audioSource.loop = false;
+    }
+
+    public void StartLoop() {
+        audioSource.loop = true;
+        audioSource.loop = true;
+    }
+
+    public void RevertToZone() {
+        musicLocked = false;
+        if (FindObjectOfType<PlayerCharacter>().CurrentMusicZone) {
+            FindObjectOfType<PlayerCharacter>().CurrentMusicZone.TransitionToZoneMusic();
         }
     }
 }

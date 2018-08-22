@@ -17,7 +17,7 @@ namespace DataUI.ListItems {
             PlayerChoiceID = playerChoiceIDStr;
         }
 
-        protected override void InsertResult() {
+        public override void InsertResult() {
             InsertNewPlayerChoiceResultID();
             DbCommands.InsertTupleToTable("GrammarActivatedByDialogueChoices", playerChoiceResultID, PlayerChoiceID, ruleID);
             dialogueUI.DisplayResultsRelatedToChoices();

@@ -20,6 +20,7 @@ using System;
 /// </summary>
 namespace GameUI {
     public class DialogueUI : UIController {
+        private Button percentageBtn;
         private PlayerInputField currentInputField;
         private DialogueTestDataController currentDialogueTestData;
     	private string testEnglish;
@@ -36,6 +37,11 @@ namespace GameUI {
         public PlayerChoice CurrentPlayerChoice {
             get { return currentPlayerChoice; }
             set { currentPlayerChoice = value; }
+        }
+
+        private bool isInUse;
+        public bool IsInUse {
+            get { return animator.GetBool("InUse"); }
         }
 
         List<String> dialogueQueue;
@@ -85,6 +91,7 @@ namespace GameUI {
             submitBtn = panel.transform.Find("SubmitBtn").gameObject;
             dialogueReason = panel.transform.Find("DialogueReason").gameObject;
             percentageTxt = dialogueReason.transform.Find("TestResult").GetComponent<Text>();
+            percentageBtn = percentageTxt.GetComponent<Button>();
             reasonImg = dialogueReason.transform.Find("Symbol").GetComponent<Image>();
             combatUI = FindObjectOfType<CombatUI>();
             btnTxt = submitBtn.transform.Find("Text").gameObject.GetComponent<Text>();
@@ -112,12 +119,15 @@ namespace GameUI {
 
 
         public void StartNewDialogue(Character character) {
+            print("START DIALOGUE");
             if (IsReadyForNewDialogue()) {
                 currentChar = character;
                 print("starting dialogue with: " + character);
                 currentCharID = character.CharacterName;
                 SetDialogueID(character);
+                print("working1");
                 DisplayFirstDialogueNode();
+                print("working2");
             } else {
                 string queueID = GetDialogueID(character);
                 QueueNewDialogue(queueID);
@@ -125,10 +135,10 @@ namespace GameUI {
         }
 
         public void StartNewDialogue(string dialogueID) {
-            print("ready for new dialogue = " + IsReadyForNewDialogue());
+            //print("ready for new dialogue = " + IsReadyForNewDialogue());
             if (IsReadyForNewDialogue()) {
                 currentCharID = DbCommands.GetFieldValueFromTable("CharacterDialogues", "CharacterNames", "DialogueIDs = " + dialogueID);
-                print("DIALOGUE ID = " + dialogueID);
+                //print("DIALOGUE ID = " + dialogueID);
                 currentChar = npcs.GetCharacterFromName(currentCharID);
                 currentDialogueID = dialogueID;
                 DisplayFirstDialogueNode();
@@ -302,10 +312,8 @@ namespace GameUI {
                 new Vector3(0f, 0f, 0f),
                 Quaternion.identity
             ) as GameObject).GetComponent<DialogueNode>();
-            dialogueNode.MyID = nodeArray[0];
-            dialogueNode.MyText = nodeArray[1];
+            dialogueNode.InitialiseMe(nodeArray[0], nodeArray[1]);
             dialogueNode.transform.SetParent(currentDialogueHolder.transform, false);
-            dialogueNode.GetComponent<DialogueNode>().SetDisplay();
         }
 
         public void InsertVocabTestNode(string[] detailsArray) {
@@ -357,7 +365,7 @@ namespace GameUI {
                             + " AND ActivatedDialogues.Completed = 0"
                             + " AND ActivatedDialogues.SaveIDs = 0";
             string dialogueID = DbCommands.GetFieldValueFromQry(qry, "DialogueIDs", character.CharacterName);
-            //Debugging.PrintDbQryResults(qry);
+            Debugging.PrintDbQryResults(qry, character.CharacterName);
             //Debugging.PrintDbTable("ActivatedDialogues");
             return dialogueID;
         }
@@ -371,10 +379,16 @@ namespace GameUI {
         }
 
         public void SetScoreBreakdownDisplay() {
+            percentageBtn.interactable = true;
             SetPercentageCorrect();
         }
-        
-    	private void SetPercentageCorrect() {
+
+        private void DisablePercentageCorrect() {
+            percentageTxt.text = "";
+            percentageBtn.interactable = false;
+        }
+
+        private void SetPercentageCorrect() {
             percentageTxt.text = currentDialogueTestData.GetAnswerPercentageCorrect().ToString() + "%";
         }
 
@@ -412,17 +426,27 @@ namespace GameUI {
         public void SubmitAnswer() {
             if(currentInputField != null) {
                 if (currentInputField.Submitted) {
+                    DisablePercentageCorrect();
                     switch (currentDialogueTestData.MyTestTrigger.TrigType) {
                         case TestTrigger.TriggerType.Ability:
                             SetNotInUse();
-                            combatUI.UseSelectedAbility();
+                            combatUI.UseSelectedAbility(currentDialogueTestData);
                             combatUI.DisplayUnderAttack();
                             break;
                         case TestTrigger.TriggerType.DialogueNode:
+                            DisableSubmitBtn();
                             DisplayNodeChoices(currentNodeID);
+                            ScrollToDialogueElement(currentCharSpeaking);
                             break;
                         case TestTrigger.TriggerType.DialogueChoice:
-                            DisplayDialogueNode(currentPlayerChoice.GetDialogueNodeData(currentPlayerChoice.MyNextNode));
+                            DisableSubmitBtn();
+                            if (currentPlayerChoice.MyNextNode != "") {
+                                print(currentPlayerChoice.MyNextNode);
+                                DisplayDialogueNode(currentPlayerChoice.GetDialogueNodeData(currentPlayerChoice.MyNextNode));
+                            } else {
+                                InsertEndDialogue();
+                                ScrollToDialogueElement(currentCharSpeaking);
+                            }
                             break;
                     }
                     
@@ -488,9 +512,11 @@ namespace GameUI {
         }
 
         public void ActivateNewWelsh(string choiceID) {
+            if (newWelshLearnedUI.transform.childCount > 0) {
+                newWelshLearnedUI.DisplayNewWelsh(choiceID);
+            }
             ActivateNewGrammar(choiceID);
             ActivateNewVocab(choiceID);
-            newWelshLearnedUI.DisplayNewWelsh(choiceID);
         }
 
         public void ActivateNewGrammar(string choiceID) {
@@ -519,6 +545,7 @@ namespace GameUI {
         }
 
         public void ActivateNewDialogue(string choiceID) {
+            Debugging.PrintDbTable("ActivatedDialogues");
             int countDialogueActivateResults = DbCommands.GetCountFromQry(DbQueries.GetDialogueActivateCountFromChoiceIDqry(choiceID));
             if (countDialogueActivateResults > 0) {
                 print("Dialogue ACTIVATING!!!!");
@@ -534,11 +561,15 @@ namespace GameUI {
 
                     foreach (string[] characterName in charactersRelatedToDialogue) {
                         List<string[]> activeDialoguesWithCharacter;
-
-                        DbCommands.GetDataStringsFromQry(DbQueries.GetActiveDialoguesWithCharacter(characterName[0]), out activeDialoguesWithCharacter, characterName[0]);
+                        string charname = characterName[0];
+                        DbCommands.GetDataStringsFromQry(DbQueries.GetActiveDialoguesWithCharacter(charname), out activeDialoguesWithCharacter, characterName[0]);
 
                         foreach (string[] dialogueWithChar in activeDialoguesWithCharacter) {
-                            DbCommands.UpdateTableField("ActivatedDialogues", "Completed", "1", "DialogueIDs = " + dialogueWithChar[0] + " AND SaveIDs = 0");
+                            string dialogueID = dialogueWithChar[0];
+                            print("printing active dialogues with " + charname);
+                            Debugging.PrintDbQryResults(DbQueries.GetActiveDialoguesWithCharacter(charname), charname);
+                            DbCommands.UpdateTableField("ActivatedDialogues", "Completed", "1", "DialogueIDs = " + dialogueID + " AND SaveIDs = 0");
+                            Debugging.PrintDbTable("ActivatedDialogues");
                         }
                     }
                     DbCommands.InsertTupleToTable("ActivatedDialogues", activatedDialogue[1], "0", "0");
@@ -563,6 +594,7 @@ namespace GameUI {
             InsertVocabTestNode(currentDialogueTestData.GetPlayerVocab());
             DisplayGrammar();
             InsertPlayerInputField();
+            ScrollToDialogueElement(currentCharSpeaking);
         }
 
         public void ProcessDialogueNodeTest(string[] vocabArray) {
@@ -584,7 +616,7 @@ namespace GameUI {
             SetNewDialogueHolder();
             InsertSpacer();
             TestTrigger testTrigger = new TestTrigger(ability.GetMyName(), ability.GetMyIcon(), TestTrigger.TriggerType.Ability);
-            currentDialogueTestData = new DialogueTestDataController(testTrigger, GetSpeakersName(currentNodeID)); 
+            currentDialogueTestData = new DialogueTestDataController(testTrigger, playerCharacter.CharacterName);
             InsertDialogueNode(currentDialogueTestData.GetVocabIntro()); //text instruction to player
             InsertVocabTestNode(currentDialogueTestData.GetPlayerVocab());
             DisplayGrammar();
@@ -594,18 +626,22 @@ namespace GameUI {
 
         public void DisplayTestResult() {
             print("display test result???");
-            SkillsResultsUI skillsResultsUI = FindObjectOfType<SkillsResultsUI>();
+            TestResultsUI skillsResultsUI = FindObjectOfType<TestResultsUI>();
             if (currentDialogueTestData != null) {
                 skillsResultsUI.DisplayResults(currentDialogueTestData);
             }
         }
 
         public void DisplayGrammar() {
+            print("working1");
             List<string[]> testGrammar = currentDialogueTestData.GetGrammar();
             if (testGrammar != null) {
+                print("working2");
                 if (testGrammar.Count > 0) {
+                    print("working3");
                     InsertRelatedGrammarTag();
                     foreach (string[] grammarRule in testGrammar) {
+                        print("working4");
                         string strGrammarShortDesc = grammarRule[1];
                         InsertGrammarShortDesc(strGrammarShortDesc);
                     }

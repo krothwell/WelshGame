@@ -10,7 +10,7 @@ public class SkillsMenuUI : UIController {
     void Start() {
         totalSkillPoints = -1;
         welshSkillsListUI = GetPanel().transform.Find("WelshSkillsListUI").GetComponent<WelshSkillsListUI>();
-        print(welshSkillsListUI);
+        //print(welshSkillsListUI);
         totalSkillPoints = GetTotalSkillPoints();
     }
     public new void DisplayComponents() {

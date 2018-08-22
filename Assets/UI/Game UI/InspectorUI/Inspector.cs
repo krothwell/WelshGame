@@ -20,6 +20,8 @@ public abstract class Inspector : MonoBehaviour {
     public abstract void SetInspectorText();
 
     public void EndInspection() {
-        inspectorUI.HideComponents();
+        if (inspectorUI != null) {
+            inspectorUI.HideComponents();
+        }
     }
 }

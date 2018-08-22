@@ -17,6 +17,7 @@ namespace GameUI {
         }
 
         public override void HideComponents() {
+            
             base.HideComponents();
             EmptyDisplay(newWelshList.transform);
         }

@@ -18,6 +18,12 @@ namespace GameUI {
                 get { return myName; }
                 set { myName = value; }
             }
+
+            private bool isCompleted;
+            public bool IsCompleted {
+                get { return isCompleted; }
+                set { isCompleted = value; }
+            }
             void Awake() {
                 SetHeightToMatchText();
                 questsUI = FindObjectOfType<QuestsUI>();
@@ -40,10 +46,16 @@ namespace GameUI {
 
             public void SetCompleted() {
                 GetComponent<Image>().color = Colours.colorCompletedQuestPanel;
+                isCompleted = true;
             }
 
             public void DeselectSelf() {
-                GetComponent<Image>().color = Colours.colorQuestPanel;
+                if (isCompleted) {
+                    GetComponent<Image>().color = Colours.colorCompletedQuestPanel;
+                }
+                else {
+                    GetComponent<Image>().color = Colours.colorQuestPanel;
+                }
             }
 
             void OnMouseUpAsButton () {

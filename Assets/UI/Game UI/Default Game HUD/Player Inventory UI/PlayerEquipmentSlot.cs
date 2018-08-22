@@ -2,25 +2,18 @@
 using System.Collections;
 
 namespace GameUI {
-    public abstract class PlayerEquipmentSlot : MonoBehaviour {
-        public WorldItems.WorldItemTypes ItemType;
-        PlayerInventoryUI inventory;
-        // Use this for initialization
-        void Start() {
-            inventory = FindObjectOfType<PlayerInventoryUI>();
-        }
+    public abstract class PlayerEquipmentSlot : PlayerSlot {
 
-        void OnMouseUpAsButton() {
-            print(inventory);
-            if (inventory.IsItemSelected()) {
-                inventory.AttemptToPutItemInSlot(gameObject);
-            }
-            else {
-                inventory.AttemptToPickUpItemInSlot(gameObject);
+        protected override void AttemptToPutItemInSlot() {
+            if (GetComponent<PlayerEquipmentSlot>().ItemType
+                == inventory.SelectedItem.GetComponent<WorldItem>().itemType) {
+                inventory.SelectedItem.GetComponent<WorldItem>().EquipToPlayerModel();
+                inventory.InsertToEquippedDict(inventory.SelectedItem.GetComponent<WorldItem>());
+                base.AttemptToPutItemInSlot();
             }
         }
 
-        public abstract WorldItem GetEquipped();
+        public abstract WorldItem GetEquippedItem();
     }
 
     

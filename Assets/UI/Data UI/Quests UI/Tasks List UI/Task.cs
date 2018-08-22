@@ -12,6 +12,7 @@ namespace DataUI {
         /// </summary>
         public class Task : UIInputListItem, ISelectableUI, IDeletableUI, IEditableUI {
             QuestsUI questsUI;
+            TaskPartsListUI taskPartsListUI;
             GameObject options;
             Toggle activeAtStartToggle;
             bool editing;
@@ -35,6 +36,7 @@ namespace DataUI {
             // Use this for initialization
             void Start() {
                 questsUI = FindObjectOfType<QuestsUI>();
+                taskPartsListUI = FindObjectOfType<TaskPartsListUI>();
                 options = transform.Find("TaskOptions").gameObject;
                 saveBtn = transform.Find("SaveBtn").GetComponent<Button>();
             }
@@ -46,12 +48,14 @@ namespace DataUI {
             }
 
             public void SelectSelf() {
-                DisplayOptions();
-                SetColour(Colours.colorDataUIInputSelected);
-                questsUI.DisplayPartsRelatedToTask(myID);
-                questsUI.DisplayResultsRelatedToTaskCompletion(myID);
-                //dialogueUI.HidePlayerChoices();
-                //dialogueUI.HidePlayerChoiceResults();
+                if (!editing) {
+                    DisplayOptions();
+                    SetColour(Colours.colorDataUIInputSelected);
+                    taskPartsListUI.DisplayPartsRelatedToTask(myID);
+                    questsUI.DisplayResultsRelatedToTaskCompletion(myID);
+                    //dialogueUI.HidePlayerChoices();
+                    //dialogueUI.HidePlayerChoiceResults();
+                }
             }
 
             public void SetActiveAtStartToggle(bool active) {
@@ -95,7 +99,6 @@ namespace DataUI {
                 editing = true;
                 HideOptions();
                 saveBtn.gameObject.SetActive(true);
-
                 GetInputField().Select();
             }
             public void StopEditing() {

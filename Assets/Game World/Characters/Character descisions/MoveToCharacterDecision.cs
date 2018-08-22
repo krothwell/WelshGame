@@ -6,7 +6,7 @@ public class MoveToCharacterDecision : CharacterMovementDecision {
 
     Character characterSelected;
 
-    public override void CheckToEndMovement() {
+    public override void EndMovementSequence() {
         if (myCharacter.MovementController.GetDistanceFromMyPosition(targetPosition) < myCharacter.GetInteractionDistance()) {
             print("close to character");
             myCharacter.SpeakToCharacter(characterSelected);

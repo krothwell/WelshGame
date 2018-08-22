@@ -47,7 +47,7 @@ public abstract class GameWorldSelector : MonoBehaviour {
         if (countingDown) {
             countdown -= Time.deltaTime;
             if (countdown <= 0) {
-                SetSelected();
+                InitialiseDecision();
                 Select();
                 ResetCountdown();
             }
@@ -81,6 +81,33 @@ public abstract class GameWorldSelector : MonoBehaviour {
                 DisplayCircle();
             }
         }
+    }
+
+    public void OnMouseExit() {
+        EndInspection();
+        if (!clicked) {
+            clicked = false;
+            DestroySelectionCircle();
+        }
+    }
+
+    public void OnMouseUpAsButton() {
+        SetMouseClicks();
+        if (World.IsGamePaused()) {
+            if (abilitySelected) {
+                InitialiseDecision();
+            }
+            else {
+                InitialiseDecision();
+                Select();
+            }
+            //CountDownToDecision();
+            //ResetCountdown();
+        }
+        else if (!countingDown) {
+            CountDownToDecision();
+        }
+
     }
 
     public void Inspect() {
@@ -123,32 +150,7 @@ public abstract class GameWorldSelector : MonoBehaviour {
         }
     }
 
-    public void OnMouseExit() {
-        EndInspection();
-        if (!clicked) {
-            clicked = false;
-            DestroySelectionCircle();
-        }
-    }
 
-    public void OnMouseUpAsButton() {
-        SetMouseClicks();
-        if (World.IsGamePaused()) {
-            if (abilitySelected) {
-                SetSelected();
-            }
-            else {
-                SetSelected();
-                Select();
-            }
-            //CountDownToDecision();
-            //ResetCountdown();
-        }
-        else if (!countingDown) {
-            CountDownToDecision();
-        }
-        
-    }
 
     public void CountDownToDecision() {
         countingDown = true;
@@ -185,7 +187,7 @@ public abstract class GameWorldSelector : MonoBehaviour {
         playerCharacter.SetCurrentSelection(this);
     }
 
-    public abstract void SetSelected();
+    public abstract void InitialiseDecision();
 
     protected void ChangeColourToSelected () {
         if (selectionCircle != null) {
@@ -212,5 +214,9 @@ public abstract class GameWorldSelector : MonoBehaviour {
                 myDecision.ProcessDecision();
             }
         }
+    }
+
+    void OnDestroy() {
+        EndInspection();
     }
 }

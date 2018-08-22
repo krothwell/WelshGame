@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ public class WeaponItem : EquipableWorldItemWithSingleSprite {
         return new Vector2(WeaponRangeX, WeaponRangeX * 0.8f);
     }
 
-    void Awake() {
+    protected override void SetPlayerPart() {
         PlayerCharacter pc = FindObjectOfType<PlayerCharacter>();
         equipToPlayerPart = pc.GetComponentInChildren<RightHandWearable>().gameObject;
     }

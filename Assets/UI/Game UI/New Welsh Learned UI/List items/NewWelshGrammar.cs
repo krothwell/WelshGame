@@ -19,12 +19,10 @@ public class NewWelshGrammar : MonoBehaviour {
 
     public void ToggleGrammarDescription() {
         if (myGrammarList == null) {
-            print("glist null");
             DisplayGrammarDescription();
         }
         else {
             HideRelatedGrammar();
-            print(myGrammarList + "glist not null");
         }
     }
 

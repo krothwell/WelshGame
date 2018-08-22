@@ -7,7 +7,7 @@ using UnityUtilities;
 
 namespace DataUI {
     namespace ListItems {
-        public class Proficiency : MonoBehaviour {
+        public class Proficiency : MonoBehaviour, ISelectableUI {
             private string currentProficiencyName;
             public string CurrentProficiencyName {
                 get { return currentProficiencyName; }
@@ -24,46 +24,39 @@ namespace DataUI {
             GameObject proficiencySaveBtn;
             GameObject thresholdText;
             Color defaultProficiencyTxtBgColor;
+            ProficienciesListUI proficiencyListUI;
+            bool isEditing;
 
             void Start() {
 
                 proficiencyText = gameObject.transform.Find("ProficiencyText").gameObject;
-                proficiencySelector = proficiencyText.transform.Find("Selector").gameObject;
                 proficiencyOptions = gameObject.transform.Find("ProficiencyOptions").gameObject;
                 proficiencySaveBtn = gameObject.transform.Find("Save").gameObject;
                 thresholdText = gameObject.transform.Find("ThresholdInput").gameObject;
                 defaultProficiencyTxtBgColor = proficiencyText.GetComponent<Image>().color;
+                proficiencyListUI = FindObjectOfType<ProficienciesListUI>();
             }
 
-
-
-            void Update() {
-                DeselectProficiencyOnClickAway();
+            public void SelectSelf() {
+                ActivateProficiencyOptions();
             }
 
-            public void DeselectProficiencyOnClickAway() {
-                if (Input.GetMouseButtonUp(0)) {
-                    if (MouseSelection.IsClickedDifferentGameObjectTo(this.gameObject)) {
-                        ActivateSelectorBtn();
-                        DeactivateProficiencyOptions();
-                        DisableEdits();
-                        proficiencyText.GetComponent<InputField>().text = CurrentProficiencyName;
-                        thresholdText.GetComponent<InputField>().text = CurrentThreshold.ToString();
-                    }
-                }
+            public void DeselectSelf() {
+                DeactivateProficiencyOptions();
+                DisableEdits();
+                proficiencyText.GetComponent<InputField>().text = CurrentProficiencyName;
+                thresholdText.GetComponent<InputField>().text = CurrentThreshold.ToString();
             }
 
-            public void ActivateSelectorBtn() {
-                proficiencySelector.gameObject.SetActive(true);
-            }
-
-            public void DeactivateProficiencySelectorBtn() {
-                proficiencySelector.gameObject.SetActive(false);
+            void OnMouseUpAsButton() {
+                proficiencyListUI.ToggleSelectionTo(this, proficiencyListUI.SelectedProficiency);
             }
 
             public void ActivateProficiencyOptions() {
-                proficiencyText.GetComponent<Image>().color = new Color(0.7f, 0.85f, 1f);
-                proficiencyOptions.SetActive(true);
+                if (!isEditing) {
+                    proficiencyText.GetComponent<Image>().color = new Color(0.7f, 0.85f, 1f);
+                    proficiencyOptions.SetActive(true);
+                }
             }
 
             public void DeactivateProficiencyOptions() {
@@ -75,12 +68,14 @@ namespace DataUI {
                 proficiencyText.GetComponent<InputField>().readOnly = false;
                 thresholdText.GetComponent<InputField>().readOnly = false;
                 proficiencySaveBtn.SetActive(true);
+                isEditing = true;
             }
 
             public void DisableEdits() {
                 proficiencyText.GetComponent<InputField>().readOnly = true;
                 thresholdText.GetComponent<InputField>().readOnly = true;
                 proficiencySaveBtn.SetActive(false);
+                isEditing = false;
             }
 
             public void SelectText() {
@@ -100,7 +95,6 @@ namespace DataUI {
                                          newThreshold,
                                          "ProficiencyNames = " + DbCommands.GetParameterNameFromValue(newName),
                                         newName);
-                ActivateSelectorBtn();
                 CurrentProficiencyName = newName;
                 CurrentThreshold = int.Parse(newThreshold);
             }

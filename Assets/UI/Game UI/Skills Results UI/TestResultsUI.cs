@@ -6,7 +6,7 @@ using System;
 using DbUtilities;
 using GameUI.ListItems;
 
-public class SkillsResultsUI : UIController {
+public class TestResultsUI : UIController {
     public GameObject WelshVocabUpdatePrefab, WelshGrammarUpdatePrefab;
     DialogueTestDataController testData;
     Text percentageCorrect, resultLabel, testTriggerLbl, talliesShift, testType, skillPointsGained, answerGiven;

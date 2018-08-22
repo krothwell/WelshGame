@@ -18,22 +18,11 @@ namespace DataUI {
             get { return vocabTranslationSelected; }
             set { vocabTranslationSelected = value; }
         }
+        ListDisplayInfo vocabListInfo;
         public GameObject translationPrefab;
         InputField inputTranslationEnTxt, inputTranslationCyTxt;
         InputField searchTranslations;
-        float searchWait = 0f;
-        bool searchCountDown = false;
         //int translationSelectInt = 0;
-
-        void Update() {
-            if (searchCountDown) {
-                searchWait -= Time.deltaTime;
-                if (searchWait <= 0) {
-                    SearchTranslationNow();
-                    searchCountDown = false;
-                }
-            }
-        }
 
         void Start() {
             //TRANSLATIONS UI
@@ -50,15 +39,26 @@ namespace DataUI {
             vocabTranslationSelected = "VocabTranslationSelected";
             CreateSelectionToggleGroup(vocabTranslationSelected);
             vocabTranslationList = transform.GetComponentInChildren<VerticalLayoutGroup>().gameObject;
-            FillDisplayFromDb(DbCommands.GetTranslationsDisplayQry(), vocabTranslationList.transform, BuildVocabTranslation);
+            vocabListInfo = new ListDisplayInfo(DbQueries.GetTranslationQry, BuildVocabTranslation);
+            GetComponentInChildren<ListSearcher>().SetSearchInfo(vocabListInfo);
+            FillDisplayFromDb(vocabListInfo.GetMyDefaultQuery(), vocabTranslationList.transform, vocabListInfo.GetMyBuildMethod());
+            
         }
 
 
         //Display a panel to add a new translation 
         public void ActivateNewTranslation() {
             newTranslationPanel.SetActive(true);
-            activateNewTranslationBtn.GetComponent<Button>().colors.normalColor.Equals(Colours.colorDataUItxt); //indicate to user that button no longer functions.
+            //activateNewTranslationBtn.GetComponent<Button>().colors.normalColor.Equals(Colours.colorDataUItxt); //indicate to user that button no longer functions.
+            activateNewTranslationBtn.GetComponent<Button>().interactable = false;
         }
+
+        public void DeactivateNewTranslation() {
+            newTranslationPanel.SetActive(false);
+            //activateNewTranslationBtn.GetComponent<Button>().colors.normalColor.Equals(Colours.colorDataUIbtn); //indicate to user that button is functioning.
+            activateNewTranslationBtn.GetComponent<Button>().interactable = true;
+        }
+
 
         public void DeactivateSelectedTranslation() {
             Translation selectedTranslation = (Translation)GetSelectedItemFromGroup(vocabTranslationSelected);
@@ -67,18 +67,14 @@ namespace DataUI {
             }
         }
 
-        public void DeactivateNewTranslation() {
-            newTranslationPanel.SetActive(false);
-            activateNewTranslationBtn.GetComponent<Button>().colors.normalColor.Equals(Colours.colorDataUIbtn); //indicate to user that button is functioning.
-        }
 
         public void InsertTranslation() {
             DbCommands.InsertTupleToTable("EnglishVocab", inputTranslationEnTxt.text);
             DbCommands.InsertTupleToTable("WelshVocab", inputTranslationCyTxt.text);
             DbCommands.InsertTupleToTable("VocabTranslations", inputTranslationEnTxt.text, inputTranslationCyTxt.text);
-            FillDisplayFromDb(DbCommands.GetTranslationsDisplayQry(), vocabTranslationList.transform, BuildVocabTranslation);
+            FillDisplayFromDb(vocabListInfo.GetMyDefaultQuery(), vocabTranslationList.transform, vocabListInfo.GetMyBuildMethod());
             searchTranslations.text = inputTranslationEnTxt.text;
-            SearchTranslationNow();
+            GetComponentInChildren<ListSearcher>().Search();
             inputTranslationEnTxt.text = "";
             inputTranslationCyTxt.text = "";
 
@@ -96,22 +92,6 @@ namespace DataUI {
             translation.GetComponent<Translation>().CurrentWelsh = CyStr;
             //translation.transform.SetParent(translations.transform, false);
             return translation.transform;
-        }
-
-        public void SearchTranslations() {
-            searchWait = 0.5f;
-            searchCountDown = true;
-        }
-
-        private void SearchTranslationNow() {
-            if (searchTranslations.text == "") {
-                FillDisplayFromDb(DbCommands.GetTranslationsDisplayQry(), vocabTranslationList.transform, BuildVocabTranslation);
-            }
-            else {
-                string searchText = "%" + searchTranslations.text + "%";
-                string sqlqry = DbQueries.GetTranslationSearchQry(searchText);
-                FillDisplayFromDb(sqlqry, vocabTranslationList.transform, BuildVocabTranslation, searchText);
-            }
         }
     }
 }

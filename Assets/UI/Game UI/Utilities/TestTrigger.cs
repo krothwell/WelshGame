@@ -38,6 +38,12 @@ public class TestTrigger {
             case TriggerType.Quest:
                 labelStr = "Part of quest";
                 break;
+            case TriggerType.DialogueChoice:
+                labelStr = "Conversation";
+                break;
+            case TriggerType.DialogueNode:
+                labelStr = "Conversation";
+                break;
         }
         return labelStr;
     }

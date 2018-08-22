@@ -11,8 +11,11 @@ namespace GameUI {
     /// to and from UI slots, and the game world. 
     /// </summary>
     public class PlayerInventoryUI : UIController {
-        GameObject items;
-        GameObject selectedItem;
+        private GameObject selectedItem;
+        public GameObject SelectedItem {
+            get { return selectedItem; }
+            set { selectedItem = value; }
+        }
         private PlayerEquipmentSlot[] equipmentSlots;
         private Dictionary<WorldItems.WorldItemTypes, WorldItem> equippedDict;
         GameObject ui;
@@ -20,11 +23,9 @@ namespace GameUI {
 
         void Awake() {
             equippedDict = new Dictionary<WorldItems.WorldItemTypes, WorldItem>();
-            items = GetPanel().transform.Find("ItemSlots").gameObject;
         }
         void Start() {
             ui = GameObject.Find("UI");
-            InitialiseEquippedItemsDict();
         }
 
         void Update() {
@@ -41,38 +42,19 @@ namespace GameUI {
             HideComponents();
         }
 
-        public void RecieveItem(WorldItem worldItem) {
-            foreach (Transform inventorySlot in items.transform) {
-                if (inventorySlot.childCount <= 0) {
-                    worldItem.transform.SetParent(inventorySlot, false);
-                    break;
-                }
+        public void EquipAll() {
+            foreach(KeyValuePair<WorldItems.WorldItemTypes, WorldItem> item in equippedDict) {
+                item.Value.EquipToPlayerModel();
             }
-
         }
 
-        public bool IsItemSelected() {
+
+
+        /// <summary>
+        /// Detect if player has picked up item in inventory
+        /// </summary>
+        public bool IsInventoryItemSelected() {
             return (selectedItem != null);
-        }
-
-        public void AttemptToPickUpItemInSlot(GameObject slot) {
-            if (slot.transform.childCount > 0) {
-                    SelectItem(slot);
-            }
-        }
-
-        public void AttemptToPutItemInSlot(GameObject slot) {
-            if (slot.transform.childCount <= 0) {
-                if (slot.HasComponent<PlayerEquipmentSlot>()) {
-                    if (slot.GetComponent<PlayerEquipmentSlot>().ItemType
-                        == selectedItem.GetComponent<WorldItem>().itemType) {
-                        InsertSelectedItemToSlot(slot, true);
-                    }
-                }
-                else if (slot.HasComponent<PlayerInventorySlot>()) {
-                    InsertSelectedItemToSlot(slot);
-                }
-            }
         }
 
         private void SetSelectedItemToCursor() {
@@ -82,6 +64,12 @@ namespace GameUI {
             selectedItem.GetComponent<RectTransform>().position = mousePos;
         }
 
+        /// <summary>
+        /// assigns the game object found in an inventory slot to the slectedItem parameter
+        /// disables box collider while selected so that it won't interfere with moving to
+        /// another slot or other actions.
+        /// </summary>
+        /// <param name="slot"></param>
         public void SelectItem(GameObject slot) {
             if (selectedItem == null) {
                 selectedItem = slot.transform.GetChild(0).gameObject;
@@ -93,15 +81,6 @@ namespace GameUI {
             }
         }
 
-        public void InsertSelectedItemToSlot(GameObject selectedSlot, bool equip = false) {
-            if (equip) {
-                selectedItem.GetComponent<WorldItem>().EquipToPlayerModel();
-                InsertToEquippedDict(selectedItem.GetComponent<WorldItem>());
-            }
-            selectedItem.transform.SetParent(selectedSlot.transform, false);
-            selectedItem.transform.localPosition = new Vector3(0f, 0f, 0f);
-            selectedItem = null;
-        }
 
         public void InsertToEquippedDict(WorldItem worldItem) {
             if (equippedDict.ContainsKey(worldItem.GetMyItemType())) {
@@ -122,7 +101,7 @@ namespace GameUI {
         }
 
         public void InitialiseEquippedItemsDict() {
-            OpenInventory();
+            //OpenInventory();
             equipmentSlots = FindObjectsOfType<PlayerEquipmentSlot>();
             foreach (PlayerEquipmentSlot equipmentSlot in equipmentSlots) {
                 if (equipmentSlot.transform.childCount > 0) {
@@ -132,7 +111,6 @@ namespace GameUI {
                     }
                 }
             }
-            CloseInventory();
             //print("PRINTING DICTIONARY");
             //foreach(KeyValuePair<WorldItems.WorldItemTypes, WorldItem> pair in equippedDict) {
             //    print(pair.Key + ":" + pair.Value);

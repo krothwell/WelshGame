@@ -13,6 +13,7 @@ namespace DataUI {
         /// </summary>
         public class TaskPart : UITextPanelListItem, ISelectableUI, IDeletableUI {
             protected QuestsUI questsUI;
+            protected TaskPartsListUI taskPartsListUI;
             protected GameObject options;
 
 
@@ -25,12 +26,13 @@ namespace DataUI {
             // Use this for initialization
             void Start() {
                 questsUI = FindObjectOfType<QuestsUI>();
+                taskPartsListUI = FindObjectOfType<TaskPartsListUI>();
                 options = transform.Find("PartOptions").gameObject;
             }
 
             void OnMouseUpAsButton() {
                 if (!questsUI.IsEditingDetails()) {
-                    questsUI.ToggleSelectionTo(gameObject.GetComponent<TaskPart>(), questsUI.selectedTaskPart);
+                    taskPartsListUI.ToggleSelectionTo(gameObject.GetComponent<TaskPart>(), taskPartsListUI.selectedTaskPart);
                 }
             }
 

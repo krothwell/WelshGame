@@ -15,7 +15,7 @@ public abstract class CharAbility : MonoBehaviour {
 	
 	void Update () {
 		if(isInUse) {
-            StartUsingAbility();
+            CountDownAbility();
             CheckToStopUsingAbility();
         }
 	}
@@ -34,7 +34,7 @@ public abstract class CharAbility : MonoBehaviour {
         myAction.MakeAction(); //The animation will begin
     }
 
-    protected void StartUsingAbility() {
+    protected void CountDownAbility() {
         if (followingThrough != true) {
             if (countDownToFollowThrough <= 0) {
                 FollowThroughAbility();
@@ -70,6 +70,7 @@ public abstract class CharAbility : MonoBehaviour {
         if (!followingThrough) {
             MyActionPrefab.InterruptAction();
             countDownToFollowThrough = FollowThroughDelay;
+            countDownToComplete = TimeToComplete;
         }
         
     }

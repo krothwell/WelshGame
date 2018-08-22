@@ -85,9 +85,15 @@ namespace DbUtilities {
             return sql;
         }
 
-        public static string GetTranslationSearchQry(string searchStr) {
-            string searchParam = DbCommands.GetParameterNameFromValue(searchStr);
-            return "SELECT * FROM VocabTranslations WHERE EnglishText LIKE " + searchParam + " OR WelshText LIKE " + searchParam + " ORDER BY EnglishText ASC;";
+        public static string GetTranslationQry(string searchStr = "") {
+            string qryStr = "SELECT * FROM VocabTranslations ";
+            if (searchStr != "") {
+                string searchParam = DbCommands.GetParameterNameFromValue(searchStr);
+                string whereStr = "WHERE EnglishText LIKE " + searchParam + " OR WelshText LIKE " + searchParam + " ORDER BY EnglishText ASC";
+                qryStr += whereStr;
+            }
+            qryStr += ";";
+            return qryStr;
         }
 
         public static string GetCharacterNamesWithScene(string sceneName) {
@@ -117,21 +123,86 @@ namespace DbUtilities {
                 + "WHERE TaskIDs = " + DbCommands.GetParameterNameFromValue(taskID) + ";";
         }
 
+        public static string GetDefeatCharTagPartsRelatedToTaskQry(string taskID) {
+            return "SELECT QuestTaskParts.PartIDs, QuestTaskPartsDefeatCharTagged.CharacterTags FROM QuestTaskParts "
+                + "INNER JOIN QuestTaskPartsDefeatCharTagged ON QuestTaskPartsDefeatCharTagged.PartIDs = QuestTaskParts.PartIDs "
+                + "WHERE TaskIDs = " + DbCommands.GetParameterNameFromValue(taskID) + ";";
+        }
+
+        public static string GetTranslationsDisplayQry() {
+            return "SELECT * FROM VocabTranslations ORDER BY EnglishText ASC;";
+        }
+
+        public static string GetProficienciesDisplayQry() {
+            return "SELECT * FROM Proficiencies ORDER BY Thresholds ASC;";
+        }
+
+        public static string GetActivateDialoguePartsRelatedToTaskQry(string taskID) {
+            return "SELECT " +
+                    "QuestTaskParts.PartIDs, " +
+                    "Dialogues.DialogueDescriptions, " +
+                    "DialogueNodes.NodeText, " +
+                    "QuestTaskPartsActivateDialogueNode.NodeIDs " +
+                "FROM QuestTaskPartsActivateDialogueNode "
+                + "INNER JOIN QuestTaskParts ON QuestTaskPartsActivateDialogueNode.PartIDs = QuestTaskParts.PartIDs "
+                + "INNER JOIN DialogueNodes ON QuestTaskPartsActivateDialogueNode.NodeIDs = DialogueNodes.NodeIDs "
+                + "INNER JOIN Dialogues ON DialogueNodes.DialogueIDs = Dialogues.DialogueIDs "
+                + "WHERE QuestTaskParts.TaskIDs = " + DbCommands.GetParameterNameFromValue(taskID) + ";";
+        }
+
+        public static string GetActivateDialoguePartsRelatedToGameTaskQry(string taskID) {
+            return "SELECT " +
+                    "QuestTaskParts.PartIDs, " +
+                    "CharacterDialogues.CharacterNames " +
+                "FROM QuestTaskPartsActivateDialogueNode "
+                + "INNER JOIN QuestTaskParts ON QuestTaskPartsActivateDialogueNode.PartIDs = QuestTaskParts.PartIDs "
+                + "INNER JOIN DialogueNodes ON QuestTaskPartsActivateDialogueNode.NodeIDs = DialogueNodes.NodeIDs "
+                + "INNER JOIN CharacterDialogues ON DialogueNodes.DialogueIDs = CharacterDialogues.DialogueIDs "
+                + "WHERE QuestTaskParts.TaskIDs = " + DbCommands.GetParameterNameFromValue(taskID) + ";";
+        }
+
+        public static string GetCompleteQuestPartsRelatedToTaskQry(string taskID) {
+            return "SELECT QuestTaskParts.PartIDs, QuestTaskPartsCompleteQuest.QuestNames, Quests.QuestDescriptions FROM QuestTaskPartsCompleteQuest "
+                + "INNER JOIN QuestTaskParts ON QuestTaskParts.PartIDs = QuestTaskPartsCompleteQuest.PartIDs "
+                + "INNER JOIN Quests ON Quests.QuestNames = QuestTaskPartsCompleteQuest.QuestNames "
+                + "WHERE TaskIDs = " + DbCommands.GetParameterNameFromValue(taskID) + ";";
+        }
+
         public static string GetTaskPartOptionsEquipItemDisplayQry() {
-            return "SELECT DISTINCT ItemNames FROM WorldItems;";
+            return "SELECT DISTINCT ItemNames FROM PremadeWorldItems;";
         }
 
-        public static string GetTaskPartOptionsPrefabQry() {
-            return "";
+        public static string GetTaskPartOptionsCompleteQuestDisplayQry() {
+            return "SELECT QuestNames, QuestDescriptions FROM Quests;";
         }
 
-        public static string GetDialogueDisplayQry() {
-            return "SELECT Dialogues.DialogueIDs, Dialogues.DialogueDescriptions, ActivatedDialogues.SaveIDs "
-                + "FROM Dialogues LEFT JOIN ActivatedDialogues ON Dialogues.DialogueIDs = ActivatedDialogues.DialogueIDs AND ActivatedDialogues.SaveIDS = -1 "
-                + "ORDER BY Dialogues.DialogueIDs ASC;";
+        public static string GetTaskPartOptionsActivateDialogueNodeDisplayQry(string searchStr = "") {
+            string qryStr = "SELECT Dialogues.DialogueDescriptions, DialogueNodes.NodeText, DialogueNodes.NodeIDs FROM DialogueNodes "
+                + "INNER JOIN Dialogues ON Dialogues.DialogueIDs = DialogueNodes.DialogueIDs";
+            if (searchStr != "") {
+                string searchParam = DbCommands.GetParameterNameFromValue(searchStr);
+                string whereStr = " WHERE Dialogues.DialogueDescriptions LIKE " + searchParam +
+                                  " OR DialogueNodes.NodeText LIKE " + searchParam +
+                                  " OR DialogueNodes.NodeIDs LIKE " + searchParam;
+                qryStr += whereStr;
+            }
+            qryStr += " ORDER BY Dialogues.DialogueIDs ASC;";
+            return qryStr;
         }
 
-        public static string GetNewNodeChoiceResultQry(string dialogueID) {
+        public static string GetDialogueDisplayQry(string searchStr = "") {
+            string qryStr = "SELECT Dialogues.DialogueIDs, Dialogues.DialogueDescriptions, ActivatedDialogues.SaveIDs "
+                + "FROM Dialogues LEFT JOIN ActivatedDialogues ON Dialogues.DialogueIDs = ActivatedDialogues.DialogueIDs AND ActivatedDialogues.SaveIDS = -1";
+            if (searchStr != "") {
+                string searchParam = DbCommands.GetParameterNameFromValue(searchStr);
+                string whereStr = " WHERE Dialogues.DialogueDescriptions LIKE " + searchParam;
+                qryStr += whereStr;
+            }
+            qryStr += " ORDER BY Dialogues.DialogueIDs ASC;";
+            return qryStr;
+        }
+
+public static string GetNewNodeChoiceResultQry(string dialogueID) {
             return "SELECT * FROM DialogueNodes WHERE DialogueIDs = " + dialogueID + ";";
         }
 
@@ -153,18 +224,29 @@ namespace DbUtilities {
                 + "ORDER BY QuestTasks.QuestNames;";
         }
 
+        public static string GetCurrentCompleteTasksPlayerChoiceResultQry(string choiceID) {
+            return "SELECT TasksCompletedByDialogueChoices.ResultIDs, QuestTasks.TaskIDs, QuestTasks.TaskDescriptions, QuestTasks.QuestNames "
+                + "FROM QuestTasks "
+                + "LEFT JOIN TasksCompletedByDialogueChoices ON QuestTasks.TaskIDs = TasksCompletedByDialogueChoices.TaskIDs "
+                + "WHERE ChoiceIDs = " + choiceID + " "
+                + "ORDER BY QuestTasks.QuestNames;";
+        }
+
         public static string GetCurrentActivateVocabPlayerChoiceResultQry(string choiceID) {
-            return "SELECT * "
+            return "SELECT WelshVocabActivatedByDialogueChoices.ResultIDs, WelshVocabActivatedByDialogueChoices.ChoiceIDs, WelshVocabActivatedByDialogueChoices.EnglishText, WelshVocabActivatedByDialogueChoices.WelshText "
                 + "FROM WelshVocabActivatedByDialogueChoices "
                 + "WHERE ChoiceIDs = " + choiceID + " "
+                    + " AND (WelshVocabActivatedByDialogueChoices.EnglishText NOT IN (SELECT DiscoveredVocab.EnglishText FROM DiscoveredVocab WHERE DiscoveredVocab.SaveIDs = 0) "
+                    + " OR WelshVocabActivatedByDialogueChoices.WelshText NOT IN (SELECT DiscoveredVocab.WelshText FROM DiscoveredVocab WHERE DiscoveredVocab.SaveIDs = 0)) "
                 + "ORDER BY WelshVocabActivatedByDialogueChoices.EnglishText;";
         }
 
         public static string GetCurrentActivateGrammarPlayerChoiceResultQry(string choiceID) {
             return "SELECT GrammarActivatedByDialogueChoices.ResultIDs, VocabGrammar.RuleIDs, VocabGrammar.ShortDescriptions, VocabGrammar.LongDescriptions "
                 + "FROM VocabGrammar "
-                + "INNER JOIN GrammarActivatedByDialogueChoices ON VocabGrammar.RuleIDs = GrammarActivatedByDialogueChoices.RuleIDs "
+                + "INNER JOIN GrammarActivatedByDialogueChoices ON GrammarActivatedByDialogueChoices.RuleIDs = VocabGrammar.RuleIDs "
                 + "WHERE GrammarActivatedByDialogueChoices.ChoiceIDs = " + choiceID + " "
+                    + " AND GrammarActivatedByDialogueChoices.RuleIDs NOT IN (SELECT DiscoveredVocabGrammar.RuleIDs FROM DiscoveredVocabGrammar WHERE DiscoveredVocabGrammar.SaveIDs = 0) "
                 + "ORDER BY VocabGrammar.RuleIDs;";
         }
 
@@ -179,7 +261,7 @@ namespace DbUtilities {
         public static string GetNewActivateTaskPlayerChoiceResultQry() {
             return "SELECT QuestTasks.TaskIDs, QuestTasks.TaskDescriptions, QuestTasks.QuestNames "
                 + "FROM QuestTasks "
-                + "WHERE QuestTasks.TaskIDs  NOT IN (SELECT QuestTasksActivated.TaskIDs FROM QuestTasksActivated WHERE SaveIDs = -1);";
+                + "WHERE QuestTasks.TaskIDs NOT IN (SELECT QuestTasksActivated.TaskIDs FROM QuestTasksActivated WHERE SaveIDs = -1);";
         }
 
         public static string GetNewActivateVocabPlayerChoiceResultQry(string searchStr = "") {
@@ -238,6 +320,12 @@ namespace DbUtilities {
         public static string GetTaskActivateCountFromChoiceIDqry(string choiceID) {
             return "SELECT COUNT(*) FROM TasksActivatedByDialogueChoices "
                 + "INNER JOIN PlayerChoiceResults ON TasksActivatedByDialogueChoices.ResultIDs = PlayerChoiceResults.ResultIDs "
+                + "WHERE PlayerChoiceResults.ChoiceIDs = " + choiceID + ";";
+        }
+
+        public static string GetTaskCompleteCountFromChoiceIDqry(string choiceID) {
+            return "SELECT COUNT(*) FROM TasksCompletedByDialogueChoices "
+                + "INNER JOIN PlayerChoiceResults ON TasksCompletedByDialogueChoices.ResultIDs = PlayerChoiceResults.ResultIDs "
                 + "WHERE PlayerChoiceResults.ChoiceIDs = " + choiceID + ";";
         }
 
@@ -308,6 +396,29 @@ namespace DbUtilities {
             return sql;
         }
 
+        public static string GetDefeatEnemyTagTasksData(string tag, string saveID) {
+            string sql = "SELECT DISTINCT QuestTaskPartsDefeatCharTagged.PartIDs, QuestTaskParts.TaskIDs, QuestTasks.QuestNames "
+                + "FROM QuestTaskPartsDefeatCharTagged "
+                + "INNER JOIN QuestTaskParts ON QuestTaskPartsDefeatCharTagged.PartIDs = QuestTaskParts.PartIDs "
+                + "INNER JOIN QuestTasksActivated ON QuestTaskParts.TaskIDs = QuestTasksActivated.TaskIDs "
+                + "INNER JOIN QuestTasks ON QuestTaskParts.TaskIDs = QuestTasks.TaskIDs "
+                + "INNER JOIN QuestsActivated ON QuestTasks.QuestNames = QuestsActivated.QuestNames "
+                + "WHERE QuestTaskPartsDefeatCharTagged.CharacterTags = " + DbCommands.GetParameterNameFromValue(tag)
+                    + " AND QuestsActivated.SaveIDs = " + saveID
+                    + " AND QuestTaskPartsDefeatCharTagged.PartIDs NOT IN (SELECT CompletedQuestTaskParts.PartIDs FROM CompletedQuestTaskParts WHERE CompletedQuestTaskParts.SaveIDs = 0)";
+            return sql;
+        }
+
+        public static string GetCompleteQuestTasksData(string questName, string saveID) {
+            string sql = "SELECT DISTINCT QuestTaskPartsCompleteQuest.PartIDs, QuestTaskParts.TaskIDs "
+                + "FROM QuestTaskPartsCompleteQuest "
+                + "INNER JOIN QuestTaskParts ON QuestTaskPartsCompleteQuest.PartIDs = QuestTaskParts.PartIDs "
+                + "INNER JOIN QuestTasksActivated ON QuestTaskParts.TaskIDs = QuestTasksActivated.TaskIDs "
+                + "WHERE QuestTaskPartsCompleteQuest.QuestNames = " + DbCommands.GetParameterNameFromValue(questName)
+                    + " AND QuestsActivated.SaveIDs = " + saveID
+                    + " AND QuestTaskPartsCompleteQuest.PartIDs NOT IN (SELECT CompletedQuestTaskParts.PartIDs FROM CompletedQuestTaskParts WHERE CompletedQuestTaskParts.SaveIDs = 0)";
+            return sql;
+        }
 
 
         public static string GetCharLinkDisplayQry() {
@@ -325,9 +436,11 @@ namespace DbUtilities {
         }
 
         public static string GetActiveDialoguesWithCharacter(string charName) {
-            string sql =  "SELECT ActivatedDialogues.DialogueIDs FROM ActivatedDialogues " +
+            string sql = "SELECT ActivatedDialogues.DialogueIDs FROM ActivatedDialogues " +
                    "INNER JOIN CharacterDialogues ON CharacterDialogues.DialogueIDs = ActivatedDialogues.DialogueIDs " +
-                   "WHERE CharacterDialogues.CharacterNames = " + DbCommands.GetParameterNameFromValue(charName) + ";";
+                   "WHERE CharacterDialogues.CharacterNames = " + DbCommands.GetParameterNameFromValue(charName) + " " +
+                    "AND ActivatedDialogues.Completed = 0 " +
+                    "AND SaveIDs = 0;";
             Debug.Log(sql);
             return sql;
         }
@@ -393,21 +506,41 @@ namespace DbUtilities {
             return "SELECT * FROM PlayerGames" + whereStr + ";";
         }
 
-        public static string GetTaskResultOptionsToStartDialogueQry() {
-            return "SELECT Dialogues.DialogueIDs, Dialogues.DialogueDescriptions, CharacterDialogues.CharacterNames "
-                + "FROM Dialogues LEFT JOIN CharacterDialogues ON Dialogues.DialogueIDs = CharacterDialogues.DialogueIDs "
-                + "ORDER BY CharacterDialogues.CharacterNames";
+        public static string GetTaskResultOptionsToStartDialogueQry(string searchStr = "") {
+            string qryStr = "SELECT Dialogues.DialogueIDs, Dialogues.DialogueDescriptions, CharacterDialogues.CharacterNames "
+                + "FROM Dialogues LEFT JOIN CharacterDialogues ON Dialogues.DialogueIDs = CharacterDialogues.DialogueIDs ";
+            if (searchStr != "") {
+                string searchParam = DbCommands.GetParameterNameFromValue(searchStr);
+                string whereStr = " WHERE Dialogues.DialogueDescriptions LIKE " + searchParam + " OR CharacterDialogues.CharacterNames LIKE " + searchParam;
+                qryStr += whereStr;
+            }
+            qryStr += " ORDER BY CharacterDialogues.CharacterNames;";
+            return qryStr;
         }
 
-        public static string GetTaskResultOptionsToEndCombatWithCharQry() {
-            return "SELECT Characters.CharacterNames, Characters.Scenes "
-                + "FROM Characters "
-                + "ORDER BY CharacterNames";
+        public static string GetTaskResultOptionsToEndCombatWithCharQry(string searchStr = "") {
+            string qryStr = "SELECT Characters.CharacterNames, Characters.Scenes "
+                + "FROM Characters ";
+            if (searchStr != "") {
+                string searchParam = DbCommands.GetParameterNameFromValue(searchStr);
+                string whereStr = " WHERE Characters.CharacterNames LIKE " + searchParam + " OR Characters.Scenes LIKE " + searchParam;
+                qryStr += whereStr;
+            }
+            qryStr += " ORDER BY CharacterNames;";
+            return qryStr;
         }
 
         public static string GetStartDialogueResultsRelatedToTaskQry(string taskID) {
-            return "SELECT QuestTaskStartDialogueResults.ResultIDs, Dialogues.DialogueIDs, Dialogues.DialogueDescriptions "
-                + "FROM QuestTaskStartDialogueResults INNER JOIN Dialogues ON Dialogues.DialogueIDs = QuestTaskStartDialogueResults.DialogueIDs "
+            return "SELECT " 
+                + "QuestTaskStartDialogueResults.ResultIDs, Dialogues.DialogueIDs, Dialogues.DialogueDescriptions "
+                + "FROM QuestTaskStartDialogueResults "
+                    + "INNER JOIN Dialogues ON Dialogues.DialogueIDs = QuestTaskStartDialogueResults.DialogueIDs "
+                + "WHERE QuestTaskStartDialogueResults.TaskIDs = " + taskID;
+        }
+
+        public static string GetActivateDialogueResultsRelatedToTaskQry(string taskID) {
+            return "SELECT QuestTaskActivateDialogueResults.ResultIDs, Dialogues.DialogueIDs, Dialogues.DialogueDescriptions "
+                + "FROM QuestTaskActivateDialogueResults INNER JOIN Dialogues ON Dialogues.DialogueIDs = QuestTaskActivateDialogueResults.DialogueIDs "
                 + "WHERE TaskIDs = " + taskID;
         }
 
@@ -450,10 +583,9 @@ namespace DbUtilities {
             return "SELECT VocabGrammar.ShortDescriptions, VocabGrammar.LongDescriptions "
                 + "FROM VocabGrammar "
                 + "INNER JOIN VocabRuleList ON VocabGrammar.RuleIDs = VocabRuleList.RuleIDs "
-                + "INNER JOIN DiscoveredVocabGrammar ON VocabGrammar.RuleIDs = VocabRuleList.RuleIDs "
                 + "WHERE VocabRuleList.EnglishText = " + DbCommands.GetParameterNameFromValue(EnglishTxt)
                     + " AND VocabRuleList.WelshText = " + DbCommands.GetParameterNameFromValue(WelshTxt)
-                    + " AND DiscoveredVocabGrammar.SaveIDs = 0";
+                    + " AND VocabGrammar.RuleIDs IN (SELECT DiscoveredVocabGrammar.RuleIDs FROM DiscoveredVocabGrammar WHERE DiscoveredVocabGrammar.SaveIDs = 0)";
         }
 
         public static string GetPlayerVocabSkillsQry() {
@@ -518,7 +650,7 @@ namespace DbUtilities {
                    "WHERE QuestTaskPartsPrefab.PartIDs " +
                     "NOT IN (SELECT CompletedQuestTaskParts.PartIDs FROM CompletedQuestTaskParts WHERE CompletedQuestTaskParts.SaveIDs = " + saveID + ") " +
                    "AND SaveIDs = " + saveID;
-            Debug.Log(sql);
+           // Debug.Log(sql);
             return sql;
         }
     }

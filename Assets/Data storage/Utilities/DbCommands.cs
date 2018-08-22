@@ -42,7 +42,7 @@ namespace DbUtilities {
                     value = "@value" + i;
                     //Debug.Log(values[i]);
                     _dbcm.Parameters.Add(new SqliteParameter(value, values[i]));
-                    Debug.Log(values[i]);
+                    //Debug.Log(values[i]);
                 }
                 else { value = values[i]; }
                 if (i == (values.Length - 1)) {
@@ -54,7 +54,7 @@ namespace DbUtilities {
 
             }
             string sql = sqlInsert + sqlValues;
-            Debug.Log(sql);
+            //Debug.Log(sql);
             _dbcm.CommandText = sql;
             _dbcm.ExecuteNonQuery();
             //Debug.Log("inserted");
@@ -75,7 +75,7 @@ namespace DbUtilities {
             _dbcm.ExecuteNonQuery();
             string pkColumnsStr = string.Join(",", pkColumns);
             //Debug.Log(pkColumnsStr);
-
+            
             string sql = "SELECT * FROM " + tblName;
             _dbcm.CommandText = sql;
             IDataReader _dbr = _dbcm.ExecuteReader();
@@ -464,21 +464,23 @@ namespace DbUtilities {
             }
         }
 
-        public static string GetTranslationsDisplayQry() {
-            return "SELECT * FROM VocabTranslations ORDER BY EnglishText ASC;";
-        }
-
-        public static string GetProficienciesDisplayQry() {
-            return "SELECT * FROM Proficiencies ORDER BY Thresholds ASC;";
-        }
-
-        public static string[] GetRandomTupleFromTable(string tblName) {
+        public static string[] GetRandomTupleFromTable(string tblName, string whereStr = "", params string[] qryParameters) {
             IDbConnection _dbc = new SqliteConnection(conn);
             _dbc.Open(); //Open connection to the database.
             IDbCommand _dbcm = _dbc.CreateCommand();
             string sql;
-            sql = "SELECT * FROM " + tblName + " ORDER BY RANDOM() LIMIT 1; ";
+            sql = "SELECT * FROM " + tblName + " ";
+            if  (whereStr != "") {
+                sql += whereStr + " ";
+            }
+            sql += "ORDER BY RANDOM() LIMIT 1; ";
+
+            foreach (string qryParameter in qryParameters) {
+                _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(qryParameter), qryParameter));
+            }
+
             _dbcm.CommandText = sql;
+
             IDataReader _dbr = _dbcm.ExecuteReader();
             _dbr.Read();
             string[] tupleArray = new string[_dbr.FieldCount];
@@ -558,7 +560,7 @@ namespace DbUtilities {
                 _dbcm.Parameters.Add(new SqliteParameter(GetParameterNameFromValue(qryParameter), qryParameter));
             }
             string sql = qry + " LIMIT 1;";
-            //Debug.Log(sql);
+            Debug.Log(sql);
             _dbcm.CommandText = sql;
             IDataReader _dbr = _dbcm.ExecuteReader();
             _dbr.Read();

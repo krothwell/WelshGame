@@ -6,7 +6,7 @@ using UnityEngine;
 public class MoveToLocationDecision : CharacterMovementDecision {
 
 
-    public override void CheckToEndMovement() {
+    public override void EndMovementSequence() {
         if (myCharacter.GetMyPosition() == movementController.GetTargetPosition()) {
             print(myCharacter +": ending decision because I think I'm at the target position!");
             EndDecision();

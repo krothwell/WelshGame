@@ -4,13 +4,18 @@ using System;
 using UnityEngine.UI;
 using DbUtilities;
 namespace GameUI {
-    public class EscMenuUI : UIController {
+    public class GameMenuUI : UIController {
+        private bool isOn;
+        public bool IsOn {
+            get { return isOn; }
+        }
         GameObject myPanel;
         GameObject saveGameList, loadGameList;
         GameObject submitSaveBtn;
         public GameObject[] options;
         PlayerSavesController playerSavesController;
         GameObject saveInput;
+        SceneLoader sceneLoader;
         // Use this for initialization
         void Start() {
             myPanel = transform.Find("Panel").gameObject;
@@ -19,6 +24,7 @@ namespace GameUI {
             loadGameList = options[1].transform.Find("LoadGamesList").gameObject;
             saveInput = options[0].transform.Find("SaveInput").gameObject;
             submitSaveBtn = options[0].transform.Find("SubmitSaveBtn").gameObject;
+            sceneLoader = new SceneLoader();
         }
 
         // Update is called once per frame
@@ -32,9 +38,11 @@ namespace GameUI {
         private void SetPanel() {
             if (myPanel.activeSelf) {
                 myPanel.SetActive(false);
+                isOn = false;
             }
             else {
                 myPanel.SetActive(true);
+                isOn = true;
             }
         }
 
@@ -67,6 +75,10 @@ namespace GameUI {
 
         public void FillLoadGames() {
             FillDisplayFromDb(DbQueries.GetSaveGamesDisplayQry(true), loadGameList.transform, playerSavesController.BuildSaveGameRow);
+        }
+
+        public void ExitToMain() {
+            sceneLoader.LoadSceneByIndex(0);
         }
 
 

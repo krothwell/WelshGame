@@ -44,14 +44,8 @@ namespace GameUtilities {
             public static void SetZ(GameObject go) {
                 
                 Vector3 goPos = go.GetComponent<Transform>().localPosition;
-                //print("gameobject: " + go + ", current y position: " + goPos.y);
                 float newZ = (float)((goPos.y % 10) * 0.2);
-               // if (newZ >= 2f) {
-               //     newZ = -2f + (float)(System.Math.Round((newZ % 20),2));
-               // }
-                //print("new z:" + newZ);
                 go.GetComponent<Transform>().localPosition = new Vector3(goPos.x, goPos.y, newZ);
-                //print(go.GetComponent<Transform>().localPosition);
             }
         }
     }

@@ -44,10 +44,10 @@ public class PlayerCombatController : CharCombatController {
         combatui.AddToUnderAttack(charIn);
         ToggleInCombat(true);
         combatStateAction.MakeAction();
-        TriggerStrategyMode();
+        TriggerCombatMode();
     }
 
-    public void TriggerStrategyMode() {
+    public void TriggerCombatMode() {
         combatui.ToggleCombatMode();
     }
 
@@ -68,9 +68,7 @@ public class PlayerCombatController : CharCombatController {
                 combatui.HideUnderAttack();
                 combatui.HidePlayerVitals();
                 MusicPlayer mp = FindObjectOfType<MusicPlayer>();
-                print(mp);
-                mp.MusicLocked = false;
-                character.CurrentMusicZone.TransitionToZoneMusic();
+                mp.RevertToZone();
             }
         }
     }

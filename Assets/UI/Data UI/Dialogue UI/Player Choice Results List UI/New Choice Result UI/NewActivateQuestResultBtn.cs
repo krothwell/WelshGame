@@ -20,7 +20,7 @@ namespace DataUI.ListItems {
             GetComponent<NewActivateQuestResultBtn>().MyName = questName;
         }
 
-        protected override void InsertResult() {
+        public override void InsertResult() {
             dialogueUI.InsertActivateQuestResult(myName);
         }
     }

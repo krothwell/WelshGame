@@ -8,27 +8,15 @@ using GameUI;
 /// arms, and lower arms parts). 
 /// </summary>
 
-public class EquipableWorldItemWithMultiSprites : WorldItem {
-    private QuestsUI questsUI;
+public abstract class EquipableWorldItemWithMultiSprites : WorldItem {
     public GameObject[] equipToPlayerParts;
 
-    protected void Start() {
-        inventoryScale = new Vector3(1f, 1f, 1f);
-        rectTransform = GetComponent<RectTransform>();
-        worldItems = FindObjectOfType<WorldItems>();
-        if (transform.parent == worldItems.transform) {
-            SetWorldDisplay();
-        } else {
-            SetInventoryDisplay();
-        }
-        questsUI = FindObjectOfType<QuestsUI>();
-        if (transform.parent.GetComponent<PlayerEquipmentSlot>() != null) {
-            EquipToPlayerModel();
-        }
+    protected override void Start() {
+        base.Start();
+        SetPlayerParts();
     }
 
     public override void EquipToPlayerModel() {
-        
         SetChildrenActive(true);
         for (int i = 0; i < transform.childCount; i++) {
             if (transform.GetChild(i).GetComponent<SpriteRenderer>().sprite != null) {
@@ -40,7 +28,6 @@ public class EquipableWorldItemWithMultiSprites : WorldItem {
             }
         }
         questsUI.CompleteEquipItemTaskPart(gameObject.name);
-        
     }
 
     public override void UnequipFromPlayerModel() {
@@ -48,6 +35,8 @@ public class EquipableWorldItemWithMultiSprites : WorldItem {
             equipToPlayerParts[i].GetComponent<SpriteRenderer>().sprite = null;
         }
     }
+
+    protected abstract void SetPlayerParts();
 
     
 }

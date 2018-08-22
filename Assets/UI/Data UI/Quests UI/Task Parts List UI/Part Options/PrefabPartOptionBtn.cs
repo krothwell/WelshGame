@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using DbUtilities;
 
@@ -11,7 +9,8 @@ namespace DataUI {
         /// 
         /// </summary>
         public class PrefabPartOptionBtn : MonoBehaviour {
-            protected QuestsUI questsUI;
+            protected TaskPartsListUI taskPartsListUI;
+
 
             private string myPath;
             public string MyPath {
@@ -27,7 +26,7 @@ namespace DataUI {
 
             // Use this for initialization
             void Start() {
-                questsUI = FindObjectOfType<QuestsUI>();
+                taskPartsListUI = FindObjectOfType<TaskPartsListUI>();
             }
 
             public void InitialiseMe(string path, string label) {
@@ -37,16 +36,16 @@ namespace DataUI {
             }
 
             public void InsertMe() {
-                string currentTaskID = questsUI.GetCurrentTaskID();
+                string currentTaskID = FindObjectOfType<QuestsUI>().GetCurrentTaskID();
                 string partID = DbCommands.GenerateUniqueID("QuestTaskParts", "PartIDs", "PartID");
-                questsUI.InsertPart(partID);
+                taskPartsListUI.InsertPart(partID);
                 DbCommands.InsertTupleToTable("QuestTaskPartsPrefab",
                                                 myPath,
                                                 myLabel,
                                                 partID
                                              );
-                questsUI.DisplayPartsRelatedToTask(currentTaskID);
-                questsUI.HideNewPartPanel();
+                taskPartsListUI.DisplayPartsRelatedToTask(currentTaskID);
+                taskPartsListUI.HideNewPartPanel();
             }
 
             public void SetText(string newText) {

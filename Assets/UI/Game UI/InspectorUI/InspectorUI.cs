@@ -9,32 +9,6 @@ public class InspectorUI : UIController {
     void Start() {
         healthSlider = GetPanel().GetComponentInChildren<Slider>().gameObject;
     }
-    //private bool isInspecting = false;
-    //// Use this for initialization
-    //bool isOnDisplay = true;
-	
-	// Update is called once per frame
-	//void Update () {
-	//	if (IsInspecting()) {
- //           if (!isOnDisplay) {
- //               DisplayComponents();
- //               isOnDisplay = true;
- //           }
- //       } else {
- //           if (isOnDisplay) {
- //               HideComponents();
- //               isOnDisplay = false;
- //           }
- //       }
-	//}
-
- //   private bool IsInspecting() {
- //       return isInspecting;
- //   }
-
- //   public void SetInspecting(bool inspecting) {
- //       isInspecting = inspecting;
- //   }
 
     public void SetInspectorText(string txt) {
         GetPanel().GetComponentInChildren<Text>().text = txt;

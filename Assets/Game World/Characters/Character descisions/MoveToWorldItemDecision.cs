@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MoveToWorldItemDecision : CharacterMovementDecision {
     protected WorldItem itemSelected;
-    public override void CheckToEndMovement() {
+    public override void EndMovementSequence() {
         if (myCharacter.MovementController.GetDistanceFromMyPosition(targetPosition) < myCharacter.GetInteractionDistance()) {
             myCharacter.PickUpItem(itemSelected);
             EndDecision();

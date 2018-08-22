@@ -42,10 +42,8 @@ namespace DataUI {
                 dialogueNodesListUI = FindObjectOfType<DialogueNodesListUI>();
             }
 
-            void OnMouseUpAsButton() {
-                if (!editable) {
-                    dialogueUI.ToggleSelectionTo(gameObject.GetComponent<Dialogue>(), dialogueUI.selectedDialogue);
-                }
+            public void Select() {
+                dialogueUI.ToggleSelectionTo(gameObject.GetComponent<Dialogue>(), dialogueUI.selectedDialogue);
             }
 
             public void SelectSelf() {

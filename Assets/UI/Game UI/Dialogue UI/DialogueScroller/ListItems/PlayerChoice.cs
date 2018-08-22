@@ -76,27 +76,26 @@ namespace GameUI {
                 DisableMe();
                 dialogueUI.DestroyInteractiveChoices();
                 dialogueUI.InsertSpacer();
-                if (myNextNode != "") {
-                    if (isVocabTest) {
-                        dialogueUI.CurrentPlayerChoice = this;
-                        dialogueUI.ProcessPlayerChoiceTest(vocabArray, testData);
-                    }
-                    else {
-                        dialogueUI.DisplayDialogueNode(GetDialogueNodeData(myNextNode));
-                    }
-                } else {
-                    dialogueUI.SetNotInUse();
-                }
+
                 if (dialogueUI.GetChoiceResultsCount(myID) > 0) {
                     dialogueUI.ActivateQuests(myID);
                     dialogueUI.ActivateQuestTasks(myID);
-                    dialogueUI.ActivateNewGrammar(myID);
+                    //dialogueUI.ActivateNewGrammar(myID);
                     dialogueUI.ActivateNewWelsh(myID);
                     dialogueUI.MarkDialogueComplete(myID);
                     dialogueUI.ActivateNewDialogue(myID);
 
                     notificationQueue = FindObjectOfType<NotificationQueue>();
                     notificationQueue.DisplayQueuedNotifications();
+                }
+
+                if (isVocabTest) {
+                    dialogueUI.CurrentPlayerChoice = this;
+                    dialogueUI.ProcessPlayerChoiceTest(vocabArray, testData);
+                } else if (myNextNode != "") {
+                    dialogueUI.DisplayDialogueNode(GetDialogueNodeData(myNextNode));
+                } else {
+                    dialogueUI.SetNotInUse();
                 }
             }
 

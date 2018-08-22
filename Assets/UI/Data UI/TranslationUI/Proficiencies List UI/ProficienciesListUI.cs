@@ -49,7 +49,7 @@ namespace DataUI {
                 translationUI.ToggleMenuTo(GetComponent<UIController>(), translationUI.SideMenuGroup);
                 translationUI.ToggleSelectedSideMenuButton(proficienciesBtn);
             }
-            FillDisplayFromDb(DbCommands.GetProficienciesDisplayQry(), ProficienciesList.transform, BuildProficiency);
+            FillDisplayFromDb(DbQueries.GetProficienciesDisplayQry(), ProficienciesList.transform, BuildProficiency);
         }
 
         //Display a panel to add a new proficiency 
@@ -66,7 +66,7 @@ namespace DataUI {
         public void InsertProficiency() {
             if ((inputProficiencyTxt.text != null) && (inputProficiencyTxt.text != "")) {
                 DbCommands.InsertTupleToTable("Proficiencies", inputProficiencyTxt.text, inputThresholdTxt.text);
-                FillDisplayFromDb(DbCommands.GetProficienciesDisplayQry(), proficienciesList.transform, BuildProficiency);
+                FillDisplayFromDb(DbQueries.GetProficienciesDisplayQry(), proficienciesList.transform, BuildProficiency);
                 inputProficiencyTxt.text = "";
                 inputThresholdTxt.text = "";
             }

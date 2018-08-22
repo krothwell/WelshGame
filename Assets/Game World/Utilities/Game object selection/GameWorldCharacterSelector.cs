@@ -20,7 +20,7 @@ public class GameWorldCharacterSelector : GameWorldSelector {
 
     }
 
-    public override void SetSelected() {
+    public override void InitialiseDecision() {
         if (selectionCircle != null) {
             //EndCurrentSelection();
             if (abilitySelected) {

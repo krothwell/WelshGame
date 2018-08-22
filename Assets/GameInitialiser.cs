@@ -21,20 +21,23 @@ public class GameInitialiser : MonoBehaviour {
         if (dataUI != null) {
             dataUI.HideComponents();
         }
-    }
-    void Start() {
+
         DbCommands.SetConnectionString("URI=file:" + Application.dataPath + DB_PATH);
         dbSetup = new DbSetup();
+        dbSetup.CreateTables();
+    }
+    void Start() {
+
         //dbSetup.DropTable("VocabTagged");
         //DbCommands.UpdateTableField("ActivatedDialogues", "Completed", "0");
-        dbSetup.CreateTables();
+
         //print("tables created");
         //dbSetup.CopyTable("PlayerGames", "Copied");
         //string[,] delFields = { { "EnglishText", "''" }, { "WelshText", "''" } };
         //DbCommands.DeleteTupleInTable("VocabTranslations", delFields);
         //dbSetup.ReplaceTable("PlayerGames");
         
-        //Debugging.PrintDbTable("VocabTranslations");
+        //Debugging.PrintDbTable("ActivatedDialogues");
         DbCommands.InsertTupleToTable("PlayerGames", "0", "Current Game", "Current player", "No path", DateTime.Now.ToString(), "Start", "0", "0", "0");
         DbCommands.InsertTupleToTable("PlayerGames", "-1", "New game", "New player", "No path", DateTime.Now.ToString(), "Start", "0", "0", "0");
         playerSavesController = FindObjectOfType<PlayerSavesController>();
@@ -43,8 +46,9 @@ public class GameInitialiser : MonoBehaviour {
         // ensures it doesn't try to load it before the connection string is set
         // up.
         playerSavesController.ManuallyInitialise();
-        Debugging.PrintDbTable("ActivatedDialogues");
-
+        //Debugging.PrintDbTable("QuestTaskStartDialogueResults");
+        Destroy(gameObject);
+        Destroy(this);
     }
 	
 }

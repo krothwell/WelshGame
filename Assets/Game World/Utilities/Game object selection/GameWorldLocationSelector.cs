@@ -12,12 +12,8 @@ public class GameWorldLocationSelector : GameWorldSelector {
         }
     }
 
-    new void OnMouseExit() {
 
-    }
-
-
-    public override void SetSelected() {
+    public override void InitialiseDecision() {
         if (abilitySelected == null) {
             BuildCircle(MouseSelection.GetMouseCoords2D());
             BuildSelectionPlayerDecision(DefaultSelectionDecisionPrefab);

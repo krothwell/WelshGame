@@ -10,6 +10,7 @@ namespace DataUI {
         public class NewEndCombatWithCharTaskResultOptionBtn : MonoBehaviour {
             Text characterNameText, sceneNameText;
             QuestsUI questsUI;
+            ListSearcher listSearcher;
             string characterName, scene;
             void Start() {
                 questsUI = FindObjectOfType<QuestsUI>();

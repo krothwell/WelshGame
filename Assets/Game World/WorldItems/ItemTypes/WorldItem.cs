@@ -9,26 +9,39 @@ using UnityEngine.UI;
 /// and inventory (UI image icon) displays. A world item has a type which is 
 /// checked to see if/where it can be equipped by the player. 
 /// </summary>
-//TODO: add a new abstract class from this called EquipableWorldItem
-//TODO: Move Equip/Unequip functions to this class, derive 
-//TODO: WorldItemWithMultipleSprites from this
 public abstract class WorldItem : MonoBehaviour {
     public WorldItems.WorldItemTypes itemType;
     protected WorldItems worldItems;
     protected Vector3 inventoryScale;
     protected RectTransform rectTransform;
+    protected QuestsUI questsUI;
+    protected PlayerInventorySlots playerInventorySlots;
 
-    protected PlayerInventoryUI playerInventory;
-
-    public void GetPickedUp () {
-        playerInventory = FindObjectOfType<PlayerInventoryUI>();
-        playerInventory.RecieveItem(this);
-        SetInventoryDisplay();
+    private void Awake() {
+        playerInventorySlots = FindObjectOfType<PlayerInventorySlots>();
     }
 
-    //TODO: check if this is better staying with player class or implementing
-    //here.
-    public void OnMouseUpAsButton() {
+    protected virtual void Start() {
+        inventoryScale = new Vector3(1f, 1f, 1f);
+        rectTransform = GetComponent<RectTransform>();
+        worldItems = FindObjectOfType<WorldItems>();
+        if (transform.parent == worldItems.transform) {
+            SetItemModeForWorld();
+        }
+        else {
+            SetItemModeForInventory();
+        }
+        questsUI = FindObjectOfType<QuestsUI>();
+
+        if (transform.parent.GetComponent<PlayerEquipmentSlot>() != null) {
+            EquipToPlayerModel();
+        }
+    }
+
+    public void GetPickedUp () {
+        Debug.Log(playerInventorySlots);
+        playerInventorySlots.ReceiveItem(this);
+        SetItemModeForInventory();
     }
 
     public WorldItems.WorldItemTypes GetMyItemType() {
@@ -37,14 +50,23 @@ public abstract class WorldItem : MonoBehaviour {
 
     public abstract void EquipToPlayerModel();
     public abstract void UnequipFromPlayerModel();
-    protected void SetWorldDisplay() {
+
+    /// <summary>
+    /// changed the properties of the item so that it displays appropriately with game
+    /// world scenery.
+    /// </summary>
+    protected void SetItemModeForWorld() {
         SetChildrenActive(true);
         ImageLayerOrder.SetOrderOnTranformChildren(transform);
         GetComponent<Image>().enabled = false;
         GetComponent<GameWorldSelector>().enabled = true;
     }
 
-    protected void SetInventoryDisplay() {
+    /// <summary>
+    /// Changes the properties of the item so that it displays appropriately in the 
+    /// inventory.
+    /// </summary>
+    protected void SetItemModeForInventory() {
         rectTransform.sizeDelta = new Vector2(20f, 20f);
         rectTransform.localPosition = new Vector3(0f, 0f, 0f);
         rectTransform.localScale = inventoryScale;

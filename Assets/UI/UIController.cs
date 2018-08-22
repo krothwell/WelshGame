@@ -22,7 +22,7 @@ public abstract class UIController : MonoBehaviour {
     /// where only one list element should be selected at a time. 
     /// A list of classes which implement the selectable interface can be added to the dictionary with a string key for referencing.
     /// </summary>
-    private Dictionary<string, ISelectableUI> selectionToggleGroups;
+    protected Dictionary<string, ISelectableUI> selectionToggleGroups;
     /// <summary>
     /// Clear current list and then get a list of data queried from the database and uses an anonymous function to create a new list 
     /// of items from the data retrieved.
@@ -58,7 +58,7 @@ public abstract class UIController : MonoBehaviour {
             Transform item = buildItem(stringArray);
             item.SetParent(display, false);
         }
-        print(query);
+        //print(query);
     }
 
     public void FillDisplayFromTransform(Transform goHolder,

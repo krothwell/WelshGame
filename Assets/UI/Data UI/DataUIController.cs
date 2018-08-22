@@ -38,5 +38,10 @@ public class DataUIController : UIController {
         World.PauseGame();
     }
 
+    public new void HideComponents() {
+        base.HideComponents();
+        World.UnpauseGame();
+    }
+
 }
 

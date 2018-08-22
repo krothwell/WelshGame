@@ -85,6 +85,12 @@ public abstract class CharCombatController : MonoBehaviour, IAttackable {
         CharacterEnemyList.Remove(charIn);
     }
 
+    protected void SetDefeated() {
+        FindObjectOfType<NPCs>().RemoveCharacter(myCharacter.CharacterName);
+        Destroy(myCharacter.gameObject);
+        Destroy(this);
+    }
+
     //public void SetSelectedAbility (GameObject ability) {
     //    selectedAbility = ability;
     //    //ability.transform.SetParent(transform, false);

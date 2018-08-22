@@ -24,17 +24,17 @@ public class DialogueTestDataController {
         set { myTestTrigger = value; }
     }
     public DialogueTestDataController(TestTrigger trigger_, string charName_) {
-        SetDefaultValues();
         charName = charName_;
         SetTestData();
+        SetDefaultValues();
         SetVocabIntro(vocab);
         myTestTrigger = trigger_;
     }
 
     public DialogueTestDataController(TestTrigger trigger_, string[] vocab_, TestType testType_, string charName_) {
-        SetDefaultValues();
         charName = charName_;
         vocab = vocab_;
+        SetDefaultValues();
         myTestTrigger = trigger_;
         testType = testType_;
     }
@@ -44,16 +44,19 @@ public class DialogueTestDataController {
         answerCorrectPercent = -1; //-1 when not set
         grammarDetailsDict = new Dictionary<int, string[]>();
         highestTallyPossible = DbCommands.GetMaxFromTable("Proficiencies", "Thresholds");
+        SetGrammar();
     }
 
     private void SetVocabIntro(string[] vocab) {
         VocabIntroGetter introGetter = new VocabIntroGetter(vocab);
         intro = introGetter.GetIntroNodeArray();
-        SetGrammar();
+        //SetGrammar();
     }
 
     private void SetTestData() {
-        string[] vocabDetails = DbCommands.GetRandomTupleFromTable("DiscoveredVocab");
+        
+        string[] vocabDetails = DbCommands.GetRandomTupleFromTable("DiscoveredVocab", "WHERE SaveIDs = 0");
+        Debug.Log("working 2");
         string[] vocabKey = new string[2];
         vocabKey[0] = vocabDetails[0];
         vocabKey[1] = vocabDetails[1];
@@ -79,6 +82,7 @@ public class DialogueTestDataController {
 
     public void SetGrammar() {
         relatedGrammarList = new List<string[]>();
+        Debug.Log(vocab[0]);
         DbCommands.GetDataStringsFromQry(DbQueries.GetDiscoveredGrammarRelatedToVocab(vocab[0], vocab[1]), out relatedGrammarList, vocab[0], vocab[1]);
     }
 

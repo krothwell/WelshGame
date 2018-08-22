@@ -16,7 +16,7 @@ namespace DataUI.ListItems {
             PlayerChoiceID = playerChoiceID_;
         }
 
-        protected override void InsertResult() {
+        public override void InsertResult() {
             InsertNewPlayerChoiceResultID();
             DbCommands.InsertTupleToTable("DialoguesActivatedByDialogueChoices", playerChoiceResultID, PlayerChoiceID, dialogueID);
             dialogueUI.DisplayResultsRelatedToChoices();

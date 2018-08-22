@@ -1,7 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
 
 public class ShieldItem : EquipableWorldItemWithSingleSprite {
+    protected override void SetPlayerPart() {
+        throw new NotImplementedException();
 
+    }
 }

@@ -13,9 +13,9 @@ public class MusicFadeIn : MonoBehaviour {
             if (fadeInRate > 0f) {
                 audioSource.volume += fadeInRate;
                 if (audioSource.volume >= 0.5f) {
-                    if (!audioSource.isPlaying) {
-                        audioSource.Play();
-                    }
+                    //if (!audioSource.isPlaying) {
+                    //    audioSource.Play();
+                    //}
                     Destroy(this);
                 }
             }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityUtilities;
 
 namespace DataUI {
     namespace ListItems {
@@ -11,6 +12,8 @@ namespace DataUI {
                 set { myChoiceID = value; }
             }
             public override void DeleteSelf() {
+                print(myChoiceID);
+                Debugging.PrintDbTable("PlayerChoices");
                 dialogueUI.DeleteCompleteDialogueResult(MyChoiceID);
                 Destroy(gameObject);
                 Destroy(this);

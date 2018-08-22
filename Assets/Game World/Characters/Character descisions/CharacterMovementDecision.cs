@@ -18,7 +18,7 @@ public abstract class CharacterMovementDecision : CharacterDecision {
     public WalkMovement WalkMovementPrefab;
 	// Update is called once per frame
 	void Update () {
-        CheckToEndMovement();
+        EndMovementSequence();
         movementController.CheckToMakeMovement();
         
     }
@@ -64,7 +64,7 @@ public abstract class CharacterMovementDecision : CharacterDecision {
     /// If the character reaches the target destination or within interaction distance of the object
     /// they are moving towards, or their status has changed then the movement can end.
     /// </summary>
-    public abstract void CheckToEndMovement();
+    public abstract void EndMovementSequence();
 
     public abstract void SetTarget(Transform targetTransform);
 

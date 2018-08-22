@@ -28,8 +28,13 @@ public class PlayerSavesController : MonoBehaviour {
     /// </summary>
     public void ManuallyInitialise() {
         if (FindObjectOfType<PlayerCharacter>() != null) {
+            
             player = FindObjectOfType<PlayerCharacter>().gameObject;
             LoadSave();
+            
+
+
+
         }
     }
 
@@ -106,7 +111,7 @@ public class PlayerSavesController : MonoBehaviour {
         DbCommands.DeleteTupleInTable("AcquiredGrammarSkills", delFields);
 
         PlayerPrefsManager.SetSaveGame(0);
-        sceneLoader.LoadSceneByName("Start");
+        sceneLoader.LoadSceneByName("Demo");
     }
 
     /*used in game to create a new save with player referenced save slot */
@@ -126,7 +131,7 @@ public class PlayerSavesController : MonoBehaviour {
     public void SaveNew() {
         SkillsMenuUI skillsMenuUI = FindObjectOfType<SkillsMenuUI>();
         SetSaveID(DbCommands.GenerateUniqueID("PlayerGames", "SaveIDs", "SaveID"));
-        string saveRef = FindObjectOfType<EscMenuUI>().transform
+        string saveRef = FindObjectOfType<GameMenuUI>().transform
             .Find("Panel")
             .Find("SaveGameUI")
             .Find("SaveInput").GetComponent<InputField>().text;
@@ -259,6 +264,7 @@ public class PlayerSavesController : MonoBehaviour {
     /*loads all the details of the saved game except for the scene, since loading a scene destroys saveGameManager obj*/
     public void LoadSave() {
         SkillsMenuUI skillsMenuUI = FindObjectOfType<SkillsMenuUI>();
+        PlayerVitalsUI playerVitalsUI = FindObjectOfType<PlayerVitalsUI>();
         int saveID = PlayerPrefsManager.GetSaveGame();
         //print(DbCommands.GetConn());
         string[] playerSave = DbCommands.GetTupleFromTable("PlayerGames", " SaveIDs = " + saveID);
@@ -271,9 +277,10 @@ public class PlayerSavesController : MonoBehaviour {
         SetPlayerPortraitPath(playerSave[3]);
         player.GetComponent<PlayerCharacter>().SetMyName(playerName);
         player.GetComponent<PlayerCharacter>().SetMyPortrait(playerPortraitPath);
+        playerVitalsUI.Portrait.sprite = player.GetComponent<PlayerCharacter>().GetMyPortrait();
         float playerXpos = float.Parse(playerSave[6]);
         float playerYpos = float.Parse(playerSave[7]);
-        print(playerXpos + ", " + playerYpos);
+        //print(playerXpos + ", " + playerYpos);
         Transform playerTransform = player.GetComponent<Transform>();
         playerTransform.localPosition = new Vector2(playerXpos, playerYpos);
         Camera.main.transform.position =  new Vector3(playerTransform.position.x, playerTransform.position.y, Camera.main.transform.position.z);
@@ -390,9 +397,6 @@ public class PlayerSavesController : MonoBehaviour {
     }
 
     private void LoadWorldItems() {
-        PlayerInventoryUI playerInventory;
-        playerInventory = FindObjectOfType<PlayerInventoryUI>();
-        playerInventory.OpenInventory();
         string saveIDstr = PlayerPrefsManager.GetSaveGame().ToString();
         WorldItems worldItems = FindObjectOfType<WorldItems>();
         worldItems.DestroyWorldItems();
@@ -417,7 +421,7 @@ public class PlayerSavesController : MonoBehaviour {
             worldItem.transform.position = new Vector3(float.Parse(worldItemData[0]), float.Parse(worldItemData[1]), float.Parse(worldItemData[2]));
             worldItem.name = worldItemData[4];
         }
-        playerInventory.CloseInventory();
+
     }
 
     private void LoadPrefabQuests() {

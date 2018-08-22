@@ -5,25 +5,12 @@ using UnityEngine.UI;
 using GameUI;
 using GameUtilities.Display;
 
-public class EquipableWorldItemWithSingleSprite : WorldItem {
-    private QuestsUI questsUI;
+public abstract class EquipableWorldItemWithSingleSprite : WorldItem {
     public GameObject equipToPlayerPart;
     // Use this for initialization
-    void Start() {
-        inventoryScale = new Vector3(1f, 1f, 1f);
-        rectTransform = GetComponent<RectTransform>();
-        worldItems = FindObjectOfType<WorldItems>();
-        if (transform.parent == worldItems.transform) {
-            SetWorldDisplay();
-        }
-        else {
-            SetInventoryDisplay();
-        }
-
-        questsUI = FindObjectOfType<QuestsUI>();
-        if (transform.parent.GetComponent<PlayerEquipmentSlot>() != null) {
-            EquipToPlayerModel();
-        }
+    protected override void Start() {
+        base.Start();
+        SetPlayerPart();
     }
 
     public override void EquipToPlayerModel() {
@@ -40,4 +27,6 @@ public class EquipableWorldItemWithSingleSprite : WorldItem {
     public override void UnequipFromPlayerModel() {
         equipToPlayerPart.GetComponent<SpriteRenderer>().sprite = null;
     }
+
+    protected abstract void SetPlayerPart();
 }

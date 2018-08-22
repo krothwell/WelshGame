@@ -39,6 +39,7 @@ namespace DataUI {
         }
 
         public void ToggleChoiceComponents() {
+            print(OptionComponentGroupArray[nodeTypeDropdown.value]);
             ToggleSelectionTo(OptionComponentGroupArray[nodeTypeDropdown.value].GetComponent<ISelectableUI>(), NodeType);
         }
 
@@ -51,9 +52,9 @@ namespace DataUI {
         }
 
         public void ActivateNodeDetails() {
+            GetPanel().SetActive(true);
             nodeTypeDropdown.value = 0;
             ToggleChoiceComponents();
-            GetPanel().SetActive(true);
             displayDialogueNodeDetailsBtn.GetComponent<Button>().interactable = false; //indicate to user that button no longer functions.
             if (editing) {
                 print((dialogueNodesListUI.GetSelectedItemFromGroup(dialogueNodesListUI.SelectedNode) as DialogueNode));
@@ -74,6 +75,7 @@ namespace DataUI {
         private void ClearEditNodeDetails() {
             inputNodeText.text = "";
             endDialogueOptionToggle.isOn = false;
+            selectedCharOverride = null;
             SetOverrideBtnTxt("<i>None</i>", "");
         }
 

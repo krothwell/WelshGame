@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityUtilities;
-using UnityEditor;
 using GameUI;
 
 public class WorldItems : MonoBehaviour {
@@ -16,10 +15,22 @@ public class WorldItems : MonoBehaviour {
         LegsWearable,
         FeetWearable
     };
-
+    PlayerInventoryUI playerInventory;
     void Awake() {
         worldItemList = new List<string[]>();
         SetWorldItemsList();
+    }
+
+    void Start() {
+        playerInventory = FindObjectOfType<PlayerInventoryUI>();
+        playerInventory.OpenInventory();
+        playerInventory.InitialiseEquippedItemsDict();
+        Invoke("CloseInventory", 0.2f);
+    }
+
+    void CloseInventory() {
+        playerInventory = FindObjectOfType<PlayerInventoryUI>();
+        playerInventory.CloseInventory();
     }
 
     public void SetWorldItemsList() {
@@ -41,7 +52,9 @@ public class WorldItems : MonoBehaviour {
             worldItemList.Add(itemDetails);
             //print(worldItem.name);
         }
-        playerInventory.CloseInventory();
+        if (FindObjectOfType<GameMenuUI>().IsOn) {
+            playerInventory.CloseInventory();
+        }
 
     }
 

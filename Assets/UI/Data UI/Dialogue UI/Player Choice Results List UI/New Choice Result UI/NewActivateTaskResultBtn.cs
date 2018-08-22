@@ -22,7 +22,7 @@ namespace DataUI.ListItems {
             PlayerChoiceID = playerChoiceIDStr;
         }
 
-        protected override void InsertResult() {
+        public override void InsertResult() {
             string newResultID = DbCommands.GenerateUniqueID("PlayerChoiceResults", "ResultIDs", "ResultID");
             DbCommands.InsertTupleToTable("PlayerChoiceResults", newResultID, PlayerChoiceID);
             DbCommands.InsertTupleToTable("TasksActivatedByDialogueChoices", newResultID, PlayerChoiceID, taskID);

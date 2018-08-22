@@ -154,6 +154,29 @@ namespace GameUI {
             }
         }
 
+        public void CompleteDefeatEnemyTagTaskPart(string tagName) {
+            Debugging.PrintDbQryResults(DbQueries.GetDefeatEnemyTagTasksData(tagName, "0"), tagName);
+            List<string[]> partsToComplete = new List<string[]>();
+            DbCommands.GetDataStringsFromQry(DbQueries.GetDefeatEnemyTagTasksData(tagName, "0"), out partsToComplete, tagName);
+            if (partsToComplete.Count > 0) {
+                foreach (string[] tuple in partsToComplete) {
+                    print("completing task part " + tagName);
+                    CompleteTaskPart(tuple[0], tuple[1], tuple[2]);
+                    print("task part completed");
+                }
+            }
+        }
+
+        public void CompleteQuestTaskPart(string questName) {
+            List<string[]> partsToComplete = new List<string[]>();
+            DbCommands.GetDataStringsFromQry(DbQueries.GetCompleteQuestTasksData(questName, "0"), out partsToComplete, questName);
+            if (partsToComplete.Count > 0) {
+                foreach (string[] tuple in partsToComplete) {
+                    CompleteTaskPart(tuple[0], tuple[1], questName);
+                }
+            }
+        }
+
         public void CompleteTaskPart(string partID, string taskID, string questName) {
             
             DbCommands.InsertTupleToTable("CompletedQuestTaskParts", partID, "0");
@@ -178,6 +201,7 @@ namespace GameUI {
                 }
                 if (startDialogueID != "") {
                     print(startDialogueID);
+                    DbCommands.InsertTupleToTable("ActivatedDialogues", startDialogueID, "0", "0");
                     dialogueUI.StartNewDialogue(startDialogueID);
                 }
                 int tasksCompletedCount = DbCommands.GetCountFromQry(

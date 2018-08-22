@@ -19,8 +19,7 @@ public class TimeOfDayController : MonoBehaviour {
     Dictionary<TimesOfDay, float> timeofDayIntensityDict;
     Color32 currentColour, dawnColour, dayColour, eveningColour, nightColour;
     public float fullDayCycle;
-    float fullDayCyclePortion, cycleTransition, currentTime, currentTransition, currentRotation, currentIntensity,
-          transitionToDay, transitionToEvening, transitionToNight, transitionToDawn;
+    float fullDayCyclePortion, cycleTransition, currentTime, currentTransition, currentRotation, currentIntensity;
     TimesOfDay timeOfDayStatus;
     Light sun;
  
@@ -29,7 +28,7 @@ public class TimeOfDayController : MonoBehaviour {
 
         nightLights = FindObjectsOfType<NightLight>();
         TurnOffNightLights();
-        print(nightLights.Length + " nightlights found");
+        //print(nightLights.Length + " nightlights found");
 
         sun = transform.Find("Sun").GetComponent<Light>();
         fullDayCycle = 100f;
@@ -43,7 +42,7 @@ public class TimeOfDayController : MonoBehaviour {
         nightColour = new Color32(255, 255, 255, 255);
         currentColour = dayColour;
 
-        print("current colour: " + currentColour.r + ", " + currentColour.g + ", " + currentColour.b);
+        //print("current colour: " + currentColour.r + ", " + currentColour.g + ", " + currentColour.b);
 
         timeOfDayStartDict = new Dictionary<TimesOfDay, float>();
         timeOfDayStartDict.Add(TimesOfDay.daytime, fullDayCyclePortion);
@@ -157,17 +156,11 @@ public class TimeOfDayController : MonoBehaviour {
         redDiff = Math.Abs(currentColour.r - timeOfDayColourDict[timeOfDayStatus].r);
         greenDiff = Math.Abs(currentColour.g - timeOfDayColourDict[timeOfDayStatus].g);
         blueDiff = Math.Abs(currentColour.b - timeOfDayColourDict[timeOfDayStatus].b);
-        //print("Multipliers: " + redMod + ", " + greenMod + ", " + blueMod);
-        //print("Diffs: " + redDiff + ", " + greenDiff + ", " + blueDiff);
         newIntensity = currentIntensity + (intensityDiff * intensityMod);
         newRotation = currentRotation + (rotationDiff * rotationMod);
         newRed = (byte) (currentColour.r + (redDiff * redMod));
         newGreen = (byte)(currentColour.g + (greenDiff * greenMod));
         newBlue = (byte)(currentColour.b + (blueDiff * blueMod));
-        //usingColour = new Color32(newRed, newGreen, newBlue, 255);
-        //usingRotation = newRotation;
-        //print("using colour: " + usingColour.r + ", " + usingColour.g + ", " + usingColour.b);
-        //print("transitioning to: " + timeOfDayStatus + ", current transition = " + currentTransition);
         sun.color = new Color32(newRed, newGreen, newBlue, 255);
         sun.transform.rotation = Quaternion.Euler(-20f, newRotation, 0);
         sun.intensity = newIntensity;
@@ -195,7 +188,6 @@ public class TimeOfDayController : MonoBehaviour {
     }
 
     void TurnOffNightLights() {
-        print("turning off night lights");
         foreach (NightLight nl in nightLights) {
             nl.TurnOff();
         }

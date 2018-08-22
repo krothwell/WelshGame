@@ -65,6 +65,9 @@ namespace GameUI {
             partsList.transform.SetSiblingIndex(transform.GetSiblingIndex() + 1);
             FillDisplayFromDb(DbQueries.GetEquipItemPartsRelatedToTask(myID), partsList.transform, BuildEquipItemPart, myID);
             AppendDisplayFromDb(DbQueries.GetPrefabPartsRelatedToTask(myID), partsList.transform, BuildPrefabPart, myID);
+            AppendDisplayFromDb(DbQueries.GetActivateDialoguePartsRelatedToGameTaskQry(myID), partsList.transform, BuildActivateDialogueNodePart, myID);
+            AppendDisplayFromDb(DbQueries.GetCompleteQuestPartsRelatedToTaskQry(myID), partsList.transform, BuildCompleteQuest, myID);
+            AppendDisplayFromDb(DbQueries.GetDefeatCharTagPartsRelatedToTaskQry(myID), partsList.transform, BuildDefeatCharTagPart, myID);
             arrowTransform.Rotate(0, 0, -90);
         }
 
@@ -88,6 +91,33 @@ namespace GameUI {
             string prefabLbl = strArray[1];
             GameObject taskPartPrefab = (Instantiate(partPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject);
             taskPartPrefab.GetComponent<Text>().text = prefabLbl;
+            SetPartCompleted(partID, taskPartPrefab);
+            return taskPartPrefab.transform;
+        }
+
+        private Transform BuildActivateDialogueNodePart(string[] strArray) {
+            string partID = strArray[0];
+            string charName = strArray[1];
+            GameObject taskPartPrefab = (Instantiate(partPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject);
+            taskPartPrefab.GetComponent<Text>().text = "Speak to " + charName;
+            SetPartCompleted(partID, taskPartPrefab);
+            return taskPartPrefab.transform;
+        }
+
+        private Transform BuildDefeatCharTagPart(string[] strArray) {
+            string partID = strArray[0];
+            string tag = strArray[1];
+            GameObject taskPartPrefab = (Instantiate(partPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject);
+            taskPartPrefab.GetComponent<Text>().text = "Defeat " + tag;
+            SetPartCompleted(partID, taskPartPrefab);
+            return taskPartPrefab.transform;
+        }
+
+        private Transform BuildCompleteQuest(string[] strArray) {
+            string partID = strArray[0];
+            string questName = strArray[1];
+            GameObject taskPartPrefab = (Instantiate(partPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject);
+            taskPartPrefab.GetComponent<Text>().text = "Complete quest: " + questName;
             SetPartCompleted(partID, taskPartPrefab);
             return taskPartPrefab.transform;
         }

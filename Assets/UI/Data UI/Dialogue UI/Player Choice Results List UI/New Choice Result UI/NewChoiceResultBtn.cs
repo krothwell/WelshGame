@@ -13,15 +13,11 @@ namespace DataUI.ListItems {
 
         protected string playerChoiceResultID;
 
-        protected void OnMouseUpAsButton() {
-            InsertResult();
-        }
-
         protected void InsertNewPlayerChoiceResultID() {
             playerChoiceResultID = DbCommands.GenerateUniqueID("PlayerChoiceResults", "ResultIDs", "ResultID");
             DbCommands.InsertTupleToTable("PlayerChoiceResults", playerChoiceResultID, PlayerChoiceID);
         }
 
-        protected abstract void InsertResult();
+        public abstract void InsertResult();
     }
 }

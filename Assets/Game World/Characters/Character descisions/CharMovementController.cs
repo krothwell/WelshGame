@@ -60,6 +60,7 @@ public class CharMovementController : MonoBehaviour {
 
     public void SetNextPosition() {
         if (redirecting) {
+            print(character + " redirecting");
             nextPosition = interimPosition;
         }
         else {

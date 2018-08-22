@@ -12,9 +12,9 @@ public class NPCCombatController : CharCombatController {
         myWeapon = GetComponent<NPCWeaponItem>();
     }
 
-    void OnTriggerEnter2D(Collider2D incursionCollider) {
-        if (incursionCollider.transform.name == "Perimeter") {
-            PlayerCharacter playerCharacter = incursionCollider.transform.parent.GetComponent<PlayerCharacter>();
+    void OnTriggerEnter2D(Collider2D inCollider) {
+        if (inCollider.transform.name == "Perimeter") {
+            PlayerCharacter playerCharacter = inCollider.transform.parent.GetComponent<PlayerCharacter>();
             if (playerCharacter != null) {
                 TriggerCombat(playerCharacter);
             }
@@ -22,9 +22,9 @@ public class NPCCombatController : CharCombatController {
     }
 
 
-    void OnTriggerExit2D (Collider2D incursionCollider) {
-        if (incursionCollider.transform.name == "Perimeter") {
-            PlayerCharacter playerCharacter = incursionCollider.transform.parent.GetComponent<PlayerCharacter>();
+    void OnTriggerExit2D (Collider2D outCollider) {
+        if (outCollider.transform.name == "Perimeter") {
+            PlayerCharacter playerCharacter = outCollider.transform.parent.GetComponent<PlayerCharacter>();
             if (playerCharacter != null) {
                 EndCombat(playerCharacter);
             }
@@ -46,6 +46,9 @@ public class NPCCombatController : CharCombatController {
 
     public override void GetHit(WorldDamage damage) {
         DeductHealth(damage);
+        if(Health<= 0 ) {
+            SetDefeated();
+        }
     }
 
 
