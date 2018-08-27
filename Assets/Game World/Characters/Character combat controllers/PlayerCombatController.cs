@@ -7,7 +7,7 @@ using GameUtilities;
 
 public class PlayerCombatController : CharCombatController {
     public AudioClip combatTheme;
-    PlayerInventoryUI inventory;
+    PlayerEquipmentSlots equipment;
     public GameObject selectedEnemy;
     CombatUI combatui;
     PlayerCharacter character;
@@ -18,11 +18,11 @@ public class PlayerCombatController : CharCombatController {
     new void Awake() {
         combatui = FindObjectOfType<CombatUI>();
         character = FindObjectOfType<PlayerCharacter>();
-        inventory = FindObjectOfType<PlayerInventoryUI>();
+        equipment = FindObjectOfType<PlayerEquipmentSlots>();
         base.Awake();
     }
     public override WorldDamage GetWeaponDamage() {
-        WeaponItem weapon = (inventory.GetItemFromEquippedDict(WorldItems.WorldItemTypes.WeaponWearable) as WeaponItem);
+        WeaponItem weapon = (equipment.GetItemFromEquippedDict(WorldItems.WorldItemTypes.WeaponWearable) as WeaponItem);
         WorldDamage wd = new WorldDamage();
         wd.BaseWeaponDamage = weapon.BaseDamage;
         return wd;
@@ -74,7 +74,7 @@ public class PlayerCombatController : CharCombatController {
     }
 
     public override Vector2 GetWeaponReachXY() {
-        myWeapon = (inventory.GetItemFromEquippedDict(WorldItems.WorldItemTypes.WeaponWearable) as WeaponItem);
+        myWeapon = (equipment.GetItemFromEquippedDict(WorldItems.WorldItemTypes.WeaponWearable) as WeaponItem);
         if (myWeapon == null) {
             return new Vector2(0f, 0f);
         } else { 

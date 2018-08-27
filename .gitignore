@@ -17,6 +17,7 @@
 *.txt 
 *.wav
 *.mp3
+*.csproj
 
 Library/
 Resources/

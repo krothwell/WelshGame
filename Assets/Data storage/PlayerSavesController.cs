@@ -405,18 +405,13 @@ public class PlayerSavesController : MonoBehaviour {
         DbCommands.GetDataStringsFromQry(DbQueries.GetSavedWorldItemsQry(saveIDstr, sceneLoader.GetCurrentSceneName()), out newWorldItemsList, saveIDstr, sceneLoader.GetCurrentSceneName());
         foreach (string[] worldItemData in newWorldItemsList) {
             string prefabPath = worldItemData[5];
-            //print(prefabPath);
             UnityEngine.Object worldItemPrefab = Resources.Load(prefabPath);
-            //print(worldItemPrefab);
             GameObject worldItem = Instantiate(worldItemPrefab, new Vector2(0f, 0f), Quaternion.identity) as GameObject;
             string[] parentPath = worldItemData[3].Split('/');
-            //print(parentPath[1]);
             Transform parentTransform = GameObject.Find(parentPath[1]).transform;
-            //print(parentTransform);
             for (int i = 2; i < parentPath.Length -1; i++) {
                 parentTransform = parentTransform.Find(parentPath[i]);
             }
-            //print(parentTransform);
             worldItem.transform.SetParent(parentTransform, false);
             worldItem.transform.position = new Vector3(float.Parse(worldItemData[0]), float.Parse(worldItemData[1]), float.Parse(worldItemData[2]));
             worldItem.name = worldItemData[4];

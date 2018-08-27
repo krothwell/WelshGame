@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponItem : EquipableWorldItemWithSingleSprite {
+public class WeaponItem : EquipableWorldItem {
     public float WeaponRangeX = 0.1f;
     public float BaseDamage;
     public DamageModifier[] DamageModifiers;
@@ -12,8 +12,8 @@ public class WeaponItem : EquipableWorldItemWithSingleSprite {
         return new Vector2(WeaponRangeX, WeaponRangeX * 0.8f);
     }
 
-    protected override void SetPlayerPart() {
+    protected override void SetPlayerParts() {
         PlayerCharacter pc = FindObjectOfType<PlayerCharacter>();
-        equipToPlayerPart = pc.GetComponentInChildren<RightHandWearable>().gameObject;
+        equipToPlayerParts[0] = pc.GetComponentInChildren<RightHandWearable>().gameObject;
     }
 }

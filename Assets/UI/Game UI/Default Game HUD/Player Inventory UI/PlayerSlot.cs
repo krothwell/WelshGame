@@ -13,8 +13,9 @@ namespace GameUI {
         public WorldItems.WorldItemTypes ItemType;
         protected PlayerInventoryUI inventory;
         // Use this for initialization
-        private void Start() {
+        protected void Start() {
             inventory = FindObjectOfType<PlayerInventoryUI>();
+            print(inventory);
         }
         private void OnMouseUpAsButton() {
             SelectSlot();

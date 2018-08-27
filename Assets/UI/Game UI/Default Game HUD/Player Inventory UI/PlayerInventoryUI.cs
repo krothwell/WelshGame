@@ -16,15 +16,13 @@ namespace GameUI {
             get { return selectedItem; }
             set { selectedItem = value; }
         }
-        private PlayerEquipmentSlot[] equipmentSlots;
-        private Dictionary<WorldItems.WorldItemTypes, WorldItem> equippedDict;
+        private PlayerEquipmentSlots equipmentSlots;
         GameObject ui;
-        public GameObject inventoryItemPrefab;
+        //public GameObject inventoryItemPrefab;
 
-        void Awake() {
-            equippedDict = new Dictionary<WorldItems.WorldItemTypes, WorldItem>();
-        }
+        
         void Start() {
+            equipmentSlots = FindObjectOfType<PlayerEquipmentSlots>();
             ui = GameObject.Find("UI");
         }
 
@@ -41,14 +39,6 @@ namespace GameUI {
         public void CloseInventory() {
             HideComponents();
         }
-
-        public void EquipAll() {
-            foreach(KeyValuePair<WorldItems.WorldItemTypes, WorldItem> item in equippedDict) {
-                item.Value.EquipToPlayerModel();
-            }
-        }
-
-
 
         /// <summary>
         /// Detect if player has picked up item in inventory
@@ -74,7 +64,8 @@ namespace GameUI {
             if (selectedItem == null) {
                 selectedItem = slot.transform.GetChild(0).gameObject;
                 if (slot.HasComponent<PlayerEquipmentSlot>()) {
-                    selectedItem.GetComponent<WorldItem>().UnequipFromPlayerModel();
+                    equipmentSlots.UnequipFromPlayerModel(
+                        selectedItem.GetComponent<EquipableWorldItem>());
                 }
                 selectedItem.GetComponent<BoxCollider2D>().enabled = false;
                 selectedItem.transform.SetParent(ui.transform);
@@ -82,40 +73,10 @@ namespace GameUI {
         }
 
 
-        public void InsertToEquippedDict(WorldItem worldItem) {
-            if (equippedDict.ContainsKey(worldItem.GetMyItemType())) {
-                equippedDict[worldItem.GetMyItemType()] = worldItem;
-            }
-            else {
-                equippedDict.Add(worldItem.GetMyItemType(), worldItem);
-            }
-        }
-
-        public WorldItem GetItemFromEquippedDict(WorldItems.WorldItemTypes itemType) {
-            if (equippedDict.ContainsKey(itemType)) {
-                return equippedDict[itemType];
-            }
-            else {
-                return null;
-            }
-        }
-
-        public void InitialiseEquippedItemsDict() {
-            //OpenInventory();
-            equipmentSlots = FindObjectsOfType<PlayerEquipmentSlot>();
-            foreach (PlayerEquipmentSlot equipmentSlot in equipmentSlots) {
-                if (equipmentSlot.transform.childCount > 0) {
-                    WorldItem item = equipmentSlot.transform.GetChild(0).GetComponent<WorldItem>();
-                    if (item != null) {
-                        InsertToEquippedDict(item);
-                    }
-                }
-            }
             //print("PRINTING DICTIONARY");
             //foreach(KeyValuePair<WorldItems.WorldItemTypes, WorldItem> pair in equippedDict) {
             //    print(pair.Key + ":" + pair.Value);
             //}
-        }
 
     }
 }

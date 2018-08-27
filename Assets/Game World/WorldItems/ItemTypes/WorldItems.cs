@@ -16,6 +16,7 @@ public class WorldItems : MonoBehaviour {
         FeetWearable
     };
     PlayerInventoryUI playerInventory;
+    PlayerEquipmentSlots playerEquipmentSlots;
     void Awake() {
         worldItemList = new List<string[]>();
         SetWorldItemsList();
@@ -23,8 +24,9 @@ public class WorldItems : MonoBehaviour {
 
     void Start() {
         playerInventory = FindObjectOfType<PlayerInventoryUI>();
+        playerEquipmentSlots = FindObjectOfType<PlayerEquipmentSlots>();
         playerInventory.OpenInventory();
-        playerInventory.InitialiseEquippedItemsDict();
+        playerEquipmentSlots.InitialiseEquippedItemsDict();
         Invoke("CloseInventory", 0.2f);
     }
 

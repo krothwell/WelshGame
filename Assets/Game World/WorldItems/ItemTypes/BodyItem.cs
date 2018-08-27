@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-public class BodyItem : EquipableWorldItemWithMultiSprites {
+public class BodyItem : EquipableWorldItem {
 
 
     protected override void SetPlayerParts() {

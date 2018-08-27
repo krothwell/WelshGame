@@ -1,28 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <LangVersion>4</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
-    <ProjectGuid>{1AF7E356-2D58-7119-FE6C-C1ED31A62E64}</ProjectGuid>
+    <RootNamespace>
+    </RootNamespace>
+    <ProjectGuid>{D51DBFA1-EA56-AAD3-3091-664BCCBB9AFB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <BaseDirectory>Assets</BaseDirectory>
+    <BaseDirectory>.</BaseDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Temp\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_5_2;UNITY_5_5;UNITY_5;UNITY_64;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_GENERICS;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;INCLUDE_DYNAMIC_GI;INCLUDE_GI;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;INCLUDE_PUBNUB;ENABLE_PLAYMODE_TESTS_RUNNER;ENABLE_SCRIPTING_NEW_CSHARP_COMPILER;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_EVENT_QUEUE;ENABLE_CLUSTERINPUT;ENABLE_VIDEO;ENABLE_VR;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_2_4;UNITY_2018_2;UNITY_2018;PLATFORM_ARCH_64;UNITY_64;UNITY_ANALYTICS;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_SPRITES;ENABLE_GRID;ENABLE_TILEMAP;ENABLE_TERRAIN;ENABLE_TEXTURE_STREAMING;ENABLE_DIRECTOR;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_TIMELINE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;INCLUDE_DYNAMIC_GI;INCLUDE_GI;ENABLE_MONO_BDWGC;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;INCLUDE_PUBNUB;ENABLE_VIDEO;ENABLE_PACKMAN;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_LOCALIZATION;PLATFORM_STANDALONE_WIN;PLATFORM_STANDALONE;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_OUT_OF_PROCESS_CRASH_HANDLER;ENABLE_EVENT_QUEUE;ENABLE_CLUSTER_SYNC;ENABLE_CLUSTERINPUT;ENABLE_VR;ENABLE_AR;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;NET_2_0_SUBSET;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;ENABLE_VSTU</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,207 +36,539 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NoConfig>true</NoConfig>
+    <NoStdLib>true</NoStdLib>
+    <AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
+    <ImplicitlyExpandNETStandardFacades>false</ImplicitlyExpandNETStandardFacades>
+    <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <UnityProjectGenerator>Unity/VSTU</UnityProjectGenerator>
+    <UnityProjectType>Game:1</UnityProjectType>
+    <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
+    <UnityVersion>2018.2.4f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.XML" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine">
-      <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+      <HintPath>C:\Program Files\Unity5.5.0f3\Editor\Data\Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
-      <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+      <HintPath>C:\Program Files\Unity5.5.0f3\Editor\Data\Managed/UnityEditor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\CreatePlaneMesh.cs" />
-     <Compile Include="Assets\Data storage\DbSetup.cs" />
-     <Compile Include="Assets\Data storage\PlayerPrefsManager.cs" />
-     <Compile Include="Assets\Data storage\PlayerSavesController.cs" />
-     <Compile Include="Assets\Data storage\SceneLoader.cs" />
-     <Compile Include="Assets\Data storage\Utilities\DBqueries.cs" />
-     <Compile Include="Assets\Data storage\Utilities\DbCommands.cs" />
-     <Compile Include="Assets\Game World\Camera\CameraController.cs" />
-     <Compile Include="Assets\Game World\Characters\Anim toggles\HumanCharAnimToggles.cs" />
-     <Compile Include="Assets\Game World\Characters\CharAction.cs" />
-     <Compile Include="Assets\Game World\Characters\CharActionContinuous.cs" />
-     <Compile Include="Assets\Game World\Characters\CharCombatController.cs" />
-     <Compile Include="Assets\Game World\Characters\CharMovementController.cs" />
-     <Compile Include="Assets\Game World\Characters\Character Abilities\CharAbility.cs" />
-     <Compile Include="Assets\Game World\Characters\Character Abilities\CharacterEffectAbility.cs" />
-     <Compile Include="Assets\Game World\Characters\Character Abilities\StrikeAbility.cs" />
-     <Compile Include="Assets\Game World\Characters\Character Movement Controllers\NPCMovementController.cs" />
-     <Compile Include="Assets\Game World\Characters\Character Movement Controllers\PlayerMovementController.cs" />
-     <Compile Include="Assets\Game World\Characters\Character Movement Controllers\StaticMovementController.cs" />
-     <Compile Include="Assets\Game World\Characters\Character Types\NPCCharacter.cs" />
-     <Compile Include="Assets\Game World\Characters\Character Types\NPCHumanCharacter.cs" />
-     <Compile Include="Assets\Game World\Characters\Character Types\PlayerCharacter.cs" />
-     <Compile Include="Assets\Game World\Characters\Character Types\StaticCharacter.cs" />
-     <Compile Include="Assets\Game World\Characters\Character ability actions\CharAbilityAction.cs" />
-     <Compile Include="Assets\Game World\Characters\Character ability actions\StrikeAbilityAction.cs" />
-     <Compile Include="Assets\Game World\Characters\Character actions\CombatStateAction.cs" />
-     <Compile Include="Assets\Game World\Characters\Character combat controllers\NPCCombatController.cs" />
-     <Compile Include="Assets\Game World\Characters\Character combat controllers\PlacidCombatController.cs" />
-     <Compile Include="Assets\Game World\Characters\Character combat controllers\PlayerCombatController.cs" />
-     <Compile Include="Assets\Game World\Characters\Character descisions\CharacterDecision.cs" />
-     <Compile Include="Assets\Game World\Characters\Character descisions\CharacterMovementDecision.cs" />
-     <Compile Include="Assets\Game World\Characters\Character descisions\MoveToCharacterDecision.cs" />
-     <Compile Include="Assets\Game World\Characters\Character descisions\MoveToEnemyDecision.cs" />
-     <Compile Include="Assets\Game World\Characters\Character descisions\MoveToLocationDecision.cs" />
-     <Compile Include="Assets\Game World\Characters\Character descisions\MoveToWorldItemDecision.cs" />
-     <Compile Include="Assets\Game World\Characters\Character movements\RunMovement.cs" />
-     <Compile Include="Assets\Game World\Characters\Character movements\WalkMovement.cs" />
-     <Compile Include="Assets\Game World\Characters\Character.cs" />
-     <Compile Include="Assets\Game World\Characters\CharacterMovement.cs" />
-     <Compile Include="Assets\Game World\Characters\CollisionAvoider.cs" />
-     <Compile Include="Assets\Game World\Characters\NPCs\NPCs.cs" />
-     <Compile Include="Assets\Game World\Characters\Player\EnemyToPlayerCloseCombatPlacements.cs" />
-     <Compile Include="Assets\Game World\IAttackable.cs" />
-     <Compile Include="Assets\Game World\Quests\Quests\QuestTheBeginning.cs" />
-     <Compile Include="Assets\Game World\Quests\Utilities\QuestActivators.cs" />
-     <Compile Include="Assets\Game World\Scenery\level1\Scenery1.cs" />
-     <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldCharacterSelector.cs" />
-     <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldItemSelector.cs" />
-     <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldLocationSelector.cs" />
-     <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldSelector.cs" />
-     <Compile Include="Assets\Game World\Utilities\Layers\ImageLayerOrder.cs" />
-     <Compile Include="Assets\Game World\Utilities\World\World.cs" />
-     <Compile Include="Assets\Game World\WorldItems\ItemTypes\BodyItem.cs" />
-     <Compile Include="Assets\Game World\WorldItems\ItemTypes\EquipableWorldItemWithMultiSprites.cs" />
-     <Compile Include="Assets\Game World\WorldItems\ItemTypes\EquipableWorldItemWithSingleSprite.cs" />
-     <Compile Include="Assets\Game World\WorldItems\ItemTypes\FeetItem.cs" />
-     <Compile Include="Assets\Game World\WorldItems\ItemTypes\HeadItem.cs" />
-     <Compile Include="Assets\Game World\WorldItems\ItemTypes\LeggingsItem.cs" />
-     <Compile Include="Assets\Game World\WorldItems\ItemTypes\ShieldItem.cs" />
-     <Compile Include="Assets\Game World\WorldItems\ItemTypes\WeaponItem.cs" />
-     <Compile Include="Assets\Game World\WorldItems\ItemTypes\WorldItem.cs" />
-     <Compile Include="Assets\Game World\WorldItems\ItemTypes\WorldItems.cs" />
-     <Compile Include="Assets\GameInitialiser.cs" />
-     <Compile Include="Assets\NotificationQueue.cs" />
-     <Compile Include="Assets\UI\Data UI\DataUIController.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Char Dialogues List UI\Add Char Dialogues UI\AddCharDialogueBtn.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Char Dialogues List UI\Add Char Dialogues UI\Dialogue Nodes List UI\DialogueNode.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Char Dialogues List UI\Add Char Dialogues UI\Dialogue Nodes List UI\Node Details UI\Select Node Speaker UI\DialogueNodeSpeaker.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Char Dialogues List UI\CharacterDialogue.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\DialogueUI.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Dialogues List UI\Dialogue.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingActivateGrammarResult.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingActivateQuestResult.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingActivateTaskResult.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingActivateWelshVocab.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingCompleteDialogueResult.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingNodeResult.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingResult.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewActivateGrammarResultBtn.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewActivateQuestResultBtn.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewActivateTaskResultBtn.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewActivateWelshVocabResultBtn.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewChoiceResultBtn.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewNodeChoiceResultBtn.cs" />
-     <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choices List UI\PlayerChoice.cs" />
-     <Compile Include="Assets\UI\Data UI\Quests UI\Quests List UI\Quest.cs" />
-     <Compile Include="Assets\UI\Data UI\Quests UI\QuestsUI.cs" />
-     <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\Part Options\EquipItemPartOptionBtn.cs" />
-     <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\TaskPart.cs" />
-     <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\TaskPartEquipItem.cs" />
-     <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\ExistingStartDialogueTaskResult.cs" />
-     <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\NewStartDialogueTaskResultOptionBtn.cs" />
-     <Compile Include="Assets\UI\Data UI\Quests UI\Tasks List UI\Task.cs" />
-     <Compile Include="Assets\UI\Data UI\TranslationUI\Grammar List UI\GrammarListUI.cs" />
-     <Compile Include="Assets\UI\Data UI\TranslationUI\Grammar List UI\GrammarRule.cs" />
-     <Compile Include="Assets\UI\Data UI\TranslationUI\Proficiencies List UI\ProficienciesListUI.cs" />
-     <Compile Include="Assets\UI\Data UI\TranslationUI\Proficiencies List UI\Proficiency.cs" />
-     <Compile Include="Assets\UI\Data UI\TranslationUI\Translation Lists UI\Translation.cs" />
-     <Compile Include="Assets\UI\Data UI\TranslationUI\TranslationUI.cs" />
-     <Compile Include="Assets\UI\Data UI\Utilities\Colours.cs" />
-     <Compile Include="Assets\UI\ExistingSaveGame.cs" />
-     <Compile Include="Assets\UI\Game UI\Combat UI\AbilityButton.cs" />
-     <Compile Include="Assets\UI\Game UI\Combat UI\CombatUI.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\DefaultGameHUD.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\Notifcation Queue UI\GameNotifier.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\Notifcation Queue UI\NewQuestNotifier.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\Notifcation Queue UI\NotificationData.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\BodyEquipmentSlot.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\FeetEquipmentSlot.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\HeadEquipmentSlot.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\LeggingsEquipmentSlot.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerEquipmentSlot.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventoryItem.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventorySlot.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventoryUI.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\ShieldEquipmentSlot.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\WeaponEquipmentSlot.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\Quest.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\QuestTask.cs" />
-     <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\QuestsUI.cs" />
-     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\DialogueHolder.cs" />
-     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\DialogueNode.cs" />
-     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\EndDialogueBtn.cs" />
-     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\PlayerChoice.cs" />
-     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\PlayerInputField.cs" />
-     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\VocabTestNode.cs" />
-     <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueUI.cs" />
-     <Compile Include="Assets\UI\Game UI\Dialogue UI\TestUtilities\VocabIntroGetter.cs" />
-     <Compile Include="Assets\UI\Game UI\Esc Menu UI\EscMenuUI.cs" />
-     <Compile Include="Assets\UI\Game UI\Esc Menu UI\ExistingSaveGameBtn.cs" />
-     <Compile Include="Assets\UI\Game UI\InspectorUI\CharacterInspector.cs" />
-     <Compile Include="Assets\UI\Game UI\InspectorUI\Inspector.cs" />
-     <Compile Include="Assets\UI\Game UI\InspectorUI\InspectorUI.cs" />
-     <Compile Include="Assets\UI\Game UI\InspectorUI\WorldItemInspector.cs" />
-     <Compile Include="Assets\UI\Game UI\New Welsh Learned UI\List items\NewWelshGrammar.cs" />
-     <Compile Include="Assets\UI\Game UI\New Welsh Learned UI\List items\NewWelshVocab.cs" />
-     <Compile Include="Assets\UI\Game UI\New Welsh Learned UI\NewWelshLearnedUI.cs" />
-     <Compile Include="Assets\UI\Game UI\Utilities\Colours.cs" />
-     <Compile Include="Assets\UI\IDeletableUI.cs" />
-     <Compile Include="Assets\UI\IEditableUI.cs" />
-     <Compile Include="Assets\UI\ISelectableUI.cs" />
-     <Compile Include="Assets\UI\ListDisplayInfo.cs" />
-     <Compile Include="Assets\UI\ListSearcher.cs" />
-     <Compile Include="Assets\UI\Saving and loading\LoadGameMenuUI.cs" />
-     <Compile Include="Assets\UI\Start Menu UI\Load Game Menu UI\ExistingSaveGameBtn.cs" />
-     <Compile Include="Assets\UI\Start Menu UI\New Game Menu UI\NewGameMenuUI.cs" />
-     <Compile Include="Assets\UI\Start Menu UI\New Game Menu UI\SelectPlayerPortraitBtn.cs" />
-     <Compile Include="Assets\UI\Start Menu UI\StartMenu.cs" />
-     <Compile Include="Assets\UI\UIController.cs" />
-     <Compile Include="Assets\UI\UIInputListItem.cs" />
-     <Compile Include="Assets\UI\UITextPanelListItem.cs" />
-     <Compile Include="Assets\Utilities\Debugging.cs" />
-     <Compile Include="Assets\Utilities\Extensions\Font extensions\LetterSpacing.cs" />
-     <Compile Include="Assets\Utilities\HeirarchyTraversal.cs" />
-     <Compile Include="Assets\Utilities\MouseSelection.cs" />
-     <Compile Include="Assets\Utilities\TypeComparisons.cs" />
-     <Compile Include="Assets\Utilities\UICommands.cs" />
- <Reference Include="UnityEngine.UI">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Networking">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.PlaymodeTestsRunner">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/PlaymodeTestsRunner/UnityEngine.PlaymodeTestsRunner.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Analytics">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.HoloLens">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.VR">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
- </Reference>
- <Reference Include="Mono.Data.Sqlite">
- <HintPath>C:/Users/Kit/Google Drive/my games/welsh rpg/game/Assets/Plugins/Mono.Data.Sqlite.dll</HintPath>
- </Reference>
- <Reference Include="System.Configuration">
- <HintPath>C:/Users/Kit/Google Drive/my games/welsh rpg/game/Assets/Plugins/System.Configuration.dll</HintPath>
- </Reference>
- <Reference Include="System.Data">
- <HintPath>C:/Users/Kit/Google Drive/my games/welsh rpg/game/Assets/Plugins/System.Data.dll</HintPath>
- </Reference>
+    <Compile Include="Assets\AbilitiesUI.cs" />
+    <Compile Include="Assets\CreatePlaneMesh.cs" />
+    <Compile Include="Assets\Data storage\DbSetup.cs" />
+    <Compile Include="Assets\Data storage\PlayerPrefsManager.cs" />
+    <Compile Include="Assets\Data storage\PlayerSavesController.cs" />
+    <Compile Include="Assets\Data storage\SceneLoader.cs" />
+    <Compile Include="Assets\Data storage\Utilities\DbCommands.cs" />
+    <Compile Include="Assets\Data storage\Utilities\DbQueries.cs" />
+    <Compile Include="Assets\EndCombatWhenHit.cs" />
+    <Compile Include="Assets\Game World\Camera\CameraController.cs" />
+    <Compile Include="Assets\Game World\Characters\Anim toggles\HumanCharAnimToggles.cs" />
+    <Compile Include="Assets\Game World\Characters\Character Abilities\CharAbility.cs" />
+    <Compile Include="Assets\Game World\Characters\Character Abilities\CharacterEffectAbility.cs" />
+    <Compile Include="Assets\Game World\Characters\Character Abilities\StrikeAbility.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\CharAbilityAction.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\CharacterMovement.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\CharAction.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\CharActionContinuous.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\CombatStateAction.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\IdleAction.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\RunMovement.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\SitAction.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\StrikeAbilityAction.cs" />
+    <Compile Include="Assets\Game World\Characters\Character animation actions\WalkMovement.cs" />
+    <Compile Include="Assets\Game World\Characters\Character combat controllers\CharCombatController.cs" />
+    <Compile Include="Assets\Game World\Characters\Character combat controllers\NPCCombatController.cs" />
+    <Compile Include="Assets\Game World\Characters\Character combat controllers\PlayerCombatController.cs" />
+    <Compile Include="Assets\Game World\Characters\Character descisions\CharacterDecision.cs" />
+    <Compile Include="Assets\Game World\Characters\Character descisions\CharacterMovementDecision.cs" />
+    <Compile Include="Assets\Game World\Characters\Character descisions\CharMovementController.cs" />
+    <Compile Include="Assets\Game World\Characters\Character descisions\CollisionAvoider.cs" />
+    <Compile Include="Assets\Game World\Characters\Character descisions\MoveToCharacterDecision.cs" />
+    <Compile Include="Assets\Game World\Characters\Character descisions\MoveToEnemyDecision.cs" />
+    <Compile Include="Assets\Game World\Characters\Character descisions\MoveToLocationDecision.cs" />
+    <Compile Include="Assets\Game World\Characters\Character descisions\MoveToWorldItemDecision.cs" />
+    <Compile Include="Assets\Game World\Characters\Character Movement Controllers\NPCMovementController.cs" />
+    <Compile Include="Assets\Game World\Characters\Character Movement Controllers\PlayerMovementController.cs" />
+    <Compile Include="Assets\Game World\Characters\Character Movement Controllers\StaticMovementController.cs" />
+    <Compile Include="Assets\Game World\Characters\Character Types\Character.cs" />
+    <Compile Include="Assets\Game World\Characters\Character Types\NPCCharacter.cs" />
+    <Compile Include="Assets\Game World\Characters\Character Types\NPCHumanCharacter.cs" />
+    <Compile Include="Assets\Game World\Characters\Character Types\PlayerCharacter.cs" />
+    <Compile Include="Assets\Game World\Characters\Character Types\StaticCharacter.cs" />
+    <Compile Include="Assets\Game World\Characters\IAttackable.cs" />
+    <Compile Include="Assets\Game World\Characters\NPC combat strategies\Actions\CombatStrategy.cs" />
+    <Compile Include="Assets\Game World\Characters\NPC combat strategies\Actions\CombatStrategyAbilityAction.cs" />
+    <Compile Include="Assets\Game World\Characters\NPC combat strategies\Actions\CombatStrategyAction.cs" />
+    <Compile Include="Assets\Game World\Characters\NPC combat strategies\Actions\CombatStrategyDecisionAction.cs" />
+    <Compile Include="Assets\Game World\Characters\NPC combat strategies\Actions\CombatStrategyEffectAbilityAction.cs" />
+    <Compile Include="Assets\Game World\Characters\NPC combat strategies\Actions\CombatStrategyMoveDecisionAction.cs" />
+    <Compile Include="Assets\Game World\Characters\NPCs\NPCs.cs" />
+    <Compile Include="Assets\Game World\Characters\Player\EnemyToPlayerCloseCombatPlacements.cs" />
+    <Compile Include="Assets\Game World\Characters\Player\LeftFootWearable.cs" />
+    <Compile Include="Assets\Game World\Characters\Player\LowerLeftArmWearable.cs" />
+    <Compile Include="Assets\Game World\Characters\Player\LowerLeftLegWearable.cs" />
+    <Compile Include="Assets\Game World\Characters\Player\LowerRightArmWearable.cs" />
+    <Compile Include="Assets\Game World\Characters\Player\LowerRightLegWearable.cs" />
+    <Compile Include="Assets\Game World\Characters\Player\LowerTorsoWearable.cs" />
+    <Compile Include="Assets\Game World\Characters\Player\RightFootWearable.cs" />
+    <Compile Include="Assets\Game World\Characters\Player\RightHandWearable.cs" />
+    <Compile Include="Assets\Game World\Characters\Player\UpperLeftArmWearable.cs" />
+    <Compile Include="Assets\Game World\Characters\Player\UpperLeftLegWearable.cs" />
+    <Compile Include="Assets\Game World\Characters\Player\UpperRightArmWearable.cs" />
+    <Compile Include="Assets\Game World\Characters\Player\UpperRightLegWearable.cs" />
+    <Compile Include="Assets\Game World\Characters\Player\UpperTorsoWearable.cs" />
+    <Compile Include="Assets\Game World\Damage\DamageModifier.cs" />
+    <Compile Include="Assets\Game World\Damage\WorldDamage.cs" />
+    <Compile Include="Assets\Game World\QuestController\Quests\Quest activators\StartDialogue.cs" />
+    <Compile Include="Assets\Game World\QuestController\Quests\Quest parts\QuestTaskPart.cs" />
+    <Compile Include="Assets\Game World\QuestController\Quests\Quest parts\TaskPartGetSkillPoint.cs" />
+    <Compile Include="Assets\Game World\QuestController\Quests\Quest results\EndCombatWithCharacter.cs" />
+    <Compile Include="Assets\Game World\QuestController\Quests\Quest results\QuestTaskResult.cs" />
+    <Compile Include="Assets\Game World\QuestController\QuestsController.cs" />
+    <Compile Include="Assets\Game World\QuestController\Utilities\QuestActivators.cs" />
+    <Compile Include="Assets\Game World\Scenery\level1\Scenery1.cs" />
+    <Compile Include="Assets\Game World\Utilities\Animation\AnimationUtilities.cs" />
+    <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldCharacterSelector.cs" />
+    <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldItemSelector.cs" />
+    <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldLocationSelector.cs" />
+    <Compile Include="Assets\Game World\Utilities\Game object selection\GameWorldSelector.cs" />
+    <Compile Include="Assets\Game World\Utilities\Layers\ImageLayerOrder.cs" />
+    <Compile Include="Assets\Game World\Utilities\World\World.cs" />
+    <Compile Include="Assets\Game World\WorldItems\ItemTypes\BodyItem.cs" />
+    <Compile Include="Assets\Game World\WorldItems\ItemTypes\EquipableWorldItem.cs" />
+    <Compile Include="Assets\Game World\WorldItems\ItemTypes\FeetItem.cs" />
+    <Compile Include="Assets\Game World\WorldItems\ItemTypes\HeadItem.cs" />
+    <Compile Include="Assets\Game World\WorldItems\ItemTypes\LeggingsItem.cs" />
+    <Compile Include="Assets\Game World\WorldItems\ItemTypes\NPCWeaponItem.cs" />
+    <Compile Include="Assets\Game World\WorldItems\ItemTypes\ShieldItem.cs" />
+    <Compile Include="Assets\Game World\WorldItems\ItemTypes\WeaponItem.cs" />
+    <Compile Include="Assets\Game World\WorldItems\ItemTypes\WorldItem.cs" />
+    <Compile Include="Assets\Game World\WorldItems\ItemTypes\WorldItems.cs" />
+    <Compile Include="Assets\GameInitialiser.cs" />
+    <Compile Include="Assets\Music\MusicFadeIn.cs" />
+    <Compile Include="Assets\Music\MusicFadeOut.cs" />
+    <Compile Include="Assets\Music\MusicPlayer.cs" />
+    <Compile Include="Assets\MusicZone.cs" />
+    <Compile Include="Assets\NightLight.cs" />
+    <Compile Include="Assets\NotificationQueue.cs" />
+    <Compile Include="Assets\PlayerChoicesListUI.cs" />
+    <Compile Include="Assets\PlayerChoiceVocabTest.cs" />
+    <Compile Include="Assets\PlayerVitalsUI.cs" />
+    <Compile Include="Assets\TimeOfDayController.cs" />
+    <Compile Include="Assets\TranslationTag.cs" />
+    <Compile Include="Assets\UI\Data UI\DataUIController.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Char Dialogues List UI\Add Char Dialogues UI\AddCharDialogueBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Char Dialogues List UI\CharacterDialogue.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Dialogue Nodes List UI\Dialogue node details\Select Node Speaker UI\DialogueNodeSpeaker.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Dialogue Nodes List UI\DialogueNode.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Dialogue Nodes List UI\DialogueNodeDetailsTextOnlyUI.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Dialogue Nodes List UI\DialogueNodeDetailsUI.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Dialogue Nodes List UI\DialogueNodeDetailsVocabTestUI.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Dialogue Nodes List UI\DialogueNodesListUI.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Dialogue Nodes List UI\DialogueNodeTextOnly.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Dialogue Nodes List UI\DialogueNodeVocabTest.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Dialogue Nodes List UI\DialogueNodeVocabToTestBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Dialogues List UI\Dialogue.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\DialogueTestDataController.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\DialogueUI.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingActivateDialogueResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingActivateGrammarResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingActivateQuestResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingActivateTaskResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingActivateWelshVocab.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingCompleteDialogueResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingCompleteTaskResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingNodeResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\Existing Choice Result UI\ExistingResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewActivateDialogueResultBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewActivateGrammarResultBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewActivateQuestResultBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewActivateTaskResultBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewActivateWelshVocabResultBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewChoiceResultBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewCompleteQuestTaskResultBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choice Results List UI\New Choice Result UI\NewNodeChoiceResultBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choices List UI\Player Choice Details UI\PlayerChoiceDetailsTextOnlyUI.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choices List UI\Player Choice Details UI\PlayerChoiceDetailsVocabTestUI.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choices List UI\Player Choice Details UI\PlayerChoiceVocabToTestBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choices List UI\PlayerChoice.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choices List UI\PlayerChoiceDetailsUI.cs" />
+    <Compile Include="Assets\UI\Data UI\Dialogue UI\Player Choices List UI\PlayerChoiceTextOnly.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Quests List UI\Quest.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\QuestsUI.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\Part Options\ActivateDialogueNodePartOptionBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\Part Options\CompleteQuestPartOptionBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\Part Options\DefeatCharTagOptionBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\Part Options\EquipItemPartOptionBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\Part Options\PrefabPartOptionBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\TaskPart.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\TaskPartActivateDialogueNode.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\TaskPartCompleteQuest.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\TaskPartDefeatCharTag.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\TaskPartEquipItem.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\TaskPartPrefab.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Parts List UI\TaskPartsListUI.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\ExistingActivateDialogueTaskResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\ExistingEndCombatWithCharTaskResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\ExistingStartDialogueTaskResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\ExistingTaskResult.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\NewEndCombatWithCharTaskResultOptionBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\NewStartDialogueTaskResultOptionBtn.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Task Results List UI\NewTaskResultActivateDialogue.cs" />
+    <Compile Include="Assets\UI\Data UI\Quests UI\Tasks List UI\Task.cs" />
+    <Compile Include="Assets\UI\Data UI\TranslationUI\Grammar List UI\GrammarListUI.cs" />
+    <Compile Include="Assets\UI\Data UI\TranslationUI\Grammar List UI\GrammarRule.cs" />
+    <Compile Include="Assets\UI\Data UI\TranslationUI\Proficiencies List UI\ProficienciesListUI.cs" />
+    <Compile Include="Assets\UI\Data UI\TranslationUI\Proficiencies List UI\Proficiency.cs" />
+    <Compile Include="Assets\UI\Data UI\TranslationUI\Tags List UI\TagsListUI.cs" />
+    <Compile Include="Assets\UI\Data UI\TranslationUI\Translation Lists UI\Translation.cs" />
+    <Compile Include="Assets\UI\Data UI\TranslationUI\TranslationUI.cs" />
+    <Compile Include="Assets\UI\Data UI\TranslationUI\VocabTranslationListUI.cs" />
+    <Compile Include="Assets\UI\Data UI\UIGameObjectToggle.cs" />
+    <Compile Include="Assets\UI\Data UI\Utilities\Colours.cs" />
+    <Compile Include="Assets\UI\ExistingSaveGame.cs" />
+    <Compile Include="Assets\UI\Game UI\Combat UI\Abilities\AbilityButton.cs" />
+    <Compile Include="Assets\UI\Game UI\Combat UI\CombatUI.cs" />
+    <Compile Include="Assets\UI\Game UI\Combat UI\Under attack UI\EnemySelectorBtn.cs" />
+    <Compile Include="Assets\UI\Game UI\Combat UI\Under attack UI\UnderAttackUI.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\DefaultGameHUD.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Notifcation Queue UI\GameNotifier.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Notifcation Queue UI\NewQuestNotifier.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Notifcation Queue UI\NotificationData.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\BodyEquipmentSlot.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\FeetEquipmentSlot.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\HeadEquipmentSlot.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\Item slots\PlayerEquipmentSlots.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\Item slots\PlayerInventorySlots.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\LeggingsEquipmentSlot.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerEquipmentSlot.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventoryItem.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventorySlot.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerInventoryUI.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\PlayerSlot.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\ShieldEquipmentSlot.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\WeaponEquipmentSlot.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\Quest.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\QuestsUI.cs" />
+    <Compile Include="Assets\UI\Game UI\Default Game HUD\Quests UI\QuestTask.cs" />
+    <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\DialogueHolder.cs" />
+    <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\DialogueNode.cs" />
+    <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\EndDialogueBtn.cs" />
+    <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\PlayerChoice.cs" />
+    <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\PlayerInputField.cs" />
+    <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueScroller\ListItems\VocabTestNode.cs" />
+    <Compile Include="Assets\UI\Game UI\Dialogue UI\DialogueUI.cs" />
+    <Compile Include="Assets\UI\Game UI\Dialogue UI\TestUtilities\VocabIntroGetter.cs" />
+    <Compile Include="Assets\UI\Game UI\Game Menu UI\ExistingSaveGameBtn.cs" />
+    <Compile Include="Assets\UI\Game UI\Game Menu UI\GameMenuUI.cs" />
+    <Compile Include="Assets\UI\Game UI\InspectorUI\CharacterInspector.cs" />
+    <Compile Include="Assets\UI\Game UI\InspectorUI\Inspector.cs" />
+    <Compile Include="Assets\UI\Game UI\InspectorUI\InspectorUI.cs" />
+    <Compile Include="Assets\UI\Game UI\InspectorUI\WorldItemInspector.cs" />
+    <Compile Include="Assets\UI\Game UI\New Welsh Learned UI\List items\NewWelshGrammar.cs" />
+    <Compile Include="Assets\UI\Game UI\New Welsh Learned UI\List items\NewWelshVocab.cs" />
+    <Compile Include="Assets\UI\Game UI\New Welsh Learned UI\NewWelshLearnedUI.cs" />
+    <Compile Include="Assets\UI\Game UI\Skills Menu UI\List items\WelshGrammar.cs" />
+    <Compile Include="Assets\UI\Game UI\Skills Menu UI\List items\WelshVocab.cs" />
+    <Compile Include="Assets\UI\Game UI\Skills Menu UI\SkillsMenuUI.cs" />
+    <Compile Include="Assets\UI\Game UI\Skills Menu UI\WelshSkillsListUI.cs" />
+    <Compile Include="Assets\UI\Game UI\Skills Results UI\List Items\WelshGrammarUpdate.cs" />
+    <Compile Include="Assets\UI\Game UI\Skills Results UI\List Items\WelshVocabUpdate.cs" />
+    <Compile Include="Assets\UI\Game UI\Skills Results UI\TestResultsUI.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\Colours.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\GrammarProficienciesHandler.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\ProficienciesHandler.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\ReadProficienciesHandler.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\TestTrigger.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\WriteProficienciesHandler.cs" />
+    <Compile Include="Assets\UI\IDeletableUI.cs" />
+    <Compile Include="Assets\UI\IEditableUI.cs" />
+    <Compile Include="Assets\UI\ISelectableUI.cs" />
+    <Compile Include="Assets\UI\ListDisplayInfo.cs" />
+    <Compile Include="Assets\UI\ListSearcher.cs" />
+    <Compile Include="Assets\UI\Saving and loading\LoadGameMenuUI.cs" />
+    <Compile Include="Assets\UI\Start Menu UI\Load Game Menu UI\ExistingSaveGameBtn.cs" />
+    <Compile Include="Assets\UI\Start Menu UI\New Game Menu UI\NewGameMenuUI.cs" />
+    <Compile Include="Assets\UI\Start Menu UI\New Game Menu UI\SelectPlayerPortraitBtn.cs" />
+    <Compile Include="Assets\UI\Start Menu UI\StartMenu.cs" />
+    <Compile Include="Assets\UI\UIController.cs" />
+    <Compile Include="Assets\UI\UIDisplayController.cs" />
+    <Compile Include="Assets\UI\UIInputListItem.cs" />
+    <Compile Include="Assets\UI\UITextPanelListItem.cs" />
+    <Compile Include="Assets\Utilities\Debugging.cs" />
+    <Compile Include="Assets\Utilities\Extensions\Font extensions\LetterSpacing.cs" />
+    <Compile Include="Assets\Utilities\HeirarchyTraversal.cs" />
+    <Compile Include="Assets\Utilities\MouseSelection.cs" />
+    <Compile Include="Assets\Utilities\TypeComparisons.cs" />
+    <Compile Include="Assets\Utilities\UICommands.cs" />
+    <None Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\ClassDiagram3.cd" />
+    <None Include="Assets\SpriteSurfaceShader.shader" />
+    <None Include="Assets\SpriteFlipShader.shader" />
+    <None Include="Assets\codeandweb.com\Readme.txt" />
+    <Reference Include="UnityEditor.StandardEvents">
+      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh game/main/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro.Editor">
+      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh game/main/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.PackageManagerUI.Editor">
+      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh game/main/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh game/main/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AIModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ARModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.ARModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AccessibilityModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.AccessibilityModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.BaselibModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.BaselibModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ClothModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.ClothModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CloudWebServicesModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.CloudWebServicesModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ClusterInputModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.ClusterInputModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ClusterRendererModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.ClusterRendererModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CrashReportingModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.CrashReportingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.DirectorModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.DirectorModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.FacebookModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.FacebookModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.FileSystemHttpModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.FileSystemHttpModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.GameCenterModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.GameCenterModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.GridModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.GridModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.HotReloadModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.HotReloadModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.InputModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.JSONSerializeModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.LocalizationModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.LocalizationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.ParticleSystemModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PerformanceReportingModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.PerformanceReportingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Physics2DModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.Physics2DModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ProfilerModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.ProfilerModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ScreenCaptureModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.ScreenCaptureModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.SharedInternalsModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.SharedInternalsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.SpriteMaskModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.SpriteMaskModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.SpriteShapeModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.SpriteShapeModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.StreamingModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.StreamingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.StyleSheetsModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.StyleSheetsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.SubstanceModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.SubstanceModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TLSModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.TLSModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TerrainModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.TerrainModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TerrainPhysicsModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.TerrainPhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TilemapModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.TilemapModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TimelineModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.TimelineModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIElementsModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.UIElementsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UNETModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.UNETModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UmbraModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.UmbraModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityAnalyticsModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.UnityAnalyticsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityConnectModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.UnityConnectModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.UnityWebRequestModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestAudioModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestTextureModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VRModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.VRModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VehiclesModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.VehiclesModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VideoModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.VideoModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.WindModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.WindModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.XRModule">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Locator">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/Unity.Locator.dll</HintPath>
+    </Reference>
+    <Reference Include="Facebook.Unity.Settings">
+      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh game/main/Library/FacebookSDK/Facebook.Unity.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Timeline">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/UnityExtensions/Unity/Timeline/RuntimeEditor/UnityEngine.Timeline.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Networking">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.GoogleAudioSpatializer">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/UnityExtensions/Unity/UnityGoogleAudioSpatializer/RuntimeEditor/UnityEngine.GoogleAudioSpatializer.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.HoloLens">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.SpatialTracking">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Data.Sqlite">
+      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh game/main/Assets/Plugins/Mono.Data.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh game/main/Assets/Plugins/System.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data">
+      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh game/main/Assets/Plugins/System.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Analytics">
+      <HintPath>C:/Users/Kit/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.analytics@2.0.16/UnityEngine.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.StandardEvents">
+      <HintPath>C:/Users/Kit/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.standardevents@1.0.13/UnityEngine.StandardEvents.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/MonoBleedingEdge/lib/mono/unity/mscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/MonoBleedingEdge/lib/mono/unity/System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/MonoBleedingEdge/lib/mono/unity/System.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/MonoBleedingEdge/lib/mono/unity/System.Runtime.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/MonoBleedingEdge/lib/mono/unity/System.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/MonoBleedingEdge/lib/mono/unity/System.Xml.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityScript">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/MonoBleedingEdge/lib/mono/unity/UnityScript.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityScript.Lang">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/MonoBleedingEdge/lib/mono/unity/UnityScript.Lang.dll</HintPath>
+    </Reference>
+    <Reference Include="Boo.Lang">
+      <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/MonoBleedingEdge/lib/mono/unity/Boo.Lang.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="GenerateTargetFrameworkMonikerAttribute" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -239,5 +576,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  
 </Project>

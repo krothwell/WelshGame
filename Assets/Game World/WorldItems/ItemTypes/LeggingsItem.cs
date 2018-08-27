@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LeggingsItem : EquipableWorldItemWithMultiSprites {
+public class LeggingsItem : EquipableWorldItem {
     protected override void SetPlayerParts() {
         PlayerCharacter pc = FindObjectOfType<PlayerCharacter>();
         equipToPlayerParts[0] = pc.GetComponentInChildren<LowerTorsoWearable>().gameObject;

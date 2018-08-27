@@ -1,4 +1,4 @@
-﻿public class FeetItem : EquipableWorldItemWithMultiSprites {
+﻿public class FeetItem : EquipableWorldItem {
     protected override void SetPlayerParts() {
         PlayerCharacter pc = FindObjectOfType<PlayerCharacter>();
         equipToPlayerParts[0] = pc.GetComponentInChildren<RightFootWearable>().gameObject;

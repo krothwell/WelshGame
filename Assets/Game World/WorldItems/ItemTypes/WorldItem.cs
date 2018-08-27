@@ -32,10 +32,6 @@ public abstract class WorldItem : MonoBehaviour {
             SetItemModeForInventory();
         }
         questsUI = FindObjectOfType<QuestsUI>();
-
-        if (transform.parent.GetComponent<PlayerEquipmentSlot>() != null) {
-            EquipToPlayerModel();
-        }
     }
 
     public void GetPickedUp () {
@@ -48,15 +44,12 @@ public abstract class WorldItem : MonoBehaviour {
         return itemType;
     }
 
-    public abstract void EquipToPlayerModel();
-    public abstract void UnequipFromPlayerModel();
-
     /// <summary>
     /// changed the properties of the item so that it displays appropriately with game
     /// world scenery.
     /// </summary>
     protected void SetItemModeForWorld() {
-        SetChildrenActive(true);
+        SetWorldSpritesActive(true);
         ImageLayerOrder.SetOrderOnTranformChildren(transform);
         GetComponent<Image>().enabled = false;
         GetComponent<GameWorldSelector>().enabled = true;
@@ -70,12 +63,17 @@ public abstract class WorldItem : MonoBehaviour {
         rectTransform.sizeDelta = new Vector2(20f, 20f);
         rectTransform.localPosition = new Vector3(0f, 0f, 0f);
         rectTransform.localScale = inventoryScale;
-        SetChildrenActive(false);
+        SetWorldSpritesActive(false);
         GetComponent<Image>().enabled = true;
         GetComponent<GameWorldSelector>().enabled = false;
     }
 
-    protected void SetChildrenActive(bool active) {
+    /// <summary>
+    /// Activates / deactivates the game objects that contain sprites attached to child 
+    /// objects which will be used to display in the world
+    /// </summary>
+    /// <param name="active"></param>
+    public void SetWorldSpritesActive(bool active) {
         foreach (Transform childTransform in transform) {
             childTransform.gameObject.SetActive(active);
         }

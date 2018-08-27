@@ -1,7 +1,7 @@
 ﻿using System;
 
-public class ShieldItem : EquipableWorldItemWithSingleSprite {
-    protected override void SetPlayerPart() {
+public class ShieldItem : EquipableWorldItem {
+    protected override void SetPlayerParts() {
         throw new NotImplementedException();
 
     }
