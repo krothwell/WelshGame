@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityUtilities;
 using GameUI;
 
+/// <summary>
+/// Responsible for high level members relating to world items.
+/// </summary>
 public class WorldItems : MonoBehaviour {
-
-    private List<string[]> worldItemList;
+    public List<string[]> WorldItemList { get; private set; }
     public enum WorldItemTypes {
         HeadWearable,
         BodyWearable,
@@ -15,29 +17,25 @@ public class WorldItems : MonoBehaviour {
         LegsWearable,
         FeetWearable
     };
-    PlayerInventoryUI playerInventory;
+    //PlayerInventoryUI playerInventory;
     PlayerEquipmentSlots playerEquipmentSlots;
     void Awake() {
-        worldItemList = new List<string[]>();
+        WorldItemList = new List<string[]>();
         SetWorldItemsList();
     }
 
     void Start() {
-        playerInventory = FindObjectOfType<PlayerInventoryUI>();
-        playerEquipmentSlots = FindObjectOfType<PlayerEquipmentSlots>();
-        playerInventory.OpenInventory();
-        playerEquipmentSlots.InitialiseEquippedItemsDict();
-        Invoke("CloseInventory", 0.2f);
+        //playerInventory = FindObjectOfType<PlayerInventoryUI>();
+        //playerEquipmentSlots = FindObjectOfType<PlayerEquipmentSlots>();
+        //playerEquipmentSlots.InitialiseEquippedItemsDict();
     }
 
-    void CloseInventory() {
-        playerInventory = FindObjectOfType<PlayerInventoryUI>();
-        playerInventory.CloseInventory();
-    }
-
+    /// <summary>
+    /// Creates a list with a string array holding all the details to save world item state
+    /// in the database
+    /// </summary>
     public void SetWorldItemsList() {
-        //print(FindObjectsOfType<WorldItem>().Length);
-        worldItemList.Clear();
+        WorldItemList.Clear();
         PlayerInventoryUI playerInventory;
         playerInventory = FindObjectOfType<PlayerInventoryUI>();
         playerInventory.OpenInventory();
@@ -51,19 +49,19 @@ public class WorldItems : MonoBehaviour {
             itemDetails[4] = worldItem.name;
             string prefabPath = "WorldItems/" + worldItem.name;
             itemDetails[5] = prefabPath;
-            worldItemList.Add(itemDetails);
-            //print(worldItem.name);
+            WorldItemList.Add(itemDetails);
         }
-        if (FindObjectOfType<GameMenuUI>().IsOn) {
-            playerInventory.CloseInventory();
-        }
+        //if (FindObjectOfType<GameMenuUI>().IsOn) {
+        //    playerInventory.CloseInventory();
+        //}
 
     }
 
-    public List<string[]> GetWorldItemsList() {
-        return worldItemList;
-    }
-
+    /// <summary>
+    /// As a saved game will likely have included world items being moved, the state of all
+    /// world items are saved to the database. When loading a game this method is responsible
+    /// for destroying all world items before they're reloaded into the game from their saved position.
+    /// </summary>
     public void DestroyWorldItems() {
         foreach (WorldItem worldItem in FindObjectsOfType<WorldItem>()) {
             Destroy(worldItem.gameObject);

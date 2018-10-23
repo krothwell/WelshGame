@@ -61,14 +61,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\AbilitiesUI.cs" />
-    <Compile Include="Assets\CreatePlaneMesh.cs" />
+    <Compile Include="Assets\checkRockHP.cs" />
     <Compile Include="Assets\Data storage\DbSetup.cs" />
     <Compile Include="Assets\Data storage\PlayerPrefsManager.cs" />
     <Compile Include="Assets\Data storage\PlayerSavesController.cs" />
     <Compile Include="Assets\Data storage\SceneLoader.cs" />
     <Compile Include="Assets\Data storage\Utilities\DbCommands.cs" />
     <Compile Include="Assets\Data storage\Utilities\DbQueries.cs" />
+    <Compile Include="Assets\DumbEnemy.cs" />
     <Compile Include="Assets\EndCombatWhenHit.cs" />
     <Compile Include="Assets\Game World\Camera\CameraController.cs" />
     <Compile Include="Assets\Game World\Characters\Anim toggles\HumanCharAnimToggles.cs" />
@@ -157,12 +157,14 @@
     <Compile Include="Assets\Music\MusicFadeIn.cs" />
     <Compile Include="Assets\Music\MusicFadeOut.cs" />
     <Compile Include="Assets\Music\MusicPlayer.cs" />
-    <Compile Include="Assets\MusicZone.cs" />
+    <Compile Include="Assets\Music\MusicZone.cs" />
     <Compile Include="Assets\NightLight.cs" />
     <Compile Include="Assets\NotificationQueue.cs" />
     <Compile Include="Assets\PlayerChoicesListUI.cs" />
     <Compile Include="Assets\PlayerChoiceVocabTest.cs" />
     <Compile Include="Assets\PlayerVitalsUI.cs" />
+    <Compile Include="Assets\Scriptable objects\FloatReference.cs" />
+    <Compile Include="Assets\Scriptable objects\FloatVariable.cs" />
     <Compile Include="Assets\TimeOfDayController.cs" />
     <Compile Include="Assets\TranslationTag.cs" />
     <Compile Include="Assets\UI\Data UI\DataUIController.cs" />
@@ -236,6 +238,7 @@
     <Compile Include="Assets\UI\Data UI\UIGameObjectToggle.cs" />
     <Compile Include="Assets\UI\Data UI\Utilities\Colours.cs" />
     <Compile Include="Assets\UI\ExistingSaveGame.cs" />
+    <Compile Include="Assets\UI\Game UI\Combat UI\Abilities\AbilitiesUI.cs" />
     <Compile Include="Assets\UI\Game UI\Combat UI\Abilities\AbilityButton.cs" />
     <Compile Include="Assets\UI\Game UI\Combat UI\CombatUI.cs" />
     <Compile Include="Assets\UI\Game UI\Combat UI\Under attack UI\EnemySelectorBtn.cs" />
@@ -284,12 +287,19 @@
     <Compile Include="Assets\UI\Game UI\Skills Results UI\List Items\WelshGrammarUpdate.cs" />
     <Compile Include="Assets\UI\Game UI\Skills Results UI\List Items\WelshVocabUpdate.cs" />
     <Compile Include="Assets\UI\Game UI\Skills Results UI\TestResultsUI.cs" />
-    <Compile Include="Assets\UI\Game UI\Utilities\Colours.cs" />
-    <Compile Include="Assets\UI\Game UI\Utilities\GrammarProficienciesHandler.cs" />
-    <Compile Include="Assets\UI\Game UI\Utilities\ProficienciesHandler.cs" />
-    <Compile Include="Assets\UI\Game UI\Utilities\ReadProficienciesHandler.cs" />
-    <Compile Include="Assets\UI\Game UI\Utilities\TestTrigger.cs" />
-    <Compile Include="Assets\UI\Game UI\Utilities\WriteProficienciesHandler.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\dyamic effects\UIDynamicEffect.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\graphics\Colours.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\interfaces\IAffectUI.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\interfaces\IReactWhenPressed.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\interfaces\IScroll.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\interfaces\YScroller.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\Mouse components\MousePressedListener.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\Proficiencies\GrammarProficienciesHandler.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\Proficiencies\ProficienciesHandler.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\Proficiencies\ReadProficienciesHandler.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\Proficiencies\WriteProficienciesHandler.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\scrolling\PressScrollModifier.cs" />
+    <Compile Include="Assets\UI\Game UI\Utilities\testing player\TestTrigger.cs" />
     <Compile Include="Assets\UI\IDeletableUI.cs" />
     <Compile Include="Assets\UI\IEditableUI.cs" />
     <Compile Include="Assets\UI\ISelectableUI.cs" />
@@ -310,21 +320,22 @@
     <Compile Include="Assets\Utilities\MouseSelection.cs" />
     <Compile Include="Assets\Utilities\TypeComparisons.cs" />
     <Compile Include="Assets\Utilities\UICommands.cs" />
+    <None Include="Assets\UI\Game UI\Utilities\Mouse components\ClassDiagram1.cd" />
     <None Include="Assets\UI\Game UI\Default Game HUD\Player Inventory UI\ClassDiagram3.cd" />
     <None Include="Assets\SpriteSurfaceShader.shader" />
     <None Include="Assets\SpriteFlipShader.shader" />
     <None Include="Assets\codeandweb.com\Readme.txt" />
     <Reference Include="UnityEditor.StandardEvents">
-      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh game/main/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh learning rpg/main/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh game/main/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh learning rpg/main/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh game/main/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh learning rpg/main/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh game/main/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh learning rpg/main/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -504,7 +515,7 @@
       <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/Managed/Unity.Locator.dll</HintPath>
     </Reference>
     <Reference Include="Facebook.Unity.Settings">
-      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh game/main/Library/FacebookSDK/Facebook.Unity.Settings.dll</HintPath>
+      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh learning rpg/main/Library/FacebookSDK/Facebook.Unity.Settings.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
@@ -525,13 +536,13 @@
       <HintPath>C:/Program Files/Unity5.5.0f3/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Data.Sqlite">
-      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh game/main/Assets/Plugins/Mono.Data.Sqlite.dll</HintPath>
+      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh learning rpg/main/Assets/Plugins/Mono.Data.Sqlite.dll</HintPath>
     </Reference>
     <Reference Include="System.Configuration">
-      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh game/main/Assets/Plugins/System.Configuration.dll</HintPath>
+      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh learning rpg/main/Assets/Plugins/System.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="System.Data">
-      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh game/main/Assets/Plugins/System.Data.dll</HintPath>
+      <HintPath>C:/Users/Kit/Nextcloud/Development/games/welsh learning rpg/main/Assets/Plugins/System.Data.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Analytics">
       <HintPath>C:/Users/Kit/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.analytics@2.0.16/UnityEngine.Analytics.dll</HintPath>

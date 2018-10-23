@@ -382,7 +382,7 @@ public class PlayerSavesController : MonoBehaviour {
         DbCommands.DeleteTupleInTable("SavedWorldItems", delFields);
         WorldItems worldItems = FindObjectOfType<WorldItems>();
         worldItems.SetWorldItemsList();
-        List<string[]> worldItemsList = worldItems.GetWorldItemsList();
+        List<string[]> worldItemsList = worldItems.WorldItemList;
         foreach (string[] worldItemData in worldItemsList) {
             DbCommands.InsertTupleToTable("SavedWorldItems",
                 saveIDstr,

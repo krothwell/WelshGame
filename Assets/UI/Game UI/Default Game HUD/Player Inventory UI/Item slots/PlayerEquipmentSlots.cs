@@ -15,7 +15,8 @@ namespace GameUI {
         }
 
         private void Start() {
-            
+            Invoke("InitialiseEquippedItemsDict", 0.1f);
+            Invoke("EquipAll", 0.1f);
         }
 
         /// <summary>
@@ -55,11 +56,9 @@ namespace GameUI {
 
         public void InsertToEquippedDict(EquipableWorldItem worldItem) {
             if (equippedDict.ContainsKey(worldItem.GetMyItemType())) {
-                Debug.Log("replace item");
                 equippedDict[worldItem.GetMyItemType()] = worldItem;
             }
             else {
-                Debug.Log("new item");
                 equippedDict.Add(worldItem.GetMyItemType(), worldItem);
             }
         }

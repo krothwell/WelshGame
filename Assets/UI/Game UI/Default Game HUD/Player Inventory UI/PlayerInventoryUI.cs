@@ -22,8 +22,10 @@ namespace GameUI {
 
         
         void Start() {
+            OpenInventory();
             equipmentSlots = FindObjectOfType<PlayerEquipmentSlots>();
             ui = GameObject.Find("UI");
+            Invoke("CloseInventory", 0.2f);
         }
 
         void Update() {

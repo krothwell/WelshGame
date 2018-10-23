@@ -1,0 +1,4 @@
+﻿interface IReactWhenPressed {
+
+    void ReactToPressed();
+}

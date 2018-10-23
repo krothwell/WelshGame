@@ -15,10 +15,11 @@ public class GameWorldItemSelector : GameWorldSelector{
     public override void InitialiseDecision() {
         if (abilitySelected == null) {
             BuildCircle();
+            Debug.Log(selectionCircle.gameObject.transform.position);
             BuildSelectionPlayerDecision(DefaultSelectionDecisionPrefab);
-            //clicked = true;
             CharacterMovementDecision movementDecision = (CharacterMovementDecision)myDecision;
             movementDecision.InitialiseMe(selectionCircle.transform, doubleClicks);
+            
             QueueDecisionToRun();
         }
     }

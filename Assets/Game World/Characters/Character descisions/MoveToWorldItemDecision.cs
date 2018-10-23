@@ -6,6 +6,7 @@ public class MoveToWorldItemDecision : CharacterMovementDecision {
     protected WorldItem itemSelected;
     public override void EndMovementSequence() {
         if (myCharacter.MovementController.GetDistanceFromMyPosition(targetPosition) < myCharacter.GetInteractionDistance()) {
+            Debug.Log(myCharacter.MovementController.GetDistanceFromMyPosition(targetPosition));
             myCharacter.PickUpItem(itemSelected);
             EndDecision();
         }
@@ -14,9 +15,10 @@ public class MoveToWorldItemDecision : CharacterMovementDecision {
 
 
     public override void SetTarget(Transform targetTransform) {
-        //print(item + " " + item.transform + " " + item.transform.position);
+        
         itemSelected = targetTransform.GetComponentInParent<WorldItem>();
-        print(itemSelected);
+        print(itemSelected + " " + itemSelected.transform.position);
+        print(myCharacter + " " + myCharacter.GetMyPosition());
         targetPosition = itemSelected.transform.localPosition;
         print(targetPosition);
         movementController.SetTargetPosition(targetPosition);

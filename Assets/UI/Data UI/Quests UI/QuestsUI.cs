@@ -442,7 +442,7 @@ namespace DataUI {
         
         private void InsertWorldItemsNotInDbFromScene(string scene) {
             WorldItems worldItems = FindObjectOfType<WorldItems>();
-            foreach (string[] worldItemDetailsArray in worldItems.GetWorldItemsList()) {
+            foreach (string[] worldItemDetailsArray in worldItems.WorldItemList) {
                 bool itemExists = DbCommands.IsRecordInTable("PremadeWorldItems",
                     "StartingLocationX = " + DbCommands.GetParameterNameFromValue(worldItemDetailsArray[0]) + " AND " +
                     "StartingLocationY = " + DbCommands.GetParameterNameFromValue(worldItemDetailsArray[1]) + " AND " +

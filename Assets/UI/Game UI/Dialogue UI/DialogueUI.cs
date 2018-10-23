@@ -23,28 +23,16 @@ namespace GameUI {
         private Button percentageBtn;
         private PlayerInputField currentInputField;
         private DialogueTestDataController currentDialogueTestData;
-    	private string testEnglish;
-    	private string testWelsh;
-    	public string TestEnglish {
-    		get {return testEnglish;}
-    		set {testEnglish = value;}
-    	}
-    	public string TestWelsh {
-    		get {return testWelsh;}
-    		set {testWelsh = value;}
-    	}
-        private PlayerChoice currentPlayerChoice;
-        public PlayerChoice CurrentPlayerChoice {
-            get { return currentPlayerChoice; }
-            set { currentPlayerChoice = value; }
-        }
+        public string TestEnglish { get; set; }
+        public string TestWelsh { get; set; }
+        public PlayerChoice CurrentPlayerChoice { get; set; }
 
         private bool isInUse;
         public bool IsInUse {
             get { return animator.GetBool("InUse"); }
         }
 
-        List<String> dialogueQueue;
+        List<string> dialogueQueue;
         //CharAbility queuedAbility;
     	Text percentageTxt, btnTxt;
         GameObject submitBtn, dialogueReason;
@@ -56,7 +44,6 @@ namespace GameUI {
         protected RectTransform contentPanel;
 
         public GameObject 
-            DialogueHolderPrefab,
             CharacterSpeakingPrefab, 
             InGameDialogueNodePrefab, 
             InGamePlayerChoicePrefab, 
@@ -67,7 +54,7 @@ namespace GameUI {
             PlayerInputFieldPrefab,
             GrammarShortDescPrefab;
         private ScrollRect dialogueScroller;
-        private GameObject currentDialogueHolder, currentCharSpeaking;
+        private GameObject dialogueHolder, currentCharSpeaking;
         private string currentCharID, currentDialogueID, currentNodeID;
         private PlayerCharacter playerCharacter;
         public Character currentChar;
@@ -81,6 +68,7 @@ namespace GameUI {
         }
         // Use this for initialization
         void Start() {
+            dialogueHolder = DialogueHolder.instance.gameObject;
             skillsMenuUI = FindObjectOfType<SkillsMenuUI>();
             dialogueQueue = new List<String>();
             questsUI = FindObjectOfType<QuestsUI>();
@@ -161,30 +149,17 @@ namespace GameUI {
 
 
 
-        public void ResetLowerDialogueContainer() {
-            foreach (Transform dialogue in dialogueScroller.gameObject.transform) {
-                Destroy(dialogue.gameObject);
-            }
-            currentDialogueHolder = null;
-        }
-
         private void DisplayFirstDialogueNode() {
             if (!IsDialogueComplete()) {
-                SetNewDialogueHolder();
+                DialogueHolder.instance.Reset();
                 SetInUse();
-                dialogueScroller.GetComponent<ScrollRect>().content = currentDialogueHolder.GetComponent<RectTransform>();
+                dialogueScroller.GetComponent<ScrollRect>().content = dialogueHolder.GetComponent<RectTransform>();
                 string[] nodeArray = DbCommands.GetTupleFromTable("DialogueNodes", "DialogueIDs = " + currentDialogueID, "NodeIDs ASC");
                 DisplayDialogueNode(nodeArray);
             }
             else {
                 SetNotInUse();
             }
-        }
-
-        private void SetNewDialogueHolder() {
-            ResetLowerDialogueContainer();
-            currentDialogueHolder = Instantiate(DialogueHolderPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
-            currentDialogueHolder.transform.SetParent(dialogueScroller.gameObject.transform, false);
         }
 
         private bool IsDialogueComplete() {
@@ -260,7 +235,7 @@ namespace GameUI {
                 InsertCharName(playerCharacter.GetMyName());
             }
             string nodeChoiceQry = "SELECT * FROM PlayerChoices WHERE NodeIDs = " + nodeID + ";";
-            AppendDisplayFromDb(nodeChoiceQry, currentDialogueHolder.transform, BuildPlayerChoice);
+            AppendDisplayFromDb(nodeChoiceQry, dialogueHolder.transform, BuildPlayerChoice);
             string displayEndDialogueIndicator = (DbCommands.GetFieldValueFromTable("DialogueNodes", "EndDialogueOption", "DialogueIDs = " + nodeID));
             int choicesInt = DbCommands.GetCountFromTable("PlayerChoices", "NodeIDs = " + nodeID);
             if (displayEndDialogueIndicator == "1" || choicesInt == 0) {
@@ -278,7 +253,7 @@ namespace GameUI {
         }
 
         public void DestroyInteractiveChoices() {
-            foreach (Transform component in currentDialogueHolder.transform) {
+            foreach (Transform component in dialogueHolder.transform) {
                 Button buttonCheck = component.GetComponent<Button>();
                 if (buttonCheck != null) {
                     if (buttonCheck.interactable) {
@@ -290,30 +265,39 @@ namespace GameUI {
 
         public void InsertSpacer() {
             GameObject newSpacer = Instantiate(SpacerPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
-            newSpacer.transform.SetParent(currentDialogueHolder.transform, false);
+            newSpacer.transform.SetParent(dialogueHolder.transform, false);
         }
 
         public void InsertCharName(string characterName_) {
             GameObject charSpeaking = Instantiate(CharacterSpeakingPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
             charSpeaking.GetComponent<Text>().text = "<b>" + characterName_ + "</b>:";
-            charSpeaking.transform.SetParent(currentDialogueHolder.transform, false);
+            charSpeaking.transform.SetParent(dialogueHolder.transform, false);
             currentCharSpeaking = charSpeaking;
         }
 
         public void InsertEndDialogue() {
             GameObject endDialogue = Instantiate(EndDialogueBtnPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity) as GameObject;
-            endDialogue.transform.SetParent(currentDialogueHolder.transform, false);
+            endDialogue.transform.SetParent(dialogueHolder.transform, false);
             endDialogue.GetComponent<Text>().text = "\t<i>End Dialogue</i>";
         }
 
         public void InsertDialogueNode(string[] nodeArray) {
+            GameObject dialogueNode = BuildDialogueNode(nodeArray);
+            dialogueNode.transform.SetParent(dialogueHolder.transform, false);
+        }
+
+        public void InsertDialogueNode(GameObject dialogueNode) {
+            dialogueNode.transform.SetParent(dialogueHolder.transform, false);
+        }
+
+        private GameObject BuildDialogueNode(string[] nodeArray) {
             DialogueNode dialogueNode = (Instantiate(
                 InGameDialogueNodePrefab,
                 new Vector3(0f, 0f, 0f),
                 Quaternion.identity
             ) as GameObject).GetComponent<DialogueNode>();
             dialogueNode.InitialiseMe(nodeArray[0], nodeArray[1]);
-            dialogueNode.transform.SetParent(currentDialogueHolder.transform, false);
+            return dialogueNode.gameObject;
         }
 
         public void InsertVocabTestNode(string[] detailsArray) {
@@ -322,7 +306,7 @@ namespace GameUI {
                 new Vector3(0f, 0f, 0f),
                 Quaternion.identity) as GameObject).GetComponent<VocabTestNode>();
             node.InitialiseMe(detailsArray[0], detailsArray[1]);
-            node.transform.SetParent(currentDialogueHolder.transform, false);
+            node.transform.SetParent(dialogueHolder.transform, false);
         }
 
         public void InsertPlayerInputField() {
@@ -330,7 +314,7 @@ namespace GameUI {
                 PlayerInputFieldPrefab,
                 new Vector3(0f, 0f, 0f),
                 Quaternion.identity) as GameObject).GetComponent<PlayerInputField>();
-            input.transform.SetParent(currentDialogueHolder.transform, false);
+            input.transform.SetParent(dialogueHolder.transform, false);
             currentInputField = input;
         }
 
@@ -347,7 +331,7 @@ namespace GameUI {
                 new Vector3(0f, 0f, 0f),
                 Quaternion.identity) as GameObject);
             grammarShortDesc.GetComponent<Text>().text = "\t- " + grammarstr;
-            grammarShortDesc.transform.SetParent(currentDialogueHolder.transform, false);
+            grammarShortDesc.transform.SetParent(dialogueHolder.transform, false);
         }
 
 
@@ -405,6 +389,7 @@ namespace GameUI {
             animator.SetBool("InUse", false);
             //playerCharacter.EndSelection();
             //playerCharacter.playerStatus = PlayerCharacter.PlayerStatus.passive;
+            DialogueHolder.instance.Reset();
             if (dialogueQueue.Count > 0) {
                 Invoke("StartNewDialogueFromQueue", 1f);
             }
@@ -440,9 +425,9 @@ namespace GameUI {
                             break;
                         case TestTrigger.TriggerType.DialogueChoice:
                             DisableSubmitBtn();
-                            if (currentPlayerChoice.MyNextNode != "") {
-                                print(currentPlayerChoice.MyNextNode);
-                                DisplayDialogueNode(currentPlayerChoice.GetDialogueNodeData(currentPlayerChoice.MyNextNode));
+                            if (CurrentPlayerChoice.MyNextNode != "") {
+                                print(CurrentPlayerChoice.MyNextNode);
+                                DisplayDialogueNode(CurrentPlayerChoice.GetDialogueNodeData(CurrentPlayerChoice.MyNextNode));
                             } else {
                                 InsertEndDialogue();
                                 ScrollToDialogueElement(currentCharSpeaking);
@@ -613,11 +598,11 @@ namespace GameUI {
             SetSubmitBtnText("Submit answer");
             SetObjectPortrait(playerCharacter.GetCombatController().GetCurrentEnemyTarget().CharacterPortrait);
             SetDialogueReasonSymbol(ability.myIcon);
-            SetNewDialogueHolder();
             InsertSpacer();
             TestTrigger testTrigger = new TestTrigger(ability.GetMyName(), ability.GetMyIcon(), TestTrigger.TriggerType.Ability);
             currentDialogueTestData = new DialogueTestDataController(testTrigger, playerCharacter.CharacterName);
-            InsertDialogueNode(currentDialogueTestData.GetVocabIntro()); //text instruction to player
+            GameObject dialogueNode = BuildDialogueNode(currentDialogueTestData.GetVocabIntro()); //text instruction to player
+            InsertDialogueNode(dialogueNode);
             InsertVocabTestNode(currentDialogueTestData.GetPlayerVocab());
             DisplayGrammar();
             InsertPlayerInputField();

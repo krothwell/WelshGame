@@ -1,40 +1,48 @@
 ﻿using UnityEngine;
-using System.Collections;
 
+/// <summary>
+/// The dialogue holder is responsible for manage building, displaying and positioning of dialogue parts.
+/// </summary>
+[RequireComponent(typeof(pressableYScroller))]
 public class DialogueHolder : MonoBehaviour {
+    
     float minimumHeightOfDialogue;
-    //if a new dialgue node is shown, the node and it's choices will be displayed. The scroll window will 
-    //be scrolled to the bottom automatically, if there is any room left causing the previous node/choices to display above
-    //the active node/choices, then the height of the dialogue holder must be artificially increased to hide the previous node.
-    //The size must also be decreased following the addition of another node, to ensure when scrolling back the user will easily
-    //be able to read the dialogue transcript.
-    // Use this for initialization
-    void Start () {
+    public static DialogueHolder instance;
+
+    private Vector2 startingXYofdialogueHolder;
+
+    private void Awake() {
+        instance = this;
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    void Start () {
+        startingXYofdialogueHolder = new Vector2(transform.localPosition.x, transform.localPosition.y);
+    }
 
-    //public void SetInitialSizeAndPosition(RectTransform scrollerRectTransform) {
-    //    GetComponent<RectTransform>().sizeDelta = scrollerRectTransform.sizeDelta;
-    //    GetComponent<RectTransform>().position = scrollerRectTransform.position;
-    //}
+    public void Reset() {
+        EmptyContents();
+        ResetPosition();
+    }
 
-    //public void IncreaseHeightByComponent(GameObject component) {
-    //    float myHeight = GetComponent<RectTransform>().sizeDelta.y;
-    //    componentsHeightCombined += component.GetComponent<RectTransform>().sizeDelta.y;
-    //}
+    private void EmptyContents() {
+        foreach (Transform dialoguePart in transform) {
+            Destroy(dialoguePart.gameObject);
+        }
+    }
 
-    //public Vector3 GetComponentPosition(GameObject component) {
-    //    RectTransform componentTransform = component.GetComponent<RectTransform>();
-    //    float componentHeight = componentTransform.sizeDelta.y;
-    //    float componentXpos = componentTransform.position.x;
-    //    float componentYpos = componentTransform.position.y;
-    //    float newComponentYpos = 0 - ((componentHeight / 2) + componentsHeightCombined);
-    //    print(newComponentYpos);
-    //    Vector3 newComponentPosition = new Vector3(componentXpos, newComponentYpos, 0f);
-    //    return newComponentPosition;
-    //}
+    /// <summary>
+    /// Moves the dialogue container back to it's local starting position.
+    /// </summary>
+    private void ResetPosition() {
+        transform.localPosition = new Vector2(startingXYofdialogueHolder.x, startingXYofdialogueHolder.y);
+    }
+
+
+    public bool IsValidScrollModifier(float modifierValue) {
+        if (modifierValue <= 0) {
+            Debug.LogError("You must use a positive value");
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

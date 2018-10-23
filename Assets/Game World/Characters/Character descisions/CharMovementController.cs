@@ -155,6 +155,7 @@ public class CharMovementController : MonoBehaviour {
     }
 
     public float GetDistanceFromMyPosition(Vector2 otherPosition) {
+        Debug.Log(myPosition + " vs " + otherPosition);
         return World.GetDistanceFromPositions2D(myPosition, otherPosition);
     }
     

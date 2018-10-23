@@ -7,6 +7,7 @@ namespace GameUI {
         protected new void Start() {
             base.Start();
             equipmentSlots = FindObjectOfType<PlayerEquipmentSlots>();
+
         }
         protected override void AttemptToPutItemInSlot() {
             if (GetComponent<PlayerEquipmentSlot>().ItemType
